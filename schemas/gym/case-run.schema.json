@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/case-run.schema.json",
+  "title": "Phase25CaseRun",
+  "description": "Additive Phase-2.5 case container. Lifecycle state and qualification remain independent.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "case_id", "slots", "reports", "review_state", "history", "created_at", "updated_at"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/case-run@0.2" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "slots": {
+      "type": "object",
+      "additionalProperties": { "$ref": "variant-run.schema.json#/$defs/phase25" }
+    },
+    "reports": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fidelity", "source_to_output_loss", "review_package"],
+      "properties": {
+        "fidelity": { "type": ["string", "null"] },
+        "source_to_output_loss": { "type": ["string", "null"] },
+        "review_package": { "type": ["string", "null"] }
+      }
+    },
+    "review_state": { "enum": ["NOT_READY", "REVIEW_READY", "HUMAN_REVIEWED"] },
+    "taste_decision_ref": { "type": ["string", "null"] },
+    "blocked_condition": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["code", "reason", "recorded_at"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "recorded_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event_id", "event", "timestamp"],
+        "properties": {
+          "event_id": { "type": "string", "minLength": 1 },
+          "event": { "type": "string", "minLength": 1 },
+          "slot": { "type": ["string", "null"], "pattern": "^V[0-9]+$" },
+          "artifact_ref": { "type": ["string", "null"] },
+          "timestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/fidelity-report.schema.json",
+  "title": "Phase25FidelityReport",
+  "description": "Human-approved V0 reference-understanding report required before original slots exist.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "case_id", "variant_id", "classification", "deployable", "original_work", "reference_design_case_id", "dimensions", "understood", "coverage_summary", "unresolved_dimensions", "approval", "approval_producer", "approval_reason", "approved_at", "created_at", "producer"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/fidelity-report@0.1" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "variant_id": { "const": "V0" },
+    "classification": { "const": "INTERNAL_REFERENCE_STUDY" },
+    "deployable": { "const": false },
+    "original_work": { "const": false },
+    "reference_design_case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "dimensions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["layout", "typography", "color", "spacing", "asset_treatment", "depth", "hierarchy", "motion", "scroll_choreography", "interaction", "transition_behavior", "narrative_pacing"],
+      "properties": {
+        "layout": { "$ref": "#/$defs/dimension" },
+        "typography": { "$ref": "#/$defs/dimension" },
+        "color": { "$ref": "#/$defs/dimension" },
+        "spacing": { "$ref": "#/$defs/dimension" },
+        "asset_treatment": { "$ref": "#/$defs/dimension" },
+        "depth": { "$ref": "#/$defs/dimension" },
+        "hierarchy": { "$ref": "#/$defs/dimension" },
+        "motion": { "$ref": "#/$defs/dimension" },
+        "scroll_choreography": { "$ref": "#/$defs/dimension" },
+        "interaction": { "$ref": "#/$defs/dimension" },
+        "transition_behavior": { "$ref": "#/$defs/dimension" },
+        "narrative_pacing": { "$ref": "#/$defs/dimension" }
+      }
+    },
+    "understood": { "enum": [true, false, "partial"] },
+    "coverage_summary": { "type": "string", "minLength": 1 },
+    "unresolved_dimensions": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "approval": { "enum": ["APPROVED", "REVISE", "REJECTED"] },
+    "approval_producer": { "const": "human" },
+    "approval_reason": { "type": "string", "minLength": 1 },
+    "approved_at": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "producer": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "dimension": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "observation", "evidence_source", "inspection_quality", "capture_refs", "source_refs", "engine_inference", "limitations"],
+      "properties": {
+        "status": { "enum": ["CAPTURED_WELL", "PARTIALLY_CAPTURED", "NOT_CAPTURED", "NOT_REPRODUCIBLE", "LICENSED_OR_PROPRIETARY_DEPENDENCY", "APPROXIMATED_BEHAVIOR"] },
+        "observation": { "type": "string", "minLength": 1 },
+        "evidence_source": { "type": "string", "minLength": 1 },
+        "inspection_quality": { "enum": ["VISUAL_SEQUENCE", "STATIC_VISUAL", "DOM_ONLY", "HUMAN_OBSERVATION", "UNAVAILABLE"] },
+        "capture_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "source_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "engine_inference": { "type": ["string", "null"] },
+        "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

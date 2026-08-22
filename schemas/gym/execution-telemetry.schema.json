@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/execution-telemetry.schema.json",
+  "title": "Phase25ExecutionTelemetry",
+  "description": "Evidence-backed execution timings and exposed counters; unavailable values remain null or unknown.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "case_id", "stages", "metrics", "updated_at"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/execution-telemetry@0.1" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "stages": {
+      "type": "object", "additionalProperties": false,
+      "required": ["planning", "retrieval", "prebuild_review", "build", "capture", "technical_evaluation", "design_evaluation", "repair", "review_package_generation", "human_review_waiting"],
+      "properties": {
+        "planning": { "$ref": "#/$defs/stage" },
+        "retrieval": { "$ref": "#/$defs/stage" },
+        "prebuild_review": { "$ref": "#/$defs/stage" },
+        "build": { "$ref": "#/$defs/stage" },
+        "capture": { "$ref": "#/$defs/stage" },
+        "technical_evaluation": { "$ref": "#/$defs/stage" },
+        "design_evaluation": { "$ref": "#/$defs/stage" },
+        "repair": { "$ref": "#/$defs/stage" },
+        "review_package_generation": { "$ref": "#/$defs/stage" },
+        "human_review_waiting": { "$ref": "#/$defs/stage" }
+      }
+    },
+    "metrics": {
+      "type": "object", "additionalProperties": false,
+      "required": ["model", "provider", "model_calls", "tokens_input", "tokens_output", "tool_calls", "vision_calls", "repair_attempts", "build_attempts", "asset_preparation_ms", "monetary_cost", "monetary_cost_status", "availability_notes"],
+      "properties": {
+        "model": { "type": ["string", "null"] },
+        "provider": { "type": ["string", "null"] },
+        "model_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "tokens_input": { "type": ["integer", "null"], "minimum": 0 },
+        "tokens_output": { "type": ["integer", "null"], "minimum": 0 },
+        "tool_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "vision_calls": { "type": ["integer", "null"], "minimum": 0 },
+        "repair_attempts": { "type": "integer", "minimum": 0 },
+        "build_attempts": { "type": "integer", "minimum": 0 },
+        "asset_preparation_ms": { "type": ["integer", "null"], "minimum": 0 },
+        "monetary_cost": { "type": ["number", "null"], "minimum": 0 },
+        "monetary_cost_status": { "enum": ["VERIFIED_FREE", "VERIFIED_PAID", "UNKNOWN"] },
+        "availability_notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "stage": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["started_at", "ended_at", "duration_ms", "status", "attempt", "receipt_refs"],
+      "properties": {
+        "started_at": { "type": "string", "format": "date-time" },
+        "ended_at": { "type": ["string", "null"], "format": "date-time" },
+        "duration_ms": { "type": ["integer", "null"], "minimum": 0 },
+        "status": { "enum": ["NOT_STARTED", "RUNNING", "COMPLETED", "FAILED", "BLOCKED", "WAITING"] },
+        "attempt": { "type": "integer", "minimum": 0 },
+        "receipt_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

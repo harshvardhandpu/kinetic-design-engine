@@ -84,5 +84,76 @@
       "then": { "properties": { "deployable": { "const": false }, "mode": { "const": "fidelity-study" } } } },
     { "if": { "properties": { "slot": { "enum": ["V8", "V9"] } } },
       "then": { "properties": { "experimental": { "const": true }, "mode": { "const": "experimental" } } } }
-  ]
+  ],
+  "$defs": {
+    "phase25": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "run_id", "case_id", "slot", "mode", "state", "attempt", "deployable", "original_work", "technically_qualified", "design_qualified", "acceptable_for_further_taste_learning", "refs", "attempts", "timestamps"],
+      "properties": {
+        "schema": { "const": "kinetic/gym/variant-run@0.2" },
+        "run_id": { "type": "string", "pattern": "^run-[0-9a-z-]+$" },
+        "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+        "slot": { "enum": ["V0", "V1", "V2"] },
+        "mode": { "enum": ["fidelity-study", "original"] },
+        "state": {
+          "enum": ["PLANNED", "BRIEF_VALIDATED", "RETRIEVAL_PROVEN", "PREBUILD_APPROVED", "BUILDING", "BUILT", "TECHNICAL_EVALUATED", "VISUAL_CAPTURED", "DESIGN_EVALUATED", "REVIEW_READY", "HUMAN_REVIEWED", "REJECTED_FINAL", "CANCELLED"]
+        },
+        "attempt": { "type": "integer", "minimum": 1, "maximum": 3 },
+        "deployable": { "type": "boolean" },
+        "original_work": { "type": "boolean" },
+        "technically_qualified": { "type": "boolean" },
+        "design_qualified": { "type": ["boolean", "null"] },
+        "acceptable_for_further_taste_learning": { "type": ["boolean", "null"] },
+        "refs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["variant_brief", "retrieval_receipt", "prebuild_review", "build_receipt", "technical_evaluation", "capture_manifest", "design_evaluation", "fidelity_report"],
+          "properties": {
+            "variant_brief": { "type": ["string", "null"] },
+            "retrieval_receipt": { "type": ["string", "null"] },
+            "prebuild_review": { "type": ["string", "null"] },
+            "build_receipt": { "type": ["string", "null"] },
+            "technical_evaluation": { "type": ["string", "null"] },
+            "capture_manifest": { "type": ["string", "null"] },
+            "design_evaluation": { "type": ["string", "null"] },
+            "fidelity_report": { "type": ["string", "null"] }
+          }
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["attempt", "status", "input_sha256", "artifact_refs", "started_at", "ended_at"],
+            "properties": {
+              "attempt": { "type": "integer", "minimum": 1, "maximum": 3 },
+              "status": { "enum": ["RUNNING", "COMPLETED", "FAILED", "BLOCKED"] },
+              "input_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+              "started_at": { "type": "string", "format": "date-time" },
+              "ended_at": { "type": ["string", "null"], "format": "date-time" }
+            }
+          }
+        },
+        "blocked_condition": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["code", "reason", "recorded_at"],
+          "properties": {
+            "code": { "type": "string", "minLength": 1 },
+            "reason": { "type": "string", "minLength": 1 },
+            "recorded_at": { "type": "string", "format": "date-time" }
+          }
+        },
+        "timestamps": { "type": "object", "additionalProperties": { "type": "string", "format": "date-time" } }
+      },
+      "allOf": [
+        {
+          "if": { "required": ["slot"], "properties": { "slot": { "const": "V0" } } },
+          "then": { "properties": { "mode": { "const": "fidelity-study" }, "deployable": { "const": false }, "original_work": { "const": false }, "design_qualified": { "const": null }, "acceptable_for_further_taste_learning": { "const": null } } }
+        }
+      ]
+    }
+  }
 }

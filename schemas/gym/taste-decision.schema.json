@@ -83,6 +83,67 @@
                "motion-quality", "originality", "density", "interaction",
                "navigation", "accessibility", "performance", "surface-fit",
                "brand-fit", "responsive", "other"]
+    },
+    "phase25": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "decision_id", "context", "candidates", "outcome", "reason_tags", "freeform", "reviewer", "supersedes", "timestamp"],
+      "properties": {
+        "schema": { "const": "kinetic/gym/taste-decision@0.2" },
+        "decision_id": { "type": "string", "pattern": "^td-[0-9]{8}-[0-9a-z]+$" },
+        "context": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["case_id", "batch_id", "surface", "goal"],
+          "properties": {
+            "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+            "batch_id": { "type": "string", "minLength": 1 },
+            "surface": { "type": "string", "minLength": 1 },
+            "goal": { "type": "string", "minLength": 1 }
+          }
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["V1", "V2"] }
+        },
+        "outcome": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["result", "relative_preference", "winner", "candidate_decisions"],
+          "properties": {
+            "result": { "enum": ["WINNER_SELECTED", "PARTIAL_ACCEPTANCE", "REJECT_ALL"] },
+            "relative_preference": { "enum": ["V1", "V2", "tie", "neither"] },
+            "winner": { "type": ["string", "null"], "enum": ["V1", "V2", null] },
+            "candidate_decisions": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["V1", "V2"],
+              "properties": {
+                "V1": { "$ref": "#/$defs/phase25CandidateDecision" },
+                "V2": { "$ref": "#/$defs/phase25CandidateDecision" }
+              }
+            }
+          }
+        },
+        "reason_tags": { "type": "array", "items": { "$ref": "#/$defs/reason_tag" } },
+        "freeform": { "type": ["string", "null"] },
+        "reviewer": { "type": "string", "minLength": 1 },
+        "supersedes": { "type": ["string", "null"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "phase25CandidateDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quality_floor_passed", "acceptable_for_further_taste_learning", "reason"],
+      "properties": {
+        "quality_floor_passed": { "type": "boolean" },
+        "acceptable_for_further_taste_learning": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
     }
   }
 }

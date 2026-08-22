@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/capture-manifest.schema.json",
+  "title": "Phase25CaptureManifest",
+  "description": "Durable content-addressed visual evidence and capture failures.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "manifest_id", "case_id", "playwright_version", "browser_version", "specs", "entries", "failures", "created_at", "updated_at"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/capture-manifest@0.1" },
+    "manifest_id": { "type": "string", "pattern": "^cm-[0-9a-z-]+$" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "playwright_version": { "type": "string", "minLength": 1 },
+    "browser_version": { "type": "string", "minLength": 1 },
+    "specs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/spec" } },
+    "entries": { "type": "array", "items": { "$ref": "#/$defs/entry" } },
+    "failures": { "type": "array", "items": { "$ref": "#/$defs/failure" } },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "viewport": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "width", "height", "device_scale", "is_mobile", "has_touch"],
+      "properties": {
+        "name": { "enum": ["desktop", "mobile"] },
+        "width": { "type": "integer", "minimum": 1 },
+        "height": { "type": "integer", "minimum": 1 },
+        "device_scale": { "type": "number", "minimum": 1 },
+        "is_mobile": { "type": "boolean" },
+        "has_touch": { "type": "boolean" }
+      }
+    },
+    "spec": {
+      "type": "object", "additionalProperties": false,
+      "required": ["capture_id", "subject_id", "attempt", "viewport", "capture_mode", "state", "url", "trigger_action", "target_selector", "checkpoint_ms", "checkpoint_progress", "reduced_motion", "build_sha256"],
+      "properties": {
+        "capture_id": { "type": "string", "pattern": "^cap-[0-9a-z-]+$" },
+        "subject_id": { "type": "string", "minLength": 1 },
+        "attempt": { "type": "integer", "minimum": 1 },
+        "viewport": { "$ref": "#/$defs/viewport" },
+        "capture_mode": { "enum": ["STATIC_CAPTURE_STABLE", "MOTION_STATE_CAPTURE"] },
+        "state": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "trigger_action": { "enum": ["goto", "scroll_to_px", "scroll_to_selector", "hover", "focus", "click", "wait_for_selector", "wait_ms", "kinetic_seek"] },
+        "target_selector": { "type": ["string", "null"] },
+        "checkpoint_ms": { "type": ["number", "null"], "minimum": 0 },
+        "checkpoint_progress": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "reduced_motion": { "enum": ["no-preference", "reduce"] },
+        "build_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "sequence_id": { "type": ["string", "null"] },
+        "sequence_index": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "entry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["capture_id", "subject_id", "attempt", "viewport", "capture_mode", "state", "url", "trigger_action", "target_selector", "checkpoint_ms", "checkpoint_progress", "timestamp", "playwright_version", "browser_version", "artifact_path", "sha256", "visual_phash", "reduced_motion", "readiness", "notes"],
+      "properties": {
+        "capture_id": { "type": "string", "pattern": "^cap-[0-9a-z-]+$" },
+        "subject_id": { "type": "string", "minLength": 1 },
+        "attempt": { "type": "integer", "minimum": 1 },
+        "viewport": { "$ref": "#/$defs/viewport" },
+        "capture_mode": { "enum": ["STATIC_CAPTURE_STABLE", "MOTION_STATE_CAPTURE"] },
+        "state": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "trigger_action": { "type": "string", "minLength": 1 },
+        "target_selector": { "type": ["string", "null"] },
+        "checkpoint_ms": { "type": ["number", "null"], "minimum": 0 },
+        "checkpoint_progress": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "playwright_version": { "type": "string", "minLength": 1 },
+        "browser_version": { "type": "string", "minLength": 1 },
+        "artifact_path": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "visual_phash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "reduced_motion": { "enum": ["no-preference", "reduce"] },
+        "readiness": { "enum": ["READY", "READY_WITH_LIMITATIONS"] },
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "sequence_id": { "type": ["string", "null"] },
+        "sequence_index": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "failure": {
+      "type": "object", "additionalProperties": false,
+      "required": ["capture_id", "attempt", "code", "reason", "transient", "timestamp"],
+      "properties": {
+        "capture_id": { "type": "string", "pattern": "^cap-[0-9a-z-]+$" },
+        "attempt": { "type": "integer", "minimum": 1 },
+        "code": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "transient": { "type": "boolean" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

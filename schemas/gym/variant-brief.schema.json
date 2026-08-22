@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/variant-brief.schema.json",
+  "title": "Phase25VariantBrief",
+  "description": "Persisted design plan required before a Phase-2.5 candidate may build.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "variant_id", "case_id", "design_case_ids_used", "surface", "goal", "direction_name", "core_concept", "composition_plan", "typography_plan", "art_direction", "motion_plan", "reference_transfer", "source_provenance", "originality_plan", "quality_hypothesis", "created_at", "producer"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/variant-brief@0.1" },
+    "variant_id": { "type": "string", "pattern": "^V[0-9]+$" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "design_case_ids_used": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^case-[0-9a-z-]+$" } },
+    "surface": { "type": "string", "minLength": 1 },
+    "goal": { "type": "string", "minLength": 1 },
+    "direction_name": { "type": "string", "minLength": 1 },
+    "core_concept": { "type": "string", "minLength": 1 },
+    "composition_plan": { "$ref": "#/$defs/composition" },
+    "typography_plan": { "$ref": "#/$defs/typography" },
+    "art_direction": { "$ref": "#/$defs/artDirection" },
+    "motion_plan": { "$ref": "#/$defs/motion" },
+    "reference_transfer": { "$ref": "#/$defs/referenceTransfer" },
+    "source_provenance": { "$ref": "#/$defs/sourceProvenance" },
+    "originality_plan": { "$ref": "#/$defs/originality" },
+    "quality_hypothesis": { "type": "string", "minLength": 1 },
+    "planning_exception": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["approver", "reason", "scope", "expires_at"],
+      "properties": {
+        "approver": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "scope": { "const": "OPTIONAL_KNOWLEDGE_SOURCE_UNAVAILABLE" },
+        "expires_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "producer": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "nonemptyStrings": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "composition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sections", "spatial_system", "visual_hierarchy", "pacing", "density", "focal_points"],
+      "properties": {
+        "sections": { "$ref": "#/$defs/nonemptyStrings" },
+        "spatial_system": { "type": "string", "minLength": 1 },
+        "visual_hierarchy": { "type": "string", "minLength": 1 },
+        "pacing": { "type": "string", "minLength": 1 },
+        "density": { "type": "string", "minLength": 1 },
+        "focal_points": { "$ref": "#/$defs/nonemptyStrings" }
+      }
+    },
+    "typography": {
+      "type": "object", "additionalProperties": false,
+      "required": ["display_role", "body_role", "scale_strategy", "contrast_strategy", "rhythm", "responsive_behavior"],
+      "properties": {
+        "display_role": { "type": "string", "minLength": 1 },
+        "body_role": { "type": "string", "minLength": 1 },
+        "scale_strategy": { "type": "string", "minLength": 1 },
+        "contrast_strategy": { "type": "string", "minLength": 1 },
+        "rhythm": { "type": "string", "minLength": 1 },
+        "responsive_behavior": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artDirection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["imagery_strategy", "asset_strategy", "texture", "material", "depth", "layering", "color_logic"],
+      "properties": {
+        "imagery_strategy": { "type": "string", "minLength": 1 },
+        "asset_strategy": { "type": "string", "minLength": 1 },
+        "texture": { "type": "string", "minLength": 1 },
+        "material": { "type": "string", "minLength": 1 },
+        "depth": { "type": "string", "minLength": 1 },
+        "layering": { "type": "string", "minLength": 1 },
+        "color_logic": { "type": "string", "minLength": 1 }
+      }
+    },
+    "signatureMove": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "central_idea", "trigger", "visual_transformation", "purpose", "content_relationship", "reduced_motion_alternative", "capture_checkpoint"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "central_idea": { "type": "string", "minLength": 1 },
+        "trigger": { "type": "string", "minLength": 1 },
+        "visual_transformation": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "content_relationship": { "type": "string", "minLength": 1 },
+        "reduced_motion_alternative": { "type": "string", "minLength": 1 },
+        "capture_checkpoint": { "type": "string", "minLength": 1 }
+      }
+    },
+    "tokenException": {
+      "type": "object", "additionalProperties": false,
+      "required": ["file", "line_or_symbol", "property", "raw_value", "reason", "evidence_ref", "scope"],
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "line_or_symbol": { "type": "string", "minLength": 1 },
+        "property": { "type": "string", "minLength": 1 },
+        "raw_value": { "type": ["string", "number"] },
+        "reason": { "type": "string", "minLength": 1 },
+        "evidence_ref": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 }
+      }
+    },
+    "motion": {
+      "type": "object", "additionalProperties": false,
+      "required": ["signature_move", "scroll_storyboard", "transitions", "interaction_states", "reduced_motion_behavior", "token_exceptions"],
+      "properties": {
+        "signature_move": { "$ref": "#/$defs/signatureMove" },
+        "scroll_storyboard": { "$ref": "#/$defs/nonemptyStrings" },
+        "transitions": { "$ref": "#/$defs/nonemptyStrings" },
+        "interaction_states": { "$ref": "#/$defs/nonemptyStrings" },
+        "reduced_motion_behavior": { "type": "string", "minLength": 1 },
+        "token_exceptions": { "type": "array", "items": { "$ref": "#/$defs/tokenException" } }
+      }
+    },
+    "referenceTransfer": {
+      "type": "object", "additionalProperties": false,
+      "required": ["retained_principles", "deliberately_rejected_principles", "prohibited_copying"],
+      "properties": {
+        "retained_principles": { "$ref": "#/$defs/nonemptyStrings" },
+        "deliberately_rejected_principles": { "$ref": "#/$defs/nonemptyStrings" },
+        "prohibited_copying": { "$ref": "#/$defs/nonemptyStrings" }
+      }
+    },
+    "attribution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["knowledge_index", "classification", "evidence_refs"],
+      "properties": {
+        "knowledge_index": { "type": "integer", "minimum": 0 },
+        "classification": { "enum": ["SOURCE-DERIVED", "ENGINE-INFERENCE", "ENGINE-RECOMMENDATION"] },
+        "evidence_refs": { "$ref": "#/$defs/nonemptyStrings" }
+      }
+    },
+    "sourceInfluence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_id", "retrieval_reason", "knowledge_used", "usage_mode", "attribution"],
+      "properties": {
+        "source_id": { "type": "string", "pattern": "^src-[a-z0-9-]+$" },
+        "retrieval_reason": { "type": "string", "minLength": 1 },
+        "knowledge_used": { "$ref": "#/$defs/nonemptyStrings" },
+        "usage_mode": { "enum": ["PRINCIPLE", "PATTERN", "RECIPE", "PRIMITIVE", "TOOL", "BUILD_DEPENDENCY", "COMPARISON_REFERENCE"] },
+        "attribution": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/attribution" } }
+      }
+    },
+    "sourceProvenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["design_reference_sources", "motion_reference_sources", "typography_sources", "implementation_sources", "tool_sources"],
+      "properties": {
+        "design_reference_sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/sourceInfluence" } },
+        "motion_reference_sources": { "type": "array", "items": { "$ref": "#/$defs/sourceInfluence" } },
+        "typography_sources": { "type": "array", "items": { "$ref": "#/$defs/sourceInfluence" } },
+        "implementation_sources": { "type": "array", "maxItems": 2, "items": { "$ref": "#/$defs/sourceInfluence" } },
+        "tool_sources": { "type": "array", "items": { "$ref": "#/$defs/sourceInfluence" } }
+      }
+    },
+    "originality": {
+      "type": "object", "additionalProperties": false,
+      "required": ["composition_differences", "typography_differences", "motion_differences", "asset_non_reuse", "signature_move_hypothesis"],
+      "properties": {
+        "composition_differences": { "$ref": "#/$defs/nonemptyStrings" },
+        "typography_differences": { "$ref": "#/$defs/nonemptyStrings" },
+        "motion_differences": { "$ref": "#/$defs/nonemptyStrings" },
+        "asset_non_reuse": { "type": "string", "minLength": 1 },
+        "signature_move_hypothesis": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

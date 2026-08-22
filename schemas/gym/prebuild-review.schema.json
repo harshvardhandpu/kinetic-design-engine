@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/prebuild-review.schema.json",
+  "title": "Phase25PreBuildReview",
+  "description": "Inspectable deterministic design-planning gate before BUILDING.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "review_id", "case_id", "variant_id", "brief_sha256", "retrieval_sha256", "decision", "rule_results", "advisory_observations", "blocking_reasons", "reviewer", "created_at"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/prebuild-review@0.1" },
+    "review_id": { "type": "string", "pattern": "^pbr-[0-9a-z-]+$" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "variant_id": { "type": "string", "pattern": "^V[0-9]+$" },
+    "brief_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "retrieval_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "decision": { "enum": ["APPROVED", "REVISE", "REJECTED"] },
+    "rule_results": { "type": "array", "minItems": 15, "items": { "$ref": "#/$defs/ruleResult" } },
+    "advisory_observations": { "type": "array", "items": { "$ref": "#/$defs/observation" } },
+    "blocking_reasons": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "reviewer": { "type": "string", "minLength": 1 },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "ruleResult": {
+      "type": "object", "additionalProperties": false,
+      "required": ["rule_id", "passed", "evidence_path", "reason"],
+      "properties": {
+        "rule_id": { "type": "string", "pattern": "^PB[0-9]{2}_[A-Z0-9_]+$" },
+        "passed": { "type": "boolean" },
+        "evidence_path": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    },
+    "observation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["producer", "observation", "severity", "confidence"],
+      "properties": {
+        "producer": { "enum": ["deterministic", "ai-critic", "human"] },
+        "observation": { "type": "string", "minLength": 1 },
+        "severity": { "enum": ["info", "low", "medium", "high", "blocker"] },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
+      }
+    }
+  }
+}

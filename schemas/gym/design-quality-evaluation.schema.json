@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/design-quality-evaluation.schema.json",
+  "title": "Phase25DesignQualityEvaluation",
+  "description": "Evidence-bound design observations. This contract cannot set design qualification.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "evaluation_id", "case_id", "variant_id", "rubric_version", "producer", "capture_manifest_ref", "brief_ref", "provenance_refs", "vision_receipt", "dimensions", "limitations", "advisory_recommendation", "created_at"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/design-quality-evaluation@0.1" },
+    "evaluation_id": { "type": "string", "pattern": "^dqe-[0-9a-z-]+$" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
+    "variant_id": { "type": "string", "pattern": "^V[0-9]+$" },
+    "rubric_version": { "type": "string", "minLength": 1 },
+    "producer": { "enum": ["ai-critic", "human"] },
+    "capture_manifest_ref": { "type": "string", "minLength": 1 },
+    "brief_ref": { "type": "string", "minLength": 1 },
+    "provenance_refs": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "vision_receipt": { "$ref": "#/$defs/visionReceipt" },
+    "dimensions": {
+      "type": "object", "additionalProperties": false,
+      "required": ["composition", "typography", "art_direction", "depth", "motion", "interaction", "scroll_story", "originality", "cohesion", "surface_fit"],
+      "properties": {
+        "composition": { "$ref": "#/$defs/dimension" },
+        "typography": { "$ref": "#/$defs/dimension" },
+        "art_direction": { "$ref": "#/$defs/dimension" },
+        "depth": { "$ref": "#/$defs/dimension" },
+        "motion": { "$ref": "#/$defs/dimension" },
+        "interaction": { "$ref": "#/$defs/dimension" },
+        "scroll_story": { "$ref": "#/$defs/dimension" },
+        "originality": { "$ref": "#/$defs/dimension" },
+        "cohesion": { "$ref": "#/$defs/dimension" },
+        "surface_fit": { "$ref": "#/$defs/dimension" }
+      }
+    },
+    "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "advisory_recommendation": { "enum": ["ADVANCE_TO_HUMAN", "REVISE", "REJECT", "HUMAN_VISUAL_GATE"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "dimension": {
+      "type": "object", "additionalProperties": false,
+      "required": ["status", "observations", "strengths", "failures", "severity", "confidence", "evidence_capture_ids", "producer"],
+      "properties": {
+        "status": { "enum": ["NOT_EVALUATED", "STRENGTH", "ACCEPTABLE", "WEAK", "FAILURE"] },
+        "observations": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "strengths": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "failures": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "severity": { "enum": ["none", "low", "medium", "high", "blocker"] },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "evidence_capture_ids": { "type": "array", "items": { "type": "string", "pattern": "^cap-[0-9a-z-]+$" } },
+        "producer": { "enum": ["ai-critic", "human"] }
+      }
+    },
+    "visionReceipt": {
+      "type": ["object", "null"], "additionalProperties": false,
+      "required": ["provider", "exact_model", "route", "vision_image_capability", "cost_status", "limits", "capture_hashes", "prompt_version", "rubric_version", "response_sha256", "called_at"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "exact_model": { "type": "string", "minLength": 1 },
+        "route": { "type": "string", "minLength": 1 },
+        "vision_image_capability": { "const": true },
+        "cost_status": { "enum": ["VERIFIED_FREE", "VERIFIED_PAID", "UNKNOWN"] },
+        "limits": { "type": ["object", "null"], "additionalProperties": { "type": ["string", "number", "boolean", "null"] } },
+        "capture_hashes": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[a-f0-9]{64}$" } },
+        "prompt_version": { "type": "string", "minLength": 1 },
+        "rubric_version": { "type": "string", "minLength": 1 },
+        "response_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "called_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
