@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile } from '../runner/store.mjs';
-import { assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
+import { assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
@@ -403,6 +403,72 @@ try {
   assert.equal(cli.status, 0, cli.stderr);
   assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'BUILDING');
 
+  // T11/T46: Phase-2.5 is V0-only until complete human-approved fixture fidelity evidence exists.
+  cli = run(['init-case', '--case', 'case-fidelity-fixture', '--run-version', 'phase2.5']);
+  assert.equal(cli.status, 0, cli.stderr);
+  const fidelityCasePath = join(tempDir, 'runs', 'case-fidelity-fixture', 'case.json');
+  let fidelityCase = JSON.parse(await readFile(fidelityCasePath, 'utf8'));
+  assert.deepEqual(Object.keys(fidelityCase.slots), ['V0']);
+  assert.equal(fidelityCase.slots.V0.deployable, false);
+  assert.equal(fidelityCase.slots.V0.original_work, false);
+  cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V1']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_FIDELITY_REQUIRED/);
+
+  const dimension = { status: 'CAPTURED_WELL', observation: 'fixture comparison is legible', evidence_source: 'paired fixture captures', inspection_quality: 'VISUAL_SEQUENCE', capture_refs: ['captures/reference.webp', 'captures/v0.webp'], source_refs: ['design-case:case-fe653973ef'], engine_inference: null, limitations: [] };
+  const goodFidelity = {
+    schema: 'kinetic/gym/fidelity-report@0.1', case_id: 'case-fidelity-fixture', variant_id: 'V0', classification: 'INTERNAL_REFERENCE_STUDY', deployable: false, original_work: false, reference_design_case_id: 'case-fe653973ef',
+    dimensions: Object.fromEntries(['layout', 'typography', 'color', 'spacing', 'asset_treatment', 'depth', 'hierarchy', 'motion', 'scroll_choreography', 'interaction', 'transition_behavior', 'narrative_pacing'].map((key) => [key, structuredClone(dimension)])),
+    understood: true, coverage_summary: 'fixture evidence covers every required dimension', unresolved_dimensions: [], approval: 'APPROVED', approval_producer: 'human', approval_reason: 'fixture contract evidence is complete', approved_at: '2026-08-22T00:00:00Z', created_at: '2026-08-22T00:00:00Z', producer: 'fixture-human',
+  };
+  assert.throws(() => assertFidelityPolicy(null, { caseId: 'case-fidelity-fixture', requireApproval: true }), (error) => error.code === 'KINETIC_FIDELITY_REQUIRED');
+  assert.throws(() => assertFidelityPolicy({ ...goodFidelity, approval_producer: 'ai-critic' }, { caseId: 'case-fidelity-fixture', requireApproval: true }), (error) => error.code === 'KINETIC_HUMAN_FIDELITY_APPROVAL_REQUIRED');
+  assert.throws(() => assertFidelityPolicy({ ...goodFidelity, approved_at: null }, { caseId: 'case-fidelity-fixture', requireApproval: true }), (error) => error.code === 'KINETIC_HUMAN_FIDELITY_APPROVAL_REQUIRED');
+  const noVisualEvidence = structuredClone(goodFidelity);
+  noVisualEvidence.dimensions.motion.capture_refs = [];
+  assert.throws(() => assertFidelityPolicy(noVisualEvidence, { caseId: 'case-fidelity-fixture', requireApproval: true }), (error) => error.code === 'KINETIC_FIDELITY_EVIDENCE_REQUIRED');
+  const unapprovedFidelity = { ...goodFidelity, approval: 'REVISE', approved_at: null };
+  assert.doesNotThrow(() => assertFidelityPolicy(unapprovedFidelity, { caseId: 'case-fidelity-fixture', requireApproval: false }));
+  assert.throws(() => assertFidelityPolicy(unapprovedFidelity, { caseId: 'case-fidelity-fixture', requireApproval: true }), (error) => error.code === 'KINETIC_HUMAN_FIDELITY_APPROVAL_REQUIRED');
+
+  const canonicalFidelityRef = 'runs/case-fidelity-fixture/reports/fidelity-v0.json';
+  const canonicalFidelityPath = join(tempDir, canonicalFidelityRef);
+  await mkdir(dirname(canonicalFidelityPath), { recursive: true });
+  await writeFile(canonicalFidelityPath, JSON.stringify(unapprovedFidelity, null, 2));
+  fidelityCase.slots.V0.state = 'DESIGN_EVALUATED';
+  fidelityCase.slots.V0.refs.fidelity_report = canonicalFidelityRef;
+  fidelityCase.reports.fidelity = canonicalFidelityRef;
+  await writeFile(fidelityCasePath, JSON.stringify(fidelityCase, null, 2));
+  cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V1']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_HUMAN_FIDELITY_APPROVAL_REQUIRED/);
+  await writeFile(canonicalFidelityPath, '{}');
+  cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V1']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_FIDELITY_REQUIRED/);
+
+  fidelityCase.slots.V0.state = 'VISUAL_CAPTURED';
+  fidelityCase.slots.V0.refs.fidelity_report = null;
+  fidelityCase.reports.fidelity = null;
+  fidelityCase.slots.V0.technically_qualified = true;
+  fidelityCase.slots.V0.timestamps.VISUAL_CAPTURED = '2026-08-22T00:00:00Z';
+  await writeFile(fidelityCasePath, JSON.stringify(fidelityCase, null, 2));
+  const fidelityInput = join(tempDir, 'fidelity-report.json');
+  await writeFile(fidelityInput, JSON.stringify(goodFidelity, null, 2));
+  cli = run(['advance', '--case', 'case-fidelity-fixture', '--slot', 'V0', '--to', 'DESIGN_EVALUATED', '--artifact', fidelityInput]);
+  assert.equal(cli.status, 0, cli.stderr);
+  cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V1']);
+  assert.equal(cli.status, 0, cli.stderr);
+  cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V2']);
+  assert.equal(cli.status, 0, cli.stderr);
+  cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V3']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_ORIGINAL_SLOT_LIMIT/);
+  fidelityCase = JSON.parse(await readFile(fidelityCasePath, 'utf8'));
+  assert.deepEqual(Object.keys(fidelityCase.slots), ['V0', 'V1', 'V2']);
+  assert.ok(['V1', 'V2'].every((slot) => fidelityCase.slots[slot].state === 'PLANNED' && fidelityCase.slots[slot].deployable === true && fidelityCase.slots[slot].original_work === true));
+  assert.equal((await validateFile({ artifactPath: fidelityCasePath, schemaPath: join(root, 'schemas', 'gym', 'case-run.schema.json') })).valid, true);
+
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
   valid(decision, phase25Taste, join(root, 'schemas', 'gym', 'taste-decision.schema.json'));
@@ -480,4 +546,4 @@ const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
 
-console.log(`S01-S08 contract foundations: PASS (T1-T13, T39-T41, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S09 contract foundations: PASS (T1-T13, T39-T41, T46, CV01-CV18, registry ${registryHashAfter})`);

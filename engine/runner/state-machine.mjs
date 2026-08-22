@@ -66,6 +66,47 @@ export function assertVariantBriefPolicy({ brief, caseId, slot }) {
   return true;
 }
 
+export function assertFidelityPolicy(report, { caseId, requireApproval = false } = {}) {
+  if (!report || report.schema !== 'kinetic/gym/fidelity-report@0.1' || report.case_id !== caseId
+    || report.variant_id !== 'V0' || report.classification !== 'INTERNAL_REFERENCE_STUDY'
+    || report.deployable !== false || report.original_work !== false) {
+    throw new TransitionError('KINETIC_FIDELITY_REQUIRED', 'a matching internal V0 FidelityReport is required');
+  }
+  if (report.approval_producer !== 'human') {
+    throw new TransitionError('KINETIC_HUMAN_FIDELITY_APPROVAL_REQUIRED', 'fidelity authority must be an explicit human');
+  }
+  const dimensions = Object.values(report.dimensions ?? {});
+  if (dimensions.length !== 12 || dimensions.some((dimension) => !Array.isArray(dimension.capture_refs) || dimension.capture_refs.length < 2
+    || !Array.isArray(dimension.source_refs) || dimension.source_refs.length === 0)) {
+    throw new TransitionError('KINETIC_FIDELITY_EVIDENCE_REQUIRED', 'every fidelity dimension requires paired reference/V0 captures and source evidence');
+  }
+  if (requireApproval && (report.approval !== 'APPROVED' || report.understood !== true || typeof report.approved_at !== 'string' || Number.isNaN(Date.parse(report.approved_at)))) {
+    throw new TransitionError('KINETIC_HUMAN_FIDELITY_APPROVAL_REQUIRED', 'originals require a complete human-approved V0 FidelityReport');
+  }
+  return true;
+}
+
+export function addOriginalSlot({ caseRun, slot, fidelityValidated = false, fidelityRef, now = new Date().toISOString() }) {
+  if (!['V1', 'V2'].includes(slot) || caseRun.slots?.[slot] || Object.keys(caseRun.slots ?? {}).filter((key) => ['V1', 'V2'].includes(key)).length >= 2) {
+    throw new TransitionError('KINETIC_ORIGINAL_SLOT_LIMIT', 'Phase-2.5 allows exactly V1 and V2 originals');
+  }
+  if (!caseRun.slots?.V0 || !['DESIGN_EVALUATED', 'REVIEW_READY', 'HUMAN_REVIEWED'].includes(caseRun.slots.V0.state)
+    || fidelityValidated !== true || typeof fidelityRef !== 'string') {
+    throw new TransitionError('KINETIC_FIDELITY_REQUIRED', 'original slots require completed V0 fidelity evidence');
+  }
+  const next = clone(caseRun);
+  next.slots[slot] = {
+    schema: 'kinetic/gym/variant-run@0.2', run_id: `run-${caseRun.case_id}-${slot.toLowerCase()}`, case_id: caseRun.case_id, slot,
+    mode: 'original', state: 'PLANNED', attempt: 1, deployable: true, original_work: true,
+    technically_qualified: false, design_qualified: null, acceptable_for_further_taste_learning: null,
+    refs: { variant_brief: null, retrieval_receipt: null, prebuild_review: null, build_receipt: null, technical_evaluation: null, capture_manifest: null, design_evaluation: null, fidelity_report: fidelityRef },
+    attempts: [], blocked_condition: null, timestamps: { PLANNED: now },
+  };
+  next.updated_at = now;
+  next.history.push({ event_id: `add-${caseRun.case_id}-${slot}`, event: 'original-slot-planned', slot, artifact_ref: fidelityRef, timestamp: now });
+  return next;
+}
+
 export function nextState(slot) {
   if (!slot || TERMINAL_STATES.has(slot.state)) return null;
   const index = FORWARD_STATES.indexOf(slot.state);
@@ -95,6 +136,9 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   }
   if (toState === 'BUILDING' && artifactRefs.prebuild_hash_unchanged !== true) {
     throw new TransitionError('KINETIC_PREBUILD_REVIEW_CHANGED', 'BUILDING requires the approved prebuild review hash to remain unchanged');
+  }
+  if (toState === 'DESIGN_EVALUATED' && record.slot === 'V0' && (artifactRefs.fidelity_validated !== true || typeof artifactRefs.fidelity_report !== 'string')) {
+    throw new TransitionError('KINETIC_FIDELITY_REQUIRED', 'V0 DESIGN_EVALUATED requires a complete FidelityReport');
   }
   if (toState === 'VISUAL_CAPTURED' && record.technically_qualified !== true) {
     throw new TransitionError('KINETIC_TECHNICAL_QUALIFICATION_REQUIRED', 'visual capture requires explicit technical qualification');

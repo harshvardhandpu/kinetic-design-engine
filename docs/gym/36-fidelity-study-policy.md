@@ -46,3 +46,13 @@ original_work: false       # never counted as original output anywhere
 V0 builds are BUILD-CACHE class except their fidelity_report and key screenshots,
 which are HIGH-VALUE (they calibrate the evaluator and future studies).
 (`docs/gym/52`)
+
+## Phase 2.5 human boundary
+
+Phase 2.5 initializes **V0 only**. V1 and V2 do not exist until V0 reaches
+`DESIGN_EVALUATED` with a schema-valid `fidelity-report@0.1` containing paired
+reference/V0 visual evidence for every required dimension and an explicit
+`approval: APPROVED` from `approval_producer: human` with `approved_at`.
+Automated or AI output cannot supply that authority. At most V1 and V2 may then
+enter `PLANNED`; V0 remains internal, undeployable, non-original, and exempt
+from originality qualification.

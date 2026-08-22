@@ -153,6 +153,10 @@
         {
           "if": { "required": ["slot"], "properties": { "slot": { "const": "V0" } } },
           "then": { "properties": { "mode": { "const": "fidelity-study" }, "deployable": { "const": false }, "original_work": { "const": false }, "design_qualified": { "const": null }, "acceptable_for_further_taste_learning": { "const": null } } }
+        },
+        {
+          "if": { "required": ["slot"], "properties": { "slot": { "enum": ["V1", "V2"] } } },
+          "then": { "properties": { "mode": { "const": "original" }, "deployable": { "const": true }, "original_work": { "const": true } } }
         }
       ]
     }

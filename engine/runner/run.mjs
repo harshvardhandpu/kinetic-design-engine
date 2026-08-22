@@ -19,7 +19,7 @@ import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
-import { applyTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
+import { addOriginalSlot, applyTransition, assertFidelityPolicy, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
 import { hashFile, readCase as readStoredCase, withCaseLock, writeCaseAtomic } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
@@ -157,6 +157,19 @@ async function assertPersistedPlanningUnchanged(caseId, slot, refs) {
   return { ...brief, retrieval_hash_unchanged: true, prebuild_hash_unchanged: true };
 }
 
+async function persistValidatedFidelity(caseId, slot, artifactPath) {
+  if (slot !== 'V0' || typeof artifactPath !== 'string') throw Object.assign(new Error('V0 FidelityReport requires --artifact'), { code: 'KINETIC_FIDELITY_REQUIRED' });
+  const report = await j(artifactPath);
+  const schemaPath = join(root, 'schemas', 'gym', 'fidelity-report.schema.json');
+  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const validation = validateValue({ value: report, schema, schemaPath });
+  if (!validation.valid) throw Object.assign(new Error(JSON.stringify(validation.errors)), { code: 'KINETIC_FIDELITY_REQUIRED' });
+  assertFidelityPolicy(report, { caseId, requireApproval: false });
+  const outputPath = join(gym, 'runs', caseId, 'reports', 'fidelity-v0.json');
+  await w(outputPath, report);
+  return { fidelity_report: relative(gym, outputPath).split('\\').join('/'), fidelity_validated: true };
+}
+
 const ORDER = ['BRIEFED', 'GENERATING', 'BUILT', 'TECHNICAL_PASS', 'RESPONSIVE_PASS', 'A11Y_PASS', 'PERFORMANCE_PASS', 'DESIGN_EVALUATED', 'QUALIFIED'];
 const TERMINAL = new Set(['QUALIFIED', 'REJECTED', 'REJECTED_FINAL', 'EMPTY']);
 
@@ -206,6 +219,27 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
     console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
     process.exitCode = 1;
   }
+} else if (cmd === 'add-slot') {
+  try {
+    await withCaseLock(A.case, `add-slot-${A.slot}`, async () => {
+      const loaded = await readStoredCase(A.case);
+      if (loaded.legacy) throw Object.assign(new Error('add-slot is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
+      const fidelityRef = loaded.record.reports?.fidelity;
+      const fidelityPath = resolveGymRef(fidelityRef, 'KINETIC_FIDELITY_REQUIRED');
+      const report = await j(fidelityPath);
+      const schemaPath = join(root, 'schemas', 'gym', 'fidelity-report.schema.json');
+      const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+      const validation = validateValue({ value: report, schema, schemaPath });
+      if (!validation.valid) throw Object.assign(new Error('stored FidelityReport is invalid'), { code: 'KINETIC_FIDELITY_REQUIRED' });
+      assertFidelityPolicy(report, { caseId: A.case, requireApproval: true });
+      const updated = addOriginalSlot({ caseRun: loaded.record, slot: A.slot, fidelityValidated: true, fidelityRef, now: now() });
+      await writeCaseAtomic(A.case, updated);
+    });
+    console.log(`${A.case}/${A.slot} -> PLANNED`);
+  } catch (error) {
+    console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
+    process.exitCode = 1;
+  }
 } else if (cmd === 'retrieve') {
   try {
     let receipt;
@@ -230,7 +264,9 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       if (A.to === 'RETRIEVAL_PROVEN') artifactRefs = { ...artifactRefs, ...await persistValidatedRetrieval(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
       if (A.to === 'PREBUILD_APPROVED') artifactRefs = { ...artifactRefs, ...await persistValidatedPrebuild(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
       if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedPlanningUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs) };
+      if (A.to === 'DESIGN_EVALUATED' && A.slot === 'V0') artifactRefs = { ...artifactRefs, ...await persistValidatedFidelity(A.case, A.slot, A.artifact) };
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
+      if (artifactRefs.fidelity_report) updated.reports.fidelity = artifactRefs.fidelity_report;
       await writeCaseAtomic(A.case, updated);
     });
     console.log(`${A.case}/${A.slot} -> ${A.to}`);
