@@ -1,0 +1,76 @@
+{
+  "schema": "kinetic/gym/experiment-record@0.1",
+  "experiment_id": "exp-test11-control-vs-kinetic-20260822",
+  "test": "Test 11 — CONTROL vs KINETIC",
+  "brief_id": "brief-test11-koan-20260822",
+  "created_at": "2026-08-22T06:15:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+  "kinetic_version": "0.2.0-phase2",
+  "repo_commit": "a4f04691aac51ebef58d12752de990d2ae8436cd",
+
+  "brief": "Single-page site for 'KŌAN' fictional tea-ceremony studio: hero, philosophy, three experiences, footer. Dark ceremonial, scroll-linked motion + entrance animations. One self-contained index.html, no external assets, original content.",
+
+  "arms": {
+    "CONTROL": {
+      "path": "gym/experiments/test11/control/index.html",
+      "kinetic_used": false,
+      "isolation_verified": "no .kinetic directory, 0 [data-kinetic] elements, 0 KINETIC handles, no install receipt",
+      "gates": { "technical": "pass", "responsive": "pass", "a11y": "pass", "performance": "pass", "design": "pending-vision-or-human" },
+      "kinetic_count": 0,
+      "dom_nodes": 34,
+      "will_change": 1,
+      "reduced_motion_handling": "NONE — hand-written IntersectionObserver entrance + scroll parallax have no prefers-reduced-motion fallback",
+      "traceability": "none — no receipt, no registry entries, no resolver chain",
+      "reproducibility_receipt": "gym/experiments/test11/control/receipt.json"
+    },
+    "TREATMENT": {
+      "path": "gym/experiments/test11/treatment/index.html",
+      "kinetic_used": true,
+      "design_cases_retrieved": ["case-fe653973ef"],
+      "primitives_installed": ["kinetic.reveal-stagger", "kinetic.scroll-progress"],
+      "tokens": { "duration-slow": 1100, "stagger-base": 100 },
+      "gates": { "technical": "pass", "responsive": "pass", "a11y": "pass", "performance": "pass", "design": "pending-vision-or-human" },
+      "kinetic_count": 3,
+      "kinetic_handles": 4,
+      "handle_states": ["reveal-stagger:playing", "reveal-stagger:playing", "reveal-stagger:idle", "scroll-progress:playing"],
+      "dom_nodes": 34,
+      "will_change": 0,
+      "reduced_motion_handling": "FREE via primitives — both installed primitives carry the prefers-reduced-motion contract (verified in installed source)",
+      "traceability": "full — install receipt, registry entries, resolver chain, reproducibility receipt",
+      "reproducibility_receipt": "gym/experiments/test11/treatment/receipt.json"
+    }
+  },
+
+  "measured_differences": [
+    { "dimension": "deterministic gates", "control": "4/4 pass", "treatment": "4/4 pass", "delta": "none — both technically qualified" },
+    { "dimension": "reduced-motion compliance", "control": "ABSENT (no fallback)", "treatment": "PRESENT (primitive contract)", "delta": "KINETIC provides accessibility degradation the control lacks" },
+    { "dimension": "traceability / reproducibility", "control": "none", "treatment": "full receipt + registry + resolver chain", "delta": "KINETIC provides auditability the control lacks" },
+    { "dimension": "will_change usage", "control": 1, "treatment": 0, "delta": "treatment avoids persistent will-change (primitive-managed)" },
+    { "dimension": "build steps", "control": "1 (write file)", "treatment": "3 (install + write + receipt)", "delta": "KINETIC costs more setup steps" },
+    { "dimension": "design quality", "control": "pending-vision-or-human", "treatment": "pending-vision-or-human", "delta": "NOT MEASURABLE — text-only runtime; aesthetic comparison requires human/vision review" }
+  ],
+
+  "uplift_conclusion": {
+    "claim": "PARTIAL — evidence-supported on process dimensions only",
+    "proven": [
+      "KINETIC treatment delivers reduced-motion accessibility compliance that the no-KINETIC control lacks (same model, same brief).",
+      "KINETIC treatment delivers full traceability + reproducibility receipts that the control lacks.",
+      "Both arms pass identical deterministic gates — KINETIC does not degrade technical quality."
+    ],
+    "not_proven": [
+      "Design/aesthetic uplift is NOT proven — this runtime is text-only; no vision or human judged either arm. Per Amendment G, no aesthetic claim is made.",
+      "Whether KINETIC produces a *better-looking* result than the same model without it remains an open question requiring human visual review."
+    ],
+    "answer_to_phase2_question": "Did KINETIC demonstrably improve the output of the same model compared with the no-KINETIC baseline? PARTIALLY YES on measurable process/accessibility/traceability dimensions; NOT YET DETERMINED on aesthetic quality (blocked on vision/human review)."
+  },
+
+  "validity_caveats": [
+    "Same agent built both arms: the model's general knowledge cannot be blinded. What is isolated is the KINETIC SYSTEM (retrieval, primitives, tokens, receipts, corpus lessons), not the model's priors.",
+    "Single brief, single model, single viewport — n=1; no statistical claim is made.",
+    "Design quality comparison is explicitly out of scope for this text-only runtime."
+  ],
+
+  "promotion_candidate": false,
+  "promotion_note": "Test 11 is a measurement experiment, not a promotable artifact. AUTO_PROMOTION=OFF."
+}

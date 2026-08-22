@@ -1,0 +1,22 @@
+{
+  "schema": "kinetic/reproducibility-receipt@0.1",
+  "arm": "TREATMENT",
+  "experiment_id": "exp-test11-control-vs-kinetic-20260822",
+  "brief_id": "brief-test11-koan-20260822",
+  "kinetic_version": "0.2.0-phase2",
+  "repo_commit": "a4f04691aac51ebef58d12752de990d2ae8436cd",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+  "prompt_skill_version": "phase2-v1 (brief.json + KINETIC retrieval/primitives)",
+  "design_cases_retrieved": ["case-fe653973ef"],
+  "tool_versions": { "node": "v20.20.2", "browser": "hermes-camofox", "viewport": "1485x840" },
+  "registry_entries": ["kinetic.reveal-stagger", "kinetic.scroll-progress"],
+  "recipe_versions": {},
+  "primitive_versions": { "kinetic.reveal-stagger": "1.0.0", "kinetic.scroll-progress": "1.0.0" },
+  "tokens": { "duration-slow": 1100, "stagger-base": 100 },
+  "dependency_lock_hash": null,
+  "random_seed": null,
+  "evaluator_version": "gates.browser@0.1",
+  "generated_at": "2026-08-22T06:15:00Z",
+  "install_receipt": "gym/experiments/test11/treatment/.kinetic/installed.json"
+}

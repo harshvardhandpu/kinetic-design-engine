@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KŌAN — Tea Ceremony Studio (TREATMENT arm)</title>
+<!--
+  TEST 11 / TREATMENT ARM — brief-test11-koan-20260822
+  Built WITH KINETIC: DesignCase retrieval (case-fe653973ef IZANAMI = nearest corpus case),
+  engine-installed primitives (reveal-stagger, scroll-progress), tokens, install receipt.
+  Same brief as the control arm. Corpus lesson applied: keep the requested dark-ceremonial
+  direction but do NOT reproduce the reference's specific expression (distinct composition).
+-->
+<style>
+:root { --bg:#0C0B09; --fg:#E7E3DA; --accent:#B08D57; --dim:rgba(231,227,218,0.55); --serif:Georgia,serif; --sans:'Helvetica Neue',Arial,sans-serif; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--fg); font-family:var(--sans); line-height:1.6; overflow-x:hidden; }
+::selection { background:var(--accent); color:var(--bg); }
+.wrap { max-width:64rem; margin:0 auto; padding:0 clamp(1.5rem,5vw,4rem); }
+
+.hero { min-height:90vh; display:flex; flex-direction:column; justify-content:center; }
+.hero .kicker { font-size:0.7rem; letter-spacing:0.4em; color:var(--accent); margin-bottom:1.6rem; }
+.hero h1 { font-family:var(--serif); font-size:clamp(2.6rem,7vw,5.4rem); line-height:1.05; font-weight:400; max-width:18ch; }
+.hero .sub { margin-top:1.8rem; color:var(--dim); max-width:30rem; }
+
+section.block { padding:12vh 0; border-top:1px solid rgba(231,227,218,0.12); }
+section.block h2 { font-family:var(--serif); font-size:clamp(2rem,5vw,3.6rem); font-weight:400; line-height:1.1; max-width:20ch; }
+section.block .body { margin-top:1.6rem; color:var(--dim); max-width:32rem; }
+
+.exps { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:2rem; margin-top:3rem; }
+.exp { border:1px solid rgba(231,227,218,0.14); border-radius:10px; padding:1.6rem; }
+.exp .no { font-size:0.66rem; letter-spacing:0.2em; color:var(--accent); }
+.exp h3 { font-family:var(--serif); font-size:1.5rem; font-weight:400; margin:0.7rem 0; }
+.exp p { color:var(--dim); font-size:0.92rem; }
+
+footer { padding:6vh 0; border-top:1px solid rgba(231,227,218,0.12); display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-size:0.72rem; letter-spacing:0.15em; color:var(--dim); }
+</style>
+</head>
+<body>
+<main id="main">
+  <section class="hero wrap">
+    <p class="kicker" data-reveal-item>KYOTO · SINCE ALWAYS</p>
+    <h1 data-reveal-item>A bowl of tea is a door left open.</h1>
+    <p class="sub" data-reveal-item>KŌAN is a tea-ceremony studio where the oldest gestures are practiced slowly, so that the present moment has somewhere to sit.</p>
+  </section>
+
+  <section class="block wrap" data-recipe-role="parallax-section">
+    <h2 data-reveal-item>We do not perform ceremony. We make room for it.</h2>
+    <p class="body" data-reveal-item>Every gathering begins with silence, water, and attention. The room is prepared before the guest arrives; the guest is prepared before the room is entered. What remains is the simplest exchange two people can share.</p>
+  </section>
+
+  <section class="block wrap">
+    <h2 data-reveal-item>Three experiences.</h2>
+    <div class="exps">
+      <article class="exp" data-reveal-item><span class="no">01</span><h3>The First Bowl</h3><p>An introduction for those who have never knelt on tatami. One hour, one bowl, no prior knowledge required.</p></article>
+      <article class="exp" data-reveal-item><span class="no">02</span><h3>The Long Sit</h3><p>A full seasonal gathering. Three hours, several courses, and the unhurried rhythm of a complete ceremony.</p></article>
+      <article class="exp" data-reveal-item><span class="no">03</span><h3>The Quiet Study</h3><p>For returning guests who wish to learn the gestures themselves, across a series of private sessions.</p></article>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <span>KŌAN TEA CEREMONY STUDIO</span>
+    <span>HIGASHIYAMA, KYOTO</span>
+  </footer>
+</main>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as scrollProgress from './kinetic/core/primitives/scroll-progress.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+for (const sec of document.querySelectorAll('.hero, .block')) {
+  handles.push(revealStagger.mount(sec, { selector: '[data-reveal-item]', duration: tokens['duration-slow'] ?? 1100, stagger: tokens['stagger-base'] ?? 100, y: '26px', threshold: 0.15, tokens }));
+}
+const ps = document.querySelector('[data-recipe-role=parallax-section]');
+if (ps) handles.push(scrollProgress.mount(ps, { mode: 'parallax', depth: 0.12, tokens }));
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>

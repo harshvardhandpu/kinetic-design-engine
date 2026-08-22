@@ -1,0 +1,21 @@
+{
+  "schema": "kinetic/reproducibility-receipt@0.1",
+  "arm": "CONTROL",
+  "experiment_id": "exp-test11-control-vs-kinetic-20260822",
+  "brief_id": "brief-test11-koan-20260822",
+  "kinetic_version": "n/a (no KINETIC)",
+  "repo_commit": "a4f04691aac51ebef58d12752de990d2ae8436cd",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+  "prompt_skill_version": "phase2-v1 (brief.json only, no KINETIC skill)",
+  "design_cases_retrieved": [],
+  "tool_versions": { "node": "v20.20.2", "browser": "hermes-camofox", "viewport": "1485x840" },
+  "registry_entries": [],
+  "recipe_versions": {},
+  "primitive_versions": {},
+  "dependency_lock_hash": null,
+  "random_seed": null,
+  "evaluator_version": "gates.browser@0.1",
+  "generated_at": "2026-08-22T06:15:00Z",
+  "note": "Control arm deliberately has no KINETIC retrieval, primitives, tokens, or install receipt. This receipt documents that absence for auditability."
+}

@@ -1,0 +1,31 @@
+{
+  "schema": "kinetic/gym/experiment-brief@0.1",
+  "brief_id": "brief-test11-koan-20260822",
+  "test": "Test 11 — CONTROL vs KINETIC",
+  "created_at": "2026-08-22T06:05:00Z",
+
+  "brief": "Build a single-page website for 'KŌAN' — a fictional tea-ceremony experience studio in Kyoto. Required sections in order: (1) hero statement, (2) philosophy, (3) three experiences, (4) footer with location. Direction: dark, ceremonial, quiet motion. Must include scroll-linked motion and entrance animations. No external images, no external fonts, no frameworks — one self-contained index.html. Content must be original.",
+
+  "constraints": {
+    "same_model": "qwen/qwen3.8-max-free",
+    "same_provider": "tokenrouter",
+    "same_brief": "this file — both arms build from this exact brief",
+    "same_gates": "identical deterministic gate suite + originality comparator vs case-fe653973ef reference fingerprint",
+    "viewport": "1485x840",
+    "browser": "hermes-camofox"
+  },
+
+  "arms": {
+    "CONTROL": {
+      "definition": "Same model + brief, WITHOUT KINETIC: no DesignCase retrieval, no engine primitives, no tokens, no install receipts, no KINETIC-specific lessons applied. Generic best-practice hand-written HTML/CSS/JS only.",
+      "isolation_note": "Honest limitation: the same agent builds both arms, so the model's general knowledge cannot be blinded. What IS isolated is the KINETIC SYSTEM — retrieval, primitives, recipes, tokens, receipts, and the corpus-derived originality/axis-inversion lessons are not used in the control arm. This is recorded as a validity caveat, not hidden."
+    },
+    "TREATMENT": {
+      "definition": "Same model + brief, WITH KINETIC: retrieve relevant DesignCase from corpus, install primitives via engine installer, use tokens, record engine receipt.",
+      "retrieval_expected": "case-fe653973ef (IZANAMI) — nearest corpus case to a dark ceremonial tea-ceremony brief"
+    }
+  },
+
+  "hypothesis": "KINETIC treatment will show (a) full traceability + reproducibility receipts the control lacks, (b) free reduced-motion compliance via primitives, (c) equal-or-better originality distance from the nearest reference thanks to the corpus-derived axis-inversion lesson. Cost: more build steps (install + receipt) than control.",
+  "uplift_rule": "Do NOT claim uplift unless measured differences support it. Design quality is NOT compared here — this runtime is text-only; aesthetic judgment stays pending-vision-or-human for both arms."
+}
