@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IZANAMI case-fe653973ef — Review Package</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 0; background: #f5f4f1; color: #1a1a1a; line-height: 1.5; }
+header { padding: 2rem 2.5rem; border-bottom: 1px solid #ddd; }
+h1 { font-size: 1.4rem; margin: 0 0 0.4rem; }
+.meta { font-size: 0.85rem; color: #666; }
+main { padding: 2rem 2.5rem; display: grid; gap: 1.5rem; }
+.card { background: #fff; border: 1px solid #e2e0dc; border-radius: 10px; padding: 1.4rem 1.6rem; }
+.card h2 { font-size: 1.05rem; margin: 0 0 0.3rem; }
+.card .dir { font-size: 0.85rem; color: #555; margin-bottom: 0.8rem; }
+.badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+.badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 999px; background: #e8f0e8; color: #2a5a2a; }
+.badge.pending { background: #fdf3e0; color: #8a6116; }
+.badge.na { background: #eee; color: #666; }
+a.open { display: inline-block; font-size: 0.85rem; color: #1a5fb4; }
+table { border-collapse: collapse; width: 100%; font-size: 0.8rem; margin-top: 0.6rem; }
+th, td { border: 1px solid #e2e0dc; padding: 0.35rem 0.6rem; text-align: left; }
+.note { font-size: 0.8rem; color: #8a6116; background: #fdf3e0; padding: 0.8rem 1rem; border-radius: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Review Package — IZANAMI (case-fe653973ef)</h1>
+  <p class="meta">Reference: izanami-official.com (Awwwards SOTD 2026) · K4 · GSAP+ScrollTrigger+Lenis+Three<br>
+  Variants: V0 fidelity study + V1–V3 originals · V4 skipped (no distinct hypothesis) · All deterministic gates PASS · Design status: <strong>AWAITING_HUMAN_VISUAL_DECISION</strong></p>
+</header>
+<main>
+  <div class="note">⚠ This runtime is text-only. No variant below has been aesthetically validated by AI. The human reviewer decides winner / runner-up / rejects. Do not treat gate PASSes as design approval.</div>
+
+  <div class="card">
+    <h2>V0 — Fidelity Study</h2>
+    <p class="dir">Reconstruction of the reference's motion system: per-char ceremonial hero reveal, numbered chapters, parallax media, ambient cloud layer (independent canvas-2d implementation), dual-timezone clocks.</p>
+    <div class="badges"><span class="badge">technical ✓</span><span class="badge">responsive ✓</span><span class="badge">a11y ✓</span><span class="badge">performance ✓</span><span class="badge na">originality: EXEMPT (fidelity study)</span><span class="badge na">deployable: false</span><span class="badge pending">design: pending-vision-or-human</span></div>
+    <a class="open" href="v0/index.html" target="_blank">Open V0 →</a>
+  </div>
+
+  <div class="card">
+    <h2>V1 — Light Archive</h2>
+    <p class="dir">Inverts every reference axis: bone paper ground, ink text, left-aligned editorial grid, fixed side index, grotesque type, crisp line-mask reveals. Original content.</p>
+    <div class="badges"><span class="badge">technical ✓</span><span class="badge">responsive ✓</span><span class="badge">a11y ✓</span><span class="badge">performance ✓</span><span class="badge">originality 0.093 PASS-distinct</span><span class="badge pending">design: pending-vision-or-human</span></div>
+    <a class="open" href="v1/index.html" target="_blank">Open V1 →</a>
+  </div>
+
+  <div class="card">
+    <h2>V2 — Horizontal Procession</h2>
+    <p class="dir">Inverts the scroll axis: a tall section drives a horizontal track of three oversized Roman-numeral plates. Near-black + single gold accent, display serif numerals. Original content.</p>
+    <div class="badges"><span class="badge">technical ✓</span><span class="badge">responsive ✓</span><span class="badge">a11y ✓</span><span class="badge">performance ✓</span><span class="badge">originality 0.161 PASS-distinct</span><span class="badge pending">design: pending-vision-or-human</span></div>
+    <a class="open" href="v2/index.html" target="_blank">Open V2 →</a>
+  </div>
+
+  <div class="card">
+    <h2>V3 — The Whispering Statement</h2>
+    <p class="dir">Single-viewport, no-scroll typographic room: scramble-decoded central statement, slow marquee band, three hover-lift whisper cards. Warm paper + deep teal + coral. Original content.</p>
+    <div class="badges"><span class="badge">technical ✓</span><span class="badge">responsive ✓</span><span class="badge">a11y ✓</span><span class="badge">performance ✓</span><span class="badge">originality 0.078 PASS-distinct</span><span class="badge pending">design: pending-vision-or-human</span></div>
+    <a class="open" href="v3/index.html" target="_blank">Open V3 →</a>
+  </div>
+
+  <div class="card">
+    <h2>Originality summary (vs reference fingerprint)</h2>
+    <table>
+      <tr><th>Variant</th><th>weighted</th><th>copy</th><th>assets</th><th>section order</th><th>verdict</th></tr>
+      <tr><td>V0</td><td colspan="4">exempt — fidelity study, deployable:false, never published</td><td>n/a</td></tr>
+      <tr><td>V1</td><td>0.093</td><td>0</td><td>0</td><td>0</td><td>PASS-distinct</td></tr>
+      <tr><td>V2</td><td>0.161</td><td>0</td><td>0</td><td>0</td><td>PASS-distinct</td></tr>
+      <tr><td>V3</td><td>0.078</td><td>0</td><td>0</td><td>0</td><td>PASS-distinct</td></tr>
+    </table>
+  </div>
+</main>
+</body>
+</html>

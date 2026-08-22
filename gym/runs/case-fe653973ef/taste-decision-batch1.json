@@ -1,0 +1,30 @@
+{
+  "schema": "kinetic/gym/taste-decision@0.1",
+  "decision_id": "td-case-fe653973ef-batch1-PENDING",
+  "status": "AWAITING_HUMAN_VISUAL_DECISION",
+  "case_id": "case-fe653973ef",
+  "batch": {
+    "candidates": ["V1", "V2", "V3"],
+    "excluded": { "V0": "fidelity study — not an original candidate; internal benchmark only" },
+    "review_url": "gym/runs/case-fe653973ef/review-package.html",
+    "prepared_at": "2026-08-22T05:00:00Z"
+  },
+  "context": {
+    "model": "qwen/qwen3.8-max-free",
+    "provider": "tokenrouter",
+    "vision_available": false,
+    "note": "Runtime is text-only. All deterministic gates PASS for V1-V3; no aesthetic validation performed by AI. Human reviewer must open each variant in a browser and judge."
+  },
+  "human_decision": {
+    "winner": null,
+    "runner_up": null,
+    "rejected": [],
+    "rationale": null,
+    "decided_by": null,
+    "decided_at": null
+  },
+  "integrity": {
+    "fabricated": false,
+    "rule": "Amendment G + human-review rule: winner/runner-up/design_quality/human_preference must come from the human. This record stays PENDING until then."
+  }
+}
