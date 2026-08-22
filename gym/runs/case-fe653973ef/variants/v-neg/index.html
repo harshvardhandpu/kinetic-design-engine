@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEFECTIVE — Veil That Never Lifts (Test 7 negative candidate)</title>
+<!--
+  KINETIC GYM / TEST 7 NEGATIVE CANDIDATE — case-fe653973ef / slot V-NEG
+  DELIBERATE DEFECT (isolated, non-destructive): a full-screen intro veil covers the page
+  and is NEVER dismissed — no click handler, no scroll handler, no timeout, no pointer-events
+  passthrough. All content beneath is permanently unreachable.
+  Purpose: prove whether deterministic gates + inspector catch an interaction-blocking defect.
+  This candidate is expected to be REJECTED. It is not for promotion or publication.
+-->
+<style>
+:root { --bg:#0B0A08; --fg:#E9E6DF; --gold:#C9A227; --sans:'Helvetica Neue',Arial,sans-serif; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--fg); font-family:var(--sans); line-height:1.6; }
+main { padding:20vh clamp(1.5rem,6vw,6rem); max-width:56rem; }
+h1 { font-size:clamp(2.4rem,6vw,4.5rem); line-height:1.05; letter-spacing:-0.02em; }
+p { margin-top:1.4rem; color:color-mix(in srgb,var(--fg) 65%,transparent); max-width:32rem; }
+a.cta { display:inline-block; margin-top:2rem; color:var(--gold); text-decoration:none; border-bottom:1px solid var(--gold); padding-bottom:0.2rem; }
+
+/* THE DEFECT: full-screen veil, opaque, never dismissed, blocks all pointer events */
+.veil {
+  position: fixed; inset: 0; z-index: 999;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  /* no pointer-events:none, no removal, no timeout — content is permanently blocked */
+}
+.veil .word { font-size:clamp(1.4rem,3vw,2rem); letter-spacing:0.5em; color:var(--gold); opacity:0.8; }
+</style>
+</head>
+<body>
+<div class="veil" aria-hidden="true"><span class="word">ENTER</span></div>
+
+<main id="main">
+  <h1 data-reveal-item>The room you cannot reach.</h1>
+  <p data-reveal-item>Behind this veil is a perfectly built page: valid semantics, accessible labels, no overflow, light DOM. Every deterministic gate will pass. And yet you can never read this sentence, click this link, or scroll this page — because the veil never lifts.</p>
+  <a class="cta" href="#main" data-reveal-item>A link you will never press →</a>
+</main>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+handles.push(revealStagger.mount(document.querySelector('main'), { selector: '[data-reveal-item]', duration: 900, stagger: 90, y: '24px', threshold: 0.2, tokens }));
+window.__KINETIC_HANDLES__ = handles;
+// NOTE: intentionally NO code to dismiss .veil — that omission IS the defect under test.
+</script>
+</body>
+</html>

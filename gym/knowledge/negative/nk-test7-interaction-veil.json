@@ -1,0 +1,51 @@
+{
+  "schema": "kinetic/gym/negative-knowledge@0.1",
+  "record_id": "nk-test7-interaction-veil-20260822",
+  "test": "Test 7 — negative learning",
+  "case_id": "case-fe653973ef",
+  "candidate": "gym/runs/case-fe653973ef/variants/v-neg/index.html",
+  "created_at": "2026-08-22T05:05:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+
+  "failure_class": "interaction-blocking-overlay",
+  "defect_description": "A full-screen fixed intro veil (position:fixed, inset:0, z-index:999, opaque background, no pointer-events:none) covers the page and is never dismissed — no click handler, no scroll handler, no timeout. All content beneath is permanently unreachable: the user can never read, click, or scroll.",
+
+  "evidence": {
+    "deterministic_gates": {
+      "technical": "pass",
+      "responsive": "pass",
+      "a11y": "pass",
+      "performance": "pass",
+      "note": "ALL four deterministic gates PASS on the defective candidate. Valid semantics, accessible labels, no overflow, light DOM — the page is 'correct' by every structural measure, yet completely unusable."
+    },
+    "interaction_blockers_heuristic": {
+      "detected": ["div.veil"],
+      "result": "CAUGHT",
+      "note": "A position:fixed/absolute element covering >=50% of the viewport with pointer-events enabled and (z-index>=100 OR opaque background) is flagged as an interaction blocker."
+    }
+  },
+
+  "diagnosis": "Deterministic structural gates (DOM validity, overflow, a11y labels, perf budgets) cannot detect runtime interaction-blocking because the blocking element is itself well-formed. The defect is behavioral/relational (an overlay that never yields), not structural. This is a concrete false-negative class for gate-only qualification and directly validates Amendment G: technical PASS != usable, and != design-qualified.",
+
+  "negative_knowledge": [
+    "A page can pass every deterministic gate and still be completely unusable if an overlay never dismisses.",
+    "Interaction-blocking is a behavioral defect invisible to structural gates; it needs a dedicated overlay/pointer-events heuristic or a vision/human check.",
+    "Intro veils, cookie walls, loading screens, and modal backdrops are the common real-world sources of this class.",
+    "An overlay is only safe if it (a) is dismissed by a real handler, (b) sets pointer-events:none once done, or (c) is removed from the DOM."
+  ],
+
+  "future_prevention_rule": {
+    "id": "rule-interaction-blocker-gate",
+    "rule": "Add an 'interaction_blockers' check to the responsive/technical gate suite: flag any position:fixed/absolute element covering >=50% of the viewport with pointer-events enabled and (z-index>=100 OR opaque background) that is not dismissed. Such a candidate must NOT pass qualification on deterministic gates alone.",
+    "implemented_in": "engine/evaluator/gates.browser.js (interaction_blockers check added)",
+    "status": "implemented"
+  },
+
+  "disposition": {
+    "candidate_rejected": true,
+    "promoted": false,
+    "published": false,
+    "note": "Isolated, non-destructive test fixture. Not dangerous; retained as evidence only."
+  }
+}

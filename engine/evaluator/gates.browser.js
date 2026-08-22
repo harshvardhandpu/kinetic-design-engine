@@ -58,7 +58,25 @@
     return e.scrollWidth > e.clientWidth + 1 && cs.overflow === 'hidden' && cs.textOverflow === 'ellipsis' === false && e.textContent.trim().length > 0 && e.children.length === 0;
   }).length;
   resp.checks.possibly_clipped_text = clipped;
-  resp.result = (!resp.checks.horizontal_overflow && resp.checks.escaping_count === 0) ? 'pass' : 'fail';
+  // interaction-blocker detection (Test-7 negative knowledge, rule-interaction-blocker-gate):
+  // a fixed/absolute overlay covering >=50% of the viewport with pointer events enabled and
+  // (z-index>=100 OR opaque background) blocks the page unless it is dismissed. Structural
+  // gates cannot see this behavioral defect, so it gets its own check.
+  const blockers = [];
+  document.querySelectorAll('body *').forEach((e) => {
+    const cs = getComputedStyle(e);
+    if (cs.position !== 'fixed' && cs.position !== 'absolute') return;
+    const r = e.getBoundingClientRect();
+    if (r.width < docEl.clientWidth * 0.5 || r.height < (innerHeight || 1) * 0.5) return;
+    if (cs.pointerEvents === 'none') return;
+    const z = parseInt(cs.zIndex, 10);
+    const bg = cs.backgroundColor;
+    const opaque = bg && bg !== 'transparent' && !/rgba\([^)]*,\s*0(\.\d+)?\s*\)$/.test(bg);
+    if ((Number.isFinite(z) && z >= 100) || opaque) blockers.push(e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).split(' ')[0] : ''));
+  });
+  resp.checks.interaction_blockers = blockers.slice(0, 10);
+  resp.checks.interaction_blocker_count = blockers.length;
+  resp.result = (!resp.checks.horizontal_overflow && resp.checks.escaping_count === 0 && blockers.length === 0) ? 'pass' : 'fail';
   out.gates.responsive = resp;
 
   // ---- A11Y (heuristic) ----
