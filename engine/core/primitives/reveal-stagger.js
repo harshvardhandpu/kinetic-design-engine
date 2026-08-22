@@ -25,6 +25,9 @@ export function mount(el, opts = {}) {
     threshold = 0.2,
     tokens = {},
   } = opts;
+  // clamp: IntersectionObserver requires threshold in [0,1]; out-of-range throws
+  // RangeError AFTER setPre() would hide content (defect found in Phase-2 Test 3)
+  const safeThreshold = Math.min(1, Math.max(0, threshold));
   const d = tokens['duration-slow'] ?? duration;
   const st = tokens['stagger-base'] ?? stagger;
 
@@ -74,7 +77,7 @@ export function mount(el, opts = {}) {
     setPre();
     io = new IntersectionObserver((entries) => {
       if (entries.some((e) => e.isIntersecting) && state === 'idle') play();
-    }, { threshold });
+    }, { threshold: safeThreshold });
     io.observe(el);
   }
 

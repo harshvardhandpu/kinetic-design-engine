@@ -31,10 +31,22 @@ const resolution = {
 };
 
 if (receipt) {
-  const entry = receipt.items.find((i) => i.id === query || i.id.includes(query));
+  // direct item match
+  let entry = receipt.items.find((i) => i.id === query || i.id.includes(query));
+  let via_recipe = null;
+  if (!entry) {
+    // traverse recipes: a primitive installed via recipe is receipt-backed through the recipe entry
+    for (const item of receipt.items.filter((i) => i.kind === 'recipe')) {
+      try {
+        const recipe = JSON.parse(await readFile(join(target, item.recipe_file), 'utf8'));
+        const p = recipe.primitives.find((pp) => pp.id === query || pp.id.includes(query));
+        if (p) { entry = item; via_recipe = { recipe_id: item.id, primitive: p.id, target_selector: p.target }; break; }
+      } catch {}
+    }
+  }
   if (entry) {
-    resolution.kinetic_id = entry.id;
-    resolution.receipt_entry = { kind: entry.kind, version: entry.version, files: entry.files };
+    resolution.kinetic_id = query.includes('kinetic.') ? (via_recipe ? via_recipe.primitive : entry.id) : entry.id;
+    resolution.receipt_entry = { kind: entry.kind, version: entry.version, files: entry.files, via_recipe };
     resolution.component_files = entry.files.map((f) => join(target, f.path));
     resolution.confidence = 'high'; // receipt-backed
   }

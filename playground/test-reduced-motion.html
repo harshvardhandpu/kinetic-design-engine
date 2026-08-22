@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KINETIC Test — Reduced Motion (Test 5)</title>
+<style>body{font-family:monospace;padding:2rem} .pass{color:green} .fail{color:red}</style>
+</head>
+<body>
+<h1>Reduced-motion degradation test</h1>
+<p>Emulates <code>prefers-reduced-motion: reduce</code> before mounting each primitive, then checks every handle lands in <code>done-reduced-motion</code> with final-state content.</p>
+<pre id="out">running…</pre>
+<script type="module">
+// emulate reduced motion BEFORE any primitive module loads
+const origMM = window.matchMedia;
+window.matchMedia = (q) => ({
+  matches: q.includes('prefers-reduced-motion') ? true : origMM(q).matches,
+  media: q, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {},
+});
+
+const results = {};
+const mods = ['reveal-stagger', 'marquee', 'scroll-progress', 'hover-lift', 'scramble-text', 'cursor-glow', 'grid-reveal'];
+
+for (const name of mods) {
+  const mod = await import(`./kinetic/core/primitives/${name}.js`);
+  const el = document.createElement('div');
+  el.innerHTML = name === 'reveal-stagger' ? '<span data-reveal-item>A</span><span data-reveal-item>B</span>' : 'TEST CONTENT';
+  document.body.appendChild(el);
+  const h = mod.mount(el, {});
+  results[name] = {
+    state: h.state,
+    pass: h.state === 'done-reduced-motion',
+    content_visible: getComputedStyle(el).opacity !== '0',
+    no_animation_nodes: !el.querySelector('.kinetic-marquee-track') && el.style.transform === '',
+  };
+  el.remove();
+}
+
+const allPass = Object.values(results).every(r => r.pass && r.content_visible);
+const lines = Object.entries(results).map(([k, v]) => `${v.pass && v.content_visible ? 'PASS' : 'FAIL'}  ${k}: state=${v.state} visible=${v.content_visible}`);
+document.getElementById('out').textContent = lines.join('\n') + `\n\nOVERALL: ${allPass ? 'PASS' : 'FAIL'} (${Object.values(results).filter(r => r.pass).length}/${mods.length} primitives degrade correctly)`;
+document.getElementById('out').className = allPass ? 'pass' : 'fail';
+window.__RM_TEST__ = { allPass, results };
+</script>
+</body>
+</html>
