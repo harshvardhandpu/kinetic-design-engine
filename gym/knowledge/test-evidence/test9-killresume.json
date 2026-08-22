@@ -1,0 +1,64 @@
+{
+  "schema": "kinetic/gym/test-evidence@0.1",
+  "test": "Test 9 — kill/resume",
+  "record_id": "test9-killresume-20260822",
+  "created_at": "2026-08-22T05:55:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+
+  "setup": {
+    "job": "test9-killresume",
+    "case": "case-test9",
+    "slot": "V0",
+    "pipeline_advanced_to": "BUILT",
+    "receipt_recorded_before_kill": true,
+    "prekill_hashes": {
+      "case.json": "39f64daed07867f07fc202540e5cbceccdd7bb3788b77e9bfe5ac2799ef14b65",
+      "installed.json": "fc9a946c1c7a91a795ac418f8510ab37123a36da652e65c713fb28e4ee0649d3"
+    }
+  },
+
+  "kill_simulation": {
+    "method": "Wrote gym/jobs/locks/case-test9.lock with holder=99999 (a dead pid) and a stale heartbeat, simulating a worker that crashed while holding the advisory lock.",
+    "holder_pid": 99999,
+    "holder_alive": false
+  },
+
+  "resume_checks": [
+    {
+      "check": "correct resume stage",
+      "command": "node engine/runner/run.mjs next --case case-test9",
+      "expected": "resume at BUILT, next_stage=TECHNICAL_PASS (not restart from BRIEFED/GENERATING)",
+      "actual": {"slot": "V0", "state": "BUILT", "next_stage": "TECHNICAL_PASS", "attempt": 1},
+      "result": "PASS"
+    },
+    {
+      "check": "dead-lock reclaim",
+      "command": "node engine/runner/run.mjs record --case case-test9 --slot V0 --state BUILT",
+      "expected": "new invocation reclaims the dead holder's lock instead of erroring LOCKED",
+      "actual": "record succeeded; no LOCKED error",
+      "result": "PASS"
+    },
+    {
+      "check": "idempotency — no duplicate/overwrite",
+      "expected": "re-recording BUILT does not duplicate artifacts, does not bump attempt, preserves receipt",
+      "actual": {"state": "BUILT", "attempt": 1, "artifacts": 1, "receipt_present": true},
+      "result": "PASS"
+    },
+    {
+      "check": "receipt integrity",
+      "expected": "installed.json hash unchanged across kill/resume",
+      "actual": "fc9a946c1c7a91a795ac418f8510ab37123a36da652e65c713fb28e4ee0649d3 (unchanged)",
+      "result": "PASS"
+    },
+    {
+      "check": "lock takeover logged",
+      "expected": "new lock records takeover_of=<dead pid>",
+      "actual": {"takeover_of": 99999, "new_holder_alive": true},
+      "result": "PASS"
+    }
+  ],
+
+  "conclusion": "PASS — completed stages are not duplicated, artifacts are not overwritten, checkpoint resumes from the correct stage (BUILT -> TECHNICAL_PASS), receipts remain valid, and a dead holder's advisory lock is reclaimed with a logged takeover.",
+  "note": "This is a pipeline/state-machine interruption test using a dedicated non-critical case (case-test9). No real learning candidate was harmed. The stale-lock path exercises the same dead-holder reclaim logic used by all runner commands."
+}

@@ -177,12 +177,13 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "SKIPPED",
       "attempt": 1,
       "gates": {},
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.302Z",
-        "GENERATING": "2026-08-22T02:47:58.401Z"
+        "GENERATING": "2026-08-22T02:47:58.401Z",
+        "SKIPPED": "2026-08-22T05:45:34.506Z"
       },
       "brief": null,
       "diagnosis": null,
@@ -195,12 +196,13 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "SKIPPED",
       "attempt": 1,
       "gates": {},
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.302Z",
-        "GENERATING": "2026-08-22T02:47:58.433Z"
+        "GENERATING": "2026-08-22T02:47:58.433Z",
+        "SKIPPED": "2026-08-22T05:45:34.536Z"
       },
       "brief": null,
       "diagnosis": null,
@@ -304,6 +306,16 @@
     {
       "at": "2026-08-22T05:29:40.533Z",
       "event": "V1 -> TECHNICAL_PASS",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:45:34.506Z",
+      "event": "V2 -> SKIPPED",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:45:34.536Z",
+      "event": "V3 -> SKIPPED",
       "attempt": 1
     }
   ]

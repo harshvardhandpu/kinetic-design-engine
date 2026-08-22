@@ -1,0 +1,82 @@
+{
+  "schema": "kinetic/gym/variant-run@0.1",
+  "case_id": "case-test9",
+  "job_id": "test9-killresume",
+  "created_at": "2026-08-22T05:47:09.481Z",
+  "slots": {
+    "V0": {
+      "run_id": "run-case-test9-v0",
+      "slot": "V0",
+      "mode": "fidelity-study",
+      "deployable": false,
+      "experimental": false,
+      "state": "BUILT",
+      "attempt": 1,
+      "gates": {},
+      "timestamps": {
+        "BRIEFED": "2026-08-22T05:47:09.481Z",
+        "GENERATING": "2026-08-22T05:47:09.507Z",
+        "BUILT": "2026-08-22T05:48:41.051Z"
+      },
+      "brief": null,
+      "diagnosis": null,
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "c32741dc02fee0ac8fd7bb99a465fb3997014e28",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.reveal-stagger"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.reveal-stagger": "0.1.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": null,
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T05:47:09.569Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-test9/variants/v0/index.html"
+      ]
+    }
+  },
+  "history": [
+    {
+      "at": "2026-08-22T05:47:09.481Z",
+      "event": "init",
+      "slots": [
+        "V0"
+      ]
+    },
+    {
+      "at": "2026-08-22T05:47:09.507Z",
+      "event": "V0 -> GENERATING",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:47:09.533Z",
+      "event": "V0 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:47:09.569Z",
+      "event": "V0 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T05:48:41.051Z",
+      "event": "V0 -> BUILT",
+      "attempt": 1
+    }
+  ]
+}
