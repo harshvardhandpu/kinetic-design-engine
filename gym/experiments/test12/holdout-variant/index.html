@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>VELA M-1 — Electric Outboard (Held-out generalization variant)</title>
+<!--
+  TEST 12 / HELD-OUT GENERALIZATION VARIANT — case-98d4bd4196 (Radian) domain
+  Brief domain: product-launch page (the holdout's domain). Built using ONLY the 3 learning
+  cases' knowledge (IZANAMI, Neue Montreal, MONOLOG) + KINETIC primitives. Radian's content,
+  copy, palette, and composition are NOT used — this tests whether KINETIC generalizes to an
+  unseen product-launch domain. Content ORIGINAL (fictional electric outboard motor).
+-->
+<style>
+:root { --bg:#07131A; --fg:#EAF2F4; --cyan:#21C8D6; --dim:rgba(234,242,244,0.55); --sans:'Helvetica Neue',Arial,sans-serif; --mono:ui-monospace,'SF Mono',Menlo,monospace; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--fg); font-family:var(--sans); line-height:1.6; overflow-x:hidden; }
+::selection { background:var(--cyan); color:var(--bg); }
+.wrap { max-width:68rem; margin:0 auto; padding:0 clamp(1.5rem,5vw,4rem); }
+
+/* hero */
+.hero { min-height:92vh; display:flex; flex-direction:column; justify-content:center; position:relative; }
+.hero .kicker { font-family:var(--mono); font-size:0.7rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1.6rem; }
+.hero h1 { font-size:clamp(2.8rem,8vw,6rem); line-height:1.0; letter-spacing:-0.02em; font-weight:700; max-width:16ch; }
+.hero .sub { margin-top:1.8rem; color:var(--dim); max-width:30rem; }
+.hero .cta { display:inline-block; margin-top:2.4rem; font-family:var(--mono); font-size:0.75rem; letter-spacing:0.2em; border:1px solid color-mix(in srgb,var(--fg) 40%,transparent); border-radius:999px; padding:0.9rem 1.8rem; text-decoration:none; }
+
+/* USP band (marquee) */
+.band { border-top:1px solid color-mix(in srgb,var(--fg) 14%,transparent); border-bottom:1px solid color-mix(in srgb,var(--fg) 14%,transparent); padding:0.8rem 0; overflow:hidden; }
+.band .kinetic-marquee-track { font-family:var(--mono); font-size:0.72rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--dim); }
+
+/* USP grid */
+section.block { padding:11vh 0; border-top:1px solid color-mix(in srgb,var(--fg) 10%,transparent); }
+section.block h2 { font-size:clamp(2rem,5vw,3.6rem); line-height:1.05; letter-spacing:-0.02em; font-weight:700; max-width:20ch; }
+section.block .body { margin-top:1.6rem; color:var(--dim); max-width:32rem; }
+.usps { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.6rem; margin-top:3rem; }
+.usp { border:1px solid color-mix(in srgb,var(--fg) 14%,transparent); border-radius:10px; padding:1.5rem; }
+.usp .no { font-family:var(--mono); font-size:0.66rem; letter-spacing:0.2em; color:var(--cyan); }
+.usp h3 { font-size:1.3rem; font-weight:600; margin:0.6rem 0; }
+.usp p { color:var(--dim); font-size:0.9rem; }
+
+/* spec strip */
+.specs { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:2rem; margin-top:3rem; }
+.spec .val { font-size:clamp(2rem,5vw,3.4rem); font-weight:700; letter-spacing:-0.02em; color:var(--cyan); }
+.spec .lbl { font-family:var(--mono); font-size:0.66rem; letter-spacing:0.18em; color:var(--dim); margin-top:0.3rem; }
+
+footer { padding:6vh 0; border-top:1px solid color-mix(in srgb,var(--fg) 12%,transparent); display:flex; justify-content:space-between; flex-wrap:wrap; gap:1rem; font-family:var(--mono); font-size:0.66rem; letter-spacing:0.15em; color:var(--dim); }
+</style>
+</head>
+<body>
+<main id="main">
+  <section class="hero wrap">
+    <p class="kicker" data-reveal-item>ELECTRIC OUTBOARD · M-1</p>
+    <h1 data-reveal-item>Silent power for open water.</h1>
+    <p class="sub" data-reveal-item>The VELA M-1 replaces the roar of combustion with the quiet of current — instant torque, zero fumes, and a battery you can swap at the dock.</p>
+    <a class="cta" href="#reserve" data-reveal-item>RESERVE YOURS</a>
+  </section>
+
+  <div class="band" data-recipe-role="marquee">Instant torque · Zero fumes · Swap at the dock · Whisper quiet · Instant torque · Zero fumes · Swap at the dock · Whisper quiet ·</div>
+
+  <section class="block wrap">
+    <h2 data-reveal-item>Built for the water, not the road.</h2>
+    <p class="body" data-reveal-item>Every component is sealed against salt, tuned for thrust, and designed to be serviced with the tools you already keep aboard.</p>
+    <div class="usps">
+      <article class="usp" data-reveal-item><span class="no">01</span><h3>Instant torque</h3><p>Full thrust from the first turn — no revving, no warm-up, no lag.</p></article>
+      <article class="usp" data-reveal-item><span class="no">02</span><h3>Swappable pack</h3><p>Exchange the battery at the dock in under a minute and keep moving.</p></article>
+      <article class="usp" data-reveal-item><span class="no">03</span><h3>Sealed for salt</h3><p>IP68-rated housing and corrosion-proof fittings, built for the sea.</p></article>
+      <article class="usp" data-reveal-item><span class="no">04</span><h3>Whisper quiet</h3><p>Under 55 dB at cruise — hear the water, not the motor.</p></article>
+    </div>
+  </section>
+
+  <section class="block wrap" id="reserve">
+    <h2 data-reveal-item>Specifications.</h2>
+    <div class="specs">
+      <div class="spec" data-reveal-item><div class="val">80 kW</div><div class="lbl">PEAK OUTPUT</div></div>
+      <div class="spec" data-reveal-item><div class="val">60 NM</div><div class="lbl">RANGE @ CRUISE</div></div>
+      <div class="spec" data-reveal-item><div class="val">&lt;55 dB</div><div class="lbl">NOISE AT CRUISE</div></div>
+      <div class="spec" data-reveal-item><div class="val">45 kg</div><div class="lbl">DRY WEIGHT</div></div>
+    </div>
+  </section>
+
+  <footer class="wrap">
+    <span>VELA M-1 — HELD-OUT GENERALIZATION VARIANT</span>
+    <span>case-98d4bd4196 domain · KINETIC GYM</span>
+  </footer>
+</main>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as scrollProgress from './kinetic/core/primitives/scroll-progress.js';
+import * as marquee from './kinetic/core/primitives/marquee.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+for (const sec of document.querySelectorAll('.hero, .block')) {
+  handles.push(revealStagger.mount(sec, { selector: '[data-reveal-item]', duration: tokens['duration-slow'] ?? 1000, stagger: tokens['stagger-base'] ?? 100, y: '26px', threshold: 0.15, tokens }));
+}
+const mq = document.querySelector('[data-recipe-role=marquee]');
+if (mq) handles.push(marquee.mount(mq, { speed: 45, tokens }));
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>

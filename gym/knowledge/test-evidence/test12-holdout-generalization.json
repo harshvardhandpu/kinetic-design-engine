@@ -1,0 +1,55 @@
+{
+  "schema": "kinetic/gym/test-evidence@0.1",
+  "test": "Test 12 — held-out generalization",
+  "record_id": "test12-holdout-generalization-20260822",
+  "created_at": "2026-08-22T06:25:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+  "kinetic_version": "0.2.0-phase2",
+
+  "holdout_case": "case-98d4bd4196",
+  "holdout_reference": "https://www.rideradian.com/",
+  "holdout_domain": "product-launch (electric enduro motorcycle) — a domain unlike all 3 learning references (studio/editorial/type-specimen)",
+
+  "pre_unseal_isolation": "gym/knowledge/test-evidence/test12-holdout-isolation.json — 4/4 checks PASS (sealed file, never retrieved, absent from recipes/principles/knowledge, no variant runs or taste decisions)",
+
+  "holdout_reference_study": {
+    "tech": "Webflow + GSAP + ScrollTrigger + Lenis, 8 videos, 1 canvas, Instrument Sans, dark theme + electric-yellow accent",
+    "fingerprint": "gym/artifacts/fp-ref-case-98d4bd4196.json",
+    "note": "Studied AFTER isolation proof, per Test-12 order."
+  },
+
+  "generalization_task": {
+    "brief": "Build an original product-launch page in the holdout's domain (electric vehicle), using ONLY the 3 learning cases' knowledge + KINETIC primitives. Do NOT use Radian's content, copy, palette, or composition.",
+    "variant": "gym/experiments/test12/holdout-variant/index.html",
+    "subject": "VELA M-1 — fictional electric outboard motor (same product-launch domain as Radian, different product/expression)",
+    "retrieval": ["case-fe653973ef", "case-6f67d60006", "case-77a4f7b7b5"],
+    "radian_in_retrieval": false,
+    "primitives_installed": ["kinetic.reveal-stagger", "kinetic.scroll-progress", "kinetic.marquee"]
+  },
+
+  "results": {
+    "gates": { "technical": "pass", "responsive": "pass", "a11y": "pass", "performance": "pass", "design": "pending-vision-or-human" },
+    "kinetic_count": 4,
+    "dom_nodes": 57,
+    "originality_vs_holdout_reference": {
+      "verdict": "PASS-distinct",
+      "weighted_similarity": 0.14,
+      "copy_similarity": 0,
+      "asset_reuse": 0,
+      "section_order_similarity": 0
+    }
+  },
+
+  "held_out_generalization": {
+    "verdict": "PASS (technical)",
+    "finding": "KINETIC, trained only on 3 studio/editorial/type-specimen references, produced a technically qualified AND original variant in an unseen product-launch domain. All deterministic gates pass; originality vs the holdout reference is PASS-distinct (0.14). The system's primitives, tokens, and originality gate transferred to a domain it never studied.",
+    "caveat": "Design/aesthetic generalization is NOT proven — text-only runtime; the holdout variant's design quality is pending-vision-or-human. Technical + originality generalization is what is evidenced here."
+  },
+
+  "holdout_release": {
+    "benchmark_complete": true,
+    "radian_may_enter_corpus": true,
+    "note": "Per Amendment B, case-98d4bd4196 may now be analyzed normally and enter the learning corpus. Full DesignCase analysis is deferred to Phase 2.5 (not done here)."
+  }
+}

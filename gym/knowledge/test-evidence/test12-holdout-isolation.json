@@ -1,0 +1,38 @@
+{
+  "schema": "kinetic/gym/test-evidence@0.1",
+  "test": "Test 12 — held-out generalization (PRE-UNSEAL isolation proof)",
+  "record_id": "test12-holdout-isolation-20260822",
+  "created_at": "2026-08-22T06:20:00Z",
+  "holdout_case": "case-98d4bd4196",
+  "holdout_reference": "https://www.rideradian.com/",
+
+  "isolation_checks": [
+    {
+      "check": "case file sealed / analysis empty",
+      "expected": "status=INGESTED, holdout flag set, analysis fields empty",
+      "actual": {"status": "INGESTED", "holdout_is_holdout": true, "analysis_empty": true, "sealed_at": "2026-08-22T02:46:00Z"},
+      "result": "PASS"
+    },
+    {
+      "check": "holdout never in design_cases_retrieved of any receipt",
+      "expected": "no receipt across gym/runs or gym/experiments lists case-98d4bd4196 as retrieved",
+      "actual": "NONE",
+      "result": "PASS"
+    },
+    {
+      "check": "holdout absent from recipes / principles / learned knowledge",
+      "expected": "no reference in engine/recipes, knowledge, gym/knowledge",
+      "actual": "NONE",
+      "result": "PASS"
+    },
+    {
+      "check": "holdout has no variant runs or taste decisions",
+      "expected": "variant_run_ids=[] and taste_decision_ids=[]",
+      "actual": {"variant_run_ids": [], "taste_decision_ids": []},
+      "result": "PASS"
+    }
+  ],
+
+  "conclusion": "PASS — before unsealing, case-98d4bd4196 (Radian) is provably excluded from retrieval, TasteMemory, recipe derivation, and the learning corpus. Any generalization measured after this point uses ONLY the 3 learning cases' knowledge, not Radian's.",
+  "note": "This proof is captured BEFORE the held-out task runs, per Amendment B + Test-12 order. The holdout may enter the corpus only after the benchmark completes."
+}
