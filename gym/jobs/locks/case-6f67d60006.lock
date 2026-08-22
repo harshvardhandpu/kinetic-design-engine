@@ -1,6 +1,7 @@
 {
-  "holder": 11570,
-  "acquired_at": "2026-08-22T02:42:56.301Z",
-  "heartbeat_at": "2026-08-22T02:42:56.301Z",
-  "ttl_seconds": 300
+  "holder": 12022,
+  "acquired_at": "2026-08-22T02:47:58.433Z",
+  "heartbeat_at": "2026-08-22T02:47:58.433Z",
+  "ttl_seconds": 300,
+  "takeover_of": 12011
 }

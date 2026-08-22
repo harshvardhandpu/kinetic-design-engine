@@ -10,11 +10,12 @@
       "mode": "fidelity-study",
       "deployable": false,
       "experimental": false,
-      "state": "BRIEFED",
+      "state": "GENERATING",
       "attempt": 1,
       "gates": {},
       "timestamps": {
-        "BRIEFED": "2026-08-22T02:42:56.333Z"
+        "BRIEFED": "2026-08-22T02:42:56.333Z",
+        "GENERATING": "2026-08-22T02:47:58.466Z"
       },
       "brief": null,
       "diagnosis": null,
@@ -27,11 +28,12 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "BRIEFED",
+      "state": "GENERATING",
       "attempt": 1,
       "gates": {},
       "timestamps": {
-        "BRIEFED": "2026-08-22T02:42:56.333Z"
+        "BRIEFED": "2026-08-22T02:42:56.333Z",
+        "GENERATING": "2026-08-22T02:47:58.505Z"
       },
       "brief": null,
       "diagnosis": null,
@@ -44,11 +46,12 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "BRIEFED",
+      "state": "GENERATING",
       "attempt": 1,
       "gates": {},
       "timestamps": {
-        "BRIEFED": "2026-08-22T02:42:56.333Z"
+        "BRIEFED": "2026-08-22T02:42:56.333Z",
+        "GENERATING": "2026-08-22T02:47:58.540Z"
       },
       "brief": null,
       "diagnosis": null,
@@ -61,11 +64,12 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "BRIEFED",
+      "state": "GENERATING",
       "attempt": 1,
       "gates": {},
       "timestamps": {
-        "BRIEFED": "2026-08-22T02:42:56.333Z"
+        "BRIEFED": "2026-08-22T02:42:56.333Z",
+        "GENERATING": "2026-08-22T02:47:58.572Z"
       },
       "brief": null,
       "diagnosis": null,
@@ -83,6 +87,26 @@
         "V2",
         "V3"
       ]
+    },
+    {
+      "at": "2026-08-22T02:47:58.466Z",
+      "event": "V0 -> GENERATING",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T02:47:58.505Z",
+      "event": "V1 -> GENERATING",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T02:47:58.540Z",
+      "event": "V2 -> GENERATING",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T02:47:58.572Z",
+      "event": "V3 -> GENERATING",
+      "attempt": 1
     }
   ]
 }
