@@ -1,0 +1,80 @@
+{
+  "schema": "kinetic/gym/metrics-baseline@0.1",
+  "phase": "Phase 2",
+  "created_at": "2026-08-22T06:35:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+  "kinetic_version": "0.2.0-phase2",
+  "note": "Values computed from persisted state (gym/runs, gym/knowledge, gym/experiments). Metrics requiring human/vision judgment are NOT_MEASURABLE_THIS_RUN with the exact blocker. No fabricated values.",
+
+  "metrics": {
+    "first_shot_preference_rate": {
+      "value": "NOT_MEASURABLE_THIS_RUN",
+      "blocker": "Requires human TasteDecision winners across batches. Runtime is text-only; the one prepared batch (case-fe653973ef) is AWAITING_HUMAN_VISUAL_DECISION. No human winner recorded yet.",
+      "definition": "batches where human winner came from the FIRST generation round / batches with a human winner",
+      "prepared_batches": 1,
+      "decided_batches": 0
+    },
+    "qualification_rate": {
+      "value_technical": 1.0,
+      "detail": "8/8 built learning variants pass all 4 deterministic gates (technical/responsive/a11y/performance). 5/5 original (V1+) variants additionally pass the originality gate and reach TECHNICAL_PASS. The 3 V0 fidelity studies stop at BUILT by design (originality-exempt, deployable:false) — this is not a failure.",
+      "value_design": "NOT_MEASURABLE_THIS_RUN",
+      "design_blocker": "DESIGN_QUALIFIED requires vision-capable or human review; runtime is text-only."
+    },
+    "repair_iterations": {
+      "value": 1,
+      "detail": "Test 3 injected defect repaired in 1 inspector->resolver->patch cycle (4 issues -> 0). No candidate required >1 repair cycle. Max allowed per candidate: 3 (Amendment H); never reached.",
+      "max_allowed": 3
+    },
+    "visual_to_source_resolution_accuracy": {
+      "value": "high-confidence, n=2",
+      "detail": "Resolver achieved high-confidence element->kinetic-id->receipt->component->source-file resolution in Test 2 (playground) and across all variant receipts. No low-confidence guess-patches occurred. Full accuracy % NOT_MEASURABLE_THIS_RUN — requires a vision-driven defect-localization benchmark (text-only runtime cannot produce visual defects to localize)."
+    },
+    "negative_recurrence": {
+      "value": 0,
+      "detail": "The Test-7 failure class (interaction-blocking overlay) recurred 0 times after the prevention rule was added: v-neg FAILs, v0/v2/playground produce no false positives and no recurrence. One negative-knowledge record created; zero repeats."
+    },
+    "performance_pass_rate": {
+      "value": 1.0,
+      "detail": "8/8 learning variants pass the performance gate (dom_nodes<3000, will_change<60, no continuous-raf)."
+    },
+    "accessibility_pass_rate": {
+      "value": 1.0,
+      "detail": "8/8 learning variants pass the a11y gate (html lang, labeled interactives, no positive tabindex). Reduced-motion contract verified on installed primitives (Test 5, Test 11)."
+    },
+    "originality_fail_rate": {
+      "value": 0.0,
+      "detail": "0/5 original variants failed the originality gate. Weighted similarities: V1=0.093, V2=0.161, V3=0.078, NM-V1=0.028, MO-V1=0.044, holdout-VELA=0.14 — all PASS-distinct."
+    },
+    "KINETIC_uplift_vs_control": {
+      "value": "PARTIAL (process/accessibility/traceability only)",
+      "detail": "Test 11: same model+brief, identical gates. Both arms pass 4/4 deterministic gates. KINETIC adds reduced-motion compliance (control has NONE) + full traceability/receipts (control has none) + 0 will_change vs control's 1. Aesthetic uplift NOT proven — text-only runtime; design quality pending-vision-or-human for both arms.",
+      "aesthetic_uplift": "NOT_MEASURABLE_THIS_RUN"
+    },
+    "held_out_generalization": {
+      "value": "PASS (technical)",
+      "detail": "Test 12: KINETIC trained on 3 studio/editorial/type-specimen refs produced a technically qualified AND original variant (VELA M-1) in an unseen product-launch domain (Radian's). 4/4 gates pass; originality vs Radian = 0.14 PASS-distinct. Pre-unseal isolation 4/4 PASS. Design generalization NOT proven (text-only)."
+    },
+    "free_model_completion": {
+      "value": 1.0,
+      "detail": "100% of Phase-2 work (8 primitives, 3 recipes, engine CLI, evaluator, runner, 10 learning builds, 12 tests, SKILL.md) completed on the free-tier model qwen/qwen3.8-max-free via tokenrouter. No paid model required."
+    },
+    "cost_per_qualified_candidate": {
+      "value": "NOT_MEASURABLE_THIS_RUN",
+      "blocker": "No token/cost metering exposed by the tokenrouter provider in this session. Cannot honestly report $/candidate without a cost source. Candidate count is known (5 technically qualified originals); cost is not."
+    },
+    "time_per_qualified_candidate": {
+      "value": "NOT_MEASURABLE_THIS_RUN",
+      "blocker": "Wall-clock per candidate was not instrumented (no per-variant start/stop timestamps in receipts beyond generated_at). Not fabricating a number. generated_at timestamps exist per receipt but do not capture build duration."
+    }
+  },
+
+  "resource_caps_enforced": {
+    "MAX_PARALLEL_AGENTS": "2 (never exceeded; work was sequential single-agent)",
+    "MAX_REPAIR_ATTEMPTS_PER_CANDIDATE": "3 (max reached: 1)",
+    "CRON": "OFF",
+    "AUTO_PROMOTION": "OFF",
+    "PRODUCTION_DEPLOYMENT": "OFF",
+    "learning_builds": "10 of 15 cap (no filler; 4 slots SKIPPED with rationale)"
+  }
+}
