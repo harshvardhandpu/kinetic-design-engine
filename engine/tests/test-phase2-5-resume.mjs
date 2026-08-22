@@ -46,7 +46,11 @@ try {
       ? { variant_brief: 'planning/v0/variant-brief.json', brief_validated: true }
       : toState === 'RETRIEVAL_PROVEN'
         ? { retrieval_receipt: 'planning/v0/retrieval-receipt.json', retrieval_proven: true }
-        : toState === 'BUILDING' ? { brief_hash_unchanged: true } : {};
+        : toState === 'PREBUILD_APPROVED'
+          ? { prebuild_review: 'planning/v0/prebuild-review.json', prebuild_approved: true }
+          : toState === 'BUILDING'
+            ? { brief_hash_unchanged: true, retrieval_hash_unchanged: true, prebuild_hash_unchanged: true }
+            : {};
     record = applyTransition({ caseRun: record, slot: 'V0', toState, artifactRefs, now });
     assert.deepEqual({
       technically_qualified: record.slots.V0.technically_qualified,

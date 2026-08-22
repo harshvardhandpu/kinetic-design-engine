@@ -66,11 +66,7 @@ async function persistValidatedBrief(caseId, slot, artifactPath, timestamp) {
 
 async function assertPersistedBriefUnchanged(caseId, slot, briefRef) {
   if (typeof briefRef !== 'string') throw Object.assign(new Error('persisted brief reference missing'), { code: 'KINETIC_BRIEF_REQUIRED' });
-  const briefPath = resolve(gym, briefRef);
-  const local = relative(gym, briefPath);
-  if (local === '..' || local.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(local)) {
-    throw Object.assign(new Error('persisted brief reference escapes the Gym'), { code: 'KINETIC_BRIEF_CHANGED' });
-  }
+  const briefPath = resolveGymRef(briefRef, 'KINETIC_BRIEF_CHANGED');
   const receipt = await j(join(dirname(briefPath), 'variant-brief.receipt.json'));
   if (!receipt || receipt.brief_ref !== briefRef || receipt.brief_schema !== 'kinetic/gym/variant-brief@0.1') {
     throw Object.assign(new Error('brief validation receipt missing or mismatched'), { code: 'KINETIC_BRIEF_CHANGED' });
@@ -79,6 +75,16 @@ async function assertPersistedBriefUnchanged(caseId, slot, briefRef) {
     throw Object.assign(new Error('persisted brief hash changed'), { code: 'KINETIC_BRIEF_CHANGED' });
   }
   return { brief_hash_unchanged: true };
+}
+
+function resolveGymRef(ref, code) {
+  if (typeof ref !== 'string') throw Object.assign(new Error('persisted artifact reference missing'), { code });
+  const path = resolve(gym, ref);
+  const local = relative(gym, path);
+  if (local === '..' || local.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(local)) {
+    throw Object.assign(new Error('persisted artifact reference escapes the Gym'), { code });
+  }
+  return path;
 }
 
 async function persistValidatedRetrieval(caseId, slot, artifactPath, briefRef) {
@@ -106,6 +112,49 @@ async function persistValidatedRetrieval(caseId, slot, artifactPath, briefRef) {
   const outputPath = join(gym, 'runs', caseId, 'planning', slot.toLowerCase(), 'retrieval-receipt.json');
   await w(outputPath, receipt);
   return { retrieval_receipt: relative(gym, outputPath).split('\\').join('/'), retrieval_proven: true };
+}
+
+async function persistValidatedPrebuild(caseId, slot, artifactPath, refs) {
+  if (typeof artifactPath !== 'string') throw Object.assign(new Error('PREBUILD_APPROVED requires --artifact'), { code: 'KINETIC_PREBUILD_REVIEW_REQUIRED' });
+  const review = await j(artifactPath);
+  if (!review) throw Object.assign(new Error('prebuild review is missing or invalid JSON'), { code: 'KINETIC_PREBUILD_REVIEW_REQUIRED' });
+  const schemaPath = join(root, 'schemas', 'gym', 'prebuild-review.schema.json');
+  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const validation = validateValue({ value: review, schema, schemaPath });
+  const briefPath = resolveGymRef(refs?.variant_brief, 'KINETIC_BRIEF_CHANGED');
+  const retrievalPath = resolveGymRef(refs?.retrieval_receipt, 'KINETIC_RETRIEVAL_CHANGED');
+  if (!validation.valid || review.case_id !== caseId || review.variant_id !== slot || review.decision !== 'APPROVED'
+    || review.rule_results.some(({ passed }) => passed !== true)
+    || await hashFile(briefPath) !== review.brief_sha256 || await hashFile(retrievalPath) !== review.retrieval_sha256) {
+    throw Object.assign(new Error('prebuild review is not an approved match for current planning artifacts'), { code: 'KINETIC_PREBUILD_REVIEW_REQUIRED' });
+  }
+  const outputPath = join(gym, 'runs', caseId, 'planning', slot.toLowerCase(), 'prebuild-review.json');
+  await w(outputPath, review);
+  const reviewRef = relative(gym, outputPath).split('\\').join('/');
+  await w(join(dirname(outputPath), 'prebuild-review.receipt.json'), {
+    schema: 'kinetic/gym/prebuild-review-receipt@0.1', case_id: caseId, slot,
+    review_ref: reviewRef, review_sha256: await hashFile(outputPath),
+  });
+  return { prebuild_review: reviewRef, prebuild_approved: true };
+}
+
+async function assertPersistedPlanningUnchanged(caseId, slot, refs) {
+  const brief = await assertPersistedBriefUnchanged(caseId, slot, refs?.variant_brief);
+  const briefPath = resolveGymRef(refs?.variant_brief, 'KINETIC_BRIEF_CHANGED');
+  const retrievalPath = resolveGymRef(refs?.retrieval_receipt, 'KINETIC_RETRIEVAL_CHANGED');
+  const reviewPath = resolveGymRef(refs?.prebuild_review, 'KINETIC_PREBUILD_REVIEW_CHANGED');
+  const review = await j(reviewPath);
+  const receipt = await j(join(dirname(reviewPath), 'prebuild-review.receipt.json'));
+  if (!review || review.case_id !== caseId || review.variant_id !== slot || review.decision !== 'APPROVED'
+    || review.rule_results.some(({ passed }) => passed !== true)
+    || await hashFile(briefPath) !== review.brief_sha256
+    || await hashFile(retrievalPath).catch(() => null) !== review.retrieval_sha256) {
+    throw Object.assign(new Error('persisted retrieval artifact changed'), { code: 'KINETIC_RETRIEVAL_CHANGED' });
+  }
+  if (!receipt || receipt.review_ref !== refs.prebuild_review || await hashFile(reviewPath).catch(() => null) !== receipt.review_sha256) {
+    throw Object.assign(new Error('approved prebuild review changed'), { code: 'KINETIC_PREBUILD_REVIEW_CHANGED' });
+  }
+  return { ...brief, retrieval_hash_unchanged: true, prebuild_hash_unchanged: true };
 }
 
 const ORDER = ['BRIEFED', 'GENERATING', 'BUILT', 'TECHNICAL_PASS', 'RESPONSIVE_PASS', 'A11Y_PASS', 'PERFORMANCE_PASS', 'DESIGN_EVALUATED', 'QUALIFIED'];
@@ -179,7 +228,8 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       let artifactRefs = A.refs && A.refs !== true ? JSON.parse(A.refs) : {};
       if (A.to === 'BRIEF_VALIDATED') artifactRefs = { ...artifactRefs, ...await persistValidatedBrief(A.case, A.slot, A.artifact, timestamp) };
       if (A.to === 'RETRIEVAL_PROVEN') artifactRefs = { ...artifactRefs, ...await persistValidatedRetrieval(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
-      if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedBriefUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
+      if (A.to === 'PREBUILD_APPROVED') artifactRefs = { ...artifactRefs, ...await persistValidatedPrebuild(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
+      if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedPlanningUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs) };
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       await writeCaseAtomic(A.case, updated);
     });

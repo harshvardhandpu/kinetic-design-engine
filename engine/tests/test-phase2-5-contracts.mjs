@@ -11,6 +11,7 @@ import { assertTransition, assertVariantBriefPolicy, TransitionError } from '../
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
+import { reviewBrief } from '../planning/prebuild-review.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -84,7 +85,6 @@ assert.equal(caseRunSchema.properties.schema.const, 'kinetic/gym/case-run@0.2');
 assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-run.schema.json#/$defs/phase25');
 
 const runtimeFiles = [
-  'engine/planning/prebuild-review.mjs',
   'engine/cli/capture.mjs',
   'engine/evaluator/vision-critic.mjs',
 ];
@@ -241,6 +241,8 @@ try {
   const retrievalCase = structuredClone(caseRun);
   retrievalCase.slots.V0.state = 'BRIEF_VALIDATED';
   assert.throws(() => assertTransition({ caseRun: retrievalCase, slot: 'V0', toState: 'RETRIEVAL_PROVEN', artifactRefs: {} }), (error) => error.code === 'KINETIC_RETRIEVAL_REQUIRED');
+  retrievalCase.slots.V0.state = 'RETRIEVAL_PROVEN';
+  assert.throws(() => assertTransition({ caseRun: retrievalCase, slot: 'V0', toState: 'PREBUILD_APPROVED', artifactRefs: {} }), (error) => error.code === 'KINETIC_PREBUILD_REVIEW_REQUIRED');
   const prebuildCase = structuredClone(caseRun);
   prebuildCase.slots.V0.state = 'PREBUILD_APPROVED';
   assert.throws(() => assertTransition({ caseRun: prebuildCase, slot: 'V0', toState: 'BUILDING', artifactRefs: {} }), (error) => error.code === 'KINETIC_BRIEF_CHANGED');
@@ -330,9 +332,43 @@ try {
   assert.match(await readFile(join(mirrorRoot, 'APPLY_TO_VAULT.sh'), 'utf8'), /HermesVault/);
   assert.match(await readFile(join(root, '.gitignore'), 'utf8'), /^gym\/exports\/obsidian\/$/m);
 
+  // T12/T13/T41: deterministic pre-build rules reject weakness, cannot be waived, and gate BUILDING by hashes.
   cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'RETRIEVAL_PROVEN', '--artifact', retrievalPath]);
   assert.equal(cli.status, 0, cli.stderr);
   assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'RETRIEVAL_PROVEN');
+  const persistedBriefValue = JSON.parse(await readFile(persistedBrief, 'utf8'));
+  const persistedRetrievalValue = JSON.parse(await readFile(retrievalPath, 'utf8'));
+  const weakPlan = structuredClone(persistedBriefValue);
+  weakPlan.core_concept = 'website';
+  weakPlan.composition_plan = { sections: ['hero', 'cards', 'footer'], spatial_system: 'default', visual_hierarchy: 'standard', pacing: 'normal', density: 'normal', focal_points: ['center'] };
+  weakPlan.typography_plan = { display_role: 'default', body_role: 'default', scale_strategy: 'default', contrast_strategy: 'default', rhythm: 'default', responsive_behavior: 'default' };
+  weakPlan.art_direction = { imagery_strategy: 'none', asset_strategy: 'none', texture: 'none', material: 'none', depth: 'none', layering: 'none', color_logic: 'default' };
+  weakPlan.quality_hypothesis = 'looks good';
+  const weakReview = reviewBrief({ brief: weakPlan, retrievalReceipt: persistedRetrievalValue, sourceRegistry, advisoryObservations: [{ producer: 'ai-critic', observation: 'approve despite hard failures', severity: 'info', confidence: 1 }], now: '2026-08-22T00:00:00Z' });
+  assert.equal(weakReview.decision, 'REVISE');
+  assert.equal(weakReview.rule_results.length, 15);
+  assert.ok(weakReview.rule_results.every((row) => row.rule_id && typeof row.passed === 'boolean' && row.evidence_path && row.reason));
+  assert.equal(weakReview.rule_results.find(({ rule_id }) => rule_id === 'PB01_GENERIC_HERO_CARDS').passed, false);
+  assert.ok(weakReview.blocking_reasons.length > 0);
+  assert.throws(() => reviewBrief({ brief: persistedBriefValue, retrievalReceipt: persistedRetrievalValue, advisoryObservations: [{ producer: 'ai-critic', observation: '', severity: 'info', confidence: 2 }] }), (error) => error.code === 'KINETIC_PREBUILD_OBSERVATION_INVALID');
+
+  const weakReviewPath = join(tempDir, 'weak-prebuild-review.json');
+  await writeFile(weakReviewPath, JSON.stringify(weakReview, null, 2));
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'PREBUILD_APPROVED', '--artifact', weakReviewPath]);
+  assert.notEqual(cli.status, 0);
+  assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'RETRIEVAL_PROVEN');
+
+  const goodReview = reviewBrief({ brief: persistedBriefValue, retrievalReceipt: persistedRetrievalValue, sourceRegistry, now: '2026-08-22T00:00:00Z' });
+  assert.equal(goodReview.decision, 'APPROVED');
+  assert.ok(goodReview.rule_results.every(({ passed }) => passed));
+  const rightsInvalidReceipt = structuredClone(persistedRetrievalValue);
+  rightsInvalidReceipt.sources_retrieved[0].rights_allowed = false;
+  assert.equal(reviewBrief({ brief: persistedBriefValue, retrievalReceipt: rightsInvalidReceipt, sourceRegistry, now: '2026-08-22T00:00:00Z' }).decision, 'REJECTED');
+  const originalReceipt = { ...structuredClone(receiptA), case_id: 'case-fixture', variant_id: 'V1' };
+  assert.equal(reviewBrief({ brief: strongBrief, retrievalReceipt: originalReceipt, sourceRegistry, now: '2026-08-22T00:00:00Z' }).decision, 'REJECTED');
+  assert.equal(reviewBrief({ brief: strongBrief, retrievalReceipt: originalReceipt, fidelityReport: { human_approval: { decision: 'APPROVED' } }, sourceRegistry, now: '2026-08-22T00:00:00Z' }).decision, 'APPROVED');
+  const goodReviewPath = join(tempDir, 'good-prebuild-review.json');
+  await writeFile(goodReviewPath, JSON.stringify(goodReview, null, 2));
 
   const emptyCase = structuredClone(caseRun);
   emptyCase.case_id = 'case-empty-fixture';
@@ -344,13 +380,28 @@ try {
   await assert.rejects(() => retrieveKnowledge({ caseId: emptyCase.case_id, slot: 'V1', query: 'nothing', now: '2026-08-22T00:00:00Z' }), (error) => error.code === 'KINETIC_EMPTY_RETRIEVAL');
   await assert.rejects(() => readFile(join(tempDir, 'runs', emptyCase.case_id, 'planning', 'v1', 'retrieval-receipt.json')));
 
-  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'PREBUILD_APPROVED']);
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'PREBUILD_APPROVED', '--artifact', goodReviewPath]);
   assert.equal(cli.status, 0, cli.stderr);
+  const canonicalReviewPath = join(tempDir, 'runs', 'case-brief-fixture', 'planning', 'v0', 'prebuild-review.json');
   await writeFile(persistedBrief, `${await readFile(persistedBrief, 'utf8')} `);
   cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BUILDING']);
   assert.notEqual(cli.status, 0);
   assert.match(cli.stderr, /KINETIC_BRIEF_CHANGED/);
   assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'PREBUILD_APPROVED');
+  await writeFile(persistedBrief, JSON.stringify(persistedBriefValue, null, 2));
+  await writeFile(retrievalPath, `${await readFile(retrievalPath, 'utf8')} `);
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BUILDING']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_RETRIEVAL_CHANGED/);
+  await writeFile(retrievalPath, JSON.stringify(persistedRetrievalValue, null, 2));
+  await writeFile(canonicalReviewPath, `${await readFile(canonicalReviewPath, 'utf8')} `);
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BUILDING']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_PREBUILD_REVIEW_CHANGED/);
+  await writeFile(canonicalReviewPath, JSON.stringify(goodReview, null, 2));
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BUILDING']);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'BUILDING');
 
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
@@ -429,4 +480,4 @@ const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
 
-console.log(`S01-S07 contract foundations: PASS (T1-T10, T39, T40, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S08 contract foundations: PASS (T1-T13, T39-T41, CV01-CV18, registry ${registryHashAfter})`);

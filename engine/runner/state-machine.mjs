@@ -84,8 +84,17 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   if (toState === 'RETRIEVAL_PROVEN' && (artifactRefs.retrieval_proven !== true || typeof artifactRefs.retrieval_receipt !== 'string')) {
     throw new TransitionError('KINETIC_RETRIEVAL_REQUIRED', 'RETRIEVAL_PROVEN requires a validated rights-filtered receipt');
   }
+  if (toState === 'PREBUILD_APPROVED' && (artifactRefs.prebuild_approved !== true || typeof artifactRefs.prebuild_review !== 'string')) {
+    throw new TransitionError('KINETIC_PREBUILD_REVIEW_REQUIRED', 'PREBUILD_APPROVED requires an APPROVED review with all hard rules passing');
+  }
   if (toState === 'BUILDING' && artifactRefs.brief_hash_unchanged !== true) {
     throw new TransitionError('KINETIC_BRIEF_CHANGED', 'BUILDING requires the persisted brief hash to remain unchanged');
+  }
+  if (toState === 'BUILDING' && artifactRefs.retrieval_hash_unchanged !== true) {
+    throw new TransitionError('KINETIC_RETRIEVAL_CHANGED', 'BUILDING requires the persisted retrieval hash to remain unchanged');
+  }
+  if (toState === 'BUILDING' && artifactRefs.prebuild_hash_unchanged !== true) {
+    throw new TransitionError('KINETIC_PREBUILD_REVIEW_CHANGED', 'BUILDING requires the approved prebuild review hash to remain unchanged');
   }
   if (toState === 'VISUAL_CAPTURED' && record.technically_qualified !== true) {
     throw new TransitionError('KINETIC_TECHNICAL_QUALIFICATION_REQUIRED', 'visual capture requires explicit technical qualification');
