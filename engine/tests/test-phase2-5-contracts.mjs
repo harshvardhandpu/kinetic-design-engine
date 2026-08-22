@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile } from '../runner/store.mjs';
 import { assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
+import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -81,7 +82,6 @@ assert.equal(caseRunSchema.properties.schema.const, 'kinetic/gym/case-run@0.2');
 assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-run.schema.json#/$defs/phase25');
 
 const runtimeFiles = [
-  'engine/knowledge/retrieval.mjs',
   'engine/knowledge/obsidian-adapter.mjs',
   'engine/planning/prebuild-review.mjs',
   'engine/cli/capture.mjs',
@@ -139,7 +139,9 @@ invalid([{ x: 1 }, { x: 1 }], { type: 'array', uniqueItems: true, items: { type:
 // CV08 local refs and JSON Pointer escapes.
 valid('ok', { $defs: { 'a/b~c': { type: 'string', const: 'ok' } }, $ref: '#/$defs/a~1b~0c' });
 
-const tempDir = await mkdtemp(join(root, 'schemas', 'gym', '.s02-'));
+const tempDir = await mkdtemp(join(root, 'schemas', 'gym', '.s02-contracts-'));
+const priorGymRoot = process.env.KINETIC_GYM_ROOT;
+process.env.KINETIC_GYM_ROOT = tempDir;
 try {
   // CV09 relative external ref.
   const externalSchema = join(tempDir, 'external.schema.json');
@@ -208,9 +210,9 @@ try {
   invalid({ ...caseRun, slots: { V0: { ...phase25Run, design_qualified: true } } }, caseRunSchema, 'KINETIC_SCHEMA_INVALID', join(root, 'schemas', 'gym', 'case-run.schema.json'));
 
   const strings = ['specific'];
-  const influence = { source_id: 'src-fixture', retrieval_reason: 'specific reason', knowledge_used: strings, usage_mode: 'PRINCIPLE', attribution: [{ knowledge_index: 0, classification: 'SOURCE-DERIVED', evidence_refs: ['receipt#/source'] }] };
+  const influence = { source_id: 'src-seesaw', retrieval_reason: 'specific reason', knowledge_used: strings, usage_mode: 'PRINCIPLE', attribution: [{ knowledge_index: 0, classification: 'SOURCE-DERIVED', evidence_refs: ['receipt#/source'] }] };
   const brief = {
-    schema: 'kinetic/gym/variant-brief@0.1', variant_id: 'V1', case_id: 'case-fixture', design_case_ids_used: ['case-reference'], surface: 'portfolio', goal: 'prove quality', direction_name: 'Fixture', core_concept: 'Structured contrast',
+    schema: 'kinetic/gym/variant-brief@0.1', variant_id: 'V1', case_id: 'case-fixture', design_case_ids_used: ['case-fe653973ef'], surface: 'portfolio', goal: 'prove quality', direction_name: 'Fixture', core_concept: 'Structured contrast',
     composition_plan: { sections: strings, spatial_system: 'grid', visual_hierarchy: 'one focus', pacing: 'measured', density: 'variable', focal_points: strings },
     typography_plan: { display_role: 'display', body_role: 'body', scale_strategy: 'fluid', contrast_strategy: 'size', rhythm: 'steady', responsive_behavior: 'clamp' },
     art_direction: { imagery_strategy: 'original', asset_strategy: 'fixture', texture: 'flat', material: 'paper', depth: 'layered', layering: 'three planes', color_logic: 'contrast' },
@@ -235,6 +237,9 @@ try {
   assert.throws(() => assertVariantBriefPolicy({ brief: weakBrief, caseId: 'case-fixture', slot: 'V1' }), (error) => error instanceof TransitionError && error.code === 'KINETIC_WEAK_VARIANT_BRIEF');
   assert.throws(() => assertVariantBriefPolicy({ brief: { ...v0Brief, case_id: 'case-other' }, caseId: 'case-fixture', slot: 'V0' }), (error) => error.code === 'KINETIC_BRIEF_INVALID');
   assert.throws(() => assertTransition({ caseRun, slot: 'V0', toState: 'BRIEF_VALIDATED', artifactRefs: {} }), (error) => error.code === 'KINETIC_BRIEF_REQUIRED');
+  const retrievalCase = structuredClone(caseRun);
+  retrievalCase.slots.V0.state = 'BRIEF_VALIDATED';
+  assert.throws(() => assertTransition({ caseRun: retrievalCase, slot: 'V0', toState: 'RETRIEVAL_PROVEN', artifactRefs: {} }), (error) => error.code === 'KINETIC_RETRIEVAL_REQUIRED');
   const prebuildCase = structuredClone(caseRun);
   prebuildCase.slots.V0.state = 'PREBUILD_APPROVED';
   assert.throws(() => assertTransition({ caseRun: prebuildCase, slot: 'V0', toState: 'BUILDING', artifactRefs: {} }), (error) => error.code === 'KINETIC_BRIEF_CHANGED');
@@ -259,8 +264,32 @@ try {
   const briefReceipt = JSON.parse(await readFile(join(dirname(persistedBrief), 'variant-brief.receipt.json')));
   assert.equal(briefReceipt.schema, 'kinetic/gym/variant-brief-receipt@0.1');
   assert.equal(briefReceipt.brief_sha256, await hashFile(persistedBrief));
-  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'RETRIEVAL_PROVEN']);
+  // T3: deterministic rights-filtered receipt and hard empty-selection stop.
+  cli = run(['retrieve', '--case', 'case-brief-fixture', '--slot', 'V0', '--query', 'portfolio motion hierarchy']);
   assert.equal(cli.status, 0, cli.stderr);
+  const retrievalPath = join(tempDir, 'runs', 'case-brief-fixture', 'planning', 'v0', 'retrieval-receipt.json');
+  const receiptA = await retrieveKnowledge({ caseId: 'case-brief-fixture', slot: 'V0', query: 'portfolio motion hierarchy', now: '2026-08-22T00:00:00Z' });
+  const receiptB = await retrieveKnowledge({ caseId: 'case-brief-fixture', slot: 'V0', query: 'portfolio motion hierarchy', now: '2026-08-22T00:00:00Z' });
+  assert.deepEqual(receiptA, receiptB);
+  assert.deepEqual(receiptA.design_cases_retrieved.map(({ case_id }) => case_id), ['case-fe653973ef']);
+  assert.deepEqual(receiptA.sources_retrieved.map(({ source_id }) => source_id), ['src-seesaw']);
+  assert.equal(receiptA.registry_version, '0.1.2');
+  assert.equal(receiptA.registry_sha256, createHash('sha256').update(await readFile(join(root, 'gym', 'knowledge', 'sources', 'registry.json'))).digest('hex'));
+  assert.ok(receiptA.rejected_candidates.every((row) => row.reason));
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'RETRIEVAL_PROVEN', '--artifact', retrievalPath]);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'RETRIEVAL_PROVEN');
+
+  const emptyCase = structuredClone(caseRun);
+  emptyCase.case_id = 'case-empty-fixture';
+  emptyCase.slots = { V1: { ...structuredClone(phase25Run), case_id: emptyCase.case_id, slot: 'V1', mode: 'original', original_work: true, state: 'BRIEF_VALIDATED', refs: { ...phase25Run.refs, variant_brief: 'runs/case-empty-fixture/planning/v1/variant-brief.json' } } };
+  await mkdir(join(tempDir, 'runs', emptyCase.case_id, 'planning', 'v1'), { recursive: true });
+  await writeFile(join(tempDir, 'runs', emptyCase.case_id, 'case.json'), JSON.stringify(emptyCase, null, 2));
+  const emptyBrief = { ...strongBrief, case_id: emptyCase.case_id, variant_id: 'V1', design_case_ids_used: [] };
+  await writeFile(join(tempDir, emptyCase.slots.V1.refs.variant_brief), JSON.stringify(emptyBrief, null, 2));
+  await assert.rejects(() => retrieveKnowledge({ caseId: emptyCase.case_id, slot: 'V1', query: 'nothing', now: '2026-08-22T00:00:00Z' }), (error) => error.code === 'KINETIC_EMPTY_RETRIEVAL');
+  await assert.rejects(() => readFile(join(tempDir, 'runs', emptyCase.case_id, 'planning', 'v1', 'retrieval-receipt.json')));
+
   cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'PREBUILD_APPROVED']);
   assert.equal(cli.status, 0, cli.stderr);
   await writeFile(persistedBrief, `${await readFile(persistedBrief, 'utf8')} `);
@@ -277,6 +306,8 @@ try {
   const registry = JSON.parse(await readFile(join(root, 'gym', 'knowledge', 'sources', 'registry.json'), 'utf8'));
   valid(registry.sources[0].audit, JSON.parse(await readFile(join(root, 'schemas', 'gym', 'source-audit-record.schema.json'), 'utf8')), join(root, 'schemas', 'gym', 'source-audit-record.schema.json'));
 } finally {
+  if (priorGymRoot == null) delete process.env.KINETIC_GYM_ROOT;
+  else process.env.KINETIC_GYM_ROOT = priorGymRoot;
   await rm(tempDir, { recursive: true, force: true });
 }
 
@@ -344,4 +375,4 @@ const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
 
-console.log(`S01-S05 contract foundations: PASS (T1, T2, T4-T7, T39, T40, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S06 contract foundations: PASS (T1-T7, T39, T40, CV01-CV18, registry ${registryHashAfter})`);

@@ -22,6 +22,7 @@ import { execSync } from 'node:child_process';
 import { applyTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
 import { hashFile, readCase as readStoredCase, withCaseLock, writeCaseAtomic } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
+import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
@@ -80,6 +81,33 @@ async function assertPersistedBriefUnchanged(caseId, slot, briefRef) {
   return { brief_hash_unchanged: true };
 }
 
+async function persistValidatedRetrieval(caseId, slot, artifactPath, briefRef) {
+  if (typeof artifactPath !== 'string') throw Object.assign(new Error('RETRIEVAL_PROVEN requires --artifact'), { code: 'KINETIC_RETRIEVAL_REQUIRED' });
+  const receipt = await j(artifactPath);
+  if (!receipt) throw Object.assign(new Error('retrieval receipt is missing or invalid JSON'), { code: 'KINETIC_RETRIEVAL_REQUIRED' });
+  const schemaPath = join(root, 'schemas', 'gym', 'retrieval-receipt.schema.json');
+  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const validation = validateValue({ value: receipt, schema, schemaPath });
+  if (!validation.valid || receipt.case_id !== caseId || receipt.variant_id !== slot) {
+    throw Object.assign(new Error(JSON.stringify(validation.errors ?? [])), { code: 'KINETIC_RETRIEVAL_REQUIRED' });
+  }
+  await assertPersistedBriefUnchanged(caseId, slot, briefRef);
+  const brief = await j(resolve(gym, briefRef));
+  const briefSources = [...new Set(Object.values(brief?.source_provenance ?? {}).flat().map(({ source_id: id }) => id))].sort();
+  const receiptSources = [...new Set(receipt.sources_retrieved.map(({ source_id: id }) => id))].sort();
+  const briefCases = [...new Set(brief?.design_case_ids_used ?? [])].sort();
+  const receiptCases = [...new Set(receipt.design_cases_retrieved.map(({ case_id: id }) => id))].sort();
+  const currentRegistrySha = await hashFile(join(root, 'gym', 'knowledge', 'sources', 'registry.json'));
+  if (JSON.stringify(briefSources) !== JSON.stringify(receiptSources) || JSON.stringify(briefCases) !== JSON.stringify(receiptCases)
+    || receipt.sources_retrieved.some(({ rights_allowed }) => rights_allowed !== true)
+    || receipt.registry_version !== '0.1.2' || receipt.registry_sha256 !== currentRegistrySha) {
+    throw Object.assign(new Error('retrieval receipt does not match brief provenance or current rights registry'), { code: 'KINETIC_RETRIEVAL_MISMATCH' });
+  }
+  const outputPath = join(gym, 'runs', caseId, 'planning', slot.toLowerCase(), 'retrieval-receipt.json');
+  await w(outputPath, receipt);
+  return { retrieval_receipt: relative(gym, outputPath).split('\\').join('/'), retrieval_proven: true };
+}
+
 const ORDER = ['BRIEFED', 'GENERATING', 'BUILT', 'TECHNICAL_PASS', 'RESPONSIVE_PASS', 'A11Y_PASS', 'PERFORMANCE_PASS', 'DESIGN_EVALUATED', 'QUALIFIED'];
 const TERMINAL = new Set(['QUALIFIED', 'REJECTED', 'REJECTED_FINAL', 'EMPTY']);
 
@@ -129,6 +157,19 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
     console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
     process.exitCode = 1;
   }
+} else if (cmd === 'retrieve') {
+  try {
+    let receipt;
+    await withCaseLock(A.case, `retrieve-${A.slot}`, async () => {
+      const filters = A.filters && A.filters !== true ? JSON.parse(A.filters) : {};
+      const entitlementRefs = A.entitlements && A.entitlements !== true ? String(A.entitlements).split(',').filter(Boolean) : [];
+      receipt = await retrieveKnowledge({ caseId: A.case, slot: A.slot, query: A.query ?? '', filters, entitlementRefs });
+    });
+    console.log(JSON.stringify({ receipt_id: receipt.receipt_id, path: `runs/${A.case}/planning/${A.slot.toLowerCase()}/retrieval-receipt.json` }));
+  } catch (error) {
+    console.error(`${error.code ?? 'KINETIC_RETRIEVAL_INVALID'}: ${error.message}`);
+    process.exit(1);
+  }
 } else if (cmd === 'advance') {
   try {
     await withCaseLock(A.case, `advance-${A.slot}-${A.to}`, async () => {
@@ -137,6 +178,7 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       const timestamp = now();
       let artifactRefs = A.refs && A.refs !== true ? JSON.parse(A.refs) : {};
       if (A.to === 'BRIEF_VALIDATED') artifactRefs = { ...artifactRefs, ...await persistValidatedBrief(A.case, A.slot, A.artifact, timestamp) };
+      if (A.to === 'RETRIEVAL_PROVEN') artifactRefs = { ...artifactRefs, ...await persistValidatedRetrieval(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
       if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedBriefUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       await writeCaseAtomic(A.case, updated);
@@ -269,6 +311,6 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
     }
   }
 } else {
-  console.error('commands: init-job | init-case [--run-version phase2.5] | advance | next | record | gate | receipt | status');
+  console.error('commands: init-job | init-case [--run-version phase2.5] | retrieve | advance | next | record | gate | receipt | status');
   process.exit(2);
 }

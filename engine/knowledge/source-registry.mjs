@@ -205,6 +205,19 @@ export function permittedRetrievalView(request) {
   return deepFreeze(rows);
 }
 
+export function permittedSourcesForInfluences(influences, { targetPath = null, entitlementRefs = [] } = {}) {
+  if (!Array.isArray(influences)) throw new RightsError('KINETIC_RIGHTS_DENIED', 'influences must be an array');
+  return influences.map((influence) => {
+    const usageMode = influence.usage_mode;
+    const operation = usageMode === 'BUILD_DEPENDENCY' ? 'build_dependency'
+      : ['RECIPE', 'PRIMITIVE'].includes(usageMode) ? 'code_ingest'
+      : usageMode === 'TOOL' ? 'tool_discovery' : 'manual_reference';
+    const source = lookupSource(influence.source_id);
+    const decision = authorizeSourceUse({ sourceId: influence.source_id, usageMode, operation, targetPath, entitlementRefs });
+    return { source, decision, influence: structuredClone(influence) };
+  });
+}
+
 export function exportSourceProvenance(sourceIds) {
   return deepFreeze(sourceIds.map((sourceId) => {
     const source = lookupSource(sourceId);

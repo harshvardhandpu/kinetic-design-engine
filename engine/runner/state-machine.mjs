@@ -81,6 +81,9 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   if (toState === 'BRIEF_VALIDATED' && (artifactRefs.brief_validated !== true || typeof artifactRefs.variant_brief !== 'string')) {
     throw new TransitionError('KINETIC_BRIEF_REQUIRED', 'BRIEF_VALIDATED requires a persisted schema-valid brief');
   }
+  if (toState === 'RETRIEVAL_PROVEN' && (artifactRefs.retrieval_proven !== true || typeof artifactRefs.retrieval_receipt !== 'string')) {
+    throw new TransitionError('KINETIC_RETRIEVAL_REQUIRED', 'RETRIEVAL_PROVEN requires a validated rights-filtered receipt');
+  }
   if (toState === 'BUILDING' && artifactRefs.brief_hash_unchanged !== true) {
     throw new TransitionError('KINETIC_BRIEF_CHANGED', 'BUILDING requires the persisted brief hash to remain unchanged');
   }
