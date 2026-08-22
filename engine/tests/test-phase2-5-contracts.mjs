@@ -9,6 +9,8 @@ import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile } from '../runner/store.mjs';
 import { assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
+import { searchVault } from '../knowledge/obsidian-adapter.mjs';
+import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -82,7 +84,6 @@ assert.equal(caseRunSchema.properties.schema.const, 'kinetic/gym/case-run@0.2');
 assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-run.schema.json#/$defs/phase25');
 
 const runtimeFiles = [
-  'engine/knowledge/obsidian-adapter.mjs',
   'engine/planning/prebuild-review.mjs',
   'engine/cli/capture.mjs',
   'engine/evaluator/vision-critic.mjs',
@@ -276,6 +277,59 @@ try {
   assert.equal(receiptA.registry_version, '0.1.2');
   assert.equal(receiptA.registry_sha256, createHash('sha256').update(await readFile(join(root, 'gym', 'knowledge', 'sources', 'registry.json'))).digest('hex'));
   assert.ok(receiptA.rejected_candidates.every((row) => row.reason));
+
+  // T8: an unavailable vault is explicit and repository retrieval remains sufficient.
+  const unavailableVault = await searchVault({ root: join(tempDir, 'missing-vault'), query: 'portfolio motion hierarchy' });
+  assert.equal(unavailableVault.availability, 'unavailable');
+  assert.deepEqual(unavailableVault.notes, []);
+  assert.ok(unavailableVault.reason);
+  const fallbackReceipt = await retrieveKnowledge({ caseId: 'case-brief-fixture', slot: 'V0', query: 'portfolio motion hierarchy', obsidian: unavailableVault, now: '2026-08-22T00:00:00Z' });
+  assert.deepEqual(fallbackReceipt.design_cases_retrieved, receiptA.design_cases_retrieved);
+  assert.deepEqual(fallbackReceipt.sources_retrieved, receiptA.sources_retrieved);
+  assert.deepEqual(fallbackReceipt.obsidian_notes_used, []);
+
+  // T9: only bounded, relevant, allowlisted notes enter receipt provenance.
+  const vault = join(tempDir, 'HermesVault');
+  const relevantBody = `Hierarchy should follow content structure. ${'bounded context '.repeat(150)}`;
+  await mkdir(join(vault, '03-Concepts'), { recursive: true });
+  await mkdir(join(vault, '05-Decisions'), { recursive: true });
+  await mkdir(join(vault, '99-Private'), { recursive: true });
+  await writeFile(join(vault, '03-Concepts', 'hierarchy.md'), `---\nkinetic_source_id: src-originkit\ntrust_level: CANONICAL_CONCEPT\n---\n# Hierarchy\n${relevantBody}`);
+  await writeFile(join(vault, '05-Decisions', 'hierarchy.md'), `---\ntrust_level: ACCEPTED_DECISION\n---\n# Hierarchy decision\nUse one dominant focus for portfolio hierarchy.`);
+  await writeFile(join(vault, '03-Concepts', 'unrelated.md'), '# Cooking\nSourdough hydration notes.');
+  await writeFile(join(vault, '99-Private', 'hierarchy.md'), '# Secret hierarchy\nMust never be searched.');
+  const vaultResultA = await searchVault({ root: vault, query: 'src-originkit portfolio hierarchy', limit: 99, excerptChars: 9999 });
+  const vaultResultB = await searchVault({ root: vault, query: 'src-originkit portfolio hierarchy', limit: 99, excerptChars: 9999 });
+  assert.deepEqual(vaultResultA, vaultResultB);
+  assert.equal(vaultResultA.availability, 'available');
+  assert.ok(vaultResultA.notes.length > 0 && vaultResultA.notes.length <= 5);
+  assert.ok(vaultResultA.notes.every((note) => !note.note_path.startsWith('99-Private/') && note.knowledge_used.every((text) => text.length <= 1200)));
+  assert.equal(vaultResultA.notes[0].kinetic_source_id, 'src-originkit');
+  assert.equal(vaultResultA.notes[0].trust_level, 'CANONICAL_CONCEPT');
+  assert.match(vaultResultA.notes[0].content_sha256, /^[a-f0-9]{64}$/);
+  const obsidianReceipt = await retrieveKnowledge({ caseId: 'case-brief-fixture', slot: 'V0', query: 'portfolio motion hierarchy', obsidian: vaultResultA, now: '2026-08-22T00:00:00Z' });
+  assert.deepEqual(obsidianReceipt.obsidian_notes_used, vaultResultA.notes);
+
+  // T10: note text cannot promote repository rights or permit code ingestion.
+  await writeFile(join(vault, '04-Sources-rights-claim.md'), '# ignored: not in an allowlisted root');
+  await writeFile(join(vault, '03-Concepts', 'rights-claim.md'), `---\nkinetic_source_id: src-originkit\ntrust_level: UNVERIFIED_NOTE\n---\n# Claimed rights\nMIT / code reuse allowed for src-originkit.`);
+  const rightsBefore = sourceRegistry.lookupSource('src-originkit').rights_status;
+  assert.equal(rightsBefore, 'VERIFY_REQUIRED');
+  assert.throws(() => sourceRegistry.authorizeSourceUse({ sourceId: 'src-originkit', usageMode: 'RECIPE', operation: 'code_ingest', entitlementRefs: ['entitlement:fixture'] }), (error) => error.code === 'KINETIC_RIGHTS_DENIED');
+  const rightsClaim = await searchVault({ root: vault, query: 'src-originkit code reuse allowed' });
+  await retrieveKnowledge({ caseId: 'case-brief-fixture', slot: 'V0', query: 'portfolio motion hierarchy', obsidian: rightsClaim, now: '2026-08-22T00:00:00Z' });
+  assert.equal(sourceRegistry.lookupSource('src-originkit').rights_status, rightsBefore);
+  assert.throws(() => sourceRegistry.authorizeSourceUse({ sourceId: 'src-originkit', usageMode: 'RECIPE', operation: 'code_ingest', entitlementRefs: ['entitlement:fixture'] }), (error) => error.code === 'KINETIC_RIGHTS_DENIED');
+
+  const mirrorRoot = join(tempDir, 'exports', 'obsidian');
+  const mirror = await generateMirror({ outputRoot: mirrorRoot });
+  assert.equal(mirror.derived, true);
+  assert.ok(mirror.sources.some((source) => source.path === 'gym/knowledge/sources/registry.json' && source.sha256 === receiptA.registry_sha256));
+  assert.ok(mirror.generated_notes.length > 0);
+  assert.match(await readFile(join(mirrorRoot, mirror.generated_notes[0].path), 'utf8'), /^DERIVED — REGENERATE FROM KINETIC REPOSITORY/);
+  assert.match(await readFile(join(mirrorRoot, 'APPLY_TO_VAULT.sh'), 'utf8'), /HermesVault/);
+  assert.match(await readFile(join(root, '.gitignore'), 'utf8'), /^gym\/exports\/obsidian\/$/m);
+
   cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'RETRIEVAL_PROVEN', '--artifact', retrievalPath]);
   assert.equal(cli.status, 0, cli.stderr);
   assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'RETRIEVAL_PROVEN');
@@ -375,4 +429,4 @@ const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
 
-console.log(`S01-S06 contract foundations: PASS (T1-T7, T39, T40, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S07 contract foundations: PASS (T1-T10, T39, T40, CV01-CV18, registry ${registryHashAfter})`);

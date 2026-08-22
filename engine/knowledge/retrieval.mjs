@@ -156,7 +156,7 @@ export async function retrieveKnowledge({ caseId, slot, query, filters = {}, ent
     recipes_selected: byMode(['RECIPE']),
     primitives_selected: byMode(['PRIMITIVE']),
     tools_selected: byMode(['TOOL', 'BUILD_DEPENDENCY']),
-    obsidian_notes_used: structuredClone(obsidian?.rows ?? []),
+    obsidian_notes_used: structuredClone(obsidian?.availability === 'available' ? obsidian.notes : obsidian?.rows ?? []),
     created_at: now,
   };
   const receiptSchema = await readJson(receiptSchemaPath, 'KINETIC_REGISTRY_INVALID');
