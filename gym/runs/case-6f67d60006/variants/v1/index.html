@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NORD ARCHIVE — The Foundry Ledger (V1 original)</title>
+<!--
+  KINETIC GYM / V1 ORIGINAL VARIANT — case-6f67d60006 / slot V1
+  The reference is a cream-paper "travel guide" specimen with per-char reveals (Framer).
+  V1 inverts: near-black ledger, bone text, one electric-blue accent, tabular archive layout,
+  and a scramble-decode motion language instead of per-char masks. Fictional typeface, original copy.
+-->
+<style>
+:root {
+  --bg: #0A0A0C;
+  --fg: #E6E4DE;
+  --blue: #3D5AFE;
+  --dim: color-mix(in srgb, var(--fg) 50%, transparent);
+  --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --sans: 'Helvetica Neue', Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.55; }
+a { color: inherit; }
+::selection { background: var(--blue); color: var(--bg); }
+
+.wrap { max-width: 64rem; margin: 0 auto; padding: 0 clamp(1.2rem, 4vw, 3rem); }
+
+header.top { display: flex; justify-content: space-between; padding: 1.4rem 0; border-bottom: 1px solid color-mix(in srgb, var(--fg) 14%, transparent); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; }
+header.top .accent { color: var(--blue); }
+
+.hero { padding: 12vh 0 8vh; }
+.hero .kicker { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.35em; color: var(--blue); margin-bottom: 1.6rem; }
+.hero h1 { font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: 1.0; letter-spacing: -0.02em; font-weight: 700; }
+.hero .sub { margin-top: 1.8rem; color: var(--dim); max-width: 32rem; }
+
+/* ledger table */
+.ledger { border-top: 1px solid color-mix(in srgb, var(--fg) 14%, transparent); }
+.row { display: grid; grid-template-columns: 6rem 1fr 8rem; gap: 1.5rem; padding: 1.6rem 0; border-bottom: 1px solid color-mix(in srgb, var(--fg) 10%, transparent); align-items: baseline; }
+@media (max-width: 640px) { .row { grid-template-columns: 1fr; gap: 0.4rem; } }
+.row .idx { font-family: var(--mono); font-size: 0.72rem; color: var(--dim); }
+.row .name { font-size: clamp(1.3rem, 2.6vw, 1.9rem); font-weight: 600; letter-spacing: -0.01em; }
+.row .meta { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; color: var(--dim); text-align: right; }
+@media (max-width: 640px) { .row .meta { text-align: left; } }
+
+/* specimen strip */
+.strip { padding: 8vh 0; }
+.strip .big { font-size: clamp(3.4rem, 11vw, 8.5rem); line-height: 0.95; letter-spacing: -0.03em; font-weight: 800; }
+.strip .cap { margin-top: 1.2rem; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.25em; color: var(--dim); }
+
+footer.bottom { padding: 4vh 0 5vh; border-top: 1px solid color-mix(in srgb, var(--fg) 14%, transparent); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.18em; color: var(--dim); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span>NORD ARCHIVE <span class="accent">/ LEDGER</span></span>
+    <span>EST. 2026 · 4 ENTRIES</span>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <p class="kicker" data-reveal-item>FOUNDRY LEDGER — FOUR CUTS</p>
+      <h1 data-recipe-role="scramble">A typeface is a record of decisions.</h1>
+      <p class="sub" data-reveal-item>This ledger lists four cuts of a fictional grotesque. Each entry records the decision that made it — weight, width, temper. Nothing here is for sale; it is for reading.</p>
+    </section>
+
+    <section class="ledger" aria-label="Ledger entries">
+      <div class="row" data-reveal-item><span class="idx">001</span><span class="name">Cut One — The Reading Weight</span><span class="meta">TEXT / 400</span></div>
+      <div class="row" data-reveal-item><span class="idx">002</span><span class="name">Cut Two — The Speaking Weight</span><span class="meta">DISPLAY / 600</span></div>
+      <div class="row" data-reveal-item><span class="idx">003</span><span class="name">Cut Three — The Shouting Weight</span><span class="meta">DISPLAY / 800</span></div>
+      <div class="row" data-reveal-item><span class="idx">004</span><span class="name">Cut Four — The Whispering Italic</span><span class="meta">TEXT / 300i</span></div>
+    </section>
+
+    <section class="strip">
+      <div class="big" data-reveal-item>Hamburgefonstiv</div>
+      <p class="cap" data-reveal-item>SPECIMEN STRING — ORIGINAL, NOT FROM ANY REFERENCE</p>
+    </section>
+  </main>
+
+  <footer class="bottom">
+    <span>NORD ARCHIVE — V1 ORIGINAL VARIANT</span>
+    <span>case-6f67d60006 · KINETIC GYM</span>
+  </footer>
+</div>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as scrambleText from './kinetic/core/primitives/scramble-text.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+const st = document.querySelector('[data-recipe-role=scramble]');
+if (st) handles.push(scrambleText.mount(st, { duration: 1300, tokens }));
+for (const sec of document.querySelectorAll('.hero, .ledger, .strip')) {
+  handles.push(revealStagger.mount(sec, { selector: '[data-reveal-item]', duration: 850, stagger: 100, y: '22px', threshold: 0.15, tokens }));
+}
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>

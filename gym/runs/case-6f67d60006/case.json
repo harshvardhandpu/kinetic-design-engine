@@ -10,17 +10,80 @@
       "mode": "fidelity-study",
       "deployable": false,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "BUILT",
       "attempt": 1,
-      "gates": {},
+      "gates": {
+        "technical": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:25:35.074Z"
+        },
+        "responsive": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:25:35.101Z"
+        },
+        "a11y": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:25:35.125Z"
+        },
+        "performance": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:25:35.153Z"
+        },
+        "design": {
+          "result": "pending-vision-or-human",
+          "producer": "not-evaluated",
+          "rationale": "Amendment G",
+          "at": "2026-08-22T05:25:35.182Z"
+        }
+      },
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.302Z",
-        "GENERATING": "2026-08-22T02:47:58.335Z"
+        "GENERATING": "2026-08-22T02:47:58.335Z",
+        "BUILT": "2026-08-22T05:25:35.042Z"
       },
       "brief": null,
       "diagnosis": null,
-      "receipt": null,
-      "artifacts": []
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "6d0701b5ff3e79fb43e8150e9ac7ee88a5ca0ac2",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.reveal-stagger",
+          "kinetic.scroll-progress",
+          "kinetic.marquee"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.reveal-stagger": "1.0.0",
+          "kinetic.scroll-progress": "1.0.0",
+          "kinetic.marquee": "1.0.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": null,
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T05:25:35.213Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-6f67d60006/variants/v0/index.html"
+      ]
     },
     "V1": {
       "run_id": "run-case-6f67d60006-v1",
@@ -28,17 +91,85 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "TECHNICAL_PASS",
       "attempt": 1,
-      "gates": {},
+      "gates": {
+        "technical": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:29:40.314Z"
+        },
+        "responsive": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:29:40.341Z"
+        },
+        "a11y": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:29:40.368Z"
+        },
+        "performance": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T05:29:40.395Z"
+        },
+        "design": {
+          "result": "pending-vision-or-human",
+          "producer": "not-evaluated",
+          "rationale": "Amendment G",
+          "at": "2026-08-22T05:29:40.433Z"
+        },
+        "originality": {
+          "result": "pass-distinct",
+          "producer": "objective",
+          "rationale": "weighted_similarity=0.028 copy=0 assets=0 section_order=0",
+          "at": "2026-08-22T05:29:40.461Z"
+        }
+      },
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.302Z",
-        "GENERATING": "2026-08-22T02:47:58.368Z"
+        "GENERATING": "2026-08-22T02:47:58.368Z",
+        "BUILT": "2026-08-22T05:29:40.284Z",
+        "TECHNICAL_PASS": "2026-08-22T05:29:40.533Z"
       },
       "brief": null,
       "diagnosis": null,
-      "receipt": null,
-      "artifacts": []
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "6d0701b5ff3e79fb43e8150e9ac7ee88a5ca0ac2",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.reveal-stagger",
+          "kinetic.scramble-text"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.reveal-stagger": "1.0.0",
+          "kinetic.scramble-text": "1.0.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": null,
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T05:29:40.498Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-6f67d60006/variants/v1/index.html"
+      ]
     },
     "V2": {
       "run_id": "run-case-6f67d60006-v2",
@@ -106,6 +237,73 @@
     {
       "at": "2026-08-22T02:47:58.433Z",
       "event": "V3 -> GENERATING",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:25:35.042Z",
+      "event": "V0 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:25:35.074Z",
+      "event": "V0 gate technical=pass"
+    },
+    {
+      "at": "2026-08-22T05:25:35.101Z",
+      "event": "V0 gate responsive=pass"
+    },
+    {
+      "at": "2026-08-22T05:25:35.125Z",
+      "event": "V0 gate a11y=pass"
+    },
+    {
+      "at": "2026-08-22T05:25:35.153Z",
+      "event": "V0 gate performance=pass"
+    },
+    {
+      "at": "2026-08-22T05:25:35.182Z",
+      "event": "V0 gate design=pending-vision-or-human"
+    },
+    {
+      "at": "2026-08-22T05:25:35.213Z",
+      "event": "V0 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T05:29:40.284Z",
+      "event": "V1 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T05:29:40.314Z",
+      "event": "V1 gate technical=pass"
+    },
+    {
+      "at": "2026-08-22T05:29:40.341Z",
+      "event": "V1 gate responsive=pass"
+    },
+    {
+      "at": "2026-08-22T05:29:40.368Z",
+      "event": "V1 gate a11y=pass"
+    },
+    {
+      "at": "2026-08-22T05:29:40.395Z",
+      "event": "V1 gate performance=pass"
+    },
+    {
+      "at": "2026-08-22T05:29:40.433Z",
+      "event": "V1 gate design=pending-vision-or-human"
+    },
+    {
+      "at": "2026-08-22T05:29:40.461Z",
+      "event": "V1 gate originality=pass-distinct"
+    },
+    {
+      "at": "2026-08-22T05:29:40.498Z",
+      "event": "V1 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T05:29:40.533Z",
+      "event": "V1 -> TECHNICAL_PASS",
       "attempt": 1
     }
   ]
