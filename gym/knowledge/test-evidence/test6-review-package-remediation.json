@@ -1,0 +1,59 @@
+{
+  "schema": "kinetic/gym/test-evidence@0.1",
+  "test": "Test 6 — review-package handoff remediation",
+  "record_id": "test6-review-package-remediation-20260822",
+  "created_at": "2026-08-22T08:21:21Z",
+  "runtime": {
+    "model": "gpt-5.6-sol",
+    "provider": "openai-codex"
+  },
+  "baseline_commit": "caf362e37c20e10f511722efed40ebeafb0083d3",
+  "defect_discovery": "Real human review found that review-package links targeted v0/index.html through v3/index.html while artifacts live under variants/v0/index.html through variants/v3/index.html.",
+  "mapping": {
+    "canonical_host_path": "/home/harshdev/HermesWorkspaces/kinetic-design-engine",
+    "canonical_sandbox_path": "/workspace/kinetic-design-engine",
+    "sandbox_workspace_mount_source": "/home/harshdev/HermesWorkspaces",
+    "old_duplicated_sandbox_path": "/workspace/home/harshdev/HermesWorkspaces/kinetic-design-engine",
+    "old_path_present": false,
+    "authoritative_copies_under_workspace": 1
+  },
+  "root_causes": {
+    "duplicated_location": "The sandbox /workspace mount maps directly to the host /home/harshdev/HermesWorkspaces directory. Treating /workspace as the host filesystem root and appending home/harshdev/HermesWorkspaces created the duplicated hierarchy.",
+    "broken_review_links": "The Phase-2 review package was hand-written with hrefs relative to an assumed vN/ sibling. No generator derived links from the runner's real artifact locations under variants/vN/, and no link-resolution regression test existed."
+  },
+  "remediation": {
+    "generator": "engine/cli/gen-review-package.mjs",
+    "generator_rule": "Use node:path.relative(caseDir, artifact) after verifying the artifact exists; never hand-write variant hrefs.",
+    "regression_test": "engine/tests/test-review-package-links.mjs",
+    "regression_red": "4 href failures on the original package",
+    "regression_green": "4 hrefs checked, 0 failures after regeneration",
+    "generated_package": "gym/runs/case-fe653973ef/review-package.html",
+    "taste_decision_changed": false,
+    "design_cases_changed": false,
+    "variants_changed": false
+  },
+  "http_and_render_verification": {
+    "base_url": "http://127.0.0.1:5500/",
+    "V0": { "artifact_exists": true, "http": 200, "bytes": 14064, "title": "IZANAMI — V0 Fidelity Study (INTERNAL, NOT DEPLOYABLE)", "h1": "Remember who you are", "visible_text_chars": 1570, "dom_elements": 211 },
+    "V1": { "artifact_exists": true, "http": 200, "bytes": 8899, "title": "WA — An Archive of Harmony (V1 original)", "h1": "Harmony is not made. It is kept.", "visible_text_chars": 1246, "dom_elements": 66 },
+    "V2": { "artifact_exists": true, "http": 200, "bytes": 6398, "title": "Three Rites — A Procession (V2 original)", "h1": "What is kept, carries forward.", "visible_text_chars": 884, "dom_elements": 38 },
+    "V3": { "artifact_exists": true, "http": 200, "bytes": 4613, "title": "The Whispering Statement (V3 original)", "h1": "Stillness speaks first.", "visible_text_chars": 524, "dom_elements": 34 }
+  },
+  "relocation_verification": {
+    "run_json_files_checked": 26,
+    "absolute_path_strings": 0,
+    "old_location_strings": 0,
+    "relative_path_fields_checked": 10,
+    "missing_relative_targets": 0,
+    "runner_checkpoints_readable": 4,
+    "install_receipts_checked": 14,
+    "installed_items_checked": 33,
+    "missing_copied_files": 0,
+    "verdict": "PASS — receipts/checkpoints are repository-relative and remain valid after relocation."
+  },
+  "canonical_review_workflow": {
+    "command": "cd /home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-fe653973ef && python3 -m http.server 5500",
+    "url": "http://127.0.0.1:5500/review-package.html"
+  },
+  "result": "PASS — Test 6 review-artifact handoff reverified after root-cause remediation. Design decision remains AWAITING_HUMAN_VISUAL_DECISION."
+}

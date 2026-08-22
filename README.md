@@ -5,7 +5,8 @@
 **No production implementation. No cron jobs. No deployments.**
 
 Canonical location: `/home/harshdev/HermesWorkspaces/kinetic-design-engine`
-(sandbox path: `/workspace/home/harshdev/HermesWorkspaces/kinetic-design-engine`).
+(sandbox path: `/workspace/kinetic-design-engine`; `/workspace` maps to the host
+`/home/harshdev/HermesWorkspaces` directory).
 
 KINETIC is a source-grounded, agent-operable web experience engine. It lets Hermes
 inspect an existing application, understand its design system, select reusable

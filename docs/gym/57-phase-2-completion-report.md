@@ -1,7 +1,7 @@
 # KINETIC Phase 2 — Completion Report
 
 **Date:** 2026-08-22 · **Runtime:** `qwen/qwen3.8-max-free` via `tokenrouter` · **KINETIC version:** 0.2.0-phase2
-**Final commit:** `e9f9486` · **Canonical workspace:** `/home/harshdev/HermesWorkspaces/kinetic-design-engine`
+**Phase-2 completion commit:** `caf362e37c20e10f511722efed40ebeafb0083d3` · **Canonical host workspace:** `/home/harshdev/HermesWorkspaces/kinetic-design-engine` · **Canonical sandbox workspace:** `/workspace/kinetic-design-engine`
 **Phase goal:** Prove that the KINETIC application loop and learning loop execute correctly end-to-end on a deliberately tiny corpus.
 
 ---
@@ -30,7 +30,7 @@
 | 3 | Feedback repair | PASS | injected threshold defect → 4 invisible-stuck → inspector → resolver → patch → 0 issues |
 | 4 | Regression safety | PASS | counter/echo/flag/theme functional post-install |
 | 5 | Reduced motion | PASS | 4/4 primitives → done-reduced-motion, content visible |
-| 6 | Learning case | PASS | IZANAMI: study→V0→V1-V3→qualification→comparison package→AWAITING_HUMAN_VISUAL_DECISION |
+| 6 | Learning case | PASS after remediation | IZANAMI: study→V0→V1-V3→qualification→review package. Human use found broken `vN/index.html` links; root-cause remediation regenerated portable `variants/vN/index.html` links and reverified V0–V3 (HTTP 200 + non-empty render). TasteDecision remains `AWAITING_HUMAN_VISUAL_DECISION`. |
 | 7 | Negative learning | PASS | interaction-blocking veil REJECTED; gates false-negative proven; prevention rule added + verified bidirectionally |
 | 8 | Experiment | PASS | Gravity Well (cursor-glow as discovery mechanic), ExperimentRecord, NOT promoted |
 | 9 | Kill/resume | PASS | correct-stage resume, dead-lock reclaim w/ logged takeover, idempotency, receipt hash unchanged |
@@ -67,7 +67,9 @@ All V1+ originals: originality PASS-distinct, copy=0, asset_reuse=0. All design 
 
 **0 decided.** 1 batch prepared and awaiting human review:
 - `gym/runs/case-fe653973ef/taste-decision-batch1.json` — status `AWAITING_HUMAN_VISUAL_DECISION`
-- Review package: `gym/runs/case-fe653973ef/review-package.html` (V1/V2/V3 with links + originality table)
+- Review package: `gym/runs/case-fe653973ef/review-package.html` (V0/V1/V2/V3; links generated from real artifact paths)
+- Canonical local review: `cd /home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-fe653973ef && python3 -m http.server 5500`, then open `http://127.0.0.1:5500/review-package.html`.
+- **Post-completion correction:** the package originally shipped with broken `v0/index.html`–`v3/index.html` links. Real human use exposed the defect. `engine/cli/gen-review-package.mjs` now derives portable links from actual artifacts, and `engine/tests/test-review-package-links.mjs` prevents recurrence. Evidence: `gym/knowledge/test-evidence/test6-review-package-remediation.json`.
 - No winner/runner-up/design_quality/human_preference fabricated (human-review rule honored).
 
 ## 6. Negative knowledge created

@@ -13,8 +13,10 @@ Recorded: 2026-08-22. Verified with `findmnt -T` inside the sandbox.
 
 ## Writable surface (complete list)
 
-1. `/workspace/home/harshdev/HermesWorkspaces/kinetic-design-engine` — KINETIC
-   canonical workspace (intended RW target).
+1. `/workspace/kinetic-design-engine` — KINETIC canonical sandbox workspace,
+   mapped from host `/home/harshdev/HermesWorkspaces/kinetic-design-engine`
+   (intended RW target). The former duplicated sandbox path
+   `/workspace/home/harshdev/HermesWorkspaces/kinetic-design-engine` is gone.
 2. `/workspace/aether-site` — pre-existing Website-Factory project, writable by
    mount inheritance. **Phase-2 rule: no writes there.** (Website Factory owns
    it; KINETIC must not touch it.)
