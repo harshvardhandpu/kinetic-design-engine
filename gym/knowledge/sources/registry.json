@@ -1,0 +1,2802 @@
+{
+  "$schema": "../../../schemas/gym/source-registry.schema.json",
+  "registry_version": "0.1.2",
+  "updated_at": "2026-08-22",
+  "authority": "KINETIC repository machine state; Obsidian is a derived synthesis layer.",
+  "training_definition": "Retrieval knowledge, DesignCases, abstract patterns, primitives/recipes, tool intelligence, evaluator and negative knowledge, source-to-output lessons, and Taste Memory; never foundation-model weight training.",
+  "sources": [
+    {
+      "source_id": "src-cuvii-labs-motion",
+      "name": "CUVII Labs Motion",
+      "canonical_url": "https://labs.cuvii.dev/volume/motion",
+      "domain": "labs.cuvii.dev",
+      "source_kind": [
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "interaction",
+        "microinteraction"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "VERIFY_REQUIRED",
+      "ai_training_status": "EXPLICITLY_PROHIBITED",
+      "automated_access": "PROHIBITED",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "UNKNOWN",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://labs.cuvii.dev/volume/motion",
+        "https://labs.cuvii.dev/robots.txt"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "NO_AUTOMATED_INGEST",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Page invites copying CUVII-authored code but acknowledges recreations and sometimes unknown original sources. No raw/code ingestion until terms and provenance are verified.",
+      "audit": {
+        "audit_id": "audit-cuvii-labs-motion",
+        "source_id": "src-cuvii-labs-motion",
+        "audited_at": "2026-08-22",
+        "purpose": "Motion study/recreation gallery",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt allows search but disallows major AI crawlers and Cloudflare browser rendering.",
+          "evidence_url": "https://labs.cuvii.dev/robots.txt"
+        },
+        "ai_training_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt publishes Content-Signal ai-train=no.",
+          "evidence_url": "https://labs.cuvii.dev/robots.txt"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "NO_AUTOMATED_INGEST",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://labs.cuvii.dev/volume/motion",
+          "https://labs.cuvii.dev/robots.txt"
+        ],
+        "canonical_owner": "CUVII Labs",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Page says original ideas/work may belong to other authors and sources are often unknown.",
+          "evidence_url": "https://labs.cuvii.dev/volume/motion"
+        },
+        "conclusion": "Page invites copying CUVII-authored code but acknowledges recreations and sometimes unknown original sources. No raw/code ingestion until terms and provenance are verified."
+      }
+    },
+    {
+      "source_id": "src-60fps-design",
+      "name": "60fps.design",
+      "canonical_url": "https://60fps.design/",
+      "domain": "60fps.design",
+      "source_kind": [
+        "MOTION_REFERENCE",
+        "MCP",
+        "LICENSE_GATED_LIBRARY"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "interaction",
+        "microinteraction",
+        "tooling"
+      ],
+      "license_status": "VERIFIED_PROPRIETARY",
+      "terms_url": "https://60fps.design/terms",
+      "license_url": null,
+      "rights_status": "LICENSE_GATED",
+      "ai_training_status": "EXPLICITLY_PROHIBITED",
+      "automated_access": "PROHIBITED",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "LICENSE_GATED",
+      "credential_required": true,
+      "attribution_required": true,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://60fps.design/",
+        "https://60fps.design/pro",
+        "https://60fps.design/terms"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "LICENSE_GATED_RUNTIME",
+        "NO_AUTOMATED_INGEST"
+      ],
+      "notes": "Manual/public reference is permitted; Pro/MCP requires a personal key. Bulk/systematic copying, mirroring, standalone reference products, and ML training/testing/benchmarking/evaluation are prohibited. Third-party app brands/assets remain third-party property.",
+      "audit": {
+        "audit_id": "audit-60fps-design",
+        "source_id": "src-60fps-design",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated recordings and motion breakdowns from real iOS apps, plus licensed MCP",
+        "terms_review": {
+          "status": "VERIFIED",
+          "summary": "Official Terms of Use last updated 2026-08-02 directly inspected.",
+          "evidence_url": "https://60fps.design/terms"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://60fps.design/"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "Terms prohibit bulk download or systematic copying by hand or script; only licensed MCP use is allowed within limits.",
+          "evidence_url": "https://60fps.design/terms"
+        },
+        "ai_training_review": {
+          "status": "VERIFIED",
+          "summary": "Terms prohibit using 60fps to train, fine tune, test, benchmark, or evaluate an ML model.",
+          "evidence_url": "https://60fps.design/terms"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "Licensed users may use references for their own, employer/client, and product work, subject to restrictions.",
+          "evidence_url": "https://60fps.design/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "No mirroring, re-hosting, sublicensing, standalone reference library, or competing product.",
+          "evidence_url": "https://60fps.design/"
+        },
+        "credential_paywall_review": {
+          "status": "VERIFIED",
+          "summary": "PRO/MCP requires a personal license key; current terms state two devices and 120 requests/minute.",
+          "evidence_url": "https://60fps.design/"
+        },
+        "structured_access_review": {
+          "status": "VERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://60fps.design/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "LICENSE_GATED_RUNTIME",
+          "NO_AUTOMATED_INGEST"
+        ],
+        "evidence_urls": [
+          "https://60fps.design/",
+          "https://60fps.design/pro",
+          "https://60fps.design/terms"
+        ],
+        "canonical_owner": "60fps.design sole proprietorship, Bengaluru",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Terms state app interfaces, brands, logos, copy and assets belong to app owners.",
+          "evidence_url": "https://60fps.design/"
+        },
+        "conclusion": "Manual/public reference is permitted; Pro/MCP requires a personal key. Bulk/systematic copying, mirroring, standalone reference products, and ML training/testing/benchmarking/evaluation are prohibited. Third-party app brands/assets remain third-party property."
+      },
+      "tier_policies": [
+        {
+          "tier": "FREE_PUBLIC",
+          "rights_status": "REFERENCE_ONLY",
+          "code_ingest": "PROHIBITED",
+          "credential_required": false,
+          "notes": "Permitted public reference only; no systematic copying."
+        },
+        {
+          "tier": "PRO_MCP",
+          "rights_status": "LICENSE_GATED",
+          "code_ingest": "LICENSE_GATED",
+          "credential_required": true,
+          "notes": "Read-only MCP under personal license and published rate limits; no bulk corpus."
+        }
+      ]
+    },
+    {
+      "source_id": "src-transitions-dev",
+      "name": "Transitions.dev",
+      "canonical_url": "https://transitions.dev/",
+      "domain": "transitions.dev",
+      "source_kind": [
+        "MOTION_REFERENCE",
+        "IMPLEMENTATION_LIBRARY"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "MIXED_FREE_AND_LICENSED",
+      "terms_url": "https://transitions.dev/terms.html",
+      "license_url": null,
+      "rights_status": "VERIFY_REQUIRED",
+      "ai_training_status": "EXPLICITLY_PROHIBITED",
+      "automated_access": "PROHIBITED",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PER_ITEM",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://transitions.dev/",
+        "https://transitions.dev/pro.html",
+        "https://transitions.dev/robots.txt"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "NO_AUTOMATED_INGEST",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Public page intentionally exposes copyable transitions, but no durable free-code license was verified. Pro stays separately license-gated.",
+      "audit": {
+        "audit_id": "audit-transitions-dev",
+        "source_id": "src-transitions-dev",
+        "audited_at": "2026-08-22",
+        "purpose": "Ready-to-use UI transitions with separate Pro material",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt allows search/reference but disallows major AI crawlers and Cloudflare browser rendering.",
+          "evidence_url": "https://transitions.dev/robots.txt"
+        },
+        "ai_training_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt publishes Content-Signal ai-train=no.",
+          "evidence_url": "https://transitions.dev/robots.txt"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "NO_AUTOMATED_INGEST",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://transitions.dev/",
+          "https://transitions.dev/pro.html",
+          "https://transitions.dev/robots.txt"
+        ],
+        "canonical_owner": "Jakub Antalik / Transitions.dev",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Site distinguishes public items from Pro content.",
+          "evidence_url": "https://transitions.dev/"
+        },
+        "conclusion": "Public page intentionally exposes copyable transitions, but no durable free-code license was verified. Pro stays separately license-gated."
+      },
+      "tier_policies": [
+        {
+          "tier": "FREE_PUBLIC",
+          "rights_status": "VERIFY_REQUIRED",
+          "code_ingest": "PER_ITEM",
+          "credential_required": false,
+          "notes": "Reference abstraction allowed; verify exact item/license before recipe ingestion."
+        },
+        {
+          "tier": "PRO",
+          "rights_status": "LICENSE_GATED",
+          "code_ingest": "LICENSE_GATED",
+          "credential_required": true,
+          "notes": "Never ingest solely because previews are publicly reachable."
+        }
+      ]
+    },
+    {
+      "source_id": "src-motion-primitives",
+      "name": "Motion Primitives",
+      "canonical_url": "https://motion-primitives.com/",
+      "domain": "motion-primitives.com",
+      "source_kind": [
+        "IMPLEMENTATION_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/ibelick/motion-primitives/main/LICENCE.md",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://motion-primitives.com/",
+        "https://raw.githubusercontent.com/ibelick/motion-primitives/main/LICENCE.md"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Code recipes may be derived from the canonical repository with version/commit and MIT notice. Demo assets and third-party dependencies remain per-item.",
+      "audit": {
+        "audit_id": "audit-motion-primitives",
+        "source_id": "src-motion-primitives",
+        "audited_at": "2026-08-22",
+        "purpose": "Open-source React motion primitives and documentation",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://motion-primitives.com/",
+          "https://raw.githubusercontent.com/ibelick/motion-primitives/main/LICENCE.md"
+        ],
+        "canonical_owner": "ibelick / Motion Primitives",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://motion-primitives.com/"
+        },
+        "conclusion": "Code recipes may be derived from the canonical repository with version/commit and MIT notice. Demo assets and third-party dependencies remain per-item."
+      }
+    },
+    {
+      "source_id": "src-motion-primitives-dock",
+      "name": "Motion Primitives — Dock",
+      "canonical_url": "https://motion-primitives.com/docs/dock",
+      "domain": "motion-primitives.com",
+      "source_kind": [
+        "IMPLEMENTATION_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/ibelick/motion-primitives/main/LICENCE.md",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://motion-primitives.com/docs/dock",
+        "https://raw.githubusercontent.com/ibelick/motion-primitives/main/LICENCE.md"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Code recipes may be derived from the canonical repository with version/commit and MIT notice. Demo assets and third-party dependencies remain per-item.",
+      "audit": {
+        "audit_id": "audit-motion-primitives-dock",
+        "source_id": "src-motion-primitives-dock",
+        "audited_at": "2026-08-22",
+        "purpose": "Open-source React motion primitives and documentation",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://motion-primitives.com/docs/dock",
+          "https://raw.githubusercontent.com/ibelick/motion-primitives/main/LICENCE.md"
+        ],
+        "canonical_owner": "ibelick / Motion Primitives",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://motion-primitives.com/docs/dock"
+        },
+        "conclusion": "Code recipes may be derived from the canonical repository with version/commit and MIT notice. Demo assets and third-party dependencies remain per-item."
+      }
+    },
+    {
+      "source_id": "src-numberflow",
+      "name": "NumberFlow",
+      "canonical_url": "https://number-flow.barvian.me/",
+      "domain": "number-flow.barvian.me",
+      "source_kind": [
+        "IMPLEMENTATION_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "microinteraction",
+        "responsive",
+        "accessibility",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/barvian/number-flow/main/LICENSE.md",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://number-flow.barvian.me/",
+        "https://raw.githubusercontent.com/barvian/number-flow/main/LICENSE.md"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "MIT code ingestion is eligible from the canonical repository with commit/version and license retention. Example copy/assets remain per-item.",
+      "audit": {
+        "audit_id": "audit-numberflow",
+        "source_id": "src-numberflow",
+        "audited_at": "2026-08-22",
+        "purpose": "Animated number transitions and examples",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://number-flow.barvian.me/",
+          "https://raw.githubusercontent.com/barvian/number-flow/main/LICENSE.md"
+        ],
+        "canonical_owner": "Maxwell Barvian / NumberFlow",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://number-flow.barvian.me/"
+        },
+        "conclusion": "MIT code ingestion is eligible from the canonical repository with commit/version and license retention. Example copy/assets remain per-item."
+      }
+    },
+    {
+      "source_id": "src-numberflow-examples",
+      "name": "NumberFlow — Examples",
+      "canonical_url": "https://number-flow.barvian.me/examples",
+      "domain": "number-flow.barvian.me",
+      "source_kind": [
+        "IMPLEMENTATION_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "transition",
+        "microinteraction",
+        "responsive",
+        "accessibility",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/barvian/number-flow/main/LICENSE.md",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://number-flow.barvian.me/examples",
+        "https://raw.githubusercontent.com/barvian/number-flow/main/LICENSE.md"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "MIT code ingestion is eligible from the canonical repository with commit/version and license retention. Example copy/assets remain per-item.",
+      "audit": {
+        "audit_id": "audit-numberflow-examples",
+        "source_id": "src-numberflow-examples",
+        "audited_at": "2026-08-22",
+        "purpose": "Animated number transitions and examples",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://number-flow.barvian.me/examples",
+          "https://raw.githubusercontent.com/barvian/number-flow/main/LICENSE.md"
+        ],
+        "canonical_owner": "Maxwell Barvian / NumberFlow",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://number-flow.barvian.me/examples"
+        },
+        "conclusion": "MIT code ingestion is eligible from the canonical repository with commit/version and license retention. Example copy/assets remain per-item."
+      }
+    },
+    {
+      "source_id": "src-morphicons",
+      "name": "Morphicons",
+      "canonical_url": "https://www.morphicons.com/",
+      "domain": "www.morphicons.com",
+      "source_kind": [
+        "IMPLEMENTATION_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "icons",
+        "motion",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/guillermolg00/morphicons/main/LICENSE",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.morphicons.com/",
+        "https://raw.githubusercontent.com/guillermolg00/morphicons/main/LICENSE"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Morphicons code is MIT. Third-party icon-library licenses must be recorded per icon set; this audit does not collapse them into the Morphicons license.",
+      "audit": {
+        "audit_id": "audit-morphicons",
+        "source_id": "src-morphicons",
+        "audited_at": "2026-08-22",
+        "purpose": "Animated/morphing icon implementation library",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://www.morphicons.com/",
+          "https://raw.githubusercontent.com/guillermolg00/morphicons/main/LICENSE"
+        ],
+        "canonical_owner": "Guillermo / Morphicons",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Morphicons license covers its software; third-party icon libraries remain independently licensed.",
+          "evidence_url": "https://www.morphicons.com/"
+        },
+        "conclusion": "Morphicons code is MIT. Third-party icon-library licenses must be recorded per icon set; this audit does not collapse them into the Morphicons license."
+      }
+    },
+    {
+      "source_id": "src-seesaw",
+      "name": "Seesaw",
+      "canonical_url": "https://www.seesaw.website/",
+      "domain": "www.seesaw.website",
+      "source_kind": [
+        "DESIGN_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "composition",
+        "typography",
+        "color",
+        "art_direction",
+        "responsive"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "INACCESSIBLE",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.seesaw.website/"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Store URL/metadata and manual abstract observations only; no source assets mirrored.",
+      "audit": {
+        "audit_id": "audit-seesaw",
+        "source_id": "src-seesaw",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated website inspiration",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "inspection_quality": "INACCESSIBLE",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.seesaw.website/"
+        ],
+        "canonical_owner": "Seesaw",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.seesaw.website/"
+        },
+        "conclusion": "Store URL/metadata and manual abstract observations only; no source assets mirrored."
+      }
+    },
+    {
+      "source_id": "src-inspora",
+      "name": "Inspora",
+      "canonical_url": "https://www.inspora.design/",
+      "domain": "www.inspora.design",
+      "source_kind": [
+        "DESIGN_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "composition",
+        "typography",
+        "color",
+        "art_direction",
+        "responsive"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "INACCESSIBLE",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.inspora.design/"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "REFERENCE_ABSTRACTION only until current terms and raw-content rights are verified.",
+      "audit": {
+        "audit_id": "audit-inspora",
+        "source_id": "src-inspora",
+        "audited_at": "2026-08-22",
+        "purpose": "Design and art-direction inspiration",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "inspection_quality": "INACCESSIBLE",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.inspora.design/"
+        ],
+        "canonical_owner": "Inspora",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.inspora.design/"
+        },
+        "conclusion": "REFERENCE_ABSTRACTION only until current terms and raw-content rights are verified."
+      }
+    },
+    {
+      "source_id": "src-webinspoo",
+      "name": "WebInspoo",
+      "canonical_url": "https://webinspoo.com/",
+      "domain": "webinspoo.com",
+      "source_kind": [
+        "DESIGN_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "composition",
+        "typography",
+        "color",
+        "art_direction",
+        "responsive"
+      ],
+      "license_status": "VERIFIED_PROPRIETARY",
+      "terms_url": "https://webinspoo.com/terms",
+      "license_url": null,
+      "rights_status": "REFERENCE_ONLY",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "PROHIBITED",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://webinspoo.com/",
+        "https://webinspoo.com/terms"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "NO_AUTOMATED_INGEST"
+      ],
+      "notes": "Official terms prohibit automated scraping/harvesting, copying/distributing site content, commercial use without authorization, and derivative works. Third-party assets remain with owners.",
+      "audit": {
+        "audit_id": "audit-webinspoo",
+        "source_id": "src-webinspoo",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated design inspiration platform",
+        "terms_review": {
+          "status": "VERIFIED",
+          "summary": "Official Terms of Service last updated 2026-08-12 directly inspected.",
+          "evidence_url": "https://webinspoo.com/terms"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "Terms expressly prohibit automated tools that scrape or harvest data.",
+          "evidence_url": "https://webinspoo.com/terms"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "Commercial use of WebInspoo content requires authorization.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "Terms prohibit copying, modifying, distributing, and derivative works without permission.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "NO_AUTOMATED_INGEST"
+        ],
+        "evidence_urls": [
+          "https://webinspoo.com/",
+          "https://webinspoo.com/terms"
+        ],
+        "canonical_owner": "WebInspoo / Taher Max",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Terms state linked fonts/assets remain the property of their owners.",
+          "evidence_url": "https://webinspoo.com/"
+        },
+        "conclusion": "Official terms prohibit automated scraping/harvesting, copying/distributing site content, commercial use without authorization, and derivative works. Third-party assets remain with owners."
+      }
+    },
+    {
+      "source_id": "src-footer-design",
+      "name": "Footer Design",
+      "canonical_url": "https://www.footer.design/",
+      "domain": "www.footer.design",
+      "source_kind": [
+        "SECTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "sections",
+        "composition",
+        "typography",
+        "navigation",
+        "interaction"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "TEXT_ONLY",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.footer.design/"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Learn footer archetypes, IA, type treatment, density, interaction, and CTA relationships; do not mirror gallery thumbnails/assets.",
+      "audit": {
+        "audit_id": "audit-footer-design",
+        "source_id": "src-footer-design",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated website footer gallery",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "inspection_quality": "TEXT_ONLY",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.footer.design/"
+        ],
+        "canonical_owner": "Footer Design / Nooon Studio",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.footer.design/"
+        },
+        "conclusion": "Learn footer archetypes, IA, type treatment, density, interaction, and CTA relationships; do not mirror gallery thumbnails/assets."
+      }
+    },
+    {
+      "source_id": "src-unsection",
+      "name": "Unsection",
+      "canonical_url": "https://www.unsection.com/",
+      "domain": "www.unsection.com",
+      "source_kind": [
+        "SECTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "sections",
+        "composition",
+        "typography",
+        "navigation",
+        "interaction"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "TEXT_ONLY",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.unsection.com/"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Taxonomy/reference abstraction only. Public and gated content are present; no gallery imagery or SVG library ingestion without item rights.",
+      "audit": {
+        "audit_id": "audit-unsection",
+        "source_id": "src-unsection",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated website section library",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "inspection_quality": "TEXT_ONLY",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.unsection.com/"
+        ],
+        "canonical_owner": "Unsection",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.unsection.com/"
+        },
+        "conclusion": "Taxonomy/reference abstraction only. Public and gated content are present; no gallery imagery or SVG library ingestion without item rights."
+      }
+    },
+    {
+      "source_id": "src-navbar-gallery",
+      "name": "Navbar Gallery",
+      "canonical_url": "https://www.navbar.gallery/",
+      "domain": "www.navbar.gallery",
+      "source_kind": [
+        "NAVIGATION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "navigation",
+        "interaction",
+        "responsive",
+        "accessibility"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "TEXT_ONLY",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.navbar.gallery/"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Learn abstract static/sticky, dropdown, mega-menu, sidebar, search, announcement, fullscreen, breadcrumb, tab, and progress patterns. Do not mirror gallery media.",
+      "audit": {
+        "audit_id": "audit-navbar-gallery",
+        "source_id": "src-navbar-gallery",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated navigation-pattern gallery",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "inspection_quality": "TEXT_ONLY",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.navbar.gallery/"
+        ],
+        "canonical_owner": "Navbar Gallery / Christina Liubynska",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.navbar.gallery/"
+        },
+        "conclusion": "Learn abstract static/sticky, dropdown, mega-menu, sidebar, search, announcement, fullscreen, breadcrumb, tab, and progress patterns. Do not mirror gallery media."
+      }
+    },
+    {
+      "source_id": "src-logoinspo",
+      "name": "LogoInspo",
+      "canonical_url": "https://www.logoinspo.com/",
+      "domain": "www.logoinspo.com",
+      "source_kind": [
+        "BRAND_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "branding",
+        "logo",
+        "color",
+        "typography"
+      ],
+      "license_status": "VERIFIED_PROPRIETARY",
+      "terms_url": "https://www.logoinspo.com/terms-of-service",
+      "license_url": null,
+      "rights_status": "REFERENCE_ONLY",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.logoinspo.com/",
+        "https://www.logoinspo.com/terms-of-service"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Official Terms of Service (updated 2026-08-20) state that showcased logos and design assets remain the intellectual property of their respective owners and creators and prohibit copying, reproduction, distribution, or derivative works without original-rightsholder permission. KINETIC may retain attribution, taxonomy, and abstract brand-system lessons only.",
+      "audit": {
+        "audit_id": "audit-logoinspo",
+        "source_id": "src-logoinspo",
+        "audited_at": "2026-08-22",
+        "purpose": "Logo and brand inspiration gallery",
+        "terms_review": {
+          "status": "VERIFIED",
+          "summary": "Official Terms of Service directly inspected; last updated 2026-08-20.",
+          "evidence_url": "https://www.logoinspo.com/terms-of-service"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Official terms provide no downstream reuse license and expressly require permission from original rights holders.",
+          "evidence_url": "https://www.logoinspo.com/terms-of-service"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.logoinspo.com/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.logoinspo.com/"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "No commercial reuse grant; original-rightsholder permission is required.",
+          "evidence_url": "https://www.logoinspo.com/terms-of-service"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "Copying, reproduction, distribution, and derivative works are prohibited without original-rightsholder permission.",
+          "evidence_url": "https://www.logoinspo.com/terms-of-service"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.logoinspo.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.logoinspo.com/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.logoinspo.com/",
+          "https://www.logoinspo.com/terms-of-service"
+        ],
+        "canonical_owner": "LogoInspo",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Terms state showcased logos, identities, and design assets remain owned by their respective owners and creators.",
+          "evidence_url": "https://www.logoinspo.com/terms-of-service"
+        },
+        "conclusion": "Official Terms of Service (updated 2026-08-20) state that showcased logos and design assets remain the intellectual property of their respective owners and creators and prohibit copying, reproduction, distribution, or derivative works without original-rightsholder permission. KINETIC may retain attribution, taxonomy, and abstract brand-system lessons only."
+      }
+    },
+    {
+      "source_id": "src-asoinspo",
+      "name": "ASOInspo",
+      "canonical_url": "https://www.asoinspo.com/",
+      "domain": "www.asoinspo.com",
+      "source_kind": [
+        "BRAND_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "app_store",
+        "branding",
+        "logo",
+        "composition",
+        "typography",
+        "color"
+      ],
+      "license_status": "VERIFIED_PROPRIETARY",
+      "terms_url": "https://www.asoinspo.com/terms",
+      "license_url": null,
+      "rights_status": "REFERENCE_ONLY",
+      "ai_training_status": "EXPLICITLY_PROHIBITED",
+      "automated_access": "PROHIBITED",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.asoinspo.com/",
+        "https://www.asoinspo.com/terms",
+        "https://www.asoinspo.com/robots.txt"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "NO_AUTOMATED_INGEST"
+      ],
+      "notes": "Reference abstraction only. App screenshots/logos remain third-party; robots.txt disallows major AI crawlers and ai training and blocks /api/.",
+      "audit": {
+        "audit_id": "audit-asoinspo",
+        "source_id": "src-asoinspo",
+        "audited_at": "2026-08-22",
+        "purpose": "Curated App Store screenshots, paywalls, onboarding, and ASO patterns",
+        "terms_review": {
+          "status": "VERIFIED",
+          "summary": "Official terms directly inspected.",
+          "evidence_url": "https://www.asoinspo.com/terms"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.asoinspo.com/"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt disallows major AI crawlers and /api/; no bulk corpus permission.",
+          "evidence_url": "https://www.asoinspo.com/robots.txt"
+        },
+        "ai_training_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt publishes Content-Signal ai-train=no.",
+          "evidence_url": "https://www.asoinspo.com/robots.txt"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "Public site supports inspiration/research; no ownership grant over third-party assets.",
+          "evidence_url": "https://www.asoinspo.com/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "No registry evidence grants redistribution of app screenshots/logos.",
+          "evidence_url": "https://www.asoinspo.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.asoinspo.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.asoinspo.com/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "NO_AUTOMATED_INGEST"
+        ],
+        "evidence_urls": [
+          "https://www.asoinspo.com/",
+          "https://www.asoinspo.com/terms",
+          "https://www.asoinspo.com/robots.txt"
+        ],
+        "canonical_owner": "ASOInspo",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Terms state third-party app screenshots, logos, trademarks, and content remain owned by their respective owners.",
+          "evidence_url": "https://www.asoinspo.com/"
+        },
+        "conclusion": "Reference abstraction only. App screenshots/logos remain third-party; robots.txt disallows major AI crawlers and ai training and blocks /api/."
+      }
+    },
+    {
+      "source_id": "src-inspotype-discovery",
+      "name": "Inspotype Discovery",
+      "canonical_url": "https://inspotype.com/discovery",
+      "domain": "inspotype.com",
+      "source_kind": [
+        "TYPOGRAPHY_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "typography",
+        "color",
+        "branding"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "METADATA_ONLY",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://inspotype.com/discovery"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Store font roles, pairings, visual direction, foundry, classification, color relationships, use context, and license metadata. Never copy font files; every font has its own license audit.",
+      "audit": {
+        "audit_id": "audit-inspotype-discovery",
+        "source_id": "src-inspotype-discovery",
+        "audited_at": "2026-08-22",
+        "purpose": "Typeface discovery, pairing, foundry, classification, and visual-direction reference",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "inspection_quality": "METADATA_ONLY",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://inspotype.com/discovery"
+        ],
+        "canonical_owner": "Inspotype",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://inspotype.com/discovery"
+        },
+        "conclusion": "Store font roles, pairings, visual direction, foundry, classification, color relationships, use context, and license metadata. Never copy font files; every font has its own license audit."
+      }
+    },
+    {
+      "source_id": "src-aceternity-components",
+      "name": "Aceternity UI Components",
+      "canonical_url": "https://ui.aceternity.com/components",
+      "domain": "ui.aceternity.com",
+      "source_kind": [
+        "COMPONENT_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "MIXED_FREE_AND_LICENSED",
+      "terms_url": "https://ui.aceternity.com/terms",
+      "license_url": "https://ui.aceternity.com/licence",
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://ui.aceternity.com/components",
+        "https://ui.aceternity.com/licence",
+        "https://ui.aceternity.com/pricing",
+        "https://ui.aceternity.com/terms"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "BUILD_TIME_LIBRARY",
+        "LICENSE_GATED_RUNTIME"
+      ],
+      "notes": "Official Aceternity license permits unlimited end products and modification, but prohibits redistributing source Items, marketplace resale, and template creation for sale. Free and All-Access tiers remain separate; third-party components keep their own licenses. KINETIC may use eligible items as build-time dependencies, not as a reusable code corpus.",
+      "audit": {
+        "audit_id": "audit-aceternity-components",
+        "source_id": "src-aceternity-components",
+        "audited_at": "2026-08-22",
+        "purpose": "Free React component catalogue with separate paid blocks/templates",
+        "terms_review": {
+          "status": "VERIFIED",
+          "summary": "Official Terms directly inspected; site material is reserved for personal access unless a separate item licence applies, and republication/copying/sale/sublicensing/redistribution are prohibited.",
+          "evidence_url": "https://ui.aceternity.com/terms"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Official Aceternity licence directly inspected; it grants end-product use/modification but prohibits source redistribution and marketplace/template resale.",
+          "evidence_url": "https://ui.aceternity.com/licence"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://ui.aceternity.com/components"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://ui.aceternity.com/components"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "Unlimited end products for self/clients are permitted under the item license.",
+          "evidence_url": "https://ui.aceternity.com/licence"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "Raw/source Item redistribution, marketplace resale, and template creation for sale are prohibited.",
+          "evidence_url": "https://ui.aceternity.com/licence"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://ui.aceternity.com/components"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://ui.aceternity.com/components"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "BUILD_TIME_LIBRARY",
+          "LICENSE_GATED_RUNTIME"
+        ],
+        "evidence_urls": [
+          "https://ui.aceternity.com/components",
+          "https://ui.aceternity.com/licence",
+          "https://ui.aceternity.com/pricing",
+          "https://ui.aceternity.com/terms"
+        ],
+        "canonical_owner": "Aceternity Labs LLC",
+        "third_party_ownership": {
+          "status": "VERIFIED",
+          "summary": "Licence states third-party components remain governed by their own identified licenses.",
+          "evidence_url": "https://ui.aceternity.com/licence"
+        },
+        "conclusion": "Official Aceternity license permits unlimited end products and modification, but prohibits redistributing source Items, marketplace resale, and template creation for sale. Free and All-Access tiers remain separate; third-party components keep their own licenses. KINETIC may use eligible items as build-time dependencies, not as a reusable code corpus."
+      },
+      "tier_policies": [
+        {
+          "tier": "FREE_COMPONENTS",
+          "rights_status": "ALLOW_ABSTRACT_PATTERN",
+          "code_ingest": "PROHIBITED",
+          "credential_required": false,
+          "notes": "Use in end products under the published item license; do not vendor or redistribute source Items."
+        },
+        {
+          "tier": "ALL_ACCESS",
+          "rights_status": "LICENSE_GATED",
+          "code_ingest": "LICENSE_GATED",
+          "credential_required": true,
+          "notes": "Paid blocks/templates require the appropriate license and remain build-time material only."
+        }
+      ]
+    },
+    {
+      "source_id": "src-react-bits",
+      "name": "React Bits",
+      "canonical_url": "https://reactbits.dev/get-started/index",
+      "domain": "reactbits.dev",
+      "source_kind": [
+        "COMPONENT_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "interaction",
+        "microinteraction",
+        "3d",
+        "canvas",
+        "shaders",
+        "implementation"
+      ],
+      "license_status": "MIXED_FREE_AND_LICENSED",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+      "rights_status": "ALLOW_ABSTRACT_PATTERN",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://reactbits.dev/get-started/index",
+        "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+        "https://reactbits.dev/robots.txt"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "BUILD_TIME_LIBRARY"
+      ],
+      "notes": "Free code license is MIT + Commons Clause: use in applications/products, but do not sell, sublicense, or redistribute components alone, bundled, or ported. KINETIC may learn abstract patterns and use as a build-time library; it must not clone/port/vendor the library.",
+      "audit": {
+        "audit_id": "audit-react-bits",
+        "source_id": "src-react-bits",
+        "audited_at": "2026-08-22",
+        "purpose": "Free/public animated React components with separate Pro catalogue",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Official repository license is MIT + Commons Clause License Condition v1.0.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt allows general access but does not grant corpus reuse.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "Commercial use is allowed only as part of an application, website, or product.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "Selling, sublicensing, or redistributing components alone, bundled, or ported is prohibited.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "BUILD_TIME_LIBRARY"
+        ],
+        "evidence_urls": [
+          "https://reactbits.dev/get-started/index",
+          "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+          "https://reactbits.dev/robots.txt"
+        ],
+        "canonical_owner": "David Haz / React Bits",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://reactbits.dev/get-started/index"
+        },
+        "conclusion": "Free code license is MIT + Commons Clause: use in applications/products, but do not sell, sublicense, or redistribute components alone, bundled, or ported. KINETIC may learn abstract patterns and use as a build-time library; it must not clone/port/vendor the library."
+      },
+      "tier_policies": [
+        {
+          "tier": "FREE_PUBLIC",
+          "rights_status": "ALLOW_ABSTRACT_PATTERN",
+          "code_ingest": "PROHIBITED",
+          "credential_required": false,
+          "notes": "Use as a licensed build dependency; no KINETIC component redistribution."
+        },
+        {
+          "tier": "PRO",
+          "rights_status": "LICENSE_GATED",
+          "code_ingest": "LICENSE_GATED",
+          "credential_required": true,
+          "notes": "Separate commercial product; do not inherit free-tier rights."
+        }
+      ]
+    },
+    {
+      "source_id": "src-fancy-components",
+      "name": "Fancy Components",
+      "canonical_url": "https://www.fancycomponents.dev/",
+      "domain": "www.fancycomponents.dev",
+      "source_kind": [
+        "COMPONENT_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.fancycomponents.dev/",
+        "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Canonical repository license is MIT. Recipe ingestion must pin source version/commit and retain license; demo assets and dependencies remain per-item.",
+      "audit": {
+        "audit_id": "audit-fancy-components",
+        "source_id": "src-fancy-components",
+        "audited_at": "2026-08-22",
+        "purpose": "Open-source animated component library and documentation",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://www.fancycomponents.dev/",
+          "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE"
+        ],
+        "canonical_owner": "Daniel Petho / Fancy Components",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.fancycomponents.dev/"
+        },
+        "conclusion": "Canonical repository license is MIT. Recipe ingestion must pin source version/commit and retain license; demo assets and dependencies remain per-item."
+      }
+    },
+    {
+      "source_id": "src-fancy-components-installation",
+      "name": "Fancy Components — Installation",
+      "canonical_url": "https://www.fancycomponents.dev/docs/installation",
+      "domain": "www.fancycomponents.dev",
+      "source_kind": [
+        "COMPONENT_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.fancycomponents.dev/docs/installation",
+        "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Canonical repository license is MIT. Recipe ingestion must pin source version/commit and retain license; demo assets and dependencies remain per-item.",
+      "audit": {
+        "audit_id": "audit-fancy-components-installation",
+        "source_id": "src-fancy-components-installation",
+        "audited_at": "2026-08-22",
+        "purpose": "Open-source animated component library and documentation",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://www.fancycomponents.dev/docs/installation",
+          "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE"
+        ],
+        "canonical_owner": "Daniel Petho / Fancy Components",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.fancycomponents.dev/docs/installation"
+        },
+        "conclusion": "Canonical repository license is MIT. Recipe ingestion must pin source version/commit and retain license; demo assets and dependencies remain per-item."
+      }
+    },
+    {
+      "source_id": "src-fancy-components-catalog",
+      "name": "Fancy Components — Components",
+      "canonical_url": "https://www.fancycomponents.dev/components",
+      "domain": "www.fancycomponents.dev",
+      "source_kind": [
+        "COMPONENT_LIBRARY",
+        "MOTION_REFERENCE"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "interaction",
+        "microinteraction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.fancycomponents.dev/components",
+        "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Canonical repository license is MIT. Recipe ingestion must pin source version/commit and retain license; demo assets and dependencies remain per-item.",
+      "audit": {
+        "audit_id": "audit-fancy-components-catalog",
+        "source_id": "src-fancy-components-catalog",
+        "audited_at": "2026-08-22",
+        "purpose": "Open-source animated component library and documentation",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license text is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://www.fancycomponents.dev/components",
+          "https://raw.githubusercontent.com/danielpetho/fancy/main/LICENSE"
+        ],
+        "canonical_owner": "Daniel Petho / Fancy Components",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.fancycomponents.dev/components"
+        },
+        "conclusion": "Canonical repository license is MIT. Recipe ingestion must pin source version/commit and retain license; demo assets and dependencies remain per-item."
+      }
+    },
+    {
+      "source_id": "src-ui-layouts-pro",
+      "name": "UI Layouts Pro",
+      "canonical_url": "https://pro.ui-layouts.com/blocks",
+      "domain": "pro.ui-layouts.com",
+      "source_kind": [
+        "LICENSE_GATED_LIBRARY",
+        "COMPONENT_LIBRARY"
+      ],
+      "knowledge_domains": [
+        "sections",
+        "composition",
+        "motion",
+        "interaction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_PROPRIETARY",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "LICENSE_GATED",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "LICENSE_GATED",
+      "credential_required": true,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "METADATA_ONLY",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://pro.ui-layouts.com/blocks",
+        "https://pro.ui-layouts.com/"
+      ],
+      "ingestion_modes": [
+        "BUILD_TIME_LIBRARY",
+        "LICENSE_GATED_RUNTIME",
+        "NO_AUTOMATED_INGEST"
+      ],
+      "notes": "Premium block/template product. Use only at build time under the user license; never treat viewable/installable paid blocks as reusable training/code corpus. Audit any separate free/open repository independently.",
+      "audit": {
+        "audit_id": "audit-ui-layouts-pro",
+        "source_id": "src-ui-layouts-pro",
+        "audited_at": "2026-08-22",
+        "purpose": "Premium React/Tailwind blocks and templates",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "Official pricing advertises commercial use for licensed projects.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "No official evidence found granting raw library redistribution; keep license-gated.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "credential_paywall_review": {
+          "status": "VERIFIED",
+          "summary": "Pricing requires a paid individual/team license.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "inspection_quality": "METADATA_ONLY",
+        "recommended_ingestion_modes": [
+          "BUILD_TIME_LIBRARY",
+          "LICENSE_GATED_RUNTIME",
+          "NO_AUTOMATED_INGEST"
+        ],
+        "evidence_urls": [
+          "https://pro.ui-layouts.com/blocks",
+          "https://pro.ui-layouts.com/"
+        ],
+        "canonical_owner": "UI Layouts Pro",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://pro.ui-layouts.com/blocks"
+        },
+        "conclusion": "Premium block/template product. Use only at build time under the user license; never treat viewable/installable paid blocks as reusable training/code corpus. Audit any separate free/open repository independently."
+      }
+    },
+    {
+      "source_id": "src-originkit",
+      "name": "Originkit",
+      "canonical_url": "https://www.originkit.dev/",
+      "domain": "www.originkit.dev",
+      "source_kind": [
+        "COMPONENT_LIBRARY",
+        "TOOL",
+        "MCP"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "interaction",
+        "microinteraction",
+        "3d",
+        "canvas",
+        "shaders",
+        "implementation",
+        "tooling"
+      ],
+      "license_status": "UNVERIFIED",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "VERIFY_REQUIRED",
+      "ai_training_status": "EXPLICITLY_PROHIBITED",
+      "automated_access": "PROHIBITED",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "UNKNOWN",
+      "credential_required": true,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.originkit.dev/",
+        "https://www.originkit.dev/robots.txt",
+        "https://www.originkit.dev/integrations"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "BUILD_TIME_LIBRARY",
+        "LICENSE_GATED_RUNTIME",
+        "NO_AUTOMATED_INGEST",
+        "VERIFY_REQUIRED"
+      ],
+      "notes": "Official integrations page verifies a hosted MCP endpoint, bearer API key, and list_components/get_component tools. Component-source license, redistribution rights, MCP terms, and rate limits remain unverified; robots publish ai-train=no and block major AI crawlers/API paths. Metadata/reference only until rights verification.",
+      "audit": {
+        "audit_id": "audit-originkit",
+        "source_id": "src-originkit",
+        "audited_at": "2026-08-22",
+        "purpose": "Animated components for Framer/React and AI-tool workflows through MCP",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.originkit.dev/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.originkit.dev/"
+        },
+        "automation_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt disallows major AI crawlers and protected routes including /api.",
+          "evidence_url": "https://www.originkit.dev/robots.txt"
+        },
+        "ai_training_review": {
+          "status": "VERIFIED",
+          "summary": "robots.txt publishes Content-Signal ai-train=no.",
+          "evidence_url": "https://www.originkit.dev/robots.txt"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.originkit.dev/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.originkit.dev/"
+        },
+        "credential_paywall_review": {
+          "status": "PARTIAL",
+          "summary": "Official integrations page requires a bearer API key; pricing/subscription conditions were not verified.",
+          "evidence_url": "https://www.originkit.dev/integrations"
+        },
+        "structured_access_review": {
+          "status": "VERIFIED",
+          "summary": "Official integrations page exposes hosted MCP endpoint and list_components/get_component tools; rate limits and rights remain unverified.",
+          "evidence_url": "https://www.originkit.dev/integrations"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "BUILD_TIME_LIBRARY",
+          "LICENSE_GATED_RUNTIME",
+          "NO_AUTOMATED_INGEST",
+          "VERIFY_REQUIRED"
+        ],
+        "evidence_urls": [
+          "https://www.originkit.dev/",
+          "https://www.originkit.dev/robots.txt",
+          "https://www.originkit.dev/integrations"
+        ],
+        "canonical_owner": "Originkit",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.originkit.dev/"
+        },
+        "conclusion": "Official integrations page verifies a hosted MCP endpoint, bearer API key, and list_components/get_component tools. Component-source license, redistribution rights, MCP terms, and rate limits remain unverified; robots publish ai-train=no and block major AI crawlers/API paths. Metadata/reference only until rights verification."
+      }
+    },
+    {
+      "source_id": "src-toolf-directory",
+      "name": "Toolfolio",
+      "canonical_url": "https://toolfolio.com/",
+      "domain": "toolfolio.com",
+      "source_kind": [
+        "TOOL_DIRECTORY"
+      ],
+      "knowledge_domains": [
+        "tooling"
+      ],
+      "license_status": "NOT_APPLICABLE",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "TOOL_DISCOVERY_ONLY",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "METADATA_ONLY",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://toolfolio.com/"
+      ],
+      "ingestion_modes": [
+        "TOOL_DISCOVERY_ONLY",
+        "NO_AUTOMATED_INGEST"
+      ],
+      "notes": "Do not copy the directory/content into KINETIC. Follow each discovered tool to its original source and create an independent policy record before use.",
+      "audit": {
+        "audit_id": "audit-toolf-directory",
+        "source_id": "src-toolf-directory",
+        "audited_at": "2026-08-22",
+        "purpose": "Tool discovery directory",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "inspection_quality": "METADATA_ONLY",
+        "recommended_ingestion_modes": [
+          "TOOL_DISCOVERY_ONLY",
+          "NO_AUTOMATED_INGEST"
+        ],
+        "evidence_urls": [
+          "https://toolfolio.com/"
+        ],
+        "canonical_owner": "Toolfolio",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://toolfolio.com/"
+        },
+        "conclusion": "Do not copy the directory/content into KINETIC. Follow each discovered tool to its original source and create an independent policy record before use."
+      }
+    },
+    {
+      "source_id": "src-design-minis",
+      "name": "Design Minis",
+      "canonical_url": "https://www.designminis.com/",
+      "domain": "www.designminis.com",
+      "source_kind": [
+        "TOOL_DIRECTORY"
+      ],
+      "knowledge_domains": [
+        "motion",
+        "color",
+        "3d",
+        "canvas",
+        "shaders",
+        "icons",
+        "typography",
+        "accessibility",
+        "tooling"
+      ],
+      "license_status": "NOT_APPLICABLE",
+      "terms_url": null,
+      "license_url": null,
+      "rights_status": "TOOL_DISCOVERY_ONLY",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PROHIBITED",
+      "code_ingest": "PROHIBITED",
+      "credential_required": false,
+      "attribution_required": false,
+      "license_retention_required": false,
+      "inspection_quality": "INACCESSIBLE",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://www.designminis.com/"
+      ],
+      "ingestion_modes": [
+        "TOOL_DISCOVERY_ONLY",
+        "NO_AUTOMATED_INGEST"
+      ],
+      "notes": "Use categories only to discover original tools. Every discovered tool receives its own source audit; do not mirror this directory.",
+      "audit": {
+        "audit_id": "audit-design-minis",
+        "source_id": "src-design-minis",
+        "audited_at": "2026-08-22",
+        "purpose": "Directory for design and implementation tools",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "license_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit reusable-content license verified.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "commercial_use_review": {
+          "status": "UNVERIFIED",
+          "summary": "Commercial-use rights not verified for reusable ingestion.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "redistribution_review": {
+          "status": "UNVERIFIED",
+          "summary": "Redistribution rights not verified.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "inspection_quality": "INACCESSIBLE",
+        "recommended_ingestion_modes": [
+          "TOOL_DISCOVERY_ONLY",
+          "NO_AUTOMATED_INGEST"
+        ],
+        "evidence_urls": [
+          "https://www.designminis.com/"
+        ],
+        "canonical_owner": "Design Minis",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "Third-party ownership not fully enumerated; treat showcased assets as separately owned.",
+          "evidence_url": "https://www.designminis.com/"
+        },
+        "conclusion": "Use categories only to discover original tools. Every discovered tool receives its own source audit; do not mirror this directory."
+      }
+    },
+    {
+      "source_id": "src-ui-layouts-free-repository",
+      "name": "UI Layouts — Free Repository",
+      "canonical_url": "https://github.com/ui-layouts/uilayouts",
+      "domain": "github.com",
+      "source_kind": [
+        "IMPLEMENTATION_LIBRARY",
+        "COMPONENT_LIBRARY"
+      ],
+      "knowledge_domains": [
+        "composition",
+        "sections",
+        "motion",
+        "interaction",
+        "implementation"
+      ],
+      "license_status": "VERIFIED_OPEN_SOURCE",
+      "terms_url": null,
+      "license_url": "https://raw.githubusercontent.com/ui-layouts/uilayouts/main/LICENSE",
+      "rights_status": "ALLOW_CODE_INGEST",
+      "ai_training_status": "UNSPECIFIED",
+      "automated_access": "UNKNOWN",
+      "asset_copy": "PER_ITEM",
+      "code_ingest": "ALLOWED",
+      "credential_required": false,
+      "attribution_required": true,
+      "license_retention_required": true,
+      "inspection_quality": "DIRECTLY_INSPECTED",
+      "last_verified_at": "2026-08-22",
+      "evidence_urls": [
+        "https://github.com/ui-layouts/uilayouts",
+        "https://raw.githubusercontent.com/ui-layouts/uilayouts/main/LICENSE"
+      ],
+      "ingestion_modes": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST"
+      ],
+      "notes": "Audit-discovered public repository, kept separate from UI Layouts Pro. Canonical repository code is MIT and eligible for recipe ingestion with commit/version and notice retention. This license does not cover Pro blocks/templates or third-party demo assets.",
+      "audit": {
+        "audit_id": "audit-ui-layouts-free-repository",
+        "source_id": "src-ui-layouts-free-repository",
+        "audited_at": "2026-08-22",
+        "purpose": "Open-source UI components/effects library, separate from the Pro product",
+        "terms_review": {
+          "status": "UNVERIFIED",
+          "summary": "No official terms verified; silence is not permission.",
+          "evidence_url": "https://github.com/ui-layouts/uilayouts"
+        },
+        "license_review": {
+          "status": "VERIFIED",
+          "summary": "Canonical repository license is MIT; retain copyright and permission notice.",
+          "evidence_url": "https://raw.githubusercontent.com/ui-layouts/uilayouts/main/LICENSE"
+        },
+        "automation_review": {
+          "status": "UNVERIFIED",
+          "summary": "No permissive automated-ingestion grant verified.",
+          "evidence_url": "https://github.com/ui-layouts/uilayouts"
+        },
+        "ai_training_review": {
+          "status": "UNVERIFIED",
+          "summary": "No explicit AI-training permission verified.",
+          "evidence_url": "https://github.com/ui-layouts/uilayouts"
+        },
+        "commercial_use_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits use, modification, distribution, sublicensing, and sale subject to notice retention.",
+          "evidence_url": "https://raw.githubusercontent.com/ui-layouts/uilayouts/main/LICENSE"
+        },
+        "redistribution_review": {
+          "status": "VERIFIED",
+          "summary": "MIT permits redistribution subject to copyright and permission notice retention.",
+          "evidence_url": "https://raw.githubusercontent.com/ui-layouts/uilayouts/main/LICENSE"
+        },
+        "credential_paywall_review": {
+          "status": "UNVERIFIED",
+          "summary": "Credential/paywall conditions not fully verified.",
+          "evidence_url": "https://github.com/ui-layouts/uilayouts"
+        },
+        "structured_access_review": {
+          "status": "UNVERIFIED",
+          "summary": "No verified API/MCP/registry for reusable ingestion.",
+          "evidence_url": "https://github.com/ui-layouts/uilayouts"
+        },
+        "inspection_quality": "DIRECTLY_INSPECTED",
+        "recommended_ingestion_modes": [
+          "REFERENCE_ABSTRACTION",
+          "CODE_RECIPE_INGEST"
+        ],
+        "evidence_urls": [
+          "https://github.com/ui-layouts/uilayouts",
+          "https://raw.githubusercontent.com/ui-layouts/uilayouts/main/LICENSE"
+        ],
+        "canonical_owner": "UI Layouts",
+        "third_party_ownership": {
+          "status": "UNVERIFIED",
+          "summary": "MIT covers repository software only; Pro products and third-party demo assets are separate.",
+          "evidence_url": "https://github.com/ui-layouts/uilayouts"
+        },
+        "conclusion": "Audit-discovered public repository, kept separate from UI Layouts Pro. Canonical repository code is MIT and eligible for recipe ingestion with commit/version and notice retention. This license does not cover Pro blocks/templates or third-party demo assets."
+      }
+    }
+  ]
+}

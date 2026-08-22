@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KINETIC Calibration Review — Product Mockup</title>
+<style>
+:root{--ink:#171714;--paper:#f4f0e7;--muted:#6e6a60;--line:#d7d0c3;--good:#265c45;--warn:#956716;--bad:#8a2e2e}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 Georgia,serif}
+header{padding:28px 5vw;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;align-items:end}
+h1{font-size:clamp(28px,5vw,58px);line-height:.95;margin:8px 0 0;font-weight:400}.eyebrow,.meta,.badge,label{font:11px/1.2 ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}.meta{color:var(--muted)}
+main{padding:36px 5vw 64px;display:grid;gap:28px}.notice{padding:14px 18px;border-left:3px solid var(--warn);background:#ede5d3}.compare{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.column{border-top:1px solid var(--ink);padding-top:12px}.column h2{font-size:20px;margin:7px 0}.frame{aspect-ratio:16/10;background:#ddd5c8;display:grid;place-items:center;color:var(--muted);margin:12px 0 8px}.frame.mobile{aspect-ratio:9/14;width:48%}.states{display:flex;gap:6px;flex-wrap:wrap}.badge{padding:5px 8px;border:1px solid var(--line);border-radius:99px}.pass{color:var(--good)}.pending{color:var(--warn)}
+.sequence{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.sequence div{aspect-ratio:16/9;background:#e4ded2;display:grid;place-items:center;color:var(--muted)}
+.decision{border-top:1px solid var(--ink);padding-top:24px;display:grid;gap:14px}.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.choice{border:1px solid var(--line);padding:16px}.choice input{margin-right:8px}.note{width:100%;min-height:90px;background:transparent;border:1px solid var(--line);padding:12px;font:inherit}button{justify-self:start;border:0;background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:99px}
+@media(max-width:900px){.compare{grid-template-columns:1fr 1fr}}@media(max-width:560px){header{display:block}.compare,.choices{grid-template-columns:1fr}.frame.mobile{width:55%}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">Phase 2.5 · human quality floor</div><h1>Calibration review</h1></div><div class="meta">No candidate is pre-selected<br>Technical pass ≠ design pass</div></header>
+<main>
+<div class="notice"><strong>Review instruction:</strong> Compare the reference evidence, internal V0 study, and original directions. Judge the absolute quality floor first; relative preference is secondary.</div>
+<section class="compare" aria-label="Reference and candidate comparison">
+<article class="column"><div class="eyebrow">Reference evidence</div><h2>Calibration reference</h2><div class="frame">Desktop · opening</div><div class="frame">Desktop · key scene</div><div class="frame mobile">Mobile · content</div><div class="sequence"><div>A</div><div>B</div><div>C</div><div>D</div></div></article>
+<article class="column"><div class="eyebrow">Internal study</div><h2>V0 fidelity</h2><div class="frame">Desktop · opening</div><div class="frame">Desktop · key scene</div><div class="frame mobile">Mobile · content</div><div class="states"><span class="badge pass">Technical pass</span><span class="badge pending">Design study</span></div></article>
+<article class="column"><div class="eyebrow">Original direction</div><h2>V1 · Direction name</h2><div class="frame">Desktop · opening</div><div class="frame">Desktop · signature move</div><div class="frame mobile">Mobile · content</div><div class="states"><span class="badge pass">Technical pass</span><span class="badge pending">Human review</span></div></article>
+<article class="column"><div class="eyebrow">Original direction</div><h2>V2 · Direction name</h2><div class="frame">Desktop · opening</div><div class="frame">Desktop · signature move</div><div class="frame mobile">Mobile · content</div><div class="states"><span class="badge pass">Technical pass</span><span class="badge pending">Human review</span></div></article>
+</section>
+<section class="decision">
+<div><div class="eyebrow">Human decision</div><h2>Does any original clear the quality floor?</h2></div>
+<div class="choices">
+<label class="choice"><input type="radio" name="decision">Winner selected</label>
+<label class="choice"><input type="radio" name="decision">Partial acceptance</label>
+<label class="choice"><input type="radio" name="decision">Reject all / none of the above</label>
+</div>
+<label for="review-note">What is meaningfully stronger—or still missing?</label>
+<textarea class="note" id="review-note"></textarea>
+<button type="button">Record human review</button>
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://www.awwwards.com/sites/wanaka-studio",
+      "title": "Wanaka Studio - Awwwards Honorable Mention",
+      "accessed": "2026-08-22"
+    },
+    {
+      "id": 2,
+      "url": "https://www.wanaka.studio",
+      "title": "Wanaka Studio",
+      "accessed": "2026-08-22"
+    },
+    {
+      "id": 3,
+      "url": "https://www.wanaka.studio/robots.txt",
+      "title": "Wanaka robots.txt",
+      "accessed": "2026-08-22"
+    },
+    {
+      "id": 4,
+      "url": "https://www.wanaka.studio/mentions-legales",
+      "title": "Wanaka legal notice",
+      "accessed": "2026-08-22"
+    }
+  ]
+}

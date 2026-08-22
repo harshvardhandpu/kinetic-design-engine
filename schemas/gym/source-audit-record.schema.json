@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/source-audit-record.schema.json",
+  "title": "SourceAuditRecord",
+  "description": "Conservative rights/access audit required before reusable KINETIC ingestion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "source_id",
+    "audited_at",
+    "canonical_owner",
+    "purpose",
+    "terms_review",
+    "license_review",
+    "third_party_ownership",
+    "automation_review",
+    "ai_training_review",
+    "commercial_use_review",
+    "redistribution_review",
+    "credential_paywall_review",
+    "structured_access_review",
+    "inspection_quality",
+    "recommended_ingestion_modes",
+    "evidence_urls",
+    "conclusion"
+  ],
+  "properties": {
+    "audit_id": { "type": "string", "pattern": "^audit-[a-z0-9-]+$" },
+    "source_id": { "type": "string", "pattern": "^src-[a-z0-9-]+$" },
+    "audited_at": { "type": "string", "format": "date" },
+    "canonical_owner": { "type": "string", "minLength": 1 },
+    "purpose": { "type": "string", "minLength": 1 },
+    "terms_review": { "$ref": "#/$defs/review" },
+    "license_review": { "$ref": "#/$defs/review" },
+    "third_party_ownership": { "$ref": "#/$defs/review" },
+    "automation_review": { "$ref": "#/$defs/review" },
+    "ai_training_review": { "$ref": "#/$defs/review" },
+    "commercial_use_review": { "$ref": "#/$defs/review" },
+    "redistribution_review": { "$ref": "#/$defs/review" },
+    "credential_paywall_review": { "$ref": "#/$defs/review" },
+    "structured_access_review": { "$ref": "#/$defs/review" },
+    "inspection_quality": {
+      "enum": [
+        "DIRECTLY_INSPECTED",
+        "VISUALLY_INSPECTED",
+        "TEXT_ONLY",
+        "METADATA_ONLY",
+        "SECONDARY_SOURCE",
+        "INACCESSIBLE"
+      ]
+    },
+    "recommended_ingestion_modes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ingestionMode" }
+    },
+    "evidence_urls": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "format": "uri" }
+    },
+    "contradictions_or_blockers": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "conclusion": { "type": "string", "minLength": 1 }
+  },
+  "$defs": {
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "summary"],
+      "properties": {
+        "status": { "enum": ["VERIFIED", "PARTIAL", "UNVERIFIED", "NOT_APPLICABLE"] },
+        "summary": { "type": "string", "minLength": 1 },
+        "evidence_url": { "type": ["string", "null"], "format": "uri" }
+      }
+    },
+    "ingestionMode": {
+      "enum": [
+        "REFERENCE_ABSTRACTION",
+        "CODE_RECIPE_INGEST",
+        "BUILD_TIME_LIBRARY",
+        "TOOL_DISCOVERY_ONLY",
+        "LICENSE_GATED_RUNTIME",
+        "NO_AUTOMATED_INGEST",
+        "VERIFY_REQUIRED"
+      ]
+    }
+  }
+}
