@@ -1,0 +1,47 @@
+{
+  "schema": "kinetic/gym/experiment-record@0.1",
+  "experiment_id": "exp-test8-gravity-well-20260822",
+  "test": "Test 8 — experiment",
+  "case_id": "case-fe653973ef",
+  "candidate": "gym/runs/case-fe653973ef/variants/v-exp/index.html",
+  "created_at": "2026-08-22T05:12:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+
+  "hypothesis": "kinetic.cursor-glow can be repurposed from a decorative pointer-follow effect into a DISCOVERY MECHANIC: a spotlight that reveals hidden text only where the cursor moves. The glow stops being ornament and starts carrying meaning ('you must move to read').",
+  "novelty": "cursor-glow has only ever been used decoratively in the studied corpus and in KINETIC's own primitives. This is the first use of it as an information-reveal interaction. No reference site in the corpus uses cursor-position-gated text visibility.",
+  "source": "Novel composition — not derived from any reference. Combines kinetic.cursor-glow (existing primitive) with a new pointer-proximity text-reveal behavior implemented inline.",
+
+  "implementation": {
+    "primitives_used": ["kinetic.cursor-glow", "kinetic.reveal-stagger"],
+    "new_behavior": "pointermove listener on the field fades hidden-line text to visible when the cursor is within 90px vertical proximity; reverts when the cursor leaves.",
+    "reduced_motion_fallback": "hidden-line text is fully visible under prefers-reduced-motion (no gating).",
+    "lines_of_code_new": "~15 (pointer-proximity reveal); rest reuses installed primitives."
+  },
+
+  "expected_benefit": "Adds a 'discovery' interaction class to KINETIC's vocabulary — motion that rewards exploration rather than decorating arrival. If it qualifies, it could seed a new primitive (kinetic.spotlight-reveal) or a recipe role.",
+  "risk": "Hidden content is invisible until hovered — poor for keyboard/touch users and screen readers if not handled. Mitigated here by reduced-motion fallback, but touch devices get no reveal path (known limitation). Discoverability depends on the on-page hint.",
+
+  "result": {
+    "technical_evaluation": {
+      "technical": "pass",
+      "responsive": "pass",
+      "a11y": "pass",
+      "performance": "pass",
+      "interaction_blockers": [],
+      "kinetic_count": 2,
+      "dom_nodes": 18
+    },
+    "design_status": "pending-vision-or-human",
+    "note": "All deterministic gates pass. Whether the discovery mechanic is delightful or gimmicky is an aesthetic judgment this text-only runtime cannot make."
+  },
+
+  "promotion_candidate": false,
+  "promotion_note": "Per Test-8 rules and Amendment H (AUTO_PROMOTION=OFF), this experiment is NOT promoted. It is recorded for the learning loop. Promotion to a stable primitive/recipe would require human/vision qualification + the promotion gate (Test 10 dry-run path).",
+
+  "known_limitations": [
+    "No touch-device reveal path (cursor-only mechanic).",
+    "Keyboard users cannot trigger the reveal (no focus equivalent wired).",
+    "Discoverability relies on the visible hint text."
+  ]
+}

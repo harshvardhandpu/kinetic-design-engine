@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gravity Well — An Experiment (Test 8)</title>
+<!--
+  KINETIC GYM / TEST 8 EXPERIMENT — case-fe653973ef / slot V-EXP
+  HYPOTHESIS: cursor-glow can be repurposed from a decorative pointer-follow into a
+  DISCOVERY MECHANIC — a spotlight that reveals hidden text as the cursor moves over it.
+  NOVELTY: cursor-glow has only ever been used decoratively in the corpus; here it carries
+  meaning (you must move to read). This is an experiment, NOT for promotion.
+  Content ORIGINAL.
+-->
+<style>
+:root { --bg:#050508; --fg:#E8E6E1; --violet:#8B7CF6; --dim:color-mix(in srgb,var(--fg) 40%,transparent); --sans:'Helvetica Neue',Arial,sans-serif; }
+* { box-sizing:border-box; margin:0; }
+body { background:var(--bg); color:var(--fg); font-family:var(--sans); line-height:1.6; min-height:100vh; overflow-x:hidden; }
+main { padding:16vh clamp(1.5rem,6vw,6rem) 12vh; max-width:58rem; position:relative; z-index:1; }
+.kicker { font-size:0.68rem; letter-spacing:0.4em; color:var(--violet); margin-bottom:1.6rem; }
+h1 { font-size:clamp(2.4rem,6vw,4.6rem); line-height:1.05; letter-spacing:-0.02em; }
+.lede { margin-top:1.6rem; color:var(--dim); max-width:32rem; }
+
+/* hidden field: text only visible where the glow reveals it */
+.field { margin-top:5rem; position:relative; }
+.field .hidden-line { font-size:clamp(1.2rem,2.6vw,1.8rem); line-height:1.5; color:transparent; -webkit-text-stroke:0.5px color-mix(in srgb,var(--fg) 12%,transparent); transition:color 0.4s; }
+.field .hint { margin-top:2rem; font-size:0.7rem; letter-spacing:0.3em; color:var(--dim); }
+footer { padding:2rem clamp(1.5rem,6vw,6rem); font-size:0.7rem; letter-spacing:0.2em; color:var(--dim); border-top:1px solid color-mix(in srgb,var(--fg) 10%,transparent); }
+@media (prefers-reduced-motion: reduce) { .field .hidden-line { color:var(--fg); -webkit-text-stroke:0; } }
+</style>
+</head>
+<body>
+<main id="main">
+  <p class="kicker" data-reveal-item>EXPERIMENT 08 — GRAVITY WELL</p>
+  <h1 data-reveal-item>Some things only appear<br>when you come looking.</h1>
+  <p class="lede" data-reveal-item>This page hides a sentence. It will not show itself. Move your cursor across the dark field below and the light you carry will find it.</p>
+
+  <div class="field" data-recipe-role="glow">
+    <p class="hidden-line">Attention is the only currency that compounds.</p>
+    <p class="hint">MOVE YOUR CURSOR ACROSS THE FIELD ↑</p>
+  </div>
+</main>
+<footer>KINETIC TEST-8 EXPERIMENT · case-fe653973ef · NOT FOR PROMOTION</footer>
+
+<script type="module">
+import * as cursorGlow from './kinetic/core/primitives/cursor-glow.js';
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+handles.push(revealStagger.mount(document.querySelector('main'), { selector: '[data-reveal-item]', duration: 900, stagger: 90, y: '24px', threshold: 0.2, tokens }));
+// EXPERIMENT: cursor-glow as discovery spotlight over the hidden field
+const field = document.querySelector('[data-recipe-role=glow]');
+if (field) handles.push(cursorGlow.mount(field, { size: 360, color: 'rgba(139,124,246,0.22)', lerp: 0.14 }));
+window.__KINETIC_HANDLES__ = handles;
+
+// reveal mechanic: as the glow passes over a hidden line, fade it in
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!REDUCED && field) {
+  const lines = field.querySelectorAll('.hidden-line');
+  field.addEventListener('pointermove', (e) => {
+    const fr = field.getBoundingClientRect();
+    for (const ln of lines) {
+      const lr = ln.getBoundingClientRect();
+      const near = Math.abs(e.clientY - (lr.top + lr.height / 2)) < 90 && e.clientX > fr.left && e.clientX < fr.right;
+      ln.style.color = near ? 'var(--fg)' : '';
+    }
+  });
+}
+</script>
+</body>
+</html>
