@@ -38,10 +38,10 @@
           "at": "2026-08-22T02:55:54.903Z"
         },
         "design": {
-          "result": "pending-vision-or-human",
-          "producer": "not-evaluated",
-          "rationale": "Amendment G: text-only model; aesthetic validation requires human visual review",
-          "at": "2026-08-22T02:55:54.938Z"
+          "result": "fail",
+          "producer": "human",
+          "rationale": "Human review: none particularly good; V2 and V3 okay without ordering; none comparable to an award-winning website; no winner accepted.",
+          "at": "2026-08-22T08:39:51.471Z"
         }
       },
       "timestamps": {
@@ -121,10 +121,10 @@
           "at": "2026-08-22T03:16:42.756Z"
         },
         "design": {
-          "result": "pending-vision-or-human",
-          "producer": "not-evaluated",
-          "rationale": "Amendment G",
-          "at": "2026-08-22T03:16:42.788Z"
+          "result": "fail",
+          "producer": "human",
+          "rationale": "Human review: none particularly good; V2 and V3 okay without ordering; none comparable to an award-winning website; no winner accepted.",
+          "at": "2026-08-22T08:39:51.505Z"
         },
         "originality": {
           "result": "pass-distinct",
@@ -207,10 +207,10 @@
           "at": "2026-08-22T04:52:12.418Z"
         },
         "design": {
-          "result": "pending-vision-or-human",
-          "producer": "not-evaluated",
-          "rationale": "Amendment G",
-          "at": "2026-08-22T04:52:12.460Z"
+          "result": "fail",
+          "producer": "human",
+          "rationale": "Human review: none particularly good; V2 and V3 okay without ordering; none comparable to an award-winning website; no winner accepted.",
+          "at": "2026-08-22T08:39:51.535Z"
         },
         "originality": {
           "result": "pass-distinct",
@@ -293,10 +293,10 @@
           "at": "2026-08-22T04:56:55.210Z"
         },
         "design": {
-          "result": "pending-vision-or-human",
-          "producer": "not-evaluated",
-          "rationale": "Amendment G",
-          "at": "2026-08-22T04:56:55.242Z"
+          "result": "fail",
+          "producer": "human",
+          "rationale": "Human review: none particularly good; V2 and V3 okay without ordering; none comparable to an award-winning website; no winner accepted.",
+          "at": "2026-08-22T08:39:51.563Z"
         },
         "originality": {
           "result": "pass-distinct",
@@ -521,6 +521,22 @@
       "at": "2026-08-22T04:56:55.333Z",
       "event": "V3 -> TECHNICAL_PASS",
       "attempt": 1
+    },
+    {
+      "at": "2026-08-22T08:39:51.471Z",
+      "event": "V0 gate design=fail"
+    },
+    {
+      "at": "2026-08-22T08:39:51.505Z",
+      "event": "V1 gate design=fail"
+    },
+    {
+      "at": "2026-08-22T08:39:51.535Z",
+      "event": "V2 gate design=fail"
+    },
+    {
+      "at": "2026-08-22T08:39:51.563Z",
+      "event": "V3 gate design=fail"
     }
   ]
 }

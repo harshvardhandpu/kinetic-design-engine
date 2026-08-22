@@ -24,8 +24,10 @@ for (const [slot, s] of Object.entries(rec.slots)) {
   const artifact = join(caseDir, 'variants', slot.toLowerCase(), 'index.html');
   if (!await exists(artifact)) continue; // only link real artifacts
   const href = relative(caseDir, artifact); // derived, never hand-written
-  const gates = Object.entries(s.gates || {}).map(([g, v]) =>
-    `<span class="badge${v.result === 'pending-vision-or-human' ? ' pending' : ''}">${g}: ${v.result}</span>`).join('');
+  const gates = Object.entries(s.gates || {}).map(([g, v]) => {
+    const cls = v.result === 'pending-vision-or-human' ? ' pending' : v.result === 'fail' ? ' fail' : '';
+    return `<span class="badge${cls}">${g}: ${v.result}</span>`;
+  }).join('');
   const orig = s.gates?.originality?.rationale ? ` · ${s.gates.originality.rationale}` : '';
   cards.push(`  <div class="card">
     <h2>${slot} — ${s.mode}${s.deployable === false ? ' (fidelity study, not deployable)' : ''}</h2>
@@ -54,6 +56,7 @@ main { padding: 2rem 2.5rem; display: grid; gap: 1.5rem; }
 .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
 .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 999px; background: #e8f0e8; color: #2a5a2a; }
 .badge.pending { background: #fdf3e0; color: #8a6116; }
+.badge.fail { background: #fbe6e6; color: #8a1f1f; }
 a.open { display: inline-block; font-size: 0.85rem; color: #1a5fb4; }
 .note { font-size: 0.8rem; color: #8a6116; background: #fdf3e0; padding: 0.8rem 1rem; border-radius: 8px; }
 </style>
@@ -64,7 +67,7 @@ a.open { display: inline-block; font-size: 0.85rem; color: #1a5fb4; }
   <p class="meta">Generated from runner state (gym/runs/${A.case}/case.json) · links derived from real artifact paths</p>
 </header>
 <main>
-  <div class="note">⚠ Deterministic gates only. Design status is pending-vision-or-human until a human (or vision-capable reviewer) decides. Do not treat gate PASSes as design approval.</div>
+  <div class="note">⚠ Deterministic PASS does not imply design approval. Human-review status is shown separately on each candidate.</div>
 ${cards.join('\n')}
 </main>
 </body>

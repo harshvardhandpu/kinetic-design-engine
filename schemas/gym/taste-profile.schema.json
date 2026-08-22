@@ -11,6 +11,19 @@
     "built_at": { "type": "string", "format": "date-time" },
     "built_by": { "type": "string", "description": "job id of the TasteConsolidationJob" },
     "decision_count": { "type": "integer", "minimum": 0 },
+    "evidence_summary": {
+      "type": "object",
+      "description": "Small-sample accounting before attribute-level taste claims are justified.",
+      "required": ["sample_count", "accepted_winners", "rejected_batches", "quality_floor_failure", "relative_positive_candidates", "confidence"],
+      "properties": {
+        "sample_count": { "type": "integer", "minimum": 0 },
+        "accepted_winners": { "type": "integer", "minimum": 0 },
+        "rejected_batches": { "type": "integer", "minimum": 0 },
+        "quality_floor_failure": { "type": "boolean" },
+        "relative_positive_candidates": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "confidence": { "enum": ["very_low", "low", "medium", "high"] }
+      }
+    },
     "decay": { "type": "object", "properties": {
       "half_life_days": { "type": ["number", "null"] },
       "model": { "type": "string", "description": "e.g. 'bradley-terry-attribute-v1' (doc 42; ponytail ceiling noted there)" } } },

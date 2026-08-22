@@ -1,0 +1,35 @@
+{
+  "schema": "kinetic/gym/taste-decision@0.1",
+  "decision_id": "td-20260822-izanami1",
+  "context": {
+    "case_id": "case-fe653973ef",
+    "batch_id": "batch1",
+    "surface": "brand-storytelling",
+    "industry": "corporate-spiritual",
+    "goal": "award-quality brand storytelling",
+    "k_level": "K4"
+  },
+  "candidates": ["V0", "V1", "V2", "V3"],
+  "outcome": {
+    "result": "REJECT_ALL",
+    "winner": null,
+    "runner_up": null,
+    "rejected": ["V0", "V1", "V2", "V3"],
+    "none_reason": "none_acceptable",
+    "relative_preference": {
+      "positive_candidates": ["V2", "V3"],
+      "ordered": false,
+      "strength": "weak"
+    },
+    "quality_floor": {
+      "passed": false,
+      "human_perceived_quality_gap": "substantial"
+    }
+  },
+  "pairwise": [],
+  "freeform": "None of them is particularly good. V2 and V3 are okay. None of them can be compared to any award-winning website.",
+  "first_shot": null,
+  "reviewer": "human-user",
+  "supersedes": null,
+  "timestamp": "2026-08-22T08:38:30Z"
+}

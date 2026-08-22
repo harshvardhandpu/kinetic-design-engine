@@ -25,11 +25,37 @@
       "type": "object",
       "required": ["winner"],
       "properties": {
-        "winner": { "type": ["string", "null"], "description": "variant run id, or null if none qualified / not reviewed" },
+        "result": { "enum": ["WINNER_SELECTED", "REJECT_ALL"], "description": "First-class review outcome. REJECT_ALL means none of the above met the human quality floor." },
+        "winner": { "type": ["string", "null"], "description": "variant run id, or null when no winner is accepted" },
         "runner_up": { "type": ["string", "null"] },
         "rejected": { "type": "array", "items": { "type": "string" } },
-        "none_reason": { "enum": ["not_reviewed", "none_qualified", "aborted", null] }
-      }
+        "none_reason": { "enum": ["not_reviewed", "none_qualified", "none_acceptable", "aborted", null] },
+        "relative_preference": {
+          "type": "object",
+          "description": "Weak relative signal; independent of the absolute quality floor.",
+          "required": ["positive_candidates", "ordered", "strength"],
+          "properties": {
+            "positive_candidates": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "ordered": { "type": "boolean" },
+            "strength": { "enum": ["weak", "moderate", "strong"] }
+          }
+        },
+        "quality_floor": {
+          "type": "object",
+          "description": "Absolute human quality-floor judgment; takes precedence over relative preference.",
+          "required": ["passed"],
+          "properties": {
+            "passed": { "type": "boolean" },
+            "human_perceived_quality_gap": { "enum": ["none", "minor", "moderate", "substantial", null] }
+          }
+        }
+      },
+      "allOf": [
+        { "if": { "required": ["result"], "properties": { "result": { "const": "REJECT_ALL" } } },
+          "then": { "properties": { "winner": { "const": null }, "quality_floor": { "required": ["passed"], "properties": { "passed": { "const": false } } } }, "required": ["quality_floor"] } },
+        { "if": { "required": ["result"], "properties": { "result": { "const": "WINNER_SELECTED" } } },
+          "then": { "properties": { "winner": { "type": "string" } } } }
+      ]
     },
     "pairwise": {
       "type": "array",

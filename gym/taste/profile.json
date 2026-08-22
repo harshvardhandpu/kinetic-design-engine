@@ -1,0 +1,22 @@
+{
+  "schema": "kinetic/gym/taste-profile@0.1",
+  "version": 1,
+  "built_at": "2026-08-22T08:38:30Z",
+  "built_by": "human-review-ingest",
+  "decision_count": 1,
+  "evidence_summary": {
+    "sample_count": 1,
+    "accepted_winners": 0,
+    "rejected_batches": 1,
+    "quality_floor_failure": true,
+    "relative_positive_candidates": ["V2", "V3"],
+    "confidence": "very_low"
+  },
+  "decay": {
+    "half_life_days": null,
+    "model": "none-small-sample"
+  },
+  "cells": [],
+  "global_notes": [],
+  "previous_version": null
+}

@@ -14,9 +14,12 @@ Human choice is a first-class learning signal. Two artifacts:
 context: {case_id, surface, industry, goal, k_level, batch_id}
 candidates: [variant ids shown]
 outcome:
+  result: WINNER_SELECTED | REJECT_ALL   # NONE_OF_THE_ABOVE is first-class
   winner: <variant id | none>
   runner_up: <variant id | null>
   rejected: [variant ids]
+  relative_preference: {positive_candidates, ordered, strength}
+  quality_floor: {passed, human_perceived_quality_gap}
 pairwise: [{preferred, over, reasons[]}]     # optional fine-grained pairs
 reason_tags: [hierarchy, typography, motion-purpose, originality, density,
               color, spacing, interaction, accessibility, performance, other]
@@ -34,9 +37,12 @@ timestamp:
 2. **No decision is required.** A skipped review is recorded as
    `outcome.winner: none` with reason `not_reviewed` — absence of signal is
    data too (prevents silent survivorship bias).
-3. **Reasons over ratings.** Tags + freeform are the durable content; numeric
+3. **None of the above is first-class.** `REJECT_ALL` never promotes the least-bad
+   candidate. Relative-positive candidates may be recorded as an unordered weak
+   signal, but the absolute quality-floor rejection takes precedence.
+4. **Reasons over ratings.** Tags + freeform are the durable content; numeric
    ratings are optional and low-weight (42).
-4. **Context is mandatory.** A decision without surface/goal context cannot
+5. **Context is mandatory.** A decision without surface/goal context cannot
    condition the profile and is quarantined for review.
 
 ## Negative knowledge link

@@ -30,7 +30,7 @@
 | 3 | Feedback repair | PASS | injected threshold defect → 4 invisible-stuck → inspector → resolver → patch → 0 issues |
 | 4 | Regression safety | PASS | counter/echo/flag/theme functional post-install |
 | 5 | Reduced motion | PASS | 4/4 primitives → done-reduced-motion, content visible |
-| 6 | Learning case | PASS after remediation | IZANAMI: study→V0→V1-V3→qualification→review package. Human use found broken `vN/index.html` links; root-cause remediation regenerated portable `variants/vN/index.html` links and reverified V0–V3 (HTTP 200 + non-empty render). TasteDecision remains `AWAITING_HUMAN_VISUAL_DECISION`. |
+| 6 | Learning case | PASS after remediation + human rejection recorded | IZANAMI: study→V0→V1-V3→qualification→review package. Link remediation reverified V0–V3. First human review is now `REJECT_ALL`: V2/V3 weakly preferable but unordered; all four fail the human quality floor and none is DESIGN_QUALIFIED. |
 | 7 | Negative learning | PASS | interaction-blocking veil REJECTED; gates false-negative proven; prevention rule added + verified bidirectionally |
 | 8 | Experiment | PASS | Gravity Well (cursor-glow as discovery mechanic), ExperimentRecord, NOT promoted |
 | 9 | Kill/resume | PASS | correct-stage resume, dead-lock reclaim w/ logged takeover, idempotency, receipt hash unchanged |
@@ -61,23 +61,27 @@ Holdout: case-98d4bd4196 (Radian) — sealed until Test 12, then released (`BENC
 | MONOLOG | BUILT (fidelity) | TECHNICAL_PASS (0.044) | SKIPPED | SKIPPED | — |
 
 Plus non-count fixtures: v-neg (Test 7 rejected), v-exp (Test 8 experiment), test11 control+treatment, test12 holdout-variant.
-All V1+ originals: originality PASS-distinct, copy=0, asset_reuse=0. All design gates: `pending-vision-or-human`.
+All V1+ originals: originality PASS-distinct, copy=0, asset_reuse=0. Post-completion human review set IZANAMI V0–V3 design gates to `fail`; other design gates remain `pending-vision-or-human`.
 
 ## 5. Human TasteDecisions
 
-**0 decided.** 1 batch prepared and awaiting human review:
-- `gym/runs/case-fe653973ef/taste-decision-batch1.json` — status `AWAITING_HUMAN_VISUAL_DECISION`
-- Review package: `gym/runs/case-fe653973ef/review-package.html` (V0/V1/V2/V3; links generated from real artifact paths)
-- Canonical local review: `cd /home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-fe653973ef && python3 -m http.server 5500`, then open `http://127.0.0.1:5500/review-package.html`.
-- **Post-completion correction:** the package originally shipped with broken `v0/index.html`–`v3/index.html` links. Real human use exposed the defect. `engine/cli/gen-review-package.mjs` now derives portable links from actual artifacts, and `engine/tests/test-review-package-links.mjs` prevents recurrence. Evidence: `gym/knowledge/test-evidence/test6-review-package-remediation.json`.
-- No winner/runner-up/design_quality/human_preference fabricated (human-review rule honored).
+**1 decided batch; 0 accepted winners; 1 rejected batch.**
+- `gym/taste/decisions/td-20260822-izanami1.json` — canonical immutable `REJECT_ALL / NO_ACCEPTABLE_WINNER` record
+- `gym/runs/case-fe653973ef/taste-decision-batch1.json` — resolved review-batch pointer to that decision
+- Human statement: “None of them is particularly good. V2 and V3 are okay. None of them can be compared to any award-winning website.”
+- Weak relative signal: V2 and V3, unordered. Absolute signal: all candidates fail the desired quality floor; human-perceived quality gap is substantial.
+- V0–V3 retain their technical states, but each has human design gate `fail` and `DESIGN_QUALIFIED=false`.
+- TasteProfile: sample_count=1, accepted_winners=0, rejected_batches=1, confidence=`very_low`; no attribute-level preference cell created.
+- Diagnosis: `docs/gym/58-izanami-human-quality-gap-diagnosis.md`.
+- The historical Phase-2 metrics baseline remains frozen at completion-time; this post-completion TasteDecision is recorded in the live profile and decision state.
+- Review package: `gym/runs/case-fe653973ef/review-package.html` (generated links and current human design statuses).
+- **Earlier post-completion correction:** real human use first exposed broken package links. `engine/cli/gen-review-package.mjs` now derives links from actual artifacts and `engine/tests/test-review-package-links.mjs` prevents recurrence. Evidence: `gym/knowledge/test-evidence/test6-review-package-remediation.json`.
 
 ## 6. Negative knowledge created
 
-1 record: `gym/knowledge/negative/nk-test7-interaction-veil.json`
-- **Failure class:** interaction-blocking-overlay (undismissed full-screen veil)
-- **Key finding:** all 4 deterministic gates PASS on a completely unusable page → structural gates have a proven false-negative class for behavioral defects (validates Amendment G)
-- **Prevention rule:** `rule-interaction-blocker-gate` implemented in evaluator; verified FAILs defective candidate, no false positives on clean variants
+2 records:
+1. `gym/knowledge/negative/nk-test7-interaction-veil.json` — interaction-blocking overlay; structural-gate false negative; prevention rule implemented and verified.
+2. `gym/knowledge/negative/nk-izanami-human-quality-floor-batch1.json` — technically qualified candidates can remain far below the human design-quality floor; `TECHNICALLY_QUALIFIED != DESIGN_QUALIFIED`.
 
 ## 7. Experiment record
 
@@ -135,7 +139,8 @@ Both arms carry Amendment-F receipts (`control/receipt.json`, `treatment/receipt
 
 - Resolver: high-confidence element→source resolution in Test 2 + all variant receipts; zero guess-patches.
 - Full accuracy % NOT_MEASURABLE_THIS_RUN — requires a vision-driven defect-localization benchmark; text-only runtime cannot produce visual defects to localize.
-- Vision status: active model is text-only; `browser_vision` unavailable for aesthetic evaluation. All design gates correctly `pending-vision-or-human`.
+- Vision status during Phase 2: active model was text-only; design gates correctly stayed `pending-vision-or-human`.
+- Post-completion human status: IZANAMI V0–V3 were visually reviewed and all four design gates now `fail`. This is a human batch verdict, not a general vision benchmark.
 
 ## 14. Failures and lessons
 
@@ -145,6 +150,7 @@ Both arms carry Amendment-F receipts (`control/receipt.json`, `treatment/receipt
 4. **Installer manifest path** — registry manifests live under `registry/`, not `engine/`. Fixed once, shared.
 5. **Receipt metadata** — initially guessed primitive versions (0.1.0); actual install receipt said 1.0.0. Lesson: read the receipt, never guess (Amendment F).
 6. **Browser console flakiness** — async/network evals and occasional backend errors; recovered via navigation reset + synchronous inline expressions.
+7. **Human quality-floor failure** — all IZANAMI candidates passed applicable deterministic gates but failed the first real human design review. Lesson: technical qualification and originality are necessary but insufficient; establish benchmarked visual quality before learning personal taste. Full evidence-labeled diagnosis: `docs/gym/58-izanami-human-quality-gap-diagnosis.md`.
 
 ## 15. Architecture changes from Phase 1/1.5
 
@@ -152,17 +158,19 @@ Both arms carry Amendment-F receipts (`control/receipt.json`, `treatment/receipt
 - Evaluator gained clip-aware escaping + `interaction_blockers` check (from negative knowledge).
 - Runner proven as the durable learning-loop backbone (kill/resume, locks, receipts) — no schema changes needed.
 - SKILL.md promoted from DRAFT to Phase-2 validated (local-only).
-- No changes to Phase-1.5 schemas, gym docs, or the promotion-gate model. Stable KINETIC core untouched (promotion dry-run stayed a simulation).
+- Phase-2 core required no schema changes at completion. The first post-completion human review added a backward-compatible TasteDecision/TasteProfile extension: first-class `WINNER_SELECTED`/`REJECT_ALL`, separate relative-preference and absolute-quality-floor signals, and very-low-confidence small-sample accounting.
 
 ## 16. Recommended Phase 2.5 scope
 
-1. **Human visual review pass** — decide the pending IZANAMI batch (first real TasteDecision), unblocking `first_shot_preference_rate` and DESIGN_QUALIFIED states.
-2. **Vision-capable evaluator** — attach a vision model or human loop so design qualification stops being the universal blocker.
-3. **Cost/time instrumentation** — meter tokens and wall-clock per candidate to fill the two NOT_MEASURABLE metrics.
-4. **Radian DesignCase** — now released; analyze and add to corpus.
-5. **Host-side mount reduction** (Amendment A) — still requires host config; sandbox cannot self-narrow.
-6. **Promotion decision** — human acceptance/rejection of `promo-20260822-interactionblockers`.
-7. **Controlled global skill install** — after human review confirms the loop's value.
+The first human review changes the priority order. Baseline quality must improve before personal-taste optimization:
+
+1. **Stronger visual benchmark evaluation** — complete V0 fidelity scoring with desktop/mobile captures, reference side-by-sides, and motion replay.
+2. **Source-to-output diagnosis** — require persisted briefs, DesignCase retrieval evidence, and explicit explanation of why V1–V3 lost reference-level quality.
+3. **Composition/motion/typography planning** — require composition map, typography roles, art/asset direction, depth plan, scroll/transition storyboard, and one committed signature move before build.
+4. **Vision-capable or human visual gate** — produce an explicit design-floor verdict before `REVIEW_READY`; deterministic PASS cannot substitute.
+5. **One tiny controlled follow-up batch** — only after this diagnosis is approved; preserve `REJECT_ALL`; do not scale the curriculum.
+6. **Personal taste measurement** — only after candidates first clear the general quality floor.
+7. **Deferred operational work** — cost/time instrumentation, Radian DesignCase, host-side mount reduction, promotion decision, and global skill install remain lower priority. CRON stays OFF.
 
 ---
 
@@ -173,6 +181,6 @@ Both arms carry Amendment-F receipts (`control/receipt.json`, `treatment/receipt
 **PARTIALLY YES — proven on process dimensions; NOT YET DETERMINED on aesthetics.**
 
 - **Proven (evidence-backed):** With the same model, provider, brief, and gates, KINETIC delivered reduced-motion accessibility compliance the control lacked, full traceability + reproducibility receipts the control lacked, and cleaner compositing (0 vs 1 will_change) — without degrading any deterministic gate. Held-out generalization (Test 12) further shows KINETIC's knowledge transfers to an unseen domain.
-- **Pending (cannot be proven here):** Whether KINETIC produces a *better-looking* result. This runtime is text-only; no vision or human has judged either arm. Per Amendment G, no aesthetic claim is made. The pending IZANAMI TasteDecision batch is the path to answering this.
+- **Aesthetics:** The first human review of IZANAMI does not show aesthetic uplift. It rejects every candidate and reports a substantial gap to expected award-winning quality. The CONTROL-vs-KINETIC pair itself still lacks human comparison, so no causal aesthetic delta is claimed. Phase 2.5 must raise the baseline quality floor before measuring personal taste.
 
 **STOPPED after Phase 2.** Phase 2.5 not started. No cron, no deployment, no push, no auto-promotion.

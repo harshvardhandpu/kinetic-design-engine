@@ -103,7 +103,7 @@
     "automated": {}
   },
   "variant_run_ids": [],
-  "taste_decision_ids": [],
+  "taste_decision_ids": ["td-20260822-izanami1"],
   "promotion_history": [],
   "re_studies": []
 }

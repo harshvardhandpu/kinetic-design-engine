@@ -1,0 +1,28 @@
+{
+  "schema": "kinetic/gym/negative-knowledge@0.1",
+  "record_id": "nk-izanami-human-quality-floor-batch1",
+  "case_id": "case-fe653973ef",
+  "taste_decision_id": "td-20260822-izanami1",
+  "failure_class": "human-design-quality-floor",
+  "level": "batch",
+  "technical_gates_failed": false,
+  "quality_floor_failure": true,
+  "design_qualified": false,
+  "human_perceived_quality_gap": "substantial",
+  "human_feedback": "None of them is particularly good. V2 and V3 are okay. None of them can be compared to any award-winning website.",
+  "relative_signal": {
+    "positive_candidates": ["V2", "V3"],
+    "ordered": false,
+    "strength": "weak",
+    "importance": "lower-than-absolute-rejection"
+  },
+  "knowledge": "Candidates can pass technical, responsive, accessibility, performance, and originality gates while remaining far below the human design-quality floor. TECHNICALLY_QUALIFIED does not imply DESIGN_QUALIFIED.",
+  "candidate_status": {
+    "V0": { "technical_state": "BUILT_FIDELITY_STUDY", "deterministic_gates": "pass", "design_qualified": false, "human_accepted": false },
+    "V1": { "technical_state": "TECHNICAL_PASS", "design_qualified": false, "human_accepted": false },
+    "V2": { "technical_state": "TECHNICAL_PASS", "design_qualified": false, "human_accepted": false, "relative_signal": "okay-unordered" },
+    "V3": { "technical_state": "TECHNICAL_PASS", "design_qualified": false, "human_accepted": false, "relative_signal": "okay-unordered" }
+  },
+  "calibration_target": "Raise the baseline design-quality floor before learning personal taste; use stronger visual benchmark evaluation and human/vision review on another tiny controlled batch.",
+  "created_at": "2026-08-22T08:38:30Z"
+}

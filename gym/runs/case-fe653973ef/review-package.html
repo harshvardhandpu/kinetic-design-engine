@@ -16,6 +16,7 @@ main { padding: 2rem 2.5rem; display: grid; gap: 1.5rem; }
 .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
 .badge { font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 999px; background: #e8f0e8; color: #2a5a2a; }
 .badge.pending { background: #fdf3e0; color: #8a6116; }
+.badge.fail { background: #fbe6e6; color: #8a1f1f; }
 a.open { display: inline-block; font-size: 0.85rem; color: #1a5fb4; }
 .note { font-size: 0.8rem; color: #8a6116; background: #fdf3e0; padding: 0.8rem 1rem; border-radius: 8px; }
 </style>
@@ -26,29 +27,29 @@ a.open { display: inline-block; font-size: 0.85rem; color: #1a5fb4; }
   <p class="meta">Generated from runner state (gym/runs/case-fe653973ef/case.json) · links derived from real artifact paths</p>
 </header>
 <main>
-  <div class="note">⚠ Deterministic gates only. Design status is pending-vision-or-human until a human (or vision-capable reviewer) decides. Do not treat gate PASSes as design approval.</div>
+  <div class="note">⚠ Deterministic PASS does not imply design approval. Human-review status is shown separately on each candidate.</div>
   <div class="card">
     <h2>V0 — fidelity-study (fidelity study, not deployable)</h2>
     <p class="dir">state: BUILT · attempt 1</p>
-    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge pending">design: pending-vision-or-human</span></div>
+    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge fail">design: fail</span></div>
     <a class="open" href="variants/v0/index.html" target="_blank">Open V0 →</a>
   </div>
   <div class="card">
     <h2>V1 — original</h2>
     <p class="dir">state: TECHNICAL_PASS · attempt 1 · weighted_similarity=0.093 copy=0 assets=0 section_order=0</p>
-    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge pending">design: pending-vision-or-human</span><span class="badge">originality: pass-distinct</span></div>
+    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge fail">design: fail</span><span class="badge">originality: pass-distinct</span></div>
     <a class="open" href="variants/v1/index.html" target="_blank">Open V1 →</a>
   </div>
   <div class="card">
     <h2>V2 — original</h2>
     <p class="dir">state: TECHNICAL_PASS · attempt 1 · weighted_similarity=0.161 copy=0 assets=0 section_order=0</p>
-    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge pending">design: pending-vision-or-human</span><span class="badge">originality: pass-distinct</span></div>
+    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge fail">design: fail</span><span class="badge">originality: pass-distinct</span></div>
     <a class="open" href="variants/v2/index.html" target="_blank">Open V2 →</a>
   </div>
   <div class="card">
     <h2>V3 — original</h2>
     <p class="dir">state: TECHNICAL_PASS · attempt 1 · weighted_similarity=0.078 copy=0 assets=0 section_order=0</p>
-    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge pending">design: pending-vision-or-human</span><span class="badge">originality: pass-distinct</span></div>
+    <div class="badges"><span class="badge">technical: pass</span><span class="badge">responsive: pass</span><span class="badge">a11y: pass</span><span class="badge">performance: pass</span><span class="badge fail">design: fail</span><span class="badge">originality: pass-distinct</span></div>
     <a class="open" href="variants/v3/index.html" target="_blank">Open V3 →</a>
   </div>
 </main>
