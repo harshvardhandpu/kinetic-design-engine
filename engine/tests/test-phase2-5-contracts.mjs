@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
-import { hashFile } from '../runner/store.mjs';
+import { hashFile, readTelemetry, recordStageTelemetry } from '../runner/store.mjs';
 import { assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
@@ -469,6 +469,25 @@ try {
   assert.ok(['V1', 'V2'].every((slot) => fidelityCase.slots[slot].state === 'PLANNED' && fidelityCase.slots[slot].deployable === true && fidelityCase.slots[slot].original_work === true));
   assert.equal((await validateFile({ artifactPath: fidelityCasePath, schemaPath: join(root, 'schemas', 'gym', 'case-run.schema.json') })).valid, true);
 
+  // T31: telemetry derives duration from timestamps, preserves unknowns, and is atomic/idempotent.
+  const qualificationBeforeTelemetry = structuredClone(fidelityCase.slots.V1);
+  const telemetryUpdate = { stage: 'planning', startedAt: '2026-08-22T00:00:00.000Z', endedAt: '2026-08-22T00:00:02.500Z', status: 'COMPLETED', attempt: 1, receiptRefs: ['planning/v1/variant-brief.json'], metrics: { build_attempts: 1, repair_attempts: 0 } };
+  const telemetryA = await recordStageTelemetry('case-fidelity-fixture', telemetryUpdate);
+  assert.equal(telemetryA.stages.planning.duration_ms, 2500);
+  assert.equal(telemetryA.metrics.model, null);
+  assert.equal(telemetryA.metrics.tokens_input, null);
+  assert.equal(telemetryA.metrics.monetary_cost, null);
+  assert.equal(telemetryA.metrics.monetary_cost_status, 'UNKNOWN');
+  assert.ok(telemetryA.metrics.availability_notes.length > 0);
+  const telemetryPath = join(tempDir, 'runs', 'case-fidelity-fixture', 'telemetry.json');
+  const telemetryHash = await hashFile(telemetryPath);
+  assert.deepEqual(await recordStageTelemetry('case-fidelity-fixture', telemetryUpdate), telemetryA);
+  assert.equal(await hashFile(telemetryPath), telemetryHash);
+  assert.deepEqual(await readTelemetry('case-fidelity-fixture'), telemetryA);
+  assert.equal((await validateFile({ artifactPath: telemetryPath, schemaPath: join(root, 'schemas', 'gym', 'execution-telemetry.schema.json') })).valid, true);
+  await assert.rejects(recordStageTelemetry('case-fidelity-fixture', { ...telemetryUpdate, stage: 'build', metrics: { monetary_cost: 0, monetary_cost_status: 'UNKNOWN' } }), (error) => error.code === 'KINETIC_TELEMETRY_INVALID');
+  assert.deepEqual(JSON.parse(await readFile(fidelityCasePath, 'utf8')).slots.V1, qualificationBeforeTelemetry);
+
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
   valid(decision, phase25Taste, join(root, 'schemas', 'gym', 'taste-decision.schema.json'));
@@ -546,4 +565,4 @@ const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
 
-console.log(`S01-S09 contract foundations: PASS (T1-T13, T39-T41, T46, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S10 contract foundations: PASS (T1-T13, T31, T39-T41, T46, CV01-CV18, registry ${registryHashAfter})`);

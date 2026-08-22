@@ -195,6 +195,54 @@ export async function appendArtifactReceipt(caseId, receipt) {
   });
 }
 
+const TELEMETRY_STAGES = ['planning', 'retrieval', 'prebuild_review', 'build', 'capture', 'technical_evaluation', 'design_evaluation', 'repair', 'review_package_generation', 'human_review_waiting'];
+const telemetryPath = (caseId) => {
+  assertId(caseId);
+  return join(gymRoot(), 'runs', caseId, 'telemetry.json');
+};
+
+function emptyTelemetry(caseId, timestamp) {
+  return {
+    schema: 'kinetic/gym/execution-telemetry@0.1', case_id: caseId,
+    stages: Object.fromEntries(TELEMETRY_STAGES.map((stage) => [stage, null])),
+    metrics: {
+      model: null, provider: null, model_calls: null, tokens_input: null, tokens_output: null,
+      tool_calls: null, vision_calls: null, repair_attempts: 0, build_attempts: 0,
+      asset_preparation_ms: null, monetary_cost: null, monetary_cost_status: 'UNKNOWN',
+      availability_notes: ['model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed'],
+    },
+    updated_at: timestamp,
+  };
+}
+
+export async function readTelemetry(caseId) {
+  return readJson(telemetryPath(caseId), 'KINETIC_TELEMETRY_NOT_FOUND');
+}
+
+export async function recordStageTelemetry(caseId, { stage, startedAt, endedAt = null, status, attempt = 0, receiptRefs = [], metrics = {} }) {
+  if (!TELEMETRY_STAGES.includes(stage) || !['NOT_STARTED', 'RUNNING', 'COMPLETED', 'FAILED', 'BLOCKED', 'WAITING'].includes(status)
+    || !Number.isInteger(attempt) || attempt < 0 || !Array.isArray(receiptRefs)
+    || !Number.isFinite(Date.parse(startedAt)) || (endedAt !== null && !Number.isFinite(Date.parse(endedAt)))) {
+    throw new StoreError('KINETIC_TELEMETRY_INVALID', 'invalid telemetry stage update');
+  }
+  if (metrics.monetary_cost === 0 && metrics.monetary_cost_status !== 'VERIFIED_FREE') {
+    throw new StoreError('KINETIC_TELEMETRY_INVALID', 'zero monetary cost requires VERIFIED_FREE evidence');
+  }
+  const durationMs = endedAt === null ? null : Date.parse(endedAt) - Date.parse(startedAt);
+  if (durationMs !== null && durationMs < 0) throw new StoreError('KINETIC_TELEMETRY_INVALID', 'telemetry end precedes start');
+  let telemetry;
+  try { telemetry = await readTelemetry(caseId); }
+  catch (error) {
+    if (error.code !== 'KINETIC_TELEMETRY_NOT_FOUND') throw error;
+    telemetry = emptyTelemetry(caseId, endedAt ?? startedAt);
+  }
+  telemetry.stages[stage] = { started_at: startedAt, ended_at: endedAt, duration_ms: durationMs, status, attempt, receipt_refs: [...receiptRefs] };
+  telemetry.metrics = { ...telemetry.metrics, ...structuredClone(metrics) };
+  telemetry.updated_at = endedAt ?? startedAt;
+  await writeJsonAtomic(telemetryPath(caseId), telemetry);
+  return telemetry;
+}
+
 export function storePaths(caseId) {
   return { gym: gymRoot(), case: casePath(caseId), locks: join(gymRoot(), 'jobs', 'locks') };
 }

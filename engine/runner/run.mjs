@@ -20,7 +20,7 @@ import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { addOriginalSlot, applyTransition, assertFidelityPolicy, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
-import { hashFile, readCase as readStoredCase, withCaseLock, writeCaseAtomic } from './store.mjs';
+import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 
@@ -170,6 +170,31 @@ async function persistValidatedFidelity(caseId, slot, artifactPath) {
   return { fidelity_report: relative(gym, outputPath).split('\\').join('/'), fidelity_validated: true };
 }
 
+async function recordTransitionTelemetry(caseId, before, after, toState, timestamp) {
+  const mapping = {
+    BRIEF_VALIDATED: ['planning', 'PLANNED', 'COMPLETED'],
+    RETRIEVAL_PROVEN: ['retrieval', 'BRIEF_VALIDATED', 'COMPLETED'],
+    PREBUILD_APPROVED: ['prebuild_review', 'RETRIEVAL_PROVEN', 'COMPLETED'],
+    BUILDING: ['build', 'BUILDING', 'RUNNING'],
+    BUILT: ['build', 'BUILDING', 'COMPLETED'],
+    TECHNICAL_EVALUATED: ['technical_evaluation', 'BUILT', 'COMPLETED'],
+    VISUAL_CAPTURED: ['capture', 'TECHNICAL_EVALUATED', 'COMPLETED'],
+    DESIGN_EVALUATED: ['design_evaluation', 'VISUAL_CAPTURED', 'COMPLETED'],
+    REVIEW_READY: ['review_package_generation', 'DESIGN_EVALUATED', 'COMPLETED'],
+    HUMAN_REVIEWED: ['human_review_waiting', 'REVIEW_READY', 'COMPLETED'],
+  };
+  const row = mapping[toState];
+  if (!row) return;
+  const [stage, startState, status] = row;
+  const startedAt = toState === 'BUILDING' ? timestamp : before.timestamps?.[startState] ?? timestamp;
+  const endedAt = status === 'RUNNING' ? null : timestamp;
+  const receiptRefs = Object.values(after.refs ?? {}).filter((value) => typeof value === 'string');
+  await recordStageTelemetry(caseId, {
+    stage, startedAt, endedAt, status, attempt: after.attempt, receiptRefs,
+    metrics: { repair_attempts: Math.max(0, after.attempt - 1), ...(['BUILDING', 'BUILT'].includes(toState) ? { build_attempts: after.attempt } : {}) },
+  });
+}
+
 const ORDER = ['BRIEFED', 'GENERATING', 'BUILT', 'TECHNICAL_PASS', 'RESPONSIVE_PASS', 'A11Y_PASS', 'PERFORMANCE_PASS', 'DESIGN_EVALUATED', 'QUALIFIED'];
 const TERMINAL = new Set(['QUALIFIED', 'REJECTED', 'REJECTED_FINAL', 'EMPTY']);
 
@@ -268,6 +293,7 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       if (artifactRefs.fidelity_report) updated.reports.fidelity = artifactRefs.fidelity_report;
       await writeCaseAtomic(A.case, updated);
+      await recordTransitionTelemetry(A.case, loaded.record.slots[A.slot], updated.slots[A.slot], A.to, timestamp);
     });
     console.log(`${A.case}/${A.slot} -> ${A.to}`);
   } catch (error) {
