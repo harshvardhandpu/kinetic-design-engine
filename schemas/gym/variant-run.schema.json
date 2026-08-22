@@ -89,7 +89,7 @@
     "phase25": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["schema", "run_id", "case_id", "slot", "mode", "state", "attempt", "deployable", "original_work", "technically_qualified", "design_qualified", "acceptable_for_further_taste_learning", "refs", "attempts", "timestamps"],
+      "required": ["schema", "run_id", "case_id", "slot", "mode", "state", "attempt", "deployable", "original_work", "technically_qualified", "design_qualified", "acceptable_for_further_taste_learning", "refs", "attempts", "blocked_condition", "timestamps"],
       "properties": {
         "schema": { "const": "kinetic/gym/variant-run@0.2" },
         "run_id": { "type": "string", "pattern": "^run-[0-9a-z-]+$" },
@@ -129,8 +129,9 @@
             "properties": {
               "attempt": { "type": "integer", "minimum": 1, "maximum": 3 },
               "status": { "enum": ["RUNNING", "COMPLETED", "FAILED", "BLOCKED"] },
-              "input_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+              "input_sha256": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
               "artifact_refs": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+              "diagnosis_ref": { "type": ["string", "null"] },
               "started_at": { "type": "string", "format": "date-time" },
               "ended_at": { "type": ["string", "null"], "format": "date-time" }
             }

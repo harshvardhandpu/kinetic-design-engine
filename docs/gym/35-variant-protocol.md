@@ -85,3 +85,32 @@ BRIEFED → GENERATING → BUILT → TECHNICAL_PASS/FAIL → RESPONSIVE_PASS/FAI
 
 All states durable on the VariantRun record; generation is resumable per-slot,
 never all-or-nothing (`docs/gym/50`).
+
+## Additive Phase-2.5 lifecycle
+
+Phase 2.5 does not migrate or reinterpret the Phase-2 sequence above. It is selected
+explicitly with `init-case --run-version phase2.5`, creates V0 only, and stores
+`case-run@0.2` with `variant-run@0.2` slot records.
+
+```text
+PLANNED → BRIEF_VALIDATED → RETRIEVAL_PROVEN → PREBUILD_APPROVED → BUILDING
+→ BUILT → TECHNICAL_EVALUATED → VISUAL_CAPTURED → DESIGN_EVALUATED
+→ REVIEW_READY → HUMAN_REVIEWED
+```
+
+Transitions are adjacent and guarded. `HUMAN_REVIEWED`, `REJECTED_FINAL`, and
+`CANCELLED` are terminal. `BLOCKED` is a condition on the current state, not a
+replacement state. The legacy `record --state` command refuses Phase-2.5 records;
+Phase-2 commands and files remain unchanged.
+
+Lifecycle progress never infers merit. Every Phase-2.5 slot stores these separately:
+
+```text
+technically_qualified: boolean
+design_qualified: boolean | null
+acceptable_for_further_taste_learning: boolean | null
+```
+
+V0 remains `deployable:false`, `original_work:false`, and outside design/taste
+qualification. Filesystem writes and lock takeover follow the atomic project-local
+rules in `docs/gym/50-resumability.md`.

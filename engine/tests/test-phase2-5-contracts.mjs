@@ -78,8 +78,6 @@ assert.equal(caseRunSchema.properties.schema.const, 'kinetic/gym/case-run@0.2');
 assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-run.schema.json#/$defs/phase25');
 
 const runtimeFiles = [
-  'engine/runner/state-machine.mjs',
-  'engine/runner/store.mjs',
   'engine/knowledge/retrieval.mjs',
   'engine/knowledge/obsidian-adapter.mjs',
   'engine/planning/prebuild-review.mjs',
@@ -200,7 +198,7 @@ try {
     schema: 'kinetic/gym/variant-run@0.2', run_id: 'run-fixture-v0', case_id: 'case-fixture', slot: 'V0', mode: 'fidelity-study', state: 'PLANNED', attempt: 1,
     deployable: false, original_work: false, technically_qualified: false, design_qualified: null, acceptable_for_further_taste_learning: null,
     refs: { variant_brief: null, retrieval_receipt: null, prebuild_review: null, build_receipt: null, technical_evaluation: null, capture_manifest: null, design_evaluation: null, fidelity_report: null },
-    attempts: [], timestamps: {},
+    attempts: [], blocked_condition: null, timestamps: {},
   };
   const caseRun = { schema: 'kinetic/gym/case-run@0.2', case_id: 'case-fixture', slots: { V0: phase25Run }, reports: { fidelity: null, source_to_output_loss: null, review_package: null }, review_state: 'NOT_READY', history: [], created_at: '2026-08-22T00:00:00Z', updated_at: '2026-08-22T00:00:00Z' };
   valid(caseRun, caseRunSchema, join(root, 'schemas', 'gym', 'case-run.schema.json'));

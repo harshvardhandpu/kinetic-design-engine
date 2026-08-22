@@ -19,9 +19,11 @@ import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import { applyTransition, nextState } from './state-machine.mjs';
+import { readCase as readStoredCase, withCaseLock, writeCaseAtomic } from './store.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const gym = join(root, 'gym');
+const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
 const runsDir = join(gym, 'runs');
 const jobsDir = join(gym, 'jobs');
 const locksDir = join(jobsDir, 'locks');
@@ -61,7 +63,47 @@ async function lock(caseId) {
 
 const casePath = (id) => join(runsDir, id, 'case.json');
 
-if (cmd === 'init-job') {
+if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
+  const timestamp = now();
+  const caseId = A.case;
+  const rec = {
+    schema: 'kinetic/gym/case-run@0.2',
+    case_id: caseId,
+    slots: {
+      V0: {
+        schema: 'kinetic/gym/variant-run@0.2', run_id: `run-${caseId}-v0`, case_id: caseId, slot: 'V0', mode: 'fidelity-study', state: 'PLANNED', attempt: 1,
+        deployable: false, original_work: false, technically_qualified: false, design_qualified: null, acceptable_for_further_taste_learning: null,
+        refs: { variant_brief: null, retrieval_receipt: null, prebuild_review: null, build_receipt: null, technical_evaluation: null, capture_manifest: null, design_evaluation: null, fidelity_report: null },
+        attempts: [], blocked_condition: null, timestamps: { PLANNED: timestamp },
+      },
+    },
+    reports: { fidelity: null, source_to_output_loss: null, review_package: null },
+    review_state: 'NOT_READY', taste_decision_ref: null, blocked_condition: null,
+    history: [{ event_id: `init-${caseId}`, event: 'phase2.5-init-v0', slot: 'V0', artifact_ref: null, timestamp }],
+    created_at: timestamp, updated_at: timestamp,
+  };
+  try {
+    await withCaseLock(caseId, 'phase2.5-init', async () => writeCaseAtomic(caseId, rec));
+    console.log(`case ${caseId}: Phase-2.5 V0 initialized`);
+  } catch (error) {
+    console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
+    process.exitCode = 1;
+  }
+} else if (cmd === 'advance') {
+  try {
+    await withCaseLock(A.case, `advance-${A.slot}-${A.to}`, async () => {
+      const loaded = await readStoredCase(A.case);
+      if (loaded.legacy) throw Object.assign(new Error('advance is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
+      const artifactRefs = A.refs && A.refs !== true ? JSON.parse(A.refs) : {};
+      const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: now() });
+      await writeCaseAtomic(A.case, updated);
+    });
+    console.log(`${A.case}/${A.slot} -> ${A.to}`);
+  } catch (error) {
+    console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
+    process.exitCode = 1;
+  }
+} else if (cmd === 'init-job') {
   const job = {
     schema: 'kinetic/gym/curriculum-job@0.1',
     job_id: A.job, type: A.type, status: 'running', schedule_ref: null,
@@ -93,16 +135,32 @@ if (cmd === 'init-job') {
 } else if (cmd === 'next') {
   const rec = await j(casePath(A.case));
   if (!rec) { console.error('no such case'); process.exit(1); }
-  // find first non-terminal slot, then its next stage
-  for (const [slot, s] of Object.entries(rec.slots)) {
-    if (TERMINAL.has(s.state)) continue;
-    const idx = ORDER.indexOf(s.state);
-    const nextStage = idx < ORDER.length - 1 ? ORDER[idx + 1] : null;
-    console.log(JSON.stringify({ case_id: A.case, slot, state: s.state, next_stage: nextStage, attempt: s.attempt, mode: s.mode }, null, 2));
-    process.exit(0);
+  if (rec.schema === 'kinetic/gym/case-run@0.2') {
+    for (const [slot, value] of Object.entries(rec.slots)) {
+      const nextStage = nextState(value, rec);
+      if (nextStage) {
+        console.log(JSON.stringify({ case_id: A.case, slot, state: value.state, next_stage: nextStage, attempt: value.attempt, mode: value.mode }, null, 2));
+        process.exit(0);
+      }
+    }
+    console.log(JSON.stringify({ case_id: A.case, done: true, summary: Object.fromEntries(Object.entries(rec.slots).map(([key, value]) => [key, value.state])) }, null, 2));
+  } else {
+    // find first non-terminal slot, then its next stage
+    for (const [slot, s] of Object.entries(rec.slots)) {
+      if (TERMINAL.has(s.state)) continue;
+      const idx = ORDER.indexOf(s.state);
+      const nextStage = idx < ORDER.length - 1 ? ORDER[idx + 1] : null;
+      console.log(JSON.stringify({ case_id: A.case, slot, state: s.state, next_stage: nextStage, attempt: s.attempt, mode: s.mode }, null, 2));
+      process.exit(0);
+    }
+    console.log(JSON.stringify({ case_id: A.case, done: true, summary: Object.fromEntries(Object.entries(rec.slots).map(([k, s]) => [k, s.state])) }, null, 2));
   }
-  console.log(JSON.stringify({ case_id: A.case, done: true, summary: Object.fromEntries(Object.entries(rec.slots).map(([k, s]) => [k, s.state])) }, null, 2));
 } else if (cmd === 'record') {
+  const before = await j(casePath(A.case));
+  if (before?.schema === 'kinetic/gym/case-run@0.2') {
+    console.error('KINETIC_PHASE25_RECORD_FORBIDDEN: use guarded Phase-2.5 commands');
+    process.exit(4);
+  }
   await lock(A.case);
   const rec = await j(casePath(A.case));
   const s = rec.slots[A.slot];
@@ -155,7 +213,11 @@ if (cmd === 'init-job') {
 } else if (cmd === 'status') {
   if (A.case) {
     const rec = await j(casePath(A.case));
-    console.log(JSON.stringify({ case: A.case, slots: Object.fromEntries(Object.entries(rec.slots).map(([k, s]) => [k, { state: s.state, attempt: s.attempt, gates: Object.fromEntries(Object.entries(s.gates).map(([g, v]) => [g, v.result])) }])) }, null, 2));
+    if (rec.schema === 'kinetic/gym/case-run@0.2') {
+      console.log(JSON.stringify({ case: A.case, run_version: 'phase2.5', slots: Object.fromEntries(Object.entries(rec.slots).map(([key, value]) => [key, { state: value.state, attempt: value.attempt, technically_qualified: value.technically_qualified, design_qualified: value.design_qualified, acceptable_for_further_taste_learning: value.acceptable_for_further_taste_learning }])) }, null, 2));
+    } else {
+      console.log(JSON.stringify({ case: A.case, slots: Object.fromEntries(Object.entries(rec.slots).map(([k, s]) => [k, { state: s.state, attempt: s.attempt, gates: Object.fromEntries(Object.entries(s.gates).map(([g, v]) => [g, v.result])) }])) }, null, 2));
+    }
   } else {
     const files = await readdir(jobsDir).catch(() => []);
     for (const f of files.filter((f) => f.endsWith('.json'))) {
@@ -164,6 +226,6 @@ if (cmd === 'init-job') {
     }
   }
 } else {
-  console.error('commands: init-job | init-case | next | record | gate | receipt | status');
+  console.error('commands: init-job | init-case [--run-version phase2.5] | advance | next | record | gate | receipt | status');
   process.exit(2);
 }
