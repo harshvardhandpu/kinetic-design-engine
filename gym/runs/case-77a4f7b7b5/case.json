@@ -1,0 +1,88 @@
+{
+  "schema": "kinetic/gym/variant-run@0.1",
+  "case_id": "case-77a4f7b7b5",
+  "job_id": "phase2-proof-20260822",
+  "created_at": "2026-08-22T02:42:56.333Z",
+  "slots": {
+    "V0": {
+      "run_id": "run-case-77a4f7b7b5-v0",
+      "slot": "V0",
+      "mode": "fidelity-study",
+      "deployable": false,
+      "experimental": false,
+      "state": "BRIEFED",
+      "attempt": 1,
+      "gates": {},
+      "timestamps": {
+        "BRIEFED": "2026-08-22T02:42:56.333Z"
+      },
+      "brief": null,
+      "diagnosis": null,
+      "receipt": null,
+      "artifacts": []
+    },
+    "V1": {
+      "run_id": "run-case-77a4f7b7b5-v1",
+      "slot": "V1",
+      "mode": "original",
+      "deployable": true,
+      "experimental": false,
+      "state": "BRIEFED",
+      "attempt": 1,
+      "gates": {},
+      "timestamps": {
+        "BRIEFED": "2026-08-22T02:42:56.333Z"
+      },
+      "brief": null,
+      "diagnosis": null,
+      "receipt": null,
+      "artifacts": []
+    },
+    "V2": {
+      "run_id": "run-case-77a4f7b7b5-v2",
+      "slot": "V2",
+      "mode": "original",
+      "deployable": true,
+      "experimental": false,
+      "state": "BRIEFED",
+      "attempt": 1,
+      "gates": {},
+      "timestamps": {
+        "BRIEFED": "2026-08-22T02:42:56.333Z"
+      },
+      "brief": null,
+      "diagnosis": null,
+      "receipt": null,
+      "artifacts": []
+    },
+    "V3": {
+      "run_id": "run-case-77a4f7b7b5-v3",
+      "slot": "V3",
+      "mode": "original",
+      "deployable": true,
+      "experimental": false,
+      "state": "BRIEFED",
+      "attempt": 1,
+      "gates": {},
+      "timestamps": {
+        "BRIEFED": "2026-08-22T02:42:56.333Z"
+      },
+      "brief": null,
+      "diagnosis": null,
+      "receipt": null,
+      "artifacts": []
+    }
+  },
+  "history": [
+    {
+      "at": "2026-08-22T02:42:56.333Z",
+      "event": "init",
+      "slots": [
+        "V0",
+        "V1",
+        "V2",
+        "V3"
+      ]
+    }
+  ]
+}

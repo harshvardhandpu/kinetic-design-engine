@@ -1,0 +1,109 @@
+{
+  "schema": "kinetic/gym/design-case@0.1",
+  "case_id": "case-fe653973ef",
+  "canonical_url": "https://izanami-official.com/",
+  "title": "IZANAMI",
+  "studio": "baqemono.inc. / Tomoyuki Nakata",
+  "status": "STUDIED",
+  "provenance": {
+    "discovered_via": "awwwards",
+    "source_url": "https://www.awwwards.com/sites/izanami",
+    "award": [
+      { "body": "Awwwards", "type": "Site of the Day", "level": "SOTD", "year": 2026, "category": "Art & Illustration / Business & Corporate", "jury_scores": { "design": 7.16, "usability": 7.1, "creativity": 7.34, "content": 7.29, "overall": 7.19, "dev_award": 7.26 } }
+    ],
+    "fetched": "2026-08-22T02:30:00Z",
+    "access_policy": "reference-site-observe-only",
+    "site_robots_checked": false,
+    "availability": "live",
+    "archive_url": null
+  },
+  "surface": {
+    "surface_types": ["brand", "storytelling", "corporate-spiritual"],
+    "k_level_estimate": "K4",
+    "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.9, "method": "live browser DOM/style/script probes + bundle signature scan" }
+  },
+  "analysis": {
+    "layout": {
+      "notes": {
+        "structure": "single-page scroll narrative: hero statement -> philosophy -> projects (3 numbered chapters: School/Craft/Retreat) -> company -> footer with dual-city clocks",
+        "main_children": ["div.home wrapping 6 sections"],
+        "grid_usage": 113,
+        "flex_usage": 60,
+        "fixed_elements": 14,
+        "scroll_height_vh": 11.05,
+        "nav": "fullscreen overlay menu (menu/close button), bilingual en/ja",
+        "distinctive": "numbered chapter rhythm (01/02/03), 'projects' eyebrow repeated per chapter, dual-timezone footer clocks (Dubai GST + Tokyo JST), persistent 'scroll' indicator"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.95, "method": "DOM structure probe" }
+    },
+    "typography": {
+      "notes": {
+        "families": { "Cinzel": 53, "Playfair Display": 51, "Helvetica Neue": 43, "Shippori Mincho": 18, "Satoshi": "loaded" },
+        "system": "serif display (Cinzel/Playfair) for statements + Shippori Mincho for Japanese + Satoshi/Helvetica for UI",
+        "h1_hero": "Remember who you are — rendered small in DOM probe (16px) because hero headline is canvas/transform-driven or split; visual scale is large per Awwwards thumbnails",
+        "character": "ceremonial, high-contrast serifs, generous tracking, quiet luxury"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.85, "method": "computed styles + document.fonts; hero size caveat noted" }
+    },
+    "color": {
+      "notes": {
+        "palette": ["#0A0801 (near-black warm)", "#D9D7D4 (bone white)"],
+        "dominant": "bone-on-black: fg rgb(217,215,212) x556 elements, bg rgb(10,8,1)",
+        "character": "2-color ceremonial palette, matches Awwwards-extracted palette exactly"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.98, "method": "computed style histogram; cross-checked with Awwwards palette metadata" }
+    },
+    "motion": {
+      "notes": {
+        "library": "GSAP + ScrollTrigger + Lenis smooth scroll, all bundled (not window-global)",
+        "spa_transitions": "custom page in/out animations (animatePageIn/animatePageOut/awaitAnimations identifiers in bundle)",
+        "signature_effects": ["cloudScrollAnimation / cloudsLoopAnimation (ambient canvas clouds)", "fadeProgress (scroll-driven fade)", "buttonInViewAnimation (CTA reveals)", "nested scroll handling (Lenis)"],
+        "canvas": "2 canvases present (300x150 default-sized at probe — likely resized/managed by rAF loop)",
+        "transforms_active": 103,
+        "will_change": 14,
+        "scroll_model": "Lenis-smoothed long scroll (9284px / 11 viewports) with ScrollTrigger-pinned chapters"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.9, "method": "bundle signature scan (845KB single Vite bundle) + runtime style probe" }
+    },
+    "technology": {
+      "observed": ["Vite build (hashed asset names)", "GSAP", "ScrollTrigger", "Lenis", "Three.js (bundle signature)", "WebGL context strings", "Canvas 2D", "IntersectionObserver", "ResizeObserver", "matchMedia", "Google Analytics (gtag)"],
+      "inferred": [
+        { "claim": "Three.js used for ambient cloud/atmosphere shader or sprite field, composited with DOM scroll narrative", "confidence": 0.7, "basis": "three + webgl signatures in bundle + cloudsAnimation identifiers + Awwwards WebGL tag" },
+        { "claim": "SPA routing with animated page transitions (Barba-like custom implementation)", "confidence": 0.8, "basis": "animatePageIn/Out + awaitAnimations identifiers; no barba library signature" }
+      ]
+    },
+    "performance": {
+      "notes": { "bundle_kb": 845, "single_bundle": true, "a11y_score_awwwards": 6.4, "wpo_score_awwwards": 7.4 },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.9, "method": "bundle size measurement" }
+    },
+    "accessibility": {
+      "notes": { "lang_switcher": "en/ja links", "menu": "button-driven overlay", "awwwards_a11y_score": 6.4, "risk": "canvas hero may lack text alternative; overlay menu focus management unverified" },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.7, "method": "DOM probe + Awwwards dev scores" }
+    },
+    "principles": [
+      { "rule": "Ceremonial pacing: long scroll (11vh) with slow reveals; motion serves remembrance narrative, never decoration", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "motion.notes" },
+      { "rule": "Two-color restraint: entire site lives on #0A0801/#D9D7D4; depth comes from type scale and imagery, not palette", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "color.notes" },
+      { "rule": "Numbered chapter rhythm (01/02/03) gives scroll narrative a table-of-contents legibility", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "layout.notes" },
+      { "rule": "Ambient layer (clouds) runs beneath content without competing: low contrast, slow, peripheral", "evidence_tag": "INFERRED", "evidence_ref": "motion.notes.signature_effects" },
+      { "rule": "Bilingual + dual-timezone details (Dubai/Tokyo clocks) encode brand geography as living UI, not copy", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "layout.notes.distinctive" }
+    ],
+    "inferences": [
+      "Hero headline likely rendered via split/transform or canvas overlay — DOM h1 measured 16px while visual hero is large; V0 must reproduce the reveal, not the literal DOM",
+      "Cloud animation is the ambient signature; a V0 without it loses the site's atmosphere",
+      "SPA transitions mean navigation is part of the motion system, not just links"
+    ],
+    "anti_patterns": [
+      { "issue": "845KB single bundle: no code splitting; slow first load on weak networks", "evidence_tag": "DIRECTLY-INSPECTED" },
+      { "issue": "Awwwards a11y score 6.4: canvas-heavy hero + overlay menu likely under-serve keyboard/AT users", "evidence_tag": "METADATA-ONLY" }
+    ]
+  },
+  "figma": { "authorization": "none", "file_ref": null, "captured": null },
+  "scores": {
+    "external": { "awwwards_sotd": 7.19, "awwwards_dev": 7.26, "note": "weak prior only (doc 32)" },
+    "automated": {}
+  },
+  "variant_run_ids": [],
+  "taste_decision_ids": [],
+  "promotion_history": [],
+  "re_studies": []
+}

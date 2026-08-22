@@ -1,0 +1,37 @@
+{
+  "schema": "kinetic/gym/design-case@0.1",
+  "case_id": "case-98d4bd4196",
+  "canonical_url": "https://www.rideradian.com/",
+  "title": "Radian",
+  "studio": "UNCOMMON",
+  "status": "INGESTED",
+  "holdout": {
+    "is_holdout": true,
+    "policy": "Amendment B: this reference must NOT enter DesignCase retrieval, recipes, or taste before the Phase-2 generalization benchmark. Analysis fields stay empty until benchmark execution. May enter the learning corpus only after the benchmark completes.",
+    "sealed_at": "2026-08-22T02:46:00Z"
+  },
+  "provenance": {
+    "discovered_via": "awwwards",
+    "source_url": "https://www.awwwards.com/sites/radian",
+    "award": [
+      { "body": "Awwwards", "type": "Site of the Day", "level": "SOTD", "year": 2026, "category": null, "jury_scores": { "overall": 7.23, "dev_award": 7.29 } }
+    ],
+    "fetched": "2026-08-22T02:46:00Z",
+    "access_policy": "reference-site-observe-only",
+    "site_robots_checked": false,
+    "availability": "live",
+    "archive_url": null
+  },
+  "surface": {
+    "surface_types": ["product"],
+    "k_level_estimate": null,
+    "evidence": { "tag": "METADATA-ONLY", "confidence": 0.3, "method": "Awwwards listing only — deliberately NOT inspected (holdout seal)" }
+  },
+  "analysis": {},
+  "figma": { "authorization": "none", "file_ref": null, "captured": null },
+  "scores": { "external": { "awwwards_sotd": 7.23, "awwwards_dev": 7.29, "note": "weak prior only" }, "automated": {} },
+  "variant_run_ids": [],
+  "taste_decision_ids": [],
+  "promotion_history": [],
+  "re_studies": []
+}

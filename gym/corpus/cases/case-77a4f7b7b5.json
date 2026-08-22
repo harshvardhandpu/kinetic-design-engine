@@ -1,0 +1,109 @@
+{
+  "schema": "kinetic/gym/design-case@0.1",
+  "case_id": "case-77a4f7b7b5",
+  "canonical_url": "https://bymonolog.com/",
+  "title": "MONOLOG",
+  "studio": "Huy Nguyen (By Huy)",
+  "status": "STUDIED",
+  "provenance": {
+    "discovered_via": "awwwards",
+    "source_url": "https://www.awwwards.com/sites/monolog",
+    "award": [
+      { "body": "Awwwards", "type": "Site of the Day", "level": "SOTD", "year": 2026, "category": null, "jury_scores": { "overall": 7.43, "dev_award": 7.22 } }
+    ],
+    "fetched": "2026-08-22T02:45:00Z",
+    "access_policy": "reference-site-observe-only",
+    "site_robots_checked": false,
+    "availability": "live",
+    "archive_url": null
+  },
+  "surface": {
+    "surface_types": ["agency", "portfolio", "conversion-landing"],
+    "k_level_estimate": "K3",
+    "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.9, "method": "live browser DOM/style/script probes" }
+  },
+  "analysis": {
+    "layout": {
+      "notes": {
+        "structure": "8 conversion-ordered sections: hero -> problem statement -> 'We close that gap' -> works (SUCCESS STORIES carousel w/ outcome metrics) -> services -> process (3 steps w/ video links) -> FAQ accordion -> CTA -> footer",
+        "scroll_vh": 15.75,
+        "flex": 317, "grid": 20, "sticky": 2,
+        "distinctive": [
+          "every case study card carries a hard outcome metric (21% conversions, 58% session duration, $100K+ in 30 days)",
+          "statistics carousels with prev/next buttons + '0# / 03' counters",
+          "'Ask AI about MONOLOG' footer: pre-filled Claude/Gemini/ChatGPT evaluation prompts as a trust mechanism",
+          "about modal opened from nav (not a route)",
+          "client logo list as social proof band",
+          "FAQ answers include pricing transparency ($15k start, $25-50k typical)"
+        ]
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.95, "method": "DOM structure probe" }
+    },
+    "typography": {
+      "notes": {
+        "families": { "Khteka": 201, "Suisse Mono": 8, "Animo": 5 },
+        "display": "Animo at up to 205px (SUCCESS STORIES), section heads ~142px",
+        "body": "Khteka (workhorse, 201 elements)",
+        "labels": "Suisse Mono for meta/labels (SS /05 card markers)",
+        "system": "3-face system: expressive display + neutral body + mono metadata"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.95, "method": "computed styles" }
+    },
+    "color": {
+      "notes": {
+        "palette": ["#E8E8E3 bone", "#080807 near-black", "#181715 warm dark sections", "#938F8A warm gray secondary"],
+        "character": "bone-on-black editorial; warm grays for hierarchy; no saturated accent — confidence through restraint"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.95, "method": "computed style histogram" }
+    },
+    "motion": {
+      "notes": {
+        "library": "GSAP 3.15.0 + ScrollTrigger + SplitText + CustomEase + Flip (Webflow CDN), Three.js 0.160.1, Lenis 1.x",
+        "media": "3 canvases, 9 videos, 43 images",
+        "signature_effects": ["SplitText headline reveals (Awwwards 'Statement-Driven Hero' element)", "works carousel with Flip-style transitions", "cinematic CTA (Awwwards 'Cinematic Call To Action' element)", "about modal transition"],
+        "scroll_model": "Lenis-smoothed 15.75-viewport scroll with ScrollTrigger-pinned sections"
+      },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.92, "method": "script inventory (window.gsap present, plugin list) + runtime probe" }
+    },
+    "technology": {
+      "observed": ["Webflow hosting (website-files CDN, jquery 3.5.1)", "GSAP 3.15.0", "ScrollTrigger", "SplitText", "CustomEase", "Flip", "Three.js 0.160.1", "Lenis 1.x", "odyn.dev bundle (analytics/CDN)", "Google Tag Manager", "9 video elements", "3 canvases"],
+      "inferred": [
+        { "claim": "Three.js drives a subtle hero/ambient canvas (3 canvases present, one likely WebGL)", "confidence": 0.65, "basis": "three.min.js loaded + canvas count" },
+        { "claim": "SplitText powers the statement hero reveals seen in Awwwards element highlights", "confidence": 0.85, "basis": "SplitText loaded + Awwwards 'Statement-Driven Hero' element tag" }
+      ]
+    },
+    "performance": {
+      "notes": { "videos": 9, "images": 43, "will_change": 3, "risk": "9 videos on one page need lazy loading; Webflow + jQuery + GSAP stack is heavy" },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.85, "method": "runtime probe" }
+    },
+    "accessibility": {
+      "notes": { "faq": "button-driven accordion (good semantics)", "carousels": "prev/next buttons labeled", "risk": "205px display type + video-heavy sections need reduced-motion + AT care; modal focus management unverified" },
+      "evidence": { "tag": "DIRECTLY-INSPECTED", "confidence": 0.75, "method": "DOM probe" }
+    },
+    "principles": [
+      { "rule": "Conversion narrative order: problem -> gap -> proof (metrics) -> process -> objections (FAQ) -> CTA; motion punctuates, never interrupts", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "layout.notes.structure" },
+      { "rule": "Outcome metrics as design elements: numbers (21%, 58%, $100K+) get display-scale treatment — proof is the hero", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "layout.notes.distinctive" },
+      { "rule": "3-face type system with clear roles: display (Animo) for statements, body (Khteka) for reading, mono (Suisse Mono) for metadata", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "typography.notes" },
+      { "rule": "Radical transparency as trust design: public pricing, real testimonials with names, 'Ask AI about us' links", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "layout.notes.distinctive" },
+      { "rule": "Warm neutrals only — no accent color; hierarchy from value contrast and type scale, not hue", "evidence_tag": "DIRECTLY-INSPECTED", "evidence_ref": "color.notes" }
+    ],
+    "inferences": [
+      "Webflow platform means V0 must independently reimplement the choreography (no copying Webflow interactions export)",
+      "The 'SS /05' mono markers create an editorial archive feel on commercial work",
+      "Video-per-case-study is the richness source; a V0 without media placeholders loses the cinematic quality"
+    ],
+    "anti_patterns": [
+      { "issue": "jQuery 3.5.1 still loaded alongside GSAP — legacy Webflow dependency bloat", "evidence_tag": "DIRECTLY-INSPECTED" },
+      { "issue": "9 videos + 43 images on one page: heavy without careful lazy-loading", "evidence_tag": "DIRECTLY-INSPECTED" }
+    ]
+  },
+  "figma": { "authorization": "none", "file_ref": null, "captured": null },
+  "scores": {
+    "external": { "awwwards_sotd": 7.43, "awwwards_dev": 7.22, "note": "weak prior only (doc 32)" },
+    "automated": {}
+  },
+  "variant_run_ids": [],
+  "taste_decision_ids": [],
+  "promotion_history": [],
+  "re_studies": []
+}

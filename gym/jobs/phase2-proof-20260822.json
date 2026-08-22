@@ -8,7 +8,7 @@
   "checkpoint": null,
   "work_items": [
     {
-      "id": "case-izanami",
+      "id": "case-fe653973ef",
       "state": "pending",
       "attempts": 0,
       "last_error": null,
@@ -16,7 +16,7 @@
       "receipt_ref": null
     },
     {
-      "id": "case-neuemontreal",
+      "id": "case-6f67d60006",
       "state": "pending",
       "attempts": 0,
       "last_error": null,
@@ -24,7 +24,7 @@
       "receipt_ref": null
     },
     {
-      "id": "case-monolog",
+      "id": "case-77a4f7b7b5",
       "state": "pending",
       "attempts": 0,
       "last_error": null,
@@ -39,6 +39,6 @@
     "wall_clock_seconds": null
   },
   "provider_notes": [],
-  "started_at": "2026-08-22T02:14:20.455Z",
+  "started_at": "2026-08-22T02:42:56.236Z",
   "finished_at": null
 }

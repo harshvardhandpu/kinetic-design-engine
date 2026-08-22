@@ -1,0 +1,30 @@
+{
+  "schema": "kinetic/gym/source-policies@0.1",
+  "updated": "2026-08-22",
+  "policies": {
+    "awwwards-metadata-only": {
+      "id": "awwwards-metadata-only",
+      "applies_to": "awwwards.com",
+      "allowed": ["read public listing/detail pages at human pace", "record public metadata (award, year, category, scores, tech tags, palette)"],
+      "forbidden": ["bulk scraping", "mirroring media/assets", "automated account access"],
+      "basis": "Phase-1.5 doc 32: robots.txt allows /websites/ listings; ToS: content is Awwwards property, featured sites remain creators' IP",
+      "verified": "2026-08-22"
+    },
+    "reference-site-observe-only": {
+      "id": "reference-site-observe-only",
+      "applies_to": "any live reference site under study",
+      "allowed": ["load public pages in browser", "probe DOM/style/script via console", "fetch public JS bundles for technology analysis", "record structural fingerprints"],
+      "forbidden": ["downloading/copying proprietary source code for reuse", "copying branding, artwork, copy, video, illustration, fonts-as-assets", "bypassing access controls", "training on content where reserved"],
+      "basis": "Phase-1.5 doc 36: observe public behavior, independently implement; V0 fidelity studies are internal benchmarks, deployable:false",
+      "verified": "2026-08-22"
+    },
+    "cssda-blocked": {
+      "id": "cssda-blocked",
+      "applies_to": "cssdesignawards.com",
+      "allowed": ["manual-entry of known winners with public metadata"],
+      "forbidden": ["any automated ingestion (captcha-gated incl. robots.txt)"],
+      "basis": "Phase-1.5 doc 32: sg-captcha challenge on all paths",
+      "verified": "2026-08-22"
+    }
+  }
+}
