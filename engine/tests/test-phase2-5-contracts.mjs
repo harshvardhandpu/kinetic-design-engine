@@ -4,7 +4,10 @@ import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
+import { hashFile } from '../runner/store.mjs';
+import { assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -220,6 +223,52 @@ try {
   valid(brief, parsed.get('schemas/gym/variant-brief.schema.json'), join(root, 'schemas', 'gym', 'variant-brief.schema.json'));
   invalid({ ...brief, motion_plan: { ...brief.motion_plan, signature_move: {} } }, parsed.get('schemas/gym/variant-brief.schema.json'));
 
+  // T1/T2: persisted complete brief, weak-original rejection, and downstream hash guard.
+  const v0Brief = { ...brief, variant_id: 'V0' };
+  assert.doesNotThrow(() => assertVariantBriefPolicy({ brief: v0Brief, caseId: 'case-fixture', slot: 'V0' }));
+  const strongBrief = structuredClone(brief);
+  strongBrief.motion_plan.signature_move = { ...strongBrief.motion_plan.signature_move, central_idea: 'Content reveals the information structure', visual_transformation: 'Foreground and background layers exchange emphasis', purpose: 'Make the narrative hierarchy legible', content_relationship: 'Each transition connects the section to its focal content' };
+  strongBrief.originality_plan.signature_move_hypothesis = 'Layer exchange creates a distinct section grammar';
+  assert.doesNotThrow(() => assertVariantBriefPolicy({ brief: strongBrief, caseId: 'case-fixture', slot: 'V1' }));
+  const weakBrief = structuredClone(brief);
+  weakBrief.motion_plan.signature_move = { ...weakBrief.motion_plan.signature_move, central_idea: 'hover', visual_transformation: 'fade', purpose: 'nice', content_relationship: 'card' };
+  assert.throws(() => assertVariantBriefPolicy({ brief: weakBrief, caseId: 'case-fixture', slot: 'V1' }), (error) => error instanceof TransitionError && error.code === 'KINETIC_WEAK_VARIANT_BRIEF');
+  assert.throws(() => assertVariantBriefPolicy({ brief: { ...v0Brief, case_id: 'case-other' }, caseId: 'case-fixture', slot: 'V0' }), (error) => error.code === 'KINETIC_BRIEF_INVALID');
+  assert.throws(() => assertTransition({ caseRun, slot: 'V0', toState: 'BRIEF_VALIDATED', artifactRefs: {} }), (error) => error.code === 'KINETIC_BRIEF_REQUIRED');
+  const prebuildCase = structuredClone(caseRun);
+  prebuildCase.slots.V0.state = 'PREBUILD_APPROVED';
+  assert.throws(() => assertTransition({ caseRun: prebuildCase, slot: 'V0', toState: 'BUILDING', artifactRefs: {} }), (error) => error.code === 'KINETIC_BRIEF_CHANGED');
+
+  const run = (args) => spawnSync(process.execPath, [join(root, 'engine', 'runner', 'run.mjs'), ...args], { cwd: root, env: { ...process.env, KINETIC_GYM_ROOT: tempDir }, encoding: 'utf8' });
+  let cli = run(['init-case', '--case', 'case-brief-fixture', '--run-version', 'phase2.5']);
+  assert.equal(cli.status, 0, cli.stderr);
+  const phaseCasePath = join(tempDir, 'runs', 'case-brief-fixture', 'case.json');
+  const badBriefPath = join(tempDir, 'bad-brief.json');
+  await writeFile(badBriefPath, '{}');
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BRIEF_VALIDATED', '--artifact', badBriefPath]);
+  assert.notEqual(cli.status, 0);
+  assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'PLANNED');
+
+  const briefPath = join(tempDir, 'v0-brief.json');
+  await writeFile(briefPath, JSON.stringify({ ...v0Brief, case_id: 'case-brief-fixture' }, null, 2));
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BRIEF_VALIDATED', '--artifact', briefPath]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const afterBrief = JSON.parse(await readFile(phaseCasePath));
+  assert.equal(afterBrief.slots.V0.state, 'BRIEF_VALIDATED');
+  const persistedBrief = join(tempDir, afterBrief.slots.V0.refs.variant_brief);
+  const briefReceipt = JSON.parse(await readFile(join(dirname(persistedBrief), 'variant-brief.receipt.json')));
+  assert.equal(briefReceipt.schema, 'kinetic/gym/variant-brief-receipt@0.1');
+  assert.equal(briefReceipt.brief_sha256, await hashFile(persistedBrief));
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'RETRIEVAL_PROVEN']);
+  assert.equal(cli.status, 0, cli.stderr);
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'PREBUILD_APPROVED']);
+  assert.equal(cli.status, 0, cli.stderr);
+  await writeFile(persistedBrief, `${await readFile(persistedBrief, 'utf8')} `);
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BUILDING']);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_BRIEF_CHANGED/);
+  assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'PREBUILD_APPROVED');
+
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
   valid(decision, phase25Taste, join(root, 'schemas', 'gym', 'taste-decision.schema.json'));
@@ -295,4 +344,4 @@ const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
 
-console.log(`S01-S03 contract foundations: PASS (${schemaFiles.length} schemas, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S05 contract foundations: PASS (T1, T2, T4-T7, T39, T40, CV01-CV18, registry ${registryHashAfter})`);

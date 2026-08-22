@@ -16,11 +16,12 @@
  * terminal state is a no-op. Locks: gym/jobs/locks/<case>.lock with pid+heartbeat.
  */
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
-import { join, dirname } from 'node:path';
+import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
-import { applyTransition, nextState } from './state-machine.mjs';
-import { readCase as readStoredCase, withCaseLock, writeCaseAtomic } from './store.mjs';
+import { applyTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
+import { hashFile, readCase as readStoredCase, withCaseLock, writeCaseAtomic } from './store.mjs';
+import { validateValue } from '../core/schema-validate.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
@@ -39,6 +40,45 @@ const A = Object.fromEntries(args.slice(1).reduce((a, c, i, arr) => {
 const j = async (p) => JSON.parse(await readFile(p, 'utf8').catch(() => 'null'));
 const w = async (p, o) => { await mkdir(dirname(p), { recursive: true }); await writeFile(p, JSON.stringify(o, null, 2)); };
 const now = () => new Date().toISOString();
+
+async function persistValidatedBrief(caseId, slot, artifactPath, timestamp) {
+  if (typeof artifactPath !== 'string' || artifactPath.length === 0) throw Object.assign(new Error('BRIEF_VALIDATED requires --artifact'), { code: 'KINETIC_BRIEF_REQUIRED' });
+  let brief;
+  try { brief = JSON.parse(await readFile(artifactPath, 'utf8')); }
+  catch (error) { throw Object.assign(new Error(`invalid brief JSON: ${error.message}`), { code: 'KINETIC_BRIEF_INVALID' }); }
+  const schemaPath = join(root, 'schemas', 'gym', 'variant-brief.schema.json');
+  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const validation = validateValue({ value: brief, schema, schemaPath });
+  if (!validation.valid) throw Object.assign(new Error(JSON.stringify(validation.errors)), { code: 'KINETIC_SCHEMA_INVALID' });
+  assertVariantBriefPolicy({ brief, caseId, slot });
+  const briefPath = join(gym, 'runs', caseId, 'planning', slot.toLowerCase(), 'variant-brief.json');
+  await w(briefPath, brief);
+  const briefSha256 = await hashFile(briefPath);
+  const briefRef = relative(gym, briefPath).split('\\').join('/');
+  await w(join(dirname(briefPath), 'variant-brief.receipt.json'), {
+    schema: 'kinetic/gym/variant-brief-receipt@0.1', case_id: caseId, slot,
+    brief_ref: briefRef, brief_sha256: briefSha256, brief_schema: brief.schema,
+    validated_at: timestamp,
+  });
+  return { variant_brief: briefRef, brief_validated: true };
+}
+
+async function assertPersistedBriefUnchanged(caseId, slot, briefRef) {
+  if (typeof briefRef !== 'string') throw Object.assign(new Error('persisted brief reference missing'), { code: 'KINETIC_BRIEF_REQUIRED' });
+  const briefPath = resolve(gym, briefRef);
+  const local = relative(gym, briefPath);
+  if (local === '..' || local.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(local)) {
+    throw Object.assign(new Error('persisted brief reference escapes the Gym'), { code: 'KINETIC_BRIEF_CHANGED' });
+  }
+  const receipt = await j(join(dirname(briefPath), 'variant-brief.receipt.json'));
+  if (!receipt || receipt.brief_ref !== briefRef || receipt.brief_schema !== 'kinetic/gym/variant-brief@0.1') {
+    throw Object.assign(new Error('brief validation receipt missing or mismatched'), { code: 'KINETIC_BRIEF_CHANGED' });
+  }
+  if (receipt.case_id !== caseId || receipt.slot !== slot || await hashFile(briefPath).catch(() => null) !== receipt.brief_sha256) {
+    throw Object.assign(new Error('persisted brief hash changed'), { code: 'KINETIC_BRIEF_CHANGED' });
+  }
+  return { brief_hash_unchanged: true };
+}
 
 const ORDER = ['BRIEFED', 'GENERATING', 'BUILT', 'TECHNICAL_PASS', 'RESPONSIVE_PASS', 'A11Y_PASS', 'PERFORMANCE_PASS', 'DESIGN_EVALUATED', 'QUALIFIED'];
 const TERMINAL = new Set(['QUALIFIED', 'REJECTED', 'REJECTED_FINAL', 'EMPTY']);
@@ -94,8 +134,11 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
     await withCaseLock(A.case, `advance-${A.slot}-${A.to}`, async () => {
       const loaded = await readStoredCase(A.case);
       if (loaded.legacy) throw Object.assign(new Error('advance is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
-      const artifactRefs = A.refs && A.refs !== true ? JSON.parse(A.refs) : {};
-      const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: now() });
+      const timestamp = now();
+      let artifactRefs = A.refs && A.refs !== true ? JSON.parse(A.refs) : {};
+      if (A.to === 'BRIEF_VALIDATED') artifactRefs = { ...artifactRefs, ...await persistValidatedBrief(A.case, A.slot, A.artifact, timestamp) };
+      if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedBriefUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
+      const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       await writeCaseAtomic(A.case, updated);
     });
     console.log(`${A.case}/${A.slot} -> ${A.to}`);

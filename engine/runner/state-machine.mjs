@@ -35,6 +35,37 @@ function assertV0Invariant(record, artifactRefs = {}) {
   }
 }
 
+export function assertVariantBriefPolicy({ brief, caseId, slot }) {
+  if (!brief || brief.schema !== 'kinetic/gym/variant-brief@0.1' || brief.case_id !== caseId || brief.variant_id !== slot) {
+    throw new TransitionError('KINETIC_BRIEF_INVALID', 'brief schema, case, and slot identity must match');
+  }
+  if (!Array.isArray(brief.design_case_ids_used) || brief.design_case_ids_used.length === 0) {
+    throw new TransitionError('KINETIC_BRIEF_INVALID', 'brief requires DesignCase provenance');
+  }
+  for (const group of Object.values(brief.source_provenance ?? {})) {
+    if (!Array.isArray(group)) throw new TransitionError('KINETIC_BRIEF_INVALID', 'source provenance groups must be arrays');
+    for (const influence of group) {
+      if (!Array.isArray(influence.knowledge_used) || !Array.isArray(influence.attribution) || influence.attribution.some(({ knowledge_index: index }) => !Number.isInteger(index) || index < 0 || index >= influence.knowledge_used.length)) {
+        throw new TransitionError('KINETIC_BRIEF_INVALID', 'source attribution must index knowledge_used');
+      }
+    }
+  }
+  if (brief.planning_exception && brief.planning_exception.scope !== 'OPTIONAL_KNOWLEDGE_SOURCE_UNAVAILABLE') {
+    throw new TransitionError('KINETIC_BRIEF_INVALID', 'planning exceptions cannot bypass required provenance or rights');
+  }
+  if (!['V1', 'V2'].includes(slot)) return true;
+  const signature = brief.motion_plan?.signature_move ?? {};
+  const substantive = ['central_idea', 'visual_transformation', 'purpose', 'content_relationship']
+    .every((key) => typeof signature[key] === 'string' && signature[key].trim().length >= 12);
+  const combined = `${signature.name ?? ''} ${signature.central_idea ?? ''} ${signature.visual_transformation ?? ''} ${signature.purpose ?? ''} ${signature.content_relationship ?? ''}`.toLowerCase();
+  const onlyDecorative = /^(?:\s*(?:hover|lift|fade|nice|card)\s*)+$/.test(combined.replace(/[^a-z]+/g, ' '));
+  const originality = brief.originality_plan;
+  if (!substantive || onlyDecorative || !originality || !Array.isArray(originality.composition_differences) || originality.composition_differences.length === 0 || String(originality.signature_move_hypothesis ?? '').trim().length < 12) {
+    throw new TransitionError('KINETIC_WEAK_VARIANT_BRIEF', 'V1/V2 require a substantive, composition-linked signature move and originality plan');
+  }
+  return true;
+}
+
 export function nextState(slot) {
   if (!slot || TERMINAL_STATES.has(slot.state)) return null;
   const index = FORWARD_STATES.indexOf(slot.state);
@@ -47,6 +78,12 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   if (TERMINAL_STATES.has(record.state)) throw new TransitionError('KINETIC_TRANSITION_DENIED', `terminal state ${record.state} cannot advance`);
   const expected = nextState(record, caseRun);
   if (toState !== expected) throw new TransitionError('KINETIC_TRANSITION_DENIED', `expected adjacent state ${expected ?? 'none'}, got ${toState}`);
+  if (toState === 'BRIEF_VALIDATED' && (artifactRefs.brief_validated !== true || typeof artifactRefs.variant_brief !== 'string')) {
+    throw new TransitionError('KINETIC_BRIEF_REQUIRED', 'BRIEF_VALIDATED requires a persisted schema-valid brief');
+  }
+  if (toState === 'BUILDING' && artifactRefs.brief_hash_unchanged !== true) {
+    throw new TransitionError('KINETIC_BRIEF_CHANGED', 'BUILDING requires the persisted brief hash to remain unchanged');
+  }
   if (toState === 'VISUAL_CAPTURED' && record.technically_qualified !== true) {
     throw new TransitionError('KINETIC_TECHNICAL_QUALIFICATION_REQUIRED', 'visual capture requires explicit technical qualification');
   }
