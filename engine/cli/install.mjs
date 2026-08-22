@@ -75,7 +75,7 @@ for (const id of items) {
   // primitive?
   const reg = registry.items.find((i) => i.id === id);
   if (!reg) throw new Error(`unknown item: ${id}`);
-  const mf = JSON.parse(await readFile(join(root, reg.manifest), 'utf8'));
+  const mf = JSON.parse(await readFile(join(root, 'registry', reg.manifest), 'utf8'));
   const files = [];
   for (const f of mf.files) {
     const srcP = join(root, '..', join('engine', f.path));

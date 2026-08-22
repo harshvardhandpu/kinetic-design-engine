@@ -29,11 +29,26 @@
   resp.checks.horizontal_overflow = docEl.scrollWidth > docEl.clientWidth + 1;
   resp.checks.scroll_width = docEl.scrollWidth;
   resp.checks.client_width = docEl.clientWidth;
-  // elements escaping viewport
+  // elements escaping viewport — an element only truly escapes if no ancestor clips it.
+  // Horizontal-scroll tracks inside overflow:hidden wrappers are intentional, not defects
+  // (bug found in Phase-2 V2: 15 false positives from a clipped .track).
+  const clippedBy = (e) => {
+    let a = e.parentElement;
+    while (a && a !== document.body) {
+      const cs = getComputedStyle(a);
+      if (/(hidden|clip)/.test(cs.overflowX) || /(hidden|clip)/.test(cs.overflow)) {
+        const ar = a.getBoundingClientRect();
+        // the clipper itself sits inside the viewport -> the overflow is contained, not escaping
+        if (ar.left >= -1 && ar.right <= docEl.clientWidth + 1) return true;
+      }
+      a = a.parentElement;
+    }
+    return false;
+  };
   const esc = [];
   document.querySelectorAll('body *').forEach((e) => {
     const r = e.getBoundingClientRect();
-    if (r.width > 0 && (r.right > docEl.clientWidth + 2 || r.left < -2)) esc.push(e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).split(' ')[0] : ''));
+    if (r.width > 0 && (r.right > docEl.clientWidth + 2 || r.left < -2) && !clippedBy(e)) esc.push(e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).split(' ')[0] : ''));
   });
   resp.checks.escaping_elements = esc.slice(0, 10);
   resp.checks.escaping_count = esc.length;

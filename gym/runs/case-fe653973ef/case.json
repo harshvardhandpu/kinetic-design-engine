@@ -10,17 +10,82 @@
       "mode": "fidelity-study",
       "deployable": false,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "BUILT",
       "attempt": 1,
-      "gates": {},
+      "gates": {
+        "technical": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T02:55:54.783Z"
+        },
+        "responsive": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T02:55:54.820Z"
+        },
+        "a11y": {
+          "result": "pass",
+          "producer": "heuristic",
+          "rationale": null,
+          "at": "2026-08-22T02:55:54.860Z"
+        },
+        "performance": {
+          "result": "pass",
+          "producer": "heuristic",
+          "rationale": null,
+          "at": "2026-08-22T02:55:54.903Z"
+        },
+        "design": {
+          "result": "pending-vision-or-human",
+          "producer": "not-evaluated",
+          "rationale": "Amendment G: text-only model; aesthetic validation requires human visual review",
+          "at": "2026-08-22T02:55:54.938Z"
+        }
+      },
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.270Z",
-        "GENERATING": "2026-08-22T02:47:58.202Z"
+        "GENERATING": "2026-08-22T02:47:58.202Z",
+        "BUILT": "2026-08-22T02:55:54.749Z"
       },
       "brief": null,
       "diagnosis": null,
-      "receipt": null,
-      "artifacts": []
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "7f2aa81c29724045139824e9f29b5405e2eebb7a",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.reveal-stagger",
+          "kinetic.scroll-progress",
+          "kinetic.grid-reveal",
+          "kinetic.marquee"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.reveal-stagger": "1.0.0",
+          "kinetic.scroll-progress": "1.0.0",
+          "kinetic.grid-reveal": "1.0.0",
+          "kinetic.marquee": "1.0.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": "null",
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T02:55:54.980Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-fe653973ef/variants/v0/index.html"
+      ]
     },
     "V1": {
       "run_id": "run-case-fe653973ef-v1",
@@ -28,17 +93,85 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "TECHNICAL_PASS",
       "attempt": 1,
-      "gates": {},
+      "gates": {
+        "technical": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T03:16:42.667Z"
+        },
+        "responsive": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T03:16:42.699Z"
+        },
+        "a11y": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T03:16:42.729Z"
+        },
+        "performance": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T03:16:42.756Z"
+        },
+        "design": {
+          "result": "pending-vision-or-human",
+          "producer": "not-evaluated",
+          "rationale": "Amendment G",
+          "at": "2026-08-22T03:16:42.788Z"
+        },
+        "originality": {
+          "result": "pass-distinct",
+          "producer": "objective",
+          "rationale": "weighted_similarity=0.093 copy=0 assets=0 section_order=0",
+          "at": "2026-08-22T03:16:42.815Z"
+        }
+      },
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.270Z",
-        "GENERATING": "2026-08-22T02:47:58.232Z"
+        "GENERATING": "2026-08-22T02:47:58.232Z",
+        "BUILT": "2026-08-22T03:16:42.635Z",
+        "TECHNICAL_PASS": "2026-08-22T03:16:42.879Z"
       },
       "brief": null,
       "diagnosis": null,
-      "receipt": null,
-      "artifacts": []
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "7f2aa81c29724045139824e9f29b5405e2eebb7a",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.reveal-stagger",
+          "kinetic.scroll-progress"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.reveal-stagger": "1.0.0",
+          "kinetic.scroll-progress": "1.0.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": null,
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T03:16:42.852Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-fe653973ef/variants/v1/index.html"
+      ]
     },
     "V2": {
       "run_id": "run-case-fe653973ef-v2",
@@ -46,17 +179,85 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "TECHNICAL_PASS",
       "attempt": 1,
-      "gates": {},
+      "gates": {
+        "technical": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:52:12.329Z"
+        },
+        "responsive": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:52:12.359Z"
+        },
+        "a11y": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:52:12.391Z"
+        },
+        "performance": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:52:12.418Z"
+        },
+        "design": {
+          "result": "pending-vision-or-human",
+          "producer": "not-evaluated",
+          "rationale": "Amendment G",
+          "at": "2026-08-22T04:52:12.460Z"
+        },
+        "originality": {
+          "result": "pass-distinct",
+          "producer": "objective",
+          "rationale": "weighted_similarity=0.161 copy=0 assets=0 section_order=0",
+          "at": "2026-08-22T04:52:12.500Z"
+        }
+      },
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.270Z",
-        "GENERATING": "2026-08-22T02:47:58.267Z"
+        "GENERATING": "2026-08-22T02:47:58.267Z",
+        "BUILT": "2026-08-22T04:52:12.305Z",
+        "TECHNICAL_PASS": "2026-08-22T04:52:12.562Z"
       },
       "brief": null,
       "diagnosis": null,
-      "receipt": null,
-      "artifacts": []
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "7f2aa81c29724045139824e9f29b5405e2eebb7a",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.reveal-stagger",
+          "kinetic.scroll-progress"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.reveal-stagger": "1.0.0",
+          "kinetic.scroll-progress": "1.0.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": null,
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T04:52:12.531Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-fe653973ef/variants/v2/index.html"
+      ]
     },
     "V3": {
       "run_id": "run-case-fe653973ef-v3",
@@ -106,6 +307,111 @@
     {
       "at": "2026-08-22T02:47:58.303Z",
       "event": "V3 -> GENERATING",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T02:55:54.749Z",
+      "event": "V0 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T02:55:54.783Z",
+      "event": "V0 gate technical=pass"
+    },
+    {
+      "at": "2026-08-22T02:55:54.820Z",
+      "event": "V0 gate responsive=pass"
+    },
+    {
+      "at": "2026-08-22T02:55:54.860Z",
+      "event": "V0 gate a11y=pass"
+    },
+    {
+      "at": "2026-08-22T02:55:54.903Z",
+      "event": "V0 gate performance=pass"
+    },
+    {
+      "at": "2026-08-22T02:55:54.938Z",
+      "event": "V0 gate design=pending-vision-or-human"
+    },
+    {
+      "at": "2026-08-22T02:55:54.980Z",
+      "event": "V0 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T03:16:42.635Z",
+      "event": "V1 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T03:16:42.667Z",
+      "event": "V1 gate technical=pass"
+    },
+    {
+      "at": "2026-08-22T03:16:42.699Z",
+      "event": "V1 gate responsive=pass"
+    },
+    {
+      "at": "2026-08-22T03:16:42.729Z",
+      "event": "V1 gate a11y=pass"
+    },
+    {
+      "at": "2026-08-22T03:16:42.756Z",
+      "event": "V1 gate performance=pass"
+    },
+    {
+      "at": "2026-08-22T03:16:42.788Z",
+      "event": "V1 gate design=pending-vision-or-human"
+    },
+    {
+      "at": "2026-08-22T03:16:42.815Z",
+      "event": "V1 gate originality=pass-distinct"
+    },
+    {
+      "at": "2026-08-22T03:16:42.852Z",
+      "event": "V1 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T03:16:42.879Z",
+      "event": "V1 -> TECHNICAL_PASS",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T04:52:12.305Z",
+      "event": "V2 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T04:52:12.329Z",
+      "event": "V2 gate technical=pass"
+    },
+    {
+      "at": "2026-08-22T04:52:12.359Z",
+      "event": "V2 gate responsive=pass"
+    },
+    {
+      "at": "2026-08-22T04:52:12.391Z",
+      "event": "V2 gate a11y=pass"
+    },
+    {
+      "at": "2026-08-22T04:52:12.418Z",
+      "event": "V2 gate performance=pass"
+    },
+    {
+      "at": "2026-08-22T04:52:12.460Z",
+      "event": "V2 gate design=pending-vision-or-human"
+    },
+    {
+      "at": "2026-08-22T04:52:12.500Z",
+      "event": "V2 gate originality=pass-distinct"
+    },
+    {
+      "at": "2026-08-22T04:52:12.531Z",
+      "event": "V2 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T04:52:12.562Z",
+      "event": "V2 -> TECHNICAL_PASS",
       "attempt": 1
     }
   ]

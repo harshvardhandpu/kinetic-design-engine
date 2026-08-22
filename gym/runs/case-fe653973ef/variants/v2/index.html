@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Rites — A Procession (V2 original)</title>
+<!--
+  KINETIC GYM / V2 ORIGINAL VARIANT — case-fe653973ef / slot V2
+  Direction: "Horizontal Procession" — the reference is a vertical, centered, dark-ceremonial scroll.
+  V1 was a light editorial grid. V2 inverts the SCROLL AXIS: a tall section drives a horizontal
+  track of three oversized numeral plates. Single gold accent on near-black. Display serif for
+  numerals only; a humanist sans carries text. Motion = scroll-driven slide-x + staggered reveals.
+  Content is ORIGINAL. No reference media, no copied copy.
+-->
+<style>
+:root {
+  --bg: #0B0A08;
+  --fg: #E9E6DF;
+  --gold: #C9A227;
+  --dim: color-mix(in srgb, var(--fg) 55%, transparent);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: 'Helvetica Neue', Arial, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; }
+a { color: inherit; }
+::selection { background: var(--gold); color: var(--bg); }
+
+/* intro */
+.intro { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(1.5rem, 6vw, 6rem); max-width: 60rem; }
+.intro .kicker { font-size: 0.7rem; letter-spacing: 0.4em; color: var(--gold); margin-bottom: 1.6rem; }
+.intro h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(2.6rem, 7vw, 5.5rem); line-height: 1.05; letter-spacing: -0.01em; }
+.intro .sub { margin-top: 2rem; max-width: 30rem; color: var(--dim); }
+.intro .hint { margin-top: 4rem; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--dim); }
+
+/* horizontal procession: tall wrapper drives a translating track */
+.procession { height: 320vh; position: relative; }
+.sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; }
+.track { display: flex; gap: clamp(2rem, 6vw, 6rem); padding: 0 clamp(1.5rem, 6vw, 6rem); will-change: transform; }
+.plate { flex: 0 0 auto; width: min(78vw, 620px); }
+.plate .num { font-family: var(--serif); font-size: clamp(6rem, 18vw, 13rem); line-height: 0.9; color: var(--gold); display: block; }
+.plate h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 600; margin: 1.4rem 0 0.8rem; letter-spacing: -0.01em; }
+.plate p { color: var(--dim); max-width: 26rem; }
+.plate .rule { width: 3.5rem; height: 1px; background: var(--gold); margin-top: 1.6rem; }
+
+/* closing */
+.outro { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; padding: 0 clamp(1.5rem, 6vw, 6rem); max-width: 60rem; }
+.outro h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.1; }
+.outro p { margin-top: 1.6rem; color: var(--dim); max-width: 30rem; }
+.outro .mark { margin-top: 3rem; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--gold); }
+
+@media (prefers-reduced-motion: reduce) {
+  .procession { height: auto; }
+  .sticky { position: static; height: auto; overflow: visible; }
+  .track { flex-direction: column; transform: none !important; }
+}
+</style>
+</head>
+<body>
+<main id="main">
+  <section class="intro">
+    <p class="kicker" data-reveal-item>A PROCESSION IN THREE RITES</p>
+    <h1 data-reveal-item>What is kept,<br>carries forward.</h1>
+    <p class="sub" data-reveal-item>Three rites move through a life. They do not arrive; they proceed. Scroll, and they pass before you in order.</p>
+    <p class="hint" data-reveal-item>SCROLL TO PROCEED →</p>
+  </section>
+
+  <section class="procession" aria-label="Three rites, revealed horizontally as you scroll">
+    <div class="sticky">
+      <div class="track" data-recipe-role="track">
+        <article class="plate">
+          <span class="num" aria-hidden="true">I</span>
+          <h2 data-reveal-item>The Rite of Beginning</h2>
+          <p data-reveal-item>Every life opens into care. The first rite is the one that receives us — patient, unhurried, making room for what has not yet become itself.</p>
+          <div class="rule"></div>
+        </article>
+        <article class="plate">
+          <span class="num" aria-hidden="true">II</span>
+          <h2 data-reveal-item>The Rite of Making</h2>
+          <p data-reveal-item>Hands learn by refining. The second rite is discipline turned into beauty — the everyday shaped until it holds its own quiet ceremony.</p>
+          <div class="rule"></div>
+        </article>
+        <article class="plate">
+          <span class="num" aria-hidden="true">III</span>
+          <h2 data-reveal-item>The Rite of Returning</h2>
+          <p data-reveal-item>What was scattered is gathered. The third rite leads the self back to its first senses, so that beginning and making can start again, whole.</p>
+          <div class="rule"></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="outro">
+    <h2 data-reveal-item>The procession never ends;<br>it only turns.</h2>
+    <p data-reveal-item>Beginning, making, returning — each rite hands the next its light. This is an original KINETIC variant, V2 of case-fe653973ef.</p>
+    <p class="mark" data-reveal-item>KEPT · CARRIED · RETURNED</p>
+  </section>
+</main>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as scrollProgress from './kinetic/core/primitives/scroll-progress.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+// intro + outro staggered reveals
+for (const sec of document.querySelectorAll('.intro, .outro')) {
+  handles.push(revealStagger.mount(sec, { selector: '[data-reveal-item]', duration: tokens['duration-slow'] ?? 900, stagger: tokens['stagger-base'] ?? 90, y: '30px', threshold: 0.2, tokens }));
+}
+// plate reveals
+for (const plate of document.querySelectorAll('.plate')) {
+  handles.push(revealStagger.mount(plate, { selector: '[data-reveal-item]', duration: 800, stagger: 100, y: '24px', threshold: 0.3, tokens }));
+}
+// horizontal track: scroll-driven slide-x across the tall procession wrapper
+const track = document.querySelector('[data-recipe-role=track]');
+if (track) handles.push(scrollProgress.mount(track, { mode: 'slide-x', depth: 0.55, tokens }));
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>

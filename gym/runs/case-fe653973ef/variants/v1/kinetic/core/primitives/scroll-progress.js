@@ -43,10 +43,6 @@ export function mount(el, opts = {}) {
     if (mode === 'parallax') {
       const shift = (t - 0.5) * 2 * d * 100; // percent of element height
       el.style.transform = `translateY(${shift}%)`;
-    } else if (mode === 'slide-x') {
-      // horizontal scroll-driven translation: t=0 -> +depth*100% right, t=1 -> -depth*100% left
-      const shift = (0.5 - t) * 2 * d * 100;
-      el.style.transform = `translateX(${shift}%)`;
     } else if (mode === 'fade') {
       el.style.opacity = String(0.15 + 0.85 * t);
     } else if (mode === 'scale') {

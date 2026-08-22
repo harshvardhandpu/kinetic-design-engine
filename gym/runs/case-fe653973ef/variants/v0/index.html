@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IZANAMI — V0 Fidelity Study (INTERNAL, NOT DEPLOYABLE)</title>
+<!--
+  KINETIC GYM / V0 FIDELITY STUDY — case-fe653973ef / slot V0
+  Mode: fidelity-study. deployable: false (doc 36).
+  Purpose: prove KINETIC understood the reference's motion system.
+  - Structure/choreography reconstructed from public observation (DesignCase evidence).
+  - Ambient cloud layer: INDEPENDENT canvas-2d implementation (not their WebGL shader).
+  - Imagery: generated placeholders only. No brand assets, no copied media.
+  - Headings reproduced for internal benchmarking only; never published.
+-->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0A0801;
+  --bone: #D9D7D4;
+  --serif-display: 'Cinzel', serif;
+  --serif-text: 'Playfair Display', serif;
+  --jp: 'Shippori Mincho', serif;
+}
+* { box-sizing: border-box; margin: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--ink); color: var(--bone); font-family: var(--serif-text); line-height: 1.7; overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--bone); color: var(--ink); }
+
+/* ambient cloud canvas (independent implementation) */
+#clouds { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5; }
+
+.site { position: relative; z-index: 1; }
+
+/* header */
+.hdr { position: fixed; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 2.2rem; mix-blend-mode: difference; }
+.hdr .wordmark { font-family: var(--serif-display); letter-spacing: 0.35em; font-size: 0.95rem; }
+.hdr .lang { display: flex; gap: 1rem; font-size: 0.75rem; letter-spacing: 0.2em; }
+.hdr .menu-btn { background: none; border: 1px solid color-mix(in srgb, var(--bone) 40%, transparent); color: var(--bone); font-family: var(--serif-text); font-size: 0.75rem; letter-spacing: 0.25em; padding: 0.5rem 1.1rem; cursor: pointer; border-radius: 999px; }
+
+/* hero */
+.hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; position: relative; }
+.hero h1 { font-family: var(--serif-display); font-weight: 400; font-size: clamp(2.4rem, 7.5vw, 6.5rem); letter-spacing: 0.06em; line-height: 1.15; }
+.hero .jp-sub { font-family: var(--jp); margin-top: 1.6rem; font-size: 0.95rem; letter-spacing: 0.5em; opacity: 0.75; }
+.scroll-cue { position: absolute; bottom: 2.2rem; left: 50%; transform: translateX(-50%); font-size: 0.7rem; letter-spacing: 0.4em; opacity: 0.6; }
+
+/* sections */
+section.chapter { padding: 16vh 2.2rem; max-width: 76rem; margin: 0 auto; position: relative; }
+.eyebrow { font-size: 0.72rem; letter-spacing: 0.45em; text-transform: lowercase; opacity: 0.65; margin-bottom: 1.2rem; }
+.statement { font-family: var(--serif-display); font-size: clamp(1.8rem, 4.5vw, 3.6rem); font-weight: 400; line-height: 1.25; letter-spacing: 0.03em; max-width: 46rem; }
+.body-copy { max-width: 34rem; margin-top: 2rem; font-size: 1.02rem; opacity: 0.85; }
+.cta-line { display: inline-flex; align-items: center; gap: 0.8rem; margin-top: 2.6rem; font-size: 0.85rem; letter-spacing: 0.3em; border-bottom: 1px solid color-mix(in srgb, var(--bone) 45%, transparent); padding-bottom: 0.4rem; }
+
+/* media blocks (placeholder gradients standing in for photography) */
+.media { margin-top: 5rem; height: 62vh; border-radius: 2px; overflow: hidden; position: relative; }
+.media .ph { position: absolute; inset: -12% 0; background: radial-gradient(120% 90% at 30% 20%, #3a3428 0%, #17130a 55%, #0a0801 100%); }
+.media .ph.alt { background: radial-gradient(110% 100% at 70% 30%, #2e2b24 0%, #141109 60%, #0a0801 100%); }
+.media .caption { position: absolute; bottom: 1.2rem; left: 1.4rem; font-size: 0.68rem; letter-spacing: 0.3em; opacity: 0.55; }
+
+/* numbered chapters */
+.chapter-head { display: flex; baseline; align-items: baseline; gap: 1.4rem; }
+.chapter-num { font-family: var(--serif-display); font-size: 0.9rem; letter-spacing: 0.2em; opacity: 0.6; }
+.divider { width: 100%; height: 1px; background: color-mix(in srgb, var(--bone) 18%, transparent); margin: 4rem 0; }
+
+/* company */
+.company .big-mark { font-family: var(--serif-display); font-size: clamp(3rem, 10vw, 9rem); letter-spacing: 0.3em; opacity: 0.9; margin: 2rem 0; }
+
+/* footer */
+footer { border-top: 1px solid color-mix(in srgb, var(--bone) 15%, transparent); padding: 4rem 2.2rem 2.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2.5rem; font-size: 0.8rem; }
+footer h3 { font-family: var(--serif-display); font-weight: 400; letter-spacing: 0.3em; font-size: 0.8rem; margin-bottom: 1rem; opacity: 0.7; }
+footer ul { list-style: none; padding: 0; display: grid; gap: 0.5rem; }
+footer .clock { font-variant-numeric: tabular-nums; opacity: 0.75; }
+footer .fine { grid-column: 1 / -1; display: flex; justify-content: space-between; opacity: 0.5; font-size: 0.7rem; letter-spacing: 0.15em; }
+
+/* V0 banner (internal benchmark marker) */
+.v0-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 20; background: #7a1f1f; color: #fff; text-align: center; font: 11px/2.2 system-ui; letter-spacing: 0.08em; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<canvas id="clouds" aria-hidden="true"></canvas>
+
+<div class="site">
+  <header class="hdr">
+    <span class="wordmark">IZANAMI</span>
+    <nav class="lang" aria-label="Language"><a href="#">en</a><a href="#">ja</a></nav>
+    <button class="menu-btn" type="button">menu</button>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <h1 id="hero-h1">Remember who you are</h1>
+      <p class="jp-sub" id="jp-sub">和 — harmony remembered</p>
+      <span class="scroll-cue">scroll</span>
+    </section>
+
+    <section class="chapter" id="philosophy">
+      <p class="eyebrow" data-reveal-item>philosophy</p>
+      <h2 class="statement" data-reveal-item>Sharing the Japanese Spirit of Harmony</h2>
+      <p class="body-copy" data-reveal-item>Harmony is not something to be created. It is something to be remembered. Guided by the ancient spirit of "和" Wa, a quiet path opens back to oneself — into harmony with who you are, and harmony with the world around you.</p>
+      <a class="cta-line" href="#" data-reveal-item>View Philosophy →</a>
+      <div class="media" data-recipe-role="parallax"><div class="ph" data-recipe-role="parallax-inner"></div><span class="caption">placeholder — original media not reproduced</span></div>
+    </section>
+
+    <section class="chapter" id="projects">
+      <p class="eyebrow" data-reveal-item>projects</p>
+      <h2 class="statement" data-reveal-item>Designing the Dimensions of Life</h2>
+      <p class="body-copy" data-reveal-item>Through three practices, harmony is designed across life: how life is nurtured, how living is enriched, and how one returns to oneself.</p>
+
+      <div class="divider"></div>
+
+      <article class="chapter-block" data-reveal-item>
+        <div class="chapter-head"><span class="chapter-num">01</span><h3 class="statement" style="font-size:clamp(1.4rem,3vw,2.4rem)">School</h3></div>
+        <p class="body-copy">Nurturing the foundations of life. Supporting families where the wishes of both parent and child are gently met.</p>
+        <a class="cta-line" href="#">View School →</a>
+        <div class="media" data-recipe-role="parallax"><div class="ph alt" data-recipe-role="parallax-inner"></div><span class="caption">placeholder</span></div>
+      </article>
+
+      <article class="chapter-block" data-reveal-item>
+        <div class="chapter-head"><span class="chapter-num">02</span><h3 class="statement" style="font-size:clamp(1.4rem,3vw,2.4rem)">Craft</h3></div>
+        <p class="body-copy">Awakening the senses through Japanese aesthetics. Objects and spaces of quiet refinement, rooted in harmony.</p>
+        <a class="cta-line" href="#">View Craft →</a>
+        <div class="media" data-recipe-role="parallax"><div class="ph" data-recipe-role="parallax-inner"></div><span class="caption">placeholder</span></div>
+      </article>
+
+      <article class="chapter-block" data-reveal-item>
+        <div class="chapter-head"><span class="chapter-num">03</span><h3 class="statement" style="font-size:clamp(1.4rem,3vw,2.4rem)">Retreat</h3></div>
+        <p class="body-copy">Returning to your essence. Private ceremonies for a return to one's original senses and way of being.</p>
+        <a class="cta-line" href="#">View Retreat →</a>
+        <div class="media" data-recipe-role="parallax"><div class="ph alt" data-recipe-role="parallax-inner"></div><span class="caption">placeholder</span></div>
+      </article>
+    </section>
+
+    <section class="chapter company" id="company">
+      <p class="eyebrow" data-reveal-item>company</p>
+      <div class="big-mark" data-recipe-role="grid-section">IZANAMI</div>
+      <p class="body-copy" data-reveal-item>No matter how the world changes, what truly enriches human life remains the same. Across cultures and borders, we carry a way of being — ancient and quietly alive — where one's inner nature is free to unfold.</p>
+      <a class="cta-line" href="#" data-reveal-item>View Company →</a>
+    </section>
+  </main>
+
+  <footer>
+    <div>
+      <h3>IZANAMI</h3>
+      <ul>
+        <li><a href="#philosophy">philosophy</a></li>
+        <li><a href="#projects">projects</a></li>
+        <li><a href="#company">company</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>dubai</h3>
+      <p>office placeholder, al muteena, dubai, uae</p>
+      <p class="clock" id="clock-dubai">--:--:-- gst</p>
+    </div>
+    <div>
+      <h3>tokyo</h3>
+      <p>placeholder bldg. 6f, ginza, chuo-ku, tokyo, jpn</p>
+      <p class="clock" id="clock-tokyo">--:--:-- jst</p>
+    </div>
+    <div class="fine"><span>©2026 — V0 fidelity study</span><a href="#main">top</a></div>
+  </footer>
+</div>
+
+<div class="v0-banner">V0 FIDELITY STUDY — INTERNAL BENCHMARK — NOT DEPLOYABLE — case-fe653973ef</div>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as scrollProgress from './kinetic/core/primitives/scroll-progress.js';
+import * as gridReveal from './kinetic/core/primitives/grid-reveal.js';
+
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+
+// hero: per-char ceremonial reveal (the reference's signature opening)
+handles.push(revealStagger.mount(document.getElementById('hero-h1'), { splitChars: true, duration: tokens['duration-slow'] ?? 1400, stagger: tokens['stagger-base'] ?? 110, y: '0.5em', tokens }));
+handles.push(revealStagger.mount(document.getElementById('jp-sub'), { duration: 1600, y: '12px', tokens }));
+
+// chapter reveals
+for (const el of document.querySelectorAll('.chapter')) {
+  handles.push(revealStagger.mount(el, { selector: '[data-reveal-item]', duration: 1100, stagger: 140, y: '28px', threshold: 0.12, tokens }));
+}
+
+// parallax media (scroll-driven depth, the reference's scrollytelling layer)
+for (const inner of document.querySelectorAll('[data-recipe-role=parallax-inner]')) {
+  handles.push(scrollProgress.mount(inner, { mode: 'parallax', depth: 0.14, tokens }));
+}
+
+// grid reveal on the company mark (section-entrance moment)
+const gridEl = document.querySelector('[data-recipe-role=grid-section]');
+if (gridEl) handles.push(gridReveal.mount(gridEl, { cols: 14, rows: 7, tokens }));
+
+window.__KINETIC_HANDLES__ = handles;
+
+// dual-timezone clocks (Dubai GST = UTC+4, Tokyo JST = UTC+9) — living-UI detail
+function tick() {
+  const now = new Date();
+  const fmt = (tz) => now.toLocaleTimeString('en-GB', { timeZone: tz, hour12: false });
+  const d = document.getElementById('clock-dubai');
+  const t = document.getElementById('clock-tokyo');
+  if (d) d.textContent = fmt('Asia/Dubai') + ' gst, dubai uae';
+  if (t) t.textContent = fmt('Asia/Tokyo') + ' jst, tokyo jpn';
+}
+tick(); setInterval(tick, 1000);
+
+// ambient cloud layer — INDEPENDENT canvas-2d implementation (drifting soft fog).
+// The reference uses a WebGL cloud system; this is our own cheap approximation,
+// honoring the same design role: peripheral, low-contrast, slow.
+const canvas = document.getElementById('clouds');
+const ctx = canvas.getContext('2d');
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let W, H, blobs = [];
+function resize() {
+  W = canvas.width = innerWidth; H = canvas.height = innerHeight;
+  blobs = Array.from({ length: 7 }, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    r: 180 + Math.random() * 320,
+    vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.05,
+    a: 0.028 + Math.random() * 0.035,
+  }));
+}
+resize(); addEventListener('resize', resize);
+function drawClouds() {
+  ctx.clearRect(0, 0, W, H);
+  for (const b of blobs) {
+    const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+    g.addColorStop(0, `rgba(217,215,212,${b.a})`);
+    g.addColorStop(1, 'rgba(217,215,212,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(b.x - b.r, b.y - b.r, b.r * 2, b.r * 2);
+    b.x += b.vx; b.y += b.vy;
+    if (b.x < -b.r) b.x = W + b.r; if (b.x > W + b.r) b.x = -b.r;
+    if (b.y < -b.r) b.y = H + b.r; if (b.y > H + b.r) b.y = -b.r;
+  }
+  if (!REDUCED) requestAnimationFrame(drawClouds);
+}
+if (REDUCED) { drawCloudsOnce(); } else { requestAnimationFrame(drawClouds); }
+function drawCloudsOnce() { ctx.clearRect(0,0,W,H); for (const b of blobs) { const g = ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r); g.addColorStop(0,`rgba(217,215,212,${b.a})`); g.addColorStop(1,'rgba(217,215,212,0)'); ctx.fillStyle=g; ctx.fillRect(b.x-b.r,b.y-b.r,b.r*2,b.r*2);} }
+</script>
+</body>
+</html>
