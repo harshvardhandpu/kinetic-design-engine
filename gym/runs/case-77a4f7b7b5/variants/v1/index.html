@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATELIER NINE — The Studio Journal (V1 original)</title>
+<!--
+  KINETIC GYM / V1 ORIGINAL VARIANT — case-77a4f7b7b5 / slot V1
+  The reference is a dark, conversion-narrative agency site (bone-on-black, SplitText reveals).
+  V1 inverts: a light "studio journal" — paper ground, ink text, one moss accent, editorial
+  columns, marquee masthead, scramble-decode section titles. Fictional studio, original copy.
+-->
+<style>
+:root {
+  --paper: #F6F4EF;
+  --ink: #16150F;
+  --moss: #5A6B3B;
+  --dim: color-mix(in srgb, var(--ink) 55%, transparent);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); line-height: 1.6; overflow-x: hidden; }
+a { color: inherit; }
+::selection { background: var(--moss); color: var(--paper); }
+
+.wrap { max-width: 68rem; margin: 0 auto; padding: 0 clamp(1.4rem, 5vw, 4rem); }
+
+/* masthead marquee */
+.masthead { border-bottom: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); padding: 0.7rem 0; overflow: hidden; }
+.masthead .kinetic-marquee-track { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--dim); }
+
+header.top { display: flex; justify-content: space-between; align-items: baseline; padding: 1.6rem 0; }
+header.top .mark { font-family: var(--serif); font-size: 1.3rem; }
+header.top .date { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.15em; color: var(--dim); }
+
+/* lead */
+.lead { padding: 8vh 0 6vh; border-bottom: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.lead .kicker { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.3em; color: var(--moss); margin-bottom: 1.4rem; }
+.lead h1 { font-family: var(--serif); font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1.05; font-weight: 400; max-width: 22ch; }
+.lead .dek { margin-top: 1.6rem; color: var(--dim); max-width: 34rem; }
+
+/* two-column journal */
+.columns { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; padding: 6vh 0; }
+@media (max-width: 720px) { .columns { grid-template-columns: 1fr; } }
+.col h2 { font-family: var(--serif); font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+.col p { color: var(--dim); font-size: 0.95rem; margin-bottom: 1rem; }
+.col .tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.2em; color: var(--moss); }
+
+/* entries list */
+.entries { border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.entry { display: grid; grid-template-columns: 5rem 1fr 9rem; gap: 1.5rem; padding: 1.8rem 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); align-items: baseline; }
+@media (max-width: 640px) { .entry { grid-template-columns: 1fr; gap: 0.4rem; } }
+.entry .no { font-family: var(--mono); font-size: 0.7rem; color: var(--dim); }
+.entry h3 { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; }
+.entry .kind { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.15em; color: var(--dim); text-align: right; }
+@media (max-width: 640px) { .entry .kind { text-align: left; } }
+
+footer.bottom { padding: 4vh 0 5vh; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.15em; color: var(--dim); }
+</style>
+</head>
+<body>
+<div class="masthead" data-recipe-role="marquee">Atelier Nine · a studio journal · notes on craft · Atelier Nine · a studio journal · notes on craft ·</div>
+
+<div class="wrap">
+  <header class="top">
+    <span class="mark">Atelier Nine</span>
+    <span class="date">VOL. 01 — MMXXVI</span>
+  </header>
+
+  <main id="main">
+    <section class="lead">
+      <p class="kicker" data-reveal-item>FROM THE WORKBENCH</p>
+      <h1 data-recipe-role="scramble">We write down what we make, so we know why we made it.</h1>
+      <p class="dek" data-reveal-item>This is not a portfolio. It is a running record of decisions — what we chose, what we discarded, and what the work taught us on the way.</p>
+    </section>
+
+    <section class="columns">
+      <div class="col" data-reveal-item>
+        <p class="tag">PRACTICE / 01</p>
+        <h2>Slow starts</h2>
+        <p>Every project begins with a week of not designing. We read, we ask, we sit with the problem until it stops being a brief and starts being a question.</p>
+      </div>
+      <div class="col" data-reveal-item>
+        <p class="tag">PRACTICE / 02</p>
+        <h2>Loud drafts</h2>
+        <p>Our first drafts are deliberately too much. We overshoot, then remove — because you cannot edit a blank page, and restraint is a second pass, not a first instinct.</p>
+      </div>
+    </section>
+
+    <section class="entries" aria-label="Journal entries">
+      <div class="entry" data-reveal-item><span class="no">N°01</span><h3>On choosing the boring option</h3><span class="kind">ESSAY</span></div>
+      <div class="entry" data-reveal-item><span class="no">N°02</span><h3>What a margin actually costs</h3><span class="kind">NOTE</span></div>
+      <div class="entry" data-reveal-item><span class="no">N°03</span><h3>The client who said less</h3><span class="kind">STORY</span></div>
+    </section>
+  </main>
+
+  <footer class="bottom">
+    <span>ATELIER NINE — V1 ORIGINAL VARIANT</span>
+    <span>case-77a4f7b7b5 · KINETIC GYM</span>
+  </footer>
+</div>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as marquee from './kinetic/core/primitives/marquee.js';
+import * as scrambleText from './kinetic/core/primitives/scramble-text.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+const mq = document.querySelector('[data-recipe-role=marquee]');
+if (mq) handles.push(marquee.mount(mq, { speed: 40, tokens }));
+const st = document.querySelector('[data-recipe-role=scramble]');
+if (st) handles.push(scrambleText.mount(st, { duration: 1300, tokens }));
+for (const sec of document.querySelectorAll('.lead, .columns, .entries')) {
+  handles.push(revealStagger.mount(sec, { selector: '[data-reveal-item]', duration: 850, stagger: 100, y: '22px', threshold: 0.15, tokens }));
+}
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>

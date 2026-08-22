@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MONOLOG — V0 Fidelity Study (INTERNAL, NOT DEPLOYABLE)</title>
+<!--
+  KINETIC GYM / V0 FIDELITY STUDY — case-77a4f7b7b5 / slot V0
+  Mode: fidelity-study. deployable: false (doc 36).
+  Reconstructs the reference's conversion-narrative structure from public observation:
+  hero statement -> problem -> gap -> works w/ outcome metrics -> services -> process -> FAQ -> CTA.
+  Bone-on-black editorial, 3-face type system (display/body/mono), SplitText-style statement reveals.
+  All copy is placeholder; client names, metrics, testimonials, media NOT reproduced.
+-->
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root {
+  --bone: #E8E8E3;
+  --ink: #080807;
+  --warm: #181715;
+  --gray: #938F8A;
+  --display: Georgia, 'Times New Roman', serif;
+  --body: 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+body { background: var(--ink); color: var(--bone); font-family: var(--body); line-height: 1.6; overflow-x: hidden; }
+a { color: inherit; }
+::selection { background: var(--bone); color: var(--ink); }
+
+.wrap { max-width: 72rem; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 4rem); }
+
+/* nav */
+nav.top { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem 0; }
+nav.top .mark { font-family: var(--display); font-size: 1.1rem; letter-spacing: 0.02em; }
+nav.top .links { display: flex; gap: 1.6rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.15em; }
+nav.top .links a { text-decoration: none; opacity: 0.8; }
+nav.top .links a:hover { opacity: 1; }
+
+/* hero */
+.hero { padding: 14vh 0 12vh; }
+.hero h1 { font-family: var(--display); font-size: clamp(2.6rem, 7vw, 5.6rem); line-height: 1.02; letter-spacing: -0.01em; font-weight: 400; max-width: 20ch; }
+.hero .sub { margin-top: 2rem; color: var(--gray); max-width: 34rem; }
+.hero .cta { display: inline-block; margin-top: 2.6rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.2em; border: 1px solid color-mix(in srgb, var(--bone) 40%, transparent); border-radius: 999px; padding: 0.8rem 1.6rem; text-decoration: none; }
+
+/* problem / gap */
+section.block { padding: 10vh 0; border-top: 1px solid color-mix(in srgb, var(--bone) 12%, transparent); }
+section.block.warm { background: var(--warm); }
+.block h2 { font-family: var(--display); font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.05; font-weight: 400; max-width: 22ch; }
+.block .body { margin-top: 1.6rem; color: var(--gray); max-width: 34rem; }
+
+/* works cards w/ outcome metrics */
+.works { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.6rem; margin-top: 3rem; }
+.work { border: 1px solid color-mix(in srgb, var(--bone) 14%, transparent); border-radius: 10px; padding: 1.6rem; display: flex; flex-direction: column; gap: 0.8rem; }
+.work .idx { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.2em; color: var(--gray); }
+.work h3 { font-family: var(--display); font-size: 1.5rem; font-weight: 400; }
+.work .metric { font-family: var(--display); font-size: 2.4rem; color: var(--bone); margin-top: auto; }
+.work .metric-label { font-size: 0.8rem; color: var(--gray); }
+
+/* process */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 3rem; }
+.step .no { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--gray); }
+.step h3 { font-family: var(--display); font-size: 1.4rem; font-weight: 400; margin: 0.6rem 0; }
+.step p { color: var(--gray); font-size: 0.92rem; }
+
+/* faq */
+.faq { margin-top: 2.5rem; display: grid; gap: 0; }
+.faq details { border-bottom: 1px solid color-mix(in srgb, var(--bone) 12%, transparent); padding: 1.2rem 0; }
+.faq summary { font-family: var(--display); font-size: 1.15rem; cursor: pointer; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq details p { margin-top: 0.8rem; color: var(--gray); font-size: 0.92rem; max-width: 40rem; }
+
+/* cta */
+.cta-final { text-align: center; padding: 14vh 0; }
+.cta-final h2 { font-family: var(--display); font-size: clamp(2.2rem, 6vw, 4.6rem); font-weight: 400; line-height: 1.05; }
+.cta-final .cta { display: inline-block; margin-top: 2.4rem; font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.2em; border: 1px solid color-mix(in srgb, var(--bone) 40%, transparent); border-radius: 999px; padding: 0.9rem 1.8rem; text-decoration: none; }
+
+footer { padding: 4vh 0 5vh; border-top: 1px solid color-mix(in srgb, var(--bone) 12%, transparent); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.15em; color: var(--gray); }
+
+.v0-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 20; background: #7a1f1f; color: #fff; text-align: center; font: 11px/2.2 system-ui; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top">
+    <span class="mark">Monolog</span>
+    <div class="links">
+      <a href="#works">Work →</a>
+      <a href="#process">Process →</a>
+      <a href="#faq">FAQ →</a>
+      <a href="#cta">Contact →</a>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero">
+      <h1 id="hero-h1">Great founders deserve a presence as powerful as what they're building.</h1>
+      <p class="sub" data-reveal-item>Placeholder statement — the reference's hero leads with the founder's gap between what they've built and what their site shows. (Original copy not reproduced.)</p>
+      <a class="cta" href="#cta" data-reveal-item>TELL US YOUR STORY</a>
+    </section>
+
+    <section class="block warm">
+      <h2 data-reveal-item>We close that gap.</h2>
+      <p class="body" data-reveal-item>Placeholder — the reference frames the website as the place customers decide if you're worth their time. (Original copy not reproduced.)</p>
+    </section>
+
+    <section class="block" id="works">
+      <h2 data-reveal-item>Success stories.</h2>
+      <div class="works">
+        <article class="work" data-reveal-item><span class="idx">SS /01</span><h3>Placeholder Client A</h3><p class="metric">+00%</p><p class="metric-label">Placeholder outcome metric</p></article>
+        <article class="work" data-reveal-item><span class="idx">SS /02</span><h3>Placeholder Client B</h3><p class="metric">+00%</p><p class="metric-label">Placeholder outcome metric</p></article>
+        <article class="work" data-reveal-item><span class="idx">SS /03</span><h3>Placeholder Client C</h3><p class="metric">$00K+</p><p class="metric-label">Placeholder outcome metric</p></article>
+      </div>
+    </section>
+
+    <section class="block warm" id="process">
+      <h2 data-reveal-item>Project process.</h2>
+      <div class="steps">
+        <div class="step" data-reveal-item><span class="no">STEP 01</span><h3>Uncover the story</h3><p>Placeholder — positioning and strategy.</p></div>
+        <div class="step" data-reveal-item><span class="no">STEP 02</span><h3>Shape the presence</h3><p>Placeholder — design and direction.</p></div>
+        <div class="step" data-reveal-item><span class="no">STEP 03</span><h3>Send it into the world</h3><p>Placeholder — launch and long-term asset.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="faq">
+      <h2 data-reveal-item>What to consider before partnering.</h2>
+      <div class="faq">
+        <details data-reveal-item><summary>Who will actually work on the project?</summary><p>Placeholder answer.</p></details>
+        <details data-reveal-item><summary>How long do projects take?</summary><p>Placeholder answer.</p></details>
+        <details data-reveal-item><summary>What is the investment?</summary><p>Placeholder answer.</p></details>
+      </div>
+    </section>
+
+    <section class="cta-final" id="cta">
+      <h2 data-reveal-item>Ready to build an experience that moves people?</h2>
+      <a class="cta" href="#" data-reveal-item>TELL US YOUR STORY</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>MONOLOG — V0 FIDELITY STUDY</span>
+    <span>INTERNAL BENCHMARK · NOT DEPLOYABLE</span>
+  </footer>
+</div>
+
+<div class="v0-banner">V0 FIDELITY STUDY — INTERNAL BENCHMARK — NOT DEPLOYABLE — case-77a4f7b7b5</div>
+
+<script type="module">
+import * as revealStagger from './kinetic/core/primitives/reveal-stagger.js';
+import * as scrollProgress from './kinetic/core/primitives/scroll-progress.js';
+import * as hoverLift from './kinetic/core/primitives/hover-lift.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+// hero: SplitText-style statement reveal (the reference's signature)
+handles.push(revealStagger.mount(document.getElementById('hero-h1'), { splitChars: true, duration: tokens['duration-slow'] ?? 1000, stagger: 18, y: '0.4em', tokens }));
+// block reveals
+for (const sec of document.querySelectorAll('.block, .cta-final, .hero')) {
+  handles.push(revealStagger.mount(sec, { selector: '[data-reveal-item]', duration: 900, stagger: 110, y: '26px', threshold: 0.15, tokens }));
+}
+// work cards: hover-lift (the reference's card interaction)
+for (const card of document.querySelectorAll('.work')) {
+  handles.push(hoverLift.mount(card, { lift: 6, tokens }));
+}
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>

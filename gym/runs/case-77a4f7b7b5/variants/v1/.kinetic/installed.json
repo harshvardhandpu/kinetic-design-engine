@@ -1,0 +1,51 @@
+{
+  "schema": "kinetic/installed-receipt@0.1",
+  "kinetic_version": "0.2.0-phase2",
+  "installed_at": "2026-08-22T05:33:36.418Z",
+  "target": "gym/runs/case-77a4f7b7b5/variants/v1",
+  "items": [
+    {
+      "kind": "primitive",
+      "id": "kinetic.reveal-stagger",
+      "version": "1.0.0",
+      "files": [
+        {
+          "path": "kinetic/core/primitives/reveal-stagger.js",
+          "sha256": "38fafaefc1f3c3ed9c776a03fa8d516630c686939369e921d90d2974f78a6c35",
+          "source_sha256": "a2b4f8dd358cd3544d3347a5739e7dc18f25e6ceffc71b3b3ba93a231ff3975c",
+          "verified": false
+        }
+      ]
+    },
+    {
+      "kind": "primitive",
+      "id": "kinetic.marquee",
+      "version": "1.0.0",
+      "files": [
+        {
+          "path": "kinetic/core/primitives/marquee.js",
+          "sha256": "33ce9d1875959423f29237d8c938348d35df7a0f7ade8279ed6619959a18cde6",
+          "source_sha256": "33ce9d1875959423f29237d8c938348d35df7a0f7ade8279ed6619959a18cde6",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "kind": "primitive",
+      "id": "kinetic.scramble-text",
+      "version": "1.0.0",
+      "files": [
+        {
+          "path": "kinetic/core/primitives/scramble-text.js",
+          "sha256": "4d8e0d1d35dcfc667c2a2ba97578e7fb59abad3602aa70b17dda4f023398494a",
+          "source_sha256": "4d8e0d1d35dcfc667c2a2ba97578e7fb59abad3602aa70b17dda4f023398494a",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "tokens": {
+    "duration-slow": "900",
+    "stagger-base": "90"
+  }
+}
