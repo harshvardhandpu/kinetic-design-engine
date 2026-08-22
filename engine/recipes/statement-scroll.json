@@ -1,0 +1,17 @@
+{
+  "schema": "kinetic/recipe-manifest@0.1",
+  "id": "kinetic.recipe.statement-scroll",
+  "version": "1.0.0",
+  "name": "statement-scroll",
+  "description": "Scroll narrative: parallax media, marquee divider, grid-reveal section entrance. Evidence: IZANAMI scrollytelling (Phase 2 corpus) + swisspixelreveal grid study (Phase 1).",
+  "k_level": "K3",
+  "surfaces": ["landing", "editorial", "campaign"],
+  "primitives": [
+    { "id": "kinetic.scroll-progress", "target": "[data-recipe-role=parallax]", "opts": { "mode": "parallax", "depth": 0.15 } },
+    { "id": "kinetic.marquee", "target": "[data-recipe-role=marquee]", "opts": { "speed": 60 } },
+    { "id": "kinetic.grid-reveal", "target": "[data-recipe-role=grid-section]", "opts": { "cols": 14, "rows": 8 } }
+  ],
+  "tokens": { "parallax-depth": 0.15, "marquee-speed": 60, "duration-med": 500 },
+  "a11y": { "reduced_motion": "parallax/marquee/grid all static; content readable without motion" },
+  "evidence": "SOURCE-DERIVED: IZANAMI scrolling/sticky/parallax elements; swisspixelreveal grid mechanics (Phase 1 probes)"
+}

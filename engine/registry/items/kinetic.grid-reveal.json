@@ -1,0 +1,39 @@
+{
+  "schema": "kinetic/primitive-manifest@0.1",
+  "id": "kinetic.grid-reveal",
+  "version": "1.0.0",
+  "name": "grid-reveal",
+  "family": "reveal",
+  "k_level": "K3",
+  "p_class": "P2",
+  "description": "grid-reveal v1.0.0",
+  "files": [
+    {
+      "path": "core/primitives/grid-reveal.js",
+      "sha256": "e5ccdd2e650d4b566888163b2d10e4d6aa194e59e65364994fa8c7bc48d254de"
+    }
+  ],
+  "exports": [
+    "meta",
+    "mount"
+  ],
+  "handle_contract": [
+    "play",
+    "pause",
+    "seek",
+    "progress",
+    "state",
+    "destroy"
+  ],
+  "a11y": {
+    "reduced_motion": "final-state-immediate",
+    "keyboard": "not-applicable",
+    "aria": "decorative-marked-aria-hidden"
+  },
+  "tokens_consumed": [
+    "duration-med"
+  ],
+  "evidence": "swisspixelreveal (Phase 1 DIRECTLY-INSPECTED): 25x14 grid, scale(0->1),",
+  "framework": "vanilla-esm",
+  "dependencies": []
+}

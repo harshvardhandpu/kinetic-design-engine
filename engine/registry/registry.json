@@ -1,0 +1,72 @@
+{
+  "schema": "kinetic/registry@0.1",
+  "name": "kinetic",
+  "version": "0.2.0-phase2",
+  "generated": "2026-08-22T02:13:58.803Z",
+  "items": [
+    {
+      "id": "kinetic.cursor-glow",
+      "version": "1.0.0",
+      "family": "ambient",
+      "k_level": "K2",
+      "p_class": "P2",
+      "manifest": "items/kinetic.cursor-glow.json"
+    },
+    {
+      "id": "kinetic.grid-reveal",
+      "version": "1.0.0",
+      "family": "reveal",
+      "k_level": "K3",
+      "p_class": "P2",
+      "manifest": "items/kinetic.grid-reveal.json"
+    },
+    {
+      "id": "kinetic.hover-lift",
+      "version": "1.0.0",
+      "family": "hover",
+      "k_level": "K1",
+      "p_class": "P0",
+      "manifest": "items/kinetic.hover-lift.json"
+    },
+    {
+      "id": "kinetic.marquee",
+      "version": "1.0.0",
+      "family": "ambient",
+      "k_level": "K1",
+      "p_class": "P0",
+      "manifest": "items/kinetic.marquee.json"
+    },
+    {
+      "id": "kinetic.page-transition",
+      "version": "1.0.0",
+      "family": "transition",
+      "k_level": "K3",
+      "p_class": "P1",
+      "manifest": "items/kinetic.page-transition.json"
+    },
+    {
+      "id": "kinetic.reveal-stagger",
+      "version": "1.0.0",
+      "family": "reveal",
+      "k_level": "K2",
+      "p_class": "P1",
+      "manifest": "items/kinetic.reveal-stagger.json"
+    },
+    {
+      "id": "kinetic.scramble-text",
+      "version": "1.0.0",
+      "family": "text",
+      "k_level": "K2",
+      "p_class": "P2",
+      "manifest": "items/kinetic.scramble-text.json"
+    },
+    {
+      "id": "kinetic.scroll-progress",
+      "version": "1.0.0",
+      "family": "scroll",
+      "k_level": "K3",
+      "p_class": "P1",
+      "manifest": "items/kinetic.scroll-progress.json"
+    }
+  ]
+}

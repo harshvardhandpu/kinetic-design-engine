@@ -1,0 +1,39 @@
+{
+  "schema": "kinetic/primitive-manifest@0.1",
+  "id": "kinetic.scramble-text",
+  "version": "1.0.0",
+  "name": "scramble-text",
+  "family": "text",
+  "k_level": "K2",
+  "p_class": "P2",
+  "description": "scramble-text v1.0.0",
+  "files": [
+    {
+      "path": "core/primitives/scramble-text.js",
+      "sha256": "4d8e0d1d35dcfc667c2a2ba97578e7fb59abad3602aa70b17dda4f023398494a"
+    }
+  ],
+  "exports": [
+    "meta",
+    "mount"
+  ],
+  "handle_contract": [
+    "play",
+    "pause",
+    "seek",
+    "progress",
+    "state",
+    "destroy"
+  ],
+  "a11y": {
+    "reduced_motion": "final-state-immediate",
+    "keyboard": "not-applicable",
+    "aria": "decorative-marked-aria-hidden"
+  },
+  "tokens_consumed": [
+    "duration-med"
+  ],
+  "evidence": "Phase-1 fullstack-studio study (ScrambleTextPlugin observed in bundle).",
+  "framework": "vanilla-esm",
+  "dependencies": []
+}

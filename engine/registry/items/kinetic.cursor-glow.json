@@ -1,0 +1,37 @@
+{
+  "schema": "kinetic/primitive-manifest@0.1",
+  "id": "kinetic.cursor-glow",
+  "version": "1.0.0",
+  "name": "cursor-glow",
+  "family": "ambient",
+  "k_level": "K2",
+  "p_class": "P2",
+  "description": "cursor-glow v1.0.0",
+  "files": [
+    {
+      "path": "core/primitives/cursor-glow.js",
+      "sha256": "14368e17874e2e6fd76d0edd1455bc76b87ac074ebc12a9c7946cfc011a0dbc1"
+    }
+  ],
+  "exports": [
+    "meta",
+    "mount"
+  ],
+  "handle_contract": [
+    "play",
+    "pause",
+    "seek",
+    "progress",
+    "state",
+    "destroy"
+  ],
+  "a11y": {
+    "reduced_motion": "final-state-immediate",
+    "keyboard": "not-applicable",
+    "aria": "decorative-marked-aria-hidden"
+  },
+  "tokens_consumed": [],
+  "evidence": "ambient-cursor patterns in award corpus (experimental category).",
+  "framework": "vanilla-esm",
+  "dependencies": []
+}

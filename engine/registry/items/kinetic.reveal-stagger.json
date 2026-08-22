@@ -1,0 +1,40 @@
+{
+  "schema": "kinetic/primitive-manifest@0.1",
+  "id": "kinetic.reveal-stagger",
+  "version": "1.0.0",
+  "name": "reveal-stagger",
+  "family": "reveal",
+  "k_level": "K2",
+  "p_class": "P1",
+  "description": "reveal-stagger v1.0.0",
+  "files": [
+    {
+      "path": "core/primitives/reveal-stagger.js",
+      "sha256": "a2b4f8dd358cd3544d3347a5739e7dc18f25e6ceffc71b3b3ba93a231ff3975c"
+    }
+  ],
+  "exports": [
+    "meta",
+    "mount"
+  ],
+  "handle_contract": [
+    "play",
+    "pause",
+    "seek",
+    "progress",
+    "state",
+    "destroy"
+  ],
+  "a11y": {
+    "reduced_motion": "final-state-immediate",
+    "keyboard": "not-applicable",
+    "aria": "decorative-marked-aria-hidden"
+  },
+  "tokens_consumed": [
+    "duration-slow",
+    "stagger-base"
+  ],
+  "evidence": "thoughtful-focus hero (Phase 1 DIRECTLY-INSPECTED):",
+  "framework": "vanilla-esm",
+  "dependencies": []
+}

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KINETIC Playground — Monitor</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="pg-nav">
+  <span class="pg-logo">KINETIC/PG</span>
+  <nav aria-label="Main">
+    <a href="index.html">Landing</a>
+    <a href="monitor.html" aria-current="page">Monitor</a>
+  </nav>
+  <button id="theme-toggle" type="button" aria-pressed="false">Theme</button>
+</header>
+
+<main id="main">
+  <section class="monitor">
+    <h1>Monitor surface</h1>
+    <p class="monitor-note">Functional baseline: these controls must keep working after any visual change (regression contract).</p>
+
+    <div class="metric-grid" role="list" aria-label="Live metrics">
+      <div class="metric" role="listitem">
+        <h2>Counter</h2>
+        <output id="counter-out" aria-live="polite">0</output>
+        <button id="counter-inc" type="button">Increment</button>
+      </div>
+      <div class="metric" role="listitem">
+        <h2>Input echo</h2>
+        <label for="echo-in">Type something</label>
+        <input id="echo-in" type="text" autocomplete="off">
+        <output id="echo-out" aria-live="polite"></output>
+      </div>
+      <div class="metric" role="listitem">
+        <h2>Toggle state</h2>
+        <label class="switch"><input id="flag-in" type="checkbox"> <span>flag</span></label>
+        <output id="flag-out" aria-live="polite">off</output>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="pg-footer"><p>KINETIC playground — monitor surface.</p></footer>
+<script type="module" src="main.js"></script>
+</body>
+</html>

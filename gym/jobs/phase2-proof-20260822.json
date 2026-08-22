@@ -1,0 +1,44 @@
+{
+  "schema": "kinetic/gym/curriculum-job@0.1",
+  "job_id": "phase2-proof-20260822",
+  "type": "ReferenceStudy",
+  "status": "running",
+  "schedule_ref": null,
+  "input": {},
+  "checkpoint": null,
+  "work_items": [
+    {
+      "id": "case-izanami",
+      "state": "pending",
+      "attempts": 0,
+      "last_error": null,
+      "error_class": null,
+      "receipt_ref": null
+    },
+    {
+      "id": "case-neuemontreal",
+      "state": "pending",
+      "attempts": 0,
+      "last_error": null,
+      "error_class": null,
+      "receipt_ref": null
+    },
+    {
+      "id": "case-monolog",
+      "state": "pending",
+      "attempts": 0,
+      "last_error": null,
+      "error_class": null,
+      "receipt_ref": null
+    }
+  ],
+  "lock": null,
+  "budget": {
+    "token_class": null,
+    "max_candidates": 15,
+    "wall_clock_seconds": null
+  },
+  "provider_notes": [],
+  "started_at": "2026-08-22T02:14:20.455Z",
+  "finished_at": null
+}

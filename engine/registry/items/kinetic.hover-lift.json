@@ -1,0 +1,39 @@
+{
+  "schema": "kinetic/primitive-manifest@0.1",
+  "id": "kinetic.hover-lift",
+  "version": "1.0.0",
+  "name": "hover-lift",
+  "family": "hover",
+  "k_level": "K1",
+  "p_class": "P0",
+  "description": "hover-lift v1.0.0",
+  "files": [
+    {
+      "path": "core/primitives/hover-lift.js",
+      "sha256": "14d3ed763891447a8c31b6f31be861789dedfafebd027d174155a3f704873c9b"
+    }
+  ],
+  "exports": [
+    "meta",
+    "mount"
+  ],
+  "handle_contract": [
+    "play",
+    "pause",
+    "seek",
+    "progress",
+    "state",
+    "destroy"
+  ],
+  "a11y": {
+    "reduced_motion": "final-state-immediate",
+    "keyboard": "focus-triggers-state",
+    "aria": "decorative-marked-aria-hidden"
+  },
+  "tokens_consumed": [
+    "duration-fast"
+  ],
+  "evidence": "elated-convention bento deck (Phase 1 DIRECTLY-INSPECTED):",
+  "framework": "vanilla-esm",
+  "dependencies": []
+}

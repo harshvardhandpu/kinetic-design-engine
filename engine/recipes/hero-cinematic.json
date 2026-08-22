@@ -1,0 +1,17 @@
+{
+  "schema": "kinetic/recipe-manifest@0.1",
+  "id": "kinetic.recipe.hero-cinematic",
+  "version": "1.0.0",
+  "name": "hero-cinematic",
+  "description": "Cinematic hero: char-stagger headline reveal, scrambled eyebrow, ambient cursor glow. Evidence: thoughtful-focus hero study (Phase 1) + MONOLOG statement hero (Phase 2 corpus).",
+  "k_level": "K3",
+  "surfaces": ["landing", "portfolio", "campaign"],
+  "primitives": [
+    { "id": "kinetic.reveal-stagger", "target": "[data-recipe-role=headline]", "opts": { "splitChars": true } },
+    { "id": "kinetic.scramble-text", "target": "[data-recipe-role=eyebrow]", "opts": { "trigger": "immediate" } },
+    { "id": "kinetic.cursor-glow", "target": "[data-recipe-role=hero-root]", "opts": {} }
+  ],
+  "tokens": { "duration-slow": 1200, "stagger-base": 120, "duration-med": 900 },
+  "a11y": { "reduced_motion": "all primitives degrade to final state", "aria": "split headline keeps aria-label" },
+  "evidence": "SOURCE-DERIVED: thoughtful-focus (1.2s/120ms/0.16,1,0.3,1 measured), MONOLOG statement-driven hero element"
+}

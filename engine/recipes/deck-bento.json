@@ -1,0 +1,16 @@
+{
+  "schema": "kinetic/recipe-manifest@0.1",
+  "id": "kinetic.recipe.deck-bento",
+  "version": "1.0.0",
+  "name": "deck-bento",
+  "description": "Bento capability deck: staggered card reveal on scroll + hover lift. Evidence: elated-convention bento deck (Phase 1 DIRECTLY-INSPECTED: role=list, tabindex=0, transform-only 0.45s).",
+  "k_level": "K2",
+  "surfaces": ["landing", "product", "portfolio"],
+  "primitives": [
+    { "id": "kinetic.reveal-stagger", "target": "[data-recipe-role=deck]", "opts": { "selector": "[data-reveal-item]", "duration": 700, "stagger": 90, "y": "24px" } },
+    { "id": "kinetic.hover-lift", "target": "[data-recipe-role=deck] [data-reveal-item]", "opts": { "each": true, "lift": 6, "duration": 450 } }
+  ],
+  "tokens": { "duration-fast": 450 },
+  "a11y": { "reduced_motion": "cards visible immediately; hover state reachable via focus-visible", "keyboard": "cards tabindex=0" },
+  "evidence": "SOURCE-DERIVED: elated-convention (semantic list, transform-only transitions measured)"
+}

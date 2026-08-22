@@ -1,0 +1,101 @@
+{
+  "schema": "kinetic/installed-receipt@0.1",
+  "kinetic_version": "0.2.0-phase2",
+  "installed_at": "2026-08-22T02:16:09.016Z",
+  "target": "playground",
+  "items": [
+    {
+      "kind": "recipe",
+      "id": "kinetic.recipe.hero-cinematic",
+      "version": "1.0.0",
+      "files": [
+        {
+          "path": "kinetic/core/primitives/reveal-stagger.js",
+          "sha256": "a2b4f8dd358cd3544d3347a5739e7dc18f25e6ceffc71b3b3ba93a231ff3975c",
+          "source_sha256": "a2b4f8dd358cd3544d3347a5739e7dc18f25e6ceffc71b3b3ba93a231ff3975c",
+          "verified": true
+        },
+        {
+          "path": "kinetic/core/primitives/scramble-text.js",
+          "sha256": "4d8e0d1d35dcfc667c2a2ba97578e7fb59abad3602aa70b17dda4f023398494a",
+          "source_sha256": "4d8e0d1d35dcfc667c2a2ba97578e7fb59abad3602aa70b17dda4f023398494a",
+          "verified": true
+        },
+        {
+          "path": "kinetic/core/primitives/cursor-glow.js",
+          "sha256": "14368e17874e2e6fd76d0edd1455bc76b87ac074ebc12a9c7946cfc011a0dbc1",
+          "source_sha256": "14368e17874e2e6fd76d0edd1455bc76b87ac074ebc12a9c7946cfc011a0dbc1",
+          "verified": true
+        }
+      ],
+      "recipe_file": "kinetic/recipes/hero-cinematic.json",
+      "targets": [
+        {
+          "primitive": "kinetic.reveal-stagger",
+          "target": "[data-recipe-role=headline]",
+          "opts": {
+            "splitChars": true
+          }
+        },
+        {
+          "primitive": "kinetic.scramble-text",
+          "target": "[data-recipe-role=eyebrow]",
+          "opts": {
+            "trigger": "immediate"
+          }
+        },
+        {
+          "primitive": "kinetic.cursor-glow",
+          "target": "[data-recipe-role=hero-root]",
+          "opts": {}
+        }
+      ]
+    },
+    {
+      "kind": "recipe",
+      "id": "kinetic.recipe.deck-bento",
+      "version": "1.0.0",
+      "files": [
+        {
+          "path": "kinetic/core/primitives/reveal-stagger.js",
+          "sha256": "a2b4f8dd358cd3544d3347a5739e7dc18f25e6ceffc71b3b3ba93a231ff3975c",
+          "source_sha256": "a2b4f8dd358cd3544d3347a5739e7dc18f25e6ceffc71b3b3ba93a231ff3975c",
+          "verified": true
+        },
+        {
+          "path": "kinetic/core/primitives/hover-lift.js",
+          "sha256": "14d3ed763891447a8c31b6f31be861789dedfafebd027d174155a3f704873c9b",
+          "source_sha256": "14d3ed763891447a8c31b6f31be861789dedfafebd027d174155a3f704873c9b",
+          "verified": true
+        }
+      ],
+      "recipe_file": "kinetic/recipes/deck-bento.json",
+      "targets": [
+        {
+          "primitive": "kinetic.reveal-stagger",
+          "target": "[data-recipe-role=deck]",
+          "opts": {
+            "selector": "[data-reveal-item]",
+            "duration": 700,
+            "stagger": 90,
+            "y": "24px"
+          }
+        },
+        {
+          "primitive": "kinetic.hover-lift",
+          "target": "[data-recipe-role=deck] [data-reveal-item]",
+          "opts": {
+            "each": true,
+            "lift": 6,
+            "duration": 450
+          }
+        }
+      ]
+    }
+  ],
+  "tokens": {
+    "duration-slow": "1200",
+    "stagger-base": "120",
+    "duration-fast": "450"
+  }
+}
