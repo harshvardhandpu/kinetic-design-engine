@@ -1,0 +1,36 @@
+{
+  "schema": "kinetic/gym/test-evidence@0.1",
+  "test": "Test 10 — promotion dry-run",
+  "record_id": "test10-promotion-dryrun-20260822",
+  "created_at": "2026-08-22T06:00:00Z",
+  "model": "qwen/qwen3.8-max-free",
+  "provider": "tokenrouter",
+
+  "candidate": "gym/knowledge/promotions/promo-20260822-interaction-blockers.json",
+  "candidate_id": "promo-20260822-interactionblockers",
+  "kind": "evaluator-rule",
+
+  "lifecycle_exercised": {
+    "proposed": true,
+    "schema_validation": "PASS — validated against schemas/gym/promotion-candidate.schema.json (required fields, schema const, id pattern, kind enum, status enum)",
+    "evidence_attached": true,
+    "thresholds_checked": {
+      "zero_regression_evidence": "yes (v-neg FAILs, v0/v2 no false positive)",
+      "explicit_human_acceptance": "NO — deliberately not obtained in a dry-run"
+    },
+    "accepted": false,
+    "merged": false,
+    "stable_core_modified": false
+  },
+
+  "checks": [
+    { "check": "PromotionCandidate is schema-valid", "result": "PASS" },
+    { "check": "status remains 'proposed' (not accepted/merged)", "result": "PASS" },
+    { "check": "human_decisions is empty (no fabricated acceptance)", "result": "PASS" },
+    { "check": "stable KINETIC core NOT modified by this test", "result": "PASS — the rule already lives in the evaluator from Test 7; this dry-run only proposes its formal promotion and changes nothing" },
+    { "check": "nothing promoted", "result": "PASS" }
+  ],
+
+  "conclusion": "PASS — the full PromotionCandidate lifecycle (propose -> validate -> check thresholds -> stop before acceptance) executes correctly. The gate correctly refuses to advance without explicit human acceptance, and no stable-core mutation occurred. This is a simulation only.",
+  "note": "The candidate chosen is real (the Test-7 interaction_blockers rule), so the dry-run exercises the gate with genuine evidence rather than placeholder data. Promotion itself is deferred to a human decision per doc 53 + Amendment H (AUTO_PROMOTION=OFF)."
+}

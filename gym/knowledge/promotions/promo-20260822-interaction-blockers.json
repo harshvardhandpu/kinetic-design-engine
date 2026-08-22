@@ -1,0 +1,37 @@
+{
+  "schema": "kinetic/gym/promotion-candidate@0.1",
+  "id": "promo-20260822-interactionblockers",
+  "kind": "evaluator-rule",
+  "summary": "Promote the interaction_blockers responsive-gate check (born from Test-7 negative knowledge) into the stable KINETIC evaluator. The check flags any position:fixed/absolute element covering >=50% of the viewport with pointer events enabled and (z-index>=100 OR opaque background) that is not dismissed, and fails the responsive gate when one is present. This closes a proven false-negative class: a page can pass every structural gate yet be completely unusable behind an undismissed overlay.",
+  "evidence": {
+    "case_ids": ["case-fe653973ef"],
+    "experiment_ids": [],
+    "variant_run_ids": ["run-case-fe653973ef-v-neg", "run-case-fe653973ef-v0", "run-case-fe653973ef-v2"],
+    "metric_deltas": [
+      { "metric": "interaction_blocker_detection", "before": 0, "after": 1 },
+      { "metric": "false_positive_on_clean_variants", "before": null, "after": 0 }
+    ],
+    "distinct_cases": 1,
+    "distinct_surfaces": 3
+  },
+  "thresholds_met": {
+    "zero_regression_evidence": "yes — verified the rule FAILs the defective v-neg candidate (div.veil detected) and produces NO false positives on clean variants v0 (fixed canvas is pointer-events:none; small banner) and v2 (sticky, not an overlay).",
+    "explicit_human_acceptance": "NO — pending. Per doc 53, evaluator-rule promotion requires explicit human acceptance. This dry-run does NOT obtain it."
+  },
+  "human_decisions": [],
+  "regression_tests": [
+    "gates.browser.js interaction_blockers check present and active",
+    "v-neg defective candidate -> responsive gate FAIL (div.veil detected)",
+    "v0 clean candidate -> responsive gate PASS (no false positive)",
+    "v2 clean candidate -> responsive gate PASS (no false positive)"
+  ],
+  "risk": {
+    "compat": "low — additive check inside the existing responsive gate; no API change to primitives or installer.",
+    "perf": "negligible — one extra getComputedStyle pass over body * during evaluation only (not at runtime).",
+    "a11y": "positive — catches overlays that block keyboard/pointer access to content.",
+    "legal": "none — no third-party assets or content involved."
+  },
+  "status": "proposed",
+  "rejection_reason": null,
+  "evolution_record_id": null
+}
