@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/taste-profile.schema.json",
+  "title": "TasteProfile",
+  "description": "Versioned consolidated preference model, rebuilt from TasteDecisions. Doc: docs/gym/41, 42",
+  "type": "object",
+  "required": ["schema", "version", "built_at", "decision_count", "cells"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/taste-profile@0.1" },
+    "version": { "type": "integer", "minimum": 1 },
+    "built_at": { "type": "string", "format": "date-time" },
+    "built_by": { "type": "string", "description": "job id of the TasteConsolidationJob" },
+    "decision_count": { "type": "integer", "minimum": 0 },
+    "decay": { "type": "object", "properties": {
+      "half_life_days": { "type": ["number", "null"] },
+      "model": { "type": "string", "description": "e.g. 'bradley-terry-attribute-v1' (doc 42; ponytail ceiling noted there)" } } },
+    "cells": {
+      "type": "array",
+      "description": "attribute scores conditioned by context (surface x goal). No unconditioned global taste claims.",
+      "items": {
+        "type": "object",
+        "required": ["context", "attribute", "score", "observations"],
+        "properties": {
+          "context": {
+            "type": "object",
+            "required": ["surface"],
+            "properties": {
+              "surface": { "type": "string" },
+              "goal": { "type": ["string", "null"] },
+              "industry": { "type": ["string", "null"] }
+            }
+          },
+          "attribute": { "type": "string", "description": "e.g. 'dense-layout', 'display-serif', 'functional-motion-only', 'deep-spatial'" },
+          "score": { "type": "number", "description": "preference score, 0-centered" },
+          "observations": { "type": "integer", "minimum": 0 },
+          "confidence": { "enum": ["low", "medium", "high"], "description": "low below observation threshold; generation falls back to corpus priors (doc 42)" },
+          "producers": { "type": "object", "description": "contribution split", "properties": {
+            "human": { "type": "number" }, "evaluator": { "type": "number" }, "award_signal": { "type": "number" } } }
+        }
+      }
+    },
+    "global_notes": { "type": "array", "items": { "type": "string" }, "description": "ONLY cross-cell-consistent observations, each citing the cells that support it" },
+    "previous_version": { "type": ["integer", "null"] }
+  }
+}

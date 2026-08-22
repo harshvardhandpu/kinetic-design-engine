@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/job@0.1",
+  "title": "KineticJob",
+  "description": "Structured KINETIC work order produced by the Hermes skill from natural language (doc 20) and consumed by the closed loop (doc 04).",
+  "type": "object",
+  "required": ["id", "target", "scope", "kinetic_level", "approval_mode"],
+  "properties": {
+    "schema": { "const": "kinetic/job@0.1" },
+    "id": { "type": "string" },
+    "created": { "type": "string", "format": "date-time" },
+    "target": {
+      "type": "object",
+      "required": ["repo"],
+      "properties": {
+        "repo": { "type": "string", "description": "Absolute path to target project." },
+        "routes": { "type": "array", "items": { "type": "string" } },
+        "elements": { "type": "array", "items": { "type": "string" }, "description": "Selectors or data-kinetic-id refs." }
+      }
+    },
+    "scope": { "type": "string", "enum": ["audit", "plan", "implement", "inspect-repair", "full-loop"] },
+    "surface": {
+      "type": "object",
+      "properties": {
+        "declared": { "type": "string" },
+        "detected": { "type": "string" },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] }
+      }
+    },
+    "aether_level": { "type": ["string", "null"], "description": "Context only (doc 19)." },
+    "kinetic_level": { "type": "string", "enum": ["K0", "K1", "K2", "K3", "K4", "K5"], "description": "Ceiling, not quota (doc 09)." },
+    "goals": { "type": "array", "items": { "type": "string" } },
+    "references": { "type": "array", "items": { "type": "string" }, "description": "Source ids (S1, S6, E1...) or url: — knowledge bias, never clone permission." },
+    "protected_areas": { "type": "array", "items": { "type": "string" }, "description": "Globs/paths; product-core is always implicitly included (doc 18)." },
+    "performance_budget": {
+      "type": "object",
+      "properties": {
+        "fps_floor": { "type": "integer" },
+        "max_p4": { "type": "integer" },
+        "cls_max": { "type": "number" }
+      }
+    },
+    "accessibility_policy": {
+      "type": "object",
+      "properties": {
+        "reduced_motion": { "type": "string", "enum": ["first-class", "simplified"], "default": "first-class" },
+        "wcag": { "type": "string", "enum": ["AA", "AAA"] }
+      }
+    },
+    "implementation_mode": { "type": "string", "enum": ["registry-install", "inline-edit", "none"] },
+    "approval_mode": { "type": "string", "enum": ["strict", "permissive"] },
+    "options_mode": { "type": "string", "enum": ["none", "three"], "default": "none" },
+    "motion_purpose_filter": { "type": "string", "enum": ["any", "functional", "functional+expressive"] },
+    "iteration_cap": { "type": "integer", "minimum": 1, "default": 3 },
+    "status": { "type": "string", "enum": ["draft", "approved", "running", "blocked", "done", "failed"] }
+  }
+}

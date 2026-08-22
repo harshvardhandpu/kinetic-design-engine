@@ -1,0 +1,22 @@
+{
+  "schema": "kinetic/principles@0.1",
+  "source": "docs/03-design-principles.md",
+  "principles": [
+    { "id": "P1", "rule": "One decision per page, committed", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P2", "rule": "Motion must have a reason; functional > expressive > decorative budget priority", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P3", "rule": "Hierarchy before decoration", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P4", "rule": "Theme is a decision, not a default", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P5", "rule": "No default typography for display roles", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P6", "rule": "Content truth before styling", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P7", "rule": "Resilient rendering: JS failure never blanks content", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P8", "rule": "Reduced motion is a first-class variant", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P9", "rule": "Verify like a hostile critic (multi-viewport, two passes)", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P10", "rule": "Ship with receipts (iteration log)", "origin": "SOURCE-DERIVED", "evidence": ["S1"] },
+    { "id": "P11", "rule": "Extract principles, never clone", "origin": "ENGINE-RECOMMENDATION", "evidence": ["E6"] },
+    { "id": "P12", "rule": "Surface determines vocabulary", "origin": "ENGINE-INFERENCE", "evidence": ["S4", "S5", "S8"] },
+    { "id": "P13", "rule": "Technology follows capability (simplest suitable rung)", "origin": "ENGINE-INFERENCE", "evidence": ["S6"] },
+    { "id": "P14", "rule": "Project owns the result (copy-source model)", "origin": "SOURCE-DERIVED", "evidence": ["R1", "R2"] },
+    { "id": "P15", "rule": "Product core is untouchable", "origin": "ENGINE-INFERENCE", "evidence": [] },
+    { "id": "P16", "rule": "Names must be true", "origin": "SOURCE-DERIVED", "evidence": ["E7"] }
+  ]
+}

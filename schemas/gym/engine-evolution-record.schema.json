@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/engine-evolution-record.schema.json",
+  "title": "EngineEvolutionRecord",
+  "description": "Audit record written when a promotion merges into stable KINETIC. Doc: docs/gym/53-promotion-gate.md",
+  "type": "object",
+  "required": ["schema", "record_id", "version_introduced", "what", "why", "promotion_candidate_id"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/engine-evolution-record@0.1" },
+    "record_id": { "type": "string", "pattern": "^evo-[0-9]{8}-[0-9a-z]+$" },
+    "version_introduced": { "type": "string", "description": "KINETIC core version this merged into" },
+    "what": {
+      "type": "object",
+      "required": ["item_id"],
+      "properties": {
+        "item_id": { "type": "string", "description": "registry item / knowledge entry / rule id" },
+        "item_version": { "type": ["string", "null"] },
+        "kind": { "enum": ["primitive", "recipe", "principle", "evaluator-rule", "tool-integration", "motion-token"] }
+      }
+    },
+    "why": { "type": "string", "description": "the problem it solved, one paragraph" },
+    "source_cases": { "type": "array", "items": { "type": "string" } },
+    "experiment_ids": { "type": "array", "items": { "type": "string" } },
+    "human_decisions": { "type": "array", "items": { "type": "string" } },
+    "benchmarks": {
+      "type": "object",
+      "properties": {
+        "before": { "type": ["object", "null"] },
+        "after": { "type": ["object", "null"] },
+        "metric_ids": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "performance": { "type": "object", "properties": {
+      "p_class": { "type": ["string", "null"], "pattern": "^P[0-4]$" },
+      "measured_deltas": { "type": ["object", "null"] } } },
+    "accessibility": { "type": "object", "properties": {
+      "contract_summary": { "type": ["string", "null"] } } },
+    "failure_cases": { "type": "array", "items": { "type": "string" }, "description": "known failures/limitations at merge time" },
+    "supersedes": { "type": "array", "items": { "type": "string" } },
+    "promotion_candidate_id": { "type": "string" },
+    "merged_at": { "type": ["string", "null"], "format": "date-time" },
+    "demoted": { "type": ["object", "null"], "description": "if rolled back: reason + date, same audit trail (doc 53 rule 3)" }
+  }
+}

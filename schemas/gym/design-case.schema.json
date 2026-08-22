@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/design-case.schema.json",
+  "title": "DesignCase",
+  "description": "Durable record of one studied reference site. Doc: docs/gym/34-design-case-schema.md",
+  "type": "object",
+  "required": ["schema", "case_id", "canonical_url", "provenance", "status"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/design-case@0.1" },
+    "case_id": { "type": "string", "pattern": "^case-[0-9a-f]{8,}$" },
+    "canonical_url": { "type": "string", "format": "uri" },
+    "title": { "type": "string" },
+    "studio": { "type": ["string", "null"] },
+    "status": {
+      "enum": ["INGESTED", "STUDIED", "BRIEFED", "GENERATING", "EVALUATING",
+               "QUALIFIED", "REVIEW_READY", "REVIEWED", "EXPERIMENT_LOGGED",
+               "PROMOTION_CANDIDATE", "UNAVAILABLE"]
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["discovered_via", "source_url", "fetched", "access_policy"],
+      "properties": {
+        "discovered_via": { "enum": ["awwwards", "siteinspire-mcp", "fwa", "godly", "manual-entry", "other"] },
+        "source_url": { "type": "string" },
+        "award": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "body": { "type": "string" },
+              "type": { "type": "string" },
+              "level": { "type": ["string", "null"] },
+              "year": { "type": ["integer", "null"], "minimum": 2000, "maximum": 2100 },
+              "category": { "type": ["string", "null"] },
+              "jury_scores": { "type": ["object", "null"], "description": "only if publicly shown; weak prior (doc 32)" }
+            }
+          }
+        },
+        "fetched": { "type": "string", "format": "date-time" },
+        "access_policy": { "type": "string", "description": "policy id from gym/corpus/source-policies.json" },
+        "site_robots_checked": { "type": "boolean" },
+        "availability": { "enum": ["live", "archived", "dead", "unknown"] },
+        "archive_url": { "type": ["string", "null"] }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "properties": {
+        "surface_types": { "type": "array", "items": { "type": "string" } },
+        "k_level_estimate": { "type": ["string", "null"], "pattern": "^K[0-5]$" },
+        "evidence": { "$ref": "#/$defs/evidence" }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "description": "Filled at STUDIED. Every sub-object carries an evidence tag.",
+      "properties": {
+        "layout": { "$ref": "#/$defs/evidenced" },
+        "typography": { "$ref": "#/$defs/evidenced" },
+        "color": { "$ref": "#/$defs/evidenced" },
+        "motion": { "$ref": "#/$defs/evidenced" },
+        "technology": {
+          "type": "object",
+          "properties": {
+            "observed": { "type": "array", "items": { "type": "string" }, "description": "probe evidence required" },
+            "inferred": {
+              "type": "array",
+              "items": { "type": "object", "required": ["claim", "confidence"], "properties": {
+                "claim": { "type": "string" }, "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+                "basis": { "type": "string" } } }
+            }
+          }
+        },
+        "performance": { "$ref": "#/$defs/evidenced" },
+        "accessibility": { "$ref": "#/$defs/evidenced" },
+        "principles": { "type": "array", "items": { "type": "object", "required": ["rule", "evidence_tag"], "properties": {
+          "rule": { "type": "string" }, "evidence_tag": { "type": "string" }, "evidence_ref": { "type": ["string", "null"] } } } },
+        "inferences": { "type": "array", "items": { "type": "string" } },
+        "anti_patterns": { "type": "array", "items": { "type": "object", "required": ["issue", "evidence_tag"], "properties": {
+          "issue": { "type": "string" }, "evidence_tag": { "type": "string" } } } }
+      }
+    },
+    "figma": {
+      "type": ["object", "null"],
+      "required": ["authorization"],
+      "properties": {
+        "authorization": { "enum": ["public", "authorized", "none"] },
+        "file_ref": { "type": ["string", "null"] },
+        "captured": { "type": ["object", "null"] }
+      }
+    },
+    "scores": {
+      "type": "object",
+      "properties": {
+        "external": { "type": "object", "description": "award signals; weak priors, never mixed with automated" },
+        "automated": { "type": "object", "description": "evaluator outputs, versioned rules" }
+      }
+    },
+    "variant_run_ids": { "type": "array", "items": { "type": "string" } },
+    "taste_decision_ids": { "type": "array", "items": { "type": "string" } },
+    "promotion_history": { "type": "array", "items": { "type": "string" }, "description": "EngineEvolutionRecord ids" },
+    "re_studies": { "type": "array", "items": { "type": "object", "required": ["date", "note"], "properties": {
+      "date": { "type": "string", "format": "date" }, "note": { "type": "string" } } } }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["tag"],
+      "properties": {
+        "tag": { "enum": ["DIRECTLY-INSPECTED", "VISUALLY-INSPECTED", "TEXT-ONLY", "METADATA-ONLY", "INFERRED"] },
+        "confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "method": { "type": ["string", "null"] }
+      }
+    },
+    "evidenced": {
+      "type": "object",
+      "required": ["evidence"],
+      "properties": {
+        "notes": { "type": ["string", "object", "null"] },
+        "artifact_refs": { "type": "array", "items": { "type": "string" }, "description": "sha256 refs into gym/artifacts/" },
+        "evidence": { "$ref": "#/$defs/evidence" }
+      }
+    }
+  }
+}

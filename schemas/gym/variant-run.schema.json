@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/variant-run.schema.json",
+  "title": "VariantRun",
+  "description": "One candidate build (V0-V9) for a DesignCase. Doc: docs/gym/35-variant-protocol.md",
+  "type": "object",
+  "required": ["schema", "run_id", "case_id", "slot", "mode", "state"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/variant-run@0.1" },
+    "run_id": { "type": "string", "pattern": "^run-[0-9a-z-]+$" },
+    "case_id": { "type": "string" },
+    "slot": { "enum": ["V0", "V1", "V2", "V3", "V4", "V5", "V6", "V7", "V8", "V9"] },
+    "mode": { "enum": ["fidelity-study", "original", "experimental"] },
+    "deployable": { "type": "boolean", "description": "always false for V0 (doc 36)" },
+    "experimental": { "type": "boolean", "description": "true iff slot V8/V9" },
+    "state": {
+      "enum": ["BRIEFED", "GENERATING", "BUILT", "TECHNICAL_PASS", "TECHNICAL_FAIL",
+               "RESPONSIVE_PASS", "RESPONSIVE_FAIL", "A11Y_PASS", "A11Y_FAIL",
+               "PERFORMANCE_PASS", "PERFORMANCE_FAIL", "DESIGN_EVALUATED",
+               "QUALIFIED", "REJECTED", "REJECTED_FINAL", "EMPTY"]
+    },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "brief": {
+      "type": "object",
+      "required": ["direction", "varied_dimensions"],
+      "properties": {
+        "direction": { "type": "string" },
+        "varied_dimensions": {
+          "type": "array",
+          "items": { "enum": ["art-direction", "layout-grammar", "typography-system",
+                              "narrative-structure", "interaction-model", "motion-choreography",
+                              "navigation-grammar", "depth-spatial", "media-treatment",
+                              "information-hierarchy", "responsive-strategy"] }
+        },
+        "k_level": { "type": ["string", "null"], "pattern": "^K[0-5]$" },
+        "constraints": { "type": "array", "items": { "type": "string" } },
+        "negative_context_refs": { "type": "array", "items": { "type": "string" } },
+        "taste_context": { "type": ["object", "null"] }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "description": "Per-gate results; producer separation is mandatory (doc 44).",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["result", "producer"],
+        "properties": {
+          "result": { "enum": ["pass", "fail", "warn", "skipped", "scored"] },
+          "producer": { "enum": ["objective", "heuristic", "ai-critic", "human"] },
+          "rules_version": { "type": ["string", "null"] },
+          "score": { "type": ["number", "null"] },
+          "rationale": { "type": ["string", "null"] },
+          "receipt_ref": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "diagnosis": { "type": ["object", "null"], "description": "on rejection: which gate + why (feeds doc 43)" },
+    "fidelity_report": {
+      "type": ["object", "null"],
+      "description": "V0 only (doc 36)",
+      "required": ["understood"],
+      "properties": {
+        "understood": { "enum": [true, false, "partial"] },
+        "aspects": { "type": "object", "additionalProperties": { "type": "object", "properties": {
+          "match": { "enum": ["high", "medium", "low", "not-reproduced"] },
+          "note": { "type": ["string", "null"] } } } },
+        "not_reproducible": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "experiment_id": { "type": ["string", "null"] },
+    "build": {
+      "type": ["object", "null"],
+      "properties": {
+        "worktree_or_dir": { "type": ["string", "null"] },
+        "base_skeleton": { "type": ["string", "null"] },
+        "artifact_refs": { "type": "array", "items": { "type": "string" } },
+        "asset_replacement_proof": { "type": ["string", "null"], "description": "required before any deployment consideration (doc 45)" }
+      }
+    },
+    "timestamps": { "type": "object", "additionalProperties": { "type": "string", "format": "date-time" } }
+  },
+  "allOf": [
+    { "if": { "properties": { "slot": { "const": "V0" } } },
+      "then": { "properties": { "deployable": { "const": false }, "mode": { "const": "fidelity-study" } } } },
+    { "if": { "properties": { "slot": { "enum": ["V8", "V9"] } } },
+      "then": { "properties": { "experimental": { "const": true }, "mode": { "const": "experimental" } } } }
+  ]
+}

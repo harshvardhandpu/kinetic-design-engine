@@ -1,0 +1,7 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "kinetic",
+  "homepage": "https://local/kinetic-design-engine",
+  "items": [],
+  "_kinetic_note": "Phase-1 stub: empty items, no includes yet. Phase 2 adds per-category registry.json files and wires them via include[] (docs/06-registry-design.md). Kept buildable as-is: a registry with zero items is valid."
+}

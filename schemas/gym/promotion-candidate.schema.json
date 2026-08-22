@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/promotion-candidate.schema.json",
+  "title": "PromotionCandidate",
+  "description": "Proposal to promote Gym learning into stable KINETIC core. Doc: docs/gym/53-promotion-gate.md",
+  "type": "object",
+  "required": ["schema", "id", "kind", "summary", "evidence", "status"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/promotion-candidate@0.1" },
+    "id": { "type": "string", "pattern": "^promo-[0-9]{8}-[0-9a-z]+$" },
+    "kind": { "enum": ["primitive", "recipe", "principle", "evaluator-rule", "tool-integration", "motion-token"] },
+    "summary": { "type": "string" },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "case_ids": { "type": "array", "items": { "type": "string" } },
+        "experiment_ids": { "type": "array", "items": { "type": "string" } },
+        "variant_run_ids": { "type": "array", "items": { "type": "string" } },
+        "metric_deltas": { "type": "array", "items": { "type": "object", "required": ["metric"], "properties": {
+          "metric": { "type": "string" }, "before": { "type": ["number", "null"] }, "after": { "type": ["number", "null"] } } } },
+        "distinct_cases": { "type": "integer", "minimum": 0 },
+        "distinct_surfaces": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "thresholds_met": { "type": ["object", "null"], "description": "per-kind evidence thresholds from doc 53, checked yes/no" },
+    "human_decisions": { "type": "array", "items": { "type": "string" }, "description": "TasteDecision ids supporting acceptance" },
+    "regression_tests": { "type": "array", "items": { "type": "string" }, "description": "MUST exist before merge (doc 53 lifecycle)" },
+    "risk": { "type": "object", "properties": {
+      "compat": { "type": "string" }, "perf": { "type": "string" },
+      "a11y": { "type": "string" }, "legal": { "type": "string" } } },
+    "status": { "enum": ["proposed", "accepted", "rejected", "merged"] },
+    "rejection_reason": { "type": ["string", "null"], "description": "recorded; rejected promotions are negative knowledge about the gate" },
+    "evolution_record_id": { "type": ["string", "null"], "description": "set at merge" }
+  }
+}

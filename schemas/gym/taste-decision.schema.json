@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/taste-decision.schema.json",
+  "title": "TasteDecision",
+  "description": "One immutable human judgment event. Append-only. Doc: docs/gym/41-taste-memory.md",
+  "type": "object",
+  "required": ["schema", "decision_id", "context", "candidates", "outcome", "reviewer", "timestamp"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/taste-decision@0.1" },
+    "decision_id": { "type": "string", "pattern": "^td-[0-9]{8}-[0-9a-z]+$" },
+    "context": {
+      "type": "object",
+      "required": ["surface"],
+      "properties": {
+        "case_id": { "type": ["string", "null"] },
+        "batch_id": { "type": ["string", "null"] },
+        "surface": { "type": "string" },
+        "industry": { "type": ["string", "null"] },
+        "goal": { "type": ["string", "null"] },
+        "k_level": { "type": ["string", "null"], "pattern": "^K[0-5]$" }
+      }
+    },
+    "candidates": { "type": "array", "items": { "type": "string" }, "minItems": 1, "description": "variant run ids shown" },
+    "outcome": {
+      "type": "object",
+      "required": ["winner"],
+      "properties": {
+        "winner": { "type": ["string", "null"], "description": "variant run id, or null if none qualified / not reviewed" },
+        "runner_up": { "type": ["string", "null"] },
+        "rejected": { "type": "array", "items": { "type": "string" } },
+        "none_reason": { "enum": ["not_reviewed", "none_qualified", "aborted", null] }
+      }
+    },
+    "pairwise": {
+      "type": "array",
+      "description": "fine-grained A-over-B rows (doc 42)",
+      "items": {
+        "type": "object",
+        "required": ["preferred", "over"],
+        "properties": {
+          "preferred": { "type": "string" },
+          "over": { "type": "string" },
+          "reasons": { "type": "array", "items": { "$ref": "#/$defs/reason_tag" } }
+        }
+      }
+    },
+    "reason_tags": { "type": "array", "items": { "$ref": "#/$defs/reason_tag" } },
+    "freeform": { "type": ["string", "null"], "description": "human's own words, verbatim" },
+    "first_shot": { "type": ["boolean", "null"], "description": "winner from FIRST generation round; feeds north-star metric (doc 54)" },
+    "reviewer": { "type": "string", "description": "default 'user'; future multi-reviewer weighting" },
+    "supersedes": { "type": ["string", "null"], "description": "decision_id corrected by this one; decisions are never edited" },
+    "timestamp": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "reason_tag": {
+      "enum": ["hierarchy", "typography", "spacing", "color", "motion-purpose",
+               "motion-quality", "originality", "density", "interaction",
+               "navigation", "accessibility", "performance", "surface-fit",
+               "brand-fit", "responsive", "other"]
+    }
+  }
+}

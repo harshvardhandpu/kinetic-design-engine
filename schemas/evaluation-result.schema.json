@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/evaluation-result@0.1",
+  "title": "EvaluationResult",
+  "description": "Automated evaluator output (doc 13). Converts 1:1 into VisualFeedback items with producer=evaluator. Also the quality-gate input (doc 04).",
+  "type": "object",
+  "required": ["schema", "job_id", "run", "checks", "gate"],
+  "properties": {
+    "schema": { "const": "kinetic/evaluation-result@0.1" },
+    "job_id": { "type": "string" },
+    "run": { "type": "integer", "minimum": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "viewport": { "type": "string" },
+    "baseline_ref": { "type": ["string", "null"], "description": "Pre-change baseline run id; deltas, not absolutes, gate where hardware varies (doc 15)." },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "group", "status"],
+        "properties": {
+          "id": { "type": "string", "description": "Check id from doc 13 catalog." },
+          "group": { "type": "string", "enum": ["layout", "typography", "color", "interaction", "console", "motion", "performance", "responsive", "accessibility", "regression"] },
+          "status": { "type": "string", "enum": ["pass", "fail", "warn", "skip"] },
+          "evidence": { "type": "object" },
+          "elements": { "type": "array", "items": { "type": "string" }, "description": "Selectors/kinetic-ids of offending elements." }
+        }
+      }
+    },
+    "slop_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["detector", "severity"],
+        "properties": {
+          "detector": { "type": "string", "description": "Detector id from doc 13 slop catalog." },
+          "severity": { "type": "string", "enum": ["low", "medium", "high"] },
+          "context_conflict": { "type": "string", "description": "Why this conflicts with the stated project context (anti-hardcoding rule)." },
+          "elements": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "fps_min": { "type": "number" },
+        "fps_median": { "type": "number" },
+        "cls": { "type": "number" },
+        "lcp_delta_ms": { "type": "number" },
+        "inp_delta_ms": { "type": "number" },
+        "long_tasks": { "type": "integer" },
+        "active_effects_peak": { "type": "integer" },
+        "canvas_count": { "type": "integer" }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": ["passed"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "blocking": { "type": "array", "items": { "type": "string" }, "description": "Ids of blocking checks." },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

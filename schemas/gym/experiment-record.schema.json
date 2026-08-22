@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/experiment-record.schema.json",
+  "title": "ExperimentRecord",
+  "description": "One hypothesis-driven experiment. Doc: docs/gym/37-experiment-protocol.md",
+  "type": "object",
+  "required": ["schema", "id", "hypothesis", "source", "novelty", "status"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/experiment-record@0.1" },
+    "id": { "type": "string", "pattern": "^exp-[0-9]{8}-[0-9a-z]+$" },
+    "hypothesis": { "type": "string", "description": "one falsifiable sentence" },
+    "hypothesis_hash": { "type": "string", "description": "dedupe key before scheduling" },
+    "source": { "type": "string", "description": "case id, tool, human suggestion, ..." },
+    "novelty": { "type": "string", "description": "what is new vs current KINETIC knowledge" },
+    "subject": {
+      "enum": ["ui-technique", "animation-primitive", "browser-capability", "mcp-tool",
+               "registry-component", "shader", "motion-pattern", "navigation-grammar",
+               "figma-workflow", "typography-treatment", "spatial-technique", "other"]
+    },
+    "implementation": {
+      "type": "object",
+      "properties": {
+        "description": { "type": "string" },
+        "files": { "type": "array", "items": { "type": "string" } },
+        "dependencies_added": { "type": "array", "items": { "type": "string" }, "description": "sandbox-only (doc 37 rule 2)" }
+      }
+    },
+    "expected_benefit": { "type": "string" },
+    "risk": { "type": "object", "properties": {
+      "perf": { "type": "string" }, "a11y": { "type": "string" },
+      "compat": { "type": "string" }, "legal": { "type": "string" } } },
+    "status": { "enum": ["backlog", "scheduled", "running", "completed", "failed", "abandoned"] },
+    "result": { "type": ["object", "null"], "properties": {
+      "outcome": { "enum": ["positive", "negative", "inconclusive"] },
+      "summary": { "type": "string" },
+      "artifact_refs": { "type": "array", "items": { "type": "string" } } } },
+    "evaluation": { "type": ["object", "null"], "description": "evaluator output refs + metric deltas" },
+    "human_feedback": { "type": "array", "items": { "type": "string" }, "description": "TasteDecision ids" },
+    "variant_run_ids": { "type": "array", "items": { "type": "string" } },
+    "promotion_candidate": { "type": "boolean", "description": "never auto-true; requires gates + measured improvement + human acceptance" },
+    "promotion_candidate_id": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/project-design-profile@0.1",
+  "title": "ProjectDesignProfile",
+  "description": "Scanner output (doc 10): the project's design intelligence snapshot. Input to every planning decision. Read-only artifact; every field carries confidence.",
+  "type": "object",
+  "required": ["schema", "repo", "scanned_at", "framework", "zones"],
+  "properties": {
+    "schema": { "const": "kinetic/project-design-profile@0.1" },
+    "repo": { "type": "string" },
+    "scanned_at": { "type": "string", "format": "date-time" },
+    "framework": {
+      "type": "object",
+      "required": ["name", "confidence"],
+      "properties": {
+        "name": { "type": "string", "enum": ["react", "next", "svelte", "sveltekit", "vue", "nuxt", "astro", "vanilla", "unknown"] },
+        "version": { "type": "string" },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+        "signals": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "routing": {
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string", "enum": ["file-based", "config-based", "none", "unknown"] },
+        "routes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "css_strategy": {
+      "type": "object",
+      "properties": {
+        "kind": { "type": "string", "enum": ["tailwind", "css-modules", "vanilla-extract", "styled-components", "emotion", "plain-css", "mixed", "unknown"] },
+        "tailwind_version": { "type": "string" },
+        "confidence": { "type": "string", "enum": ["high", "medium", "low"] }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "description": "Design tokens discovered (colors, spacing, radii, shadows, fonts).",
+      "properties": {
+        "colors": { "type": "object" },
+        "spacing_scale": { "type": "array", "items": { "type": ["string", "number"] } },
+        "radii": { "type": "object" },
+        "shadows": { "type": "object" },
+        "fonts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "family": { "type": "string" },
+              "role": { "type": "string", "enum": ["display", "text", "mono", "unknown"] },
+              "source": { "type": "string" }
+            }
+          }
+        },
+        "source_files": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "existing_animations": {
+      "type": "object",
+      "properties": {
+        "keyframes_count": { "type": "integer" },
+        "motion_libs": { "type": "array", "items": { "type": "string" }, "description": "From dependencies (e.g. motion, gsap, svelte/transition usage)." },
+        "reduced_motion_queries": { "type": "integer" },
+        "samples": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "runtime": { "type": "object" },
+        "dev": { "type": "object" }
+      }
+    },
+    "reusable_components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "path": { "type": "string" },
+          "kind": { "type": "string" }
+        }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["route"],
+        "properties": {
+          "route": { "type": "string" },
+          "file": { "type": "string" },
+          "surface": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["monitor", "operate", "compare", "configure", "decide-learn", "explore", "command-inspect", "unknown"] },
+              "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+              "signals": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "sections": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "zones": {
+      "type": "object",
+      "description": "Three-zone map (doc 10). Unclassified paths default to product_core (fail safe).",
+      "required": ["product_core", "design_system", "experience_layer"],
+      "properties": {
+        "product_core": { "type": "array", "items": { "type": "string" } },
+        "design_system": { "type": "array", "items": { "type": "string" } },
+        "experience_layer": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "a11y_patterns": {
+      "type": "object",
+      "properties": {
+        "focus_styles": { "type": "boolean" },
+        "aria_usage": { "type": "string", "enum": ["none", "sparse", "consistent", "unknown"] },
+        "reduced_motion_support": { "type": "boolean" }
+      }
+    },
+    "responsive": {
+      "type": "object",
+      "properties": {
+        "breakpoints": { "type": "array", "items": { "type": ["string", "number"] } },
+        "container_queries": { "type": "boolean" }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Explicit unknowns; planner asks instead of guessing (doc 04 stage 1)."
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/visual-feedback@0.1",
+  "title": "VisualFeedback",
+  "description": "One structured feedback record (doc 11). Produced by humans via the inspector, by the automated evaluator, or by the motion inspector. Repair consumes arrays of these.",
+  "type": "object",
+  "required": ["schema", "session", "route", "producer", "target", "feedback"],
+  "properties": {
+    "schema": { "const": "kinetic/visual-feedback@0.1" },
+    "session": {
+      "type": "object",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "project": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "route": { "type": "string" },
+    "viewport": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "enum": ["mobile-390", "tablet-768", "desktop-1440", "custom"] },
+        "width": { "type": "integer" },
+        "height": { "type": "integer" },
+        "dpr": { "type": "number" }
+      }
+    },
+    "producer": { "type": "string", "enum": ["human", "evaluator", "motion-inspector"] },
+    "target": {
+      "type": "object",
+      "properties": {
+        "selector": { "type": "string", "description": "Most stable selector first (kinetic-id based when available)." },
+        "fallback_selectors": { "type": "array", "items": { "type": "string" } },
+        "kinetic_id": { "type": "string" },
+        "kinetic_recipe": { "type": "string" },
+        "kinetic_primitive": { "type": "string" },
+        "component": { "type": "string", "description": "Framework component name if known." },
+        "text_excerpt": { "type": "string", "description": "For text-range feedback." },
+        "region": {
+          "type": "object",
+          "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" } },
+          "description": "Arbitrary region selection fallback."
+        }
+      }
+    },
+    "visual_state": {
+      "type": "object",
+      "properties": {
+        "hover": { "type": "boolean" },
+        "focus": { "type": "boolean" },
+        "animation_progress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reduced_motion": { "type": "boolean" },
+        "capability_rung": { "type": "string", "description": "Implementation rung actually in use (doc 14)." }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "description": "Motion-inspector block (doc 12).",
+      "properties": {
+        "animation_name": { "type": "string" },
+        "trigger": { "type": "string" },
+        "duration_ms": { "type": "number" },
+        "delay_ms": { "type": "number" },
+        "easing": { "type": "string" },
+        "easing_token": { "type": "string" },
+        "spring": { "type": "object" },
+        "scroll_trigger": { "type": "object" },
+        "affected_properties": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "feedback": {
+      "type": "object",
+      "required": ["severity", "category", "instruction"],
+      "properties": {
+        "severity": { "type": "string", "enum": ["low", "medium", "high", "blocker"] },
+        "category": { "type": "string", "enum": ["layout", "typography", "spacing", "color", "motion", "interaction", "hierarchy", "content", "responsive", "accessibility", "performance", "bug"] },
+        "instruction": { "type": "string" },
+        "expected_vs_actual": {
+          "type": "object",
+          "properties": { "expected": { "type": "string" }, "actual": { "type": "string" } }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "computed_styles": { "type": "object", "additionalProperties": { "type": "string" } },
+        "bounding_box": { "type": "object", "properties": { "x": { "type": "number" }, "y": { "type": "number" }, "w": { "type": "number" }, "h": { "type": "number" } } },
+        "nearby_elements": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "selector": { "type": "string" },
+              "kinetic_id": { "type": "string" },
+              "relation": { "type": "string" }
+            }
+          }
+        },
+        "screenshot_ref": { "type": "string" }
+      }
+    },
+    "resolution": {
+      "type": "object",
+      "description": "Filled by the resolver (doc 11 ladder), never by the collector.",
+      "properties": {
+        "source_file": { "type": "string" },
+        "source_range": { "type": "object", "properties": { "start_line": { "type": "integer" }, "end_line": { "type": "integer" } } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "method": { "type": "string", "enum": ["kinetic-id", "component-map", "selector-grep", "region-fallback"] },
+        "candidates": { "type": "array", "items": { "type": "string" }, "description": "Ambiguous matches returned, never picked silently." }
+      }
+    }
+  }
+}

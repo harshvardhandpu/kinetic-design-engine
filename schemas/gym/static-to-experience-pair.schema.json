@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/static-to-experience-pair.schema.json",
+  "title": "StaticToExperiencePair",
+  "description": "One mapping from static visual intent to runtime behavior. Doc: docs/gym/39-static-to-experience.md",
+  "type": "object",
+  "required": ["schema", "pair_id", "static", "experience"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/static-to-experience-pair@0.1" },
+    "pair_id": { "type": "string", "pattern": "^pair-[0-9a-z-]+$" },
+    "case_id": { "type": ["string", "null"], "description": "null for synthetic pairs" },
+    "static": {
+      "type": "object",
+      "required": ["description", "kind"],
+      "properties": {
+        "description": { "type": "string" },
+        "kind": { "enum": ["hero", "card", "nav", "illustration", "composition", "3d-artwork", "other"] },
+        "artifact_ref": { "type": ["string", "null"], "description": "sha256 ref: screenshot or figma node capture" }
+      }
+    },
+    "experience": {
+      "type": "object",
+      "required": ["description", "kind", "evidence", "confidence"],
+      "properties": {
+        "description": { "type": "string" },
+        "kind": { "enum": ["entrance", "hover", "scroll", "parallax", "transition",
+                            "responsive", "spatial-interaction", "ambient", "other"] },
+        "evidence": { "enum": ["DIRECTLY-INSPECTED", "VISUALLY-INSPECTED", "FIGMA-LIVE-COMPARE", "INFERRED"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "motion_tokens": { "type": ["object", "null"], "description": "Phase-1 motion-token values when measured (docs/08)" },
+        "primitive_refs": { "type": "array", "items": { "type": "string" }, "description": "KINETIC primitive ids if mappable" }
+      }
+    },
+    "notes": { "type": ["string", "null"] }
+  },
+  "allOf": [
+    { "if": { "properties": { "experience": { "properties": { "evidence": { "const": "INFERRED" } } } } },
+      "then": { "description": "INFERRED pairs must attribute the inference to learned knowledge, never present as recovered fact (doc 39 hard rule)" } }
+  ]
+}

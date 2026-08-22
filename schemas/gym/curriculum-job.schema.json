@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/curriculum-job.schema.json",
+  "title": "CurriculumJob",
+  "description": "Universal job record: checkpointing, locking, idempotency, receipts. Doc: docs/gym/50-resumability.md",
+  "type": "object",
+  "required": ["schema", "job_id", "type", "status", "input", "work_items"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/curriculum-job@0.1" },
+    "job_id": { "type": "string", "pattern": "^[a-z-]+-[0-9]{8}-[0-9a-z]+$" },
+    "type": {
+      "enum": ["CorpusIngest", "ReferenceStudy", "VariantGeneration", "Evaluation",
+               "ExperimentLog", "HumanReviewPrep", "TasteConsolidation", "ToolResearch",
+               "PatternClustering", "FailureAnalysis", "RecipeCandidate", "EnginePromotionReview"]
+    },
+    "status": { "enum": ["pending", "running", "paused", "done", "failed", "blocked"] },
+    "schedule_ref": { "type": ["string", "null"], "description": "future cron id; NOT activated in Phase 1.5" },
+    "input": { "type": "object", "description": "immutable after start" },
+    "checkpoint": { "type": ["object", "null"], "description": "last durable progress point" },
+    "work_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "state"],
+        "properties": {
+          "id": { "type": "string", "description": "idempotency key: url-hash | case:slot:attempt | run:gate:rules-version" },
+          "state": { "enum": ["pending", "running", "done", "failed", "blocked", "skipped"] },
+          "attempts": { "type": "integer", "minimum": 0 },
+          "last_error": { "type": ["string", "null"] },
+          "error_class": { "enum": ["transient", "quota", "deterministic", null] },
+          "receipt_ref": { "type": ["string", "null"], "description": "sha256 artifact receipt" }
+        }
+      }
+    },
+    "lock": {
+      "type": ["object", "null"],
+      "properties": {
+        "holder": { "type": "string" },
+        "acquired_at": { "type": "string", "format": "date-time" },
+        "heartbeat_at": { "type": "string", "format": "date-time" },
+        "ttl_seconds": { "type": "integer" }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "token_class": { "type": ["string", "null"] },
+        "max_candidates": { "type": ["integer", "null"] },
+        "wall_clock_seconds": { "type": ["integer", "null"] }
+      }
+    },
+    "provider_notes": {
+      "type": "array",
+      "items": { "type": "object", "properties": {
+        "at": { "type": "string", "format": "date-time" },
+        "event": { "type": "string", "description": "failover, model swap, pause-on-quota (docs 48/50)" } } }
+    },
+    "started_at": { "type": ["string", "null"], "format": "date-time" },
+    "finished_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

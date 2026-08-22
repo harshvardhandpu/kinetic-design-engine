@@ -1,0 +1,35 @@
+{
+  "schema": "kinetic/source-index@0.1",
+  "updated": "2026-08-21",
+  "classification_tags": ["SOURCE-DERIVED", "ENGINE-INFERENCE", "ENGINE-RECOMMENDATION"],
+  "inspection_quality_tags": ["DIRECTLY-INSPECTED", "VISUALLY-INSPECTED", "TEXT-ONLY", "METADATA-ONLY", "SECONDARY-SOURCE", "INACCESSIBLE"],
+  "sources": [
+    { "id": "S1", "name": "DesignLab playbook (Notion)", "url": "https://app.notion.com/p/DesignLab-395e68099f798077a296faeac9ddaddb", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "knowledge", "analysis": "docs/02-source-analysis.md#s1", "key_assets": ["5 cheapness tells", "$10K site prompt", "tool index", "UI/UX Pro Max workflow"] },
+    { "id": "S2", "name": "Google Doc: 6 Websites Animation", "url": "https://docs.google.com/document/d/12d44VTucp0kn5jmmYatLVdQgsXN3ZCEkQj1GO4ANVmY/mobilebasic", "status": "accessed", "quality": "TEXT-ONLY", "layer": "index", "analysis": "docs/02-source-analysis.md#s2-note" },
+    { "id": "S3", "name": "X post @Sikandar_Bhide 2090106334201225285", "url": "https://x.com/Sikandar_Bhide/status/2090106334201225285", "status": "partial", "quality": "TEXT-ONLY", "media": "INACCESSIBLE", "layer": "index", "note": "Post text + 7 project links captured; media NOT retrieved. Keep strictly separate from E-series project findings." },
+    { "id": "S4", "name": "elated-convention (Framer bento deck)", "url": "https://elated-convention-516854.framer.app/", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "reference", "stack": "react+motion (Framer)", "analysis": "docs/02-source-analysis.md#s4" },
+    { "id": "S5", "name": "thoughtful-focus (Framer hero)", "url": "https://thoughtful-focus-537972.framer.app/", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "reference", "stack": "react+motion (Framer)", "analysis": "docs/02-source-analysis.md#s5" },
+    { "id": "S6", "name": "3dparticlesphere (Shape Morpher)", "url": "https://3dparticlesphere.framer.website/", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "reference", "stack": "react+motion (Framer), Canvas 2D (WebGL ABSENT)", "analysis": "docs/02-source-analysis.md#s6" },
+    { "id": "S7", "name": "swisspixelreveal (Framer)", "url": "https://gracious-routine-029598.framer.app/swisspixelreveal", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "reference", "stack": "react+motion (Framer), DOM grid", "analysis": "docs/02-source-analysis.md#s7" },
+    { "id": "S8", "name": "fullstack-studio (Webflow)", "url": "https://fullstack-studio.webflow.io/", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "reference", "stack": "webflow+jquery+gsap+scrolltrigger+splittext+scrambletext", "analysis": "docs/02-source-analysis.md#s8" },
+    { "id": "S9", "name": "fancy-toggle (Framer)", "url": "https://fancy-toggle-753251.framer.app/", "status": "partial", "quality": "TEXT-ONLY", "layer": "reference", "gap": "G3: morph mechanism unconfirmed", "analysis": "docs/02-source-analysis.md#s9" },
+    { "id": "E1", "name": "sv-agentation (Svelte Agentation v0.3.0)", "url": "https://sv-agentation.com", "repo": "https://github.com/SikandarJODD/sv-agentation", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "feedback-bridge-reference", "relation": "RELATED-AUTHOR-PROJECT (not X-post content)", "analysis": "docs/02-source-analysis.md#e1e2" },
+    { "id": "E2", "name": "Agentation (original, agentation.com)", "url": "https://www.agentation.com", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "feedback-bridge-reference", "analysis": "docs/02-source-analysis.md#e1e2" },
+    { "id": "E3", "name": "sv-animations (Svelte Animations)", "url": "https://sv-animations.vercel.app", "repo": "https://github.com/SikandarJODD/animations", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model", "relation": "RELATED-AUTHOR-PROJECT" },
+    { "id": "E4", "name": "sv-blocks / cnblocks", "url": "https://sv-blocks.vercel.app", "repo": "https://github.com/SikandarJODD/cnblocks", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model", "notes": "jsrepo CLI + MCP server integration" },
+    { "id": "E5", "name": "sv-matrix (dot matrix loaders)", "url": "https://sv-matrix.vercel.app", "repo": "https://github.com/SikandarJODD/sv-matrix", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model" },
+    { "id": "E6", "name": "sv-efferd (marketing blocks)", "url": "https://sv-efferd.pages.dev", "repo": "https://github.com/SikandarJODD/sv-efferd", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model", "notes": "credit-to-original pattern" },
+    { "id": "E7", "name": "sv-particles (actually QBlocks)", "url": "https://sv-particles.vercel.app", "repo": "https://github.com/SikandarJODD/sv-particles", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model", "notes": "misleading name — contains no particles (P16 evidence)" },
+    { "id": "E8", "name": "SikandarJODD GitHub profile", "url": "https://github.com/SikandarJODD?tab=repositories", "status": "accessed", "quality": "METADATA-ONLY", "layer": "index" },
+    { "id": "R1", "name": "shadcn/ui registry spec", "url": "https://ui.shadcn.com/docs/registry", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model" },
+    { "id": "R2", "name": "jsrepo", "url": "https://jsrepo.dev", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "registry-model" },
+    { "id": "K1", "name": "ui-ux-pro-max skill (installed locally)", "path": "~/.hermes/skills/creative/ui-ux-pro-max", "status": "accessed", "quality": "DIRECTLY-INSPECTED", "layer": "knowledge", "notes": "referenced by S1; already installed in this Hermes" }
+  ],
+  "gaps": [
+    { "id": "G1", "gap": "No visual/screenshot inspection this session (text-only model checkpoint); implementation claims rest on DOM/script probes instead" },
+    { "id": "G2", "gap": "S3 post media inaccessible — nothing claimed from post video" },
+    { "id": "G3", "gap": "S9 morph mechanism unconfirmed" },
+    { "id": "G4", "gap": "reactbits/aceternity/21st.dev/componentry/refero not inspected (DesignLab tool index leads for Phase 2)" },
+    { "id": "G5", "gap": "Canonical host workspace not mountable from sandbox (infra)" }
+  ]
+}

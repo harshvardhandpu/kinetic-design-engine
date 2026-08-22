@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/tool-knowledge.schema.json",
+  "title": "ToolKnowledge",
+  "description": "Knowledge entry for one UI/design tool or MCP server. kind discriminator replaces a separate MCPKnowledge schema (decision: docs/gym/46). Doc: docs/gym/46-tool-intelligence.md",
+  "type": "object",
+  "required": ["schema", "tool", "kind", "version_checked", "status", "integration_status"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/tool-knowledge@0.1" },
+    "tool": { "type": "string" },
+    "kind": { "enum": ["tool", "mcp"] },
+    "version_checked": {
+      "type": "object",
+      "required": ["date"],
+      "properties": {
+        "version": { "type": ["string", "null"] },
+        "date": { "type": "string", "format": "date" }
+      }
+    },
+    "status": { "enum": ["active", "changed", "deprecated", "blocked", "stale"] },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["capability"],
+        "properties": {
+          "capability": { "type": "string" },
+          "evidence": { "type": ["string", "null"], "description": "doc link, sandbox experiment id, or schema inspection ref" }
+        }
+      }
+    },
+    "limitations": { "type": "array", "items": { "type": "string" }, "description": "observed failure modes included — the valuable part" },
+    "license": { "type": ["string", "null"] },
+    "pricing": { "type": "object", "properties": {
+      "free_tier": { "type": ["string", "null"] }, "paid_notes": { "type": ["string", "null"] } } },
+    "mcp": {
+      "type": ["object", "null"],
+      "description": "present when kind=mcp",
+      "properties": {
+        "endpoint": { "type": ["string", "null"] },
+        "transport": { "type": ["string", "null"] },
+        "auth": { "type": ["string", "null"], "description": "never store secrets; describe mechanism only" },
+        "tools": { "type": "array", "items": { "type": "object", "required": ["name"], "properties": {
+          "name": { "type": "string" }, "description": { "type": ["string", "null"] } } } },
+        "rate_limits": { "type": ["string", "null"] }
+      }
+    },
+    "skill": { "type": "object", "properties": {
+      "hermes_skill_available": { "type": "boolean" }, "path": { "type": ["string", "null"] } } },
+    "framework_support": { "type": "array", "items": { "type": "string" } },
+    "best_uses": { "type": "array", "items": { "type": "string" } },
+    "bad_uses": { "type": "array", "items": { "type": "string" } },
+    "cost_class": { "enum": ["free", "metered", "paid", "unknown"] },
+    "privacy_class": { "enum": ["local", "public-api", "third-party", "unknown"] },
+    "fallback_for": { "type": ["string", "null"], "description": "declared fallback chain for the router (doc 47)" },
+    "integration_status": { "enum": ["not-connected", "sandboxed", "approved"] },
+    "sandbox_experiments": { "type": "array", "items": { "type": "string" }, "description": "ExperimentRecord ids" }
+  }
+}
