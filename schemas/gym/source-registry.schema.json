@@ -5,16 +5,19 @@
   "description": "Authoritative registry of inspiration, implementation, and tool sources with conservative rights policy.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema", "updated", "training_definition", "sources"],
+  "required": ["$schema", "registry_version", "updated_at", "authority", "training_definition", "sources"],
   "properties": {
-    "schema": { "const": "kinetic/gym/source-registry@0.1" },
-    "updated": { "type": "string", "format": "date" },
+    "$schema": { "const": "../../../schemas/gym/source-registry.schema.json" },
+    "registry_version": { "const": "0.1.2" },
+    "updated_at": { "type": "string", "format": "date" },
+    "authority": { "const": "KINETIC repository machine state; Obsidian is a derived synthesis layer." },
     "training_definition": {
-      "const": "retrieval/design-pattern/tool/evaluator/negative/taste knowledge only; no foundation-model weight training"
+      "const": "Retrieval knowledge, DesignCases, abstract patterns, primitives/recipes, tool intelligence, evaluator and negative knowledge, source-to-output lessons, and Taste Memory; never foundation-model weight training."
     },
     "sources": {
       "type": "array",
       "minItems": 1,
+      "uniqueItems": true,
       "items": { "$ref": "#/$defs/source" }
     }
   },

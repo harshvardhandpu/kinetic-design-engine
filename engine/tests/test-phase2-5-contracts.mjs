@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
+import * as sourceRegistry from '../knowledge/source-registry.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const schemaFiles = [
@@ -78,7 +80,6 @@ assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-
 const runtimeFiles = [
   'engine/runner/state-machine.mjs',
   'engine/runner/store.mjs',
-  'engine/knowledge/source-registry.mjs',
   'engine/knowledge/retrieval.mjs',
   'engine/knowledge/obsidian-adapter.mjs',
   'engine/planning/prebuild-review.mjs',
@@ -232,4 +233,68 @@ try {
   await rm(tempDir, { recursive: true, force: true });
 }
 
-console.log(`S01/S02 contract foundations: PASS (${schemaFiles.length} schemas, ${ids.length} unique ids, CV01-CV18)`);
+// S03 / T4-T7, T39-T40: registry wrapper, deny-first rights, and immutability.
+const registryPath = join(root, 'gym', 'knowledge', 'sources', 'registry.json');
+const registrySchemaPath = join(root, 'schemas', 'gym', 'source-registry.schema.json');
+const registryBytesBefore = await readFile(registryPath);
+const registryHashBefore = createHash('sha256').update(registryBytesBefore).digest('hex');
+const policyBefore = sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesBefore));
+const loadedRegistry = await sourceRegistry.loadSourceRegistry({ registryPath, schemaPath: registrySchemaPath });
+assert.equal(loadedRegistry.registry_version, '0.1.2');
+assert.equal(loadedRegistry.sources.length, 27);
+assert.equal(new Set(loadedRegistry.sources.map(({ source_id }) => source_id)).size, 27);
+assert.equal(new Set(loadedRegistry.sources.map(({ canonical_url }) => sourceRegistry.canonicalizeSourceUrl(canonical_url))).size, 27);
+assert.equal((await validateFile({ artifactPath: registryPath, schemaPath: registrySchemaPath })).valid, true);
+assert.ok(Object.isFrozen(loadedRegistry) && Object.isFrozen(loadedRegistry.sources) && Object.isFrozen(loadedRegistry.sources[0]));
+assert.throws(() => { loadedRegistry.sources[0].rights_status = 'ALLOW_CODE_INGEST'; }, TypeError);
+assert.equal(sourceRegistry.lookupSource('src-originkit').source_id, 'src-originkit');
+assert.equal(sourceRegistry.readSourceAudit('src-originkit').source_id, 'src-originkit');
+assert.throws(() => sourceRegistry.lookupSource('src-missing'), (error) => error.code === 'KINETIC_SOURCE_NOT_FOUND');
+
+const allow = (request) => {
+  const decision = sourceRegistry.authorizeSourceUse(request);
+  assert.equal(decision.allowed, true);
+  assert.equal(decision.registry_version, '0.1.2');
+  assert.ok(decision.evidence_urls.length > 0);
+  return decision;
+};
+const deny = (request, code) => assert.throws(() => sourceRegistry.authorizeSourceUse(request), (error) => error.code === code);
+allow({ sourceId: 'src-seesaw', usageMode: 'PRINCIPLE', operation: 'manual_reference' });
+deny({ sourceId: 'src-seesaw', usageMode: 'RECIPE', operation: 'code_ingest' }, 'KINETIC_RIGHTS_DENIED');
+allow({ sourceId: 'src-motion-primitives', usageMode: 'RECIPE', operation: 'code_ingest' });
+deny({ sourceId: 'src-motion-primitives', usageMode: 'PRIMITIVE', operation: 'asset_copy' }, 'KINETIC_RIGHTS_DENIED');
+allow({ sourceId: 'src-webinspoo', usageMode: 'COMPARISON_REFERENCE', operation: 'manual_reference' });
+deny({ sourceId: 'src-webinspoo', usageMode: 'RECIPE', operation: 'code_ingest' }, 'KINETIC_RIGHTS_DENIED');
+deny({ sourceId: 'src-60fps-design', usageMode: 'PRINCIPLE', operation: 'manual_reference' }, 'KINETIC_ENTITLEMENT_REQUIRED');
+allow({ sourceId: 'src-60fps-design', usageMode: 'PRINCIPLE', operation: 'manual_reference', entitlementRefs: ['entitlement:fixture'] });
+allow({ sourceId: 'src-toolf-directory', usageMode: 'TOOL', operation: 'tool_discovery' });
+deny({ sourceId: 'src-toolf-directory', usageMode: 'PRINCIPLE', operation: 'manual_reference' }, 'KINETIC_RIGHTS_DENIED');
+
+// T5 VERIFY_REQUIRED remains abstract/manual only.
+allow({ sourceId: 'src-originkit', usageMode: 'PRINCIPLE', operation: 'manual_reference' });
+deny({ sourceId: 'src-originkit', usageMode: 'RECIPE', operation: 'code_ingest', entitlementRefs: ['entitlement:fixture'] }, 'KINETIC_RIGHTS_DENIED');
+
+// T6 automation denial is independent from manual abstract use.
+deny({ sourceId: 'src-cuvii-labs-motion', usageMode: 'COMPARISON_REFERENCE', operation: 'automated_fetch' }, 'KINETIC_AUTOMATION_DENIED');
+assert.throws(() => sourceRegistry.assertAutomatedAccess({ sourceId: 'src-cuvii-labs-motion', url: 'https://labs.cuvii.dev/volume/motion', operation: 'capture' }), (error) => error.code === 'KINETIC_AUTOMATION_DENIED');
+
+// T7 build-time dependencies stay candidate-local and entitlement-scoped.
+const buildRequest = { sourceId: 'src-aceternity-components', usageMode: 'BUILD_DEPENDENCY', operation: 'build_dependency', entitlementRefs: ['license:item-verified'] };
+allow({ ...buildRequest, targetPath: 'gym/runs/case-fixture/variants/v1/vendor/aceternity.js' });
+deny({ ...buildRequest, targetPath: 'engine/core/aceternity.js' }, 'KINETIC_TARGET_FORBIDDEN');
+deny({ ...buildRequest, targetPath: 'gym/runs/case-fixture/variants/v1/../../../../engine/registry/item.js' }, 'KINETIC_TARGET_FORBIDDEN');
+
+const recipeView = sourceRegistry.permittedRetrievalView({ usageMode: 'RECIPE', operation: 'code_ingest' });
+assert.ok(recipeView.length > 0);
+assert.ok(recipeView.every((row) => row.decision.allowed && row.source.code_ingest === 'ALLOWED' && row.source.ingestion_modes.includes('CODE_RECIPE_INGEST')));
+assert.ok(!recipeView.some((row) => row.source.rights_status === 'VERIFY_REQUIRED' || row.source.rights_status === 'REFERENCE_ONLY'));
+const provenance = sourceRegistry.exportSourceProvenance(['src-motion-primitives']);
+assert.deepEqual(Object.keys(provenance[0]).sort(), ['canonical_url', 'evidence_urls', 'last_verified_at', 'rights_status', 'source_id'].sort());
+assert.ok(!Object.keys(sourceRegistry).some((name) => /^(set|update|mutate|write).*rights/i.test(name)), 'no runtime rights mutation export');
+
+const registryBytesAfter = await readFile(registryPath);
+const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest('hex');
+assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
+assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
+
+console.log(`S01-S03 contract foundations: PASS (${schemaFiles.length} schemas, CV01-CV18, registry ${registryHashAfter})`);
