@@ -265,17 +265,87 @@
       "mode": "original",
       "deployable": true,
       "experimental": false,
-      "state": "GENERATING",
+      "state": "TECHNICAL_PASS",
       "attempt": 1,
-      "gates": {},
+      "gates": {
+        "technical": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:56:55.125Z"
+        },
+        "responsive": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:56:55.151Z"
+        },
+        "a11y": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:56:55.181Z"
+        },
+        "performance": {
+          "result": "pass",
+          "producer": "objective",
+          "rationale": null,
+          "at": "2026-08-22T04:56:55.210Z"
+        },
+        "design": {
+          "result": "pending-vision-or-human",
+          "producer": "not-evaluated",
+          "rationale": "Amendment G",
+          "at": "2026-08-22T04:56:55.242Z"
+        },
+        "originality": {
+          "result": "pass-distinct",
+          "producer": "objective",
+          "rationale": "weighted_similarity=0.078 copy=0 assets=0 section_order=0",
+          "at": "2026-08-22T04:56:55.270Z"
+        }
+      },
       "timestamps": {
         "BRIEFED": "2026-08-22T02:42:56.270Z",
-        "GENERATING": "2026-08-22T02:47:58.303Z"
+        "GENERATING": "2026-08-22T02:47:58.303Z",
+        "BUILT": "2026-08-22T04:56:55.094Z",
+        "TECHNICAL_PASS": "2026-08-22T04:56:55.333Z"
       },
       "brief": null,
       "diagnosis": null,
-      "receipt": null,
-      "artifacts": []
+      "receipt": {
+        "schema": "kinetic/reproducibility-receipt@0.1",
+        "kinetic_version": "0.2.0-phase2",
+        "repo_commit": "f30d2775fa691b1f9677b0b74497a33bea16512f",
+        "model": "qwen/qwen3.8-max-free",
+        "provider": "tokenrouter",
+        "prompt_skill_version": "phase2-v1",
+        "design_cases_retrieved": [],
+        "tool_versions": {
+          "node": "v20.20.2",
+          "browser": "hermes-camofox",
+          "viewport": "1485x840"
+        },
+        "registry_entries": [
+          "kinetic.scramble-text",
+          "kinetic.marquee",
+          "kinetic.hover-lift"
+        ],
+        "recipe_versions": {},
+        "primitive_versions": {
+          "kinetic.scramble-text": "1.0.0",
+          "kinetic.marquee": "1.0.0",
+          "kinetic.hover-lift": "1.0.0"
+        },
+        "dependency_lock_hash": null,
+        "random_seed": null,
+        "evaluator_version": "gates.browser@0.1",
+        "generated_at": "2026-08-22T04:56:55.306Z",
+        "extra": null
+      },
+      "artifacts": [
+        "gym/runs/case-fe653973ef/variants/v3/index.html"
+      ]
     }
   },
   "history": [
@@ -412,6 +482,44 @@
     {
       "at": "2026-08-22T04:52:12.562Z",
       "event": "V2 -> TECHNICAL_PASS",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T04:56:55.094Z",
+      "event": "V3 -> BUILT",
+      "attempt": 1
+    },
+    {
+      "at": "2026-08-22T04:56:55.125Z",
+      "event": "V3 gate technical=pass"
+    },
+    {
+      "at": "2026-08-22T04:56:55.151Z",
+      "event": "V3 gate responsive=pass"
+    },
+    {
+      "at": "2026-08-22T04:56:55.181Z",
+      "event": "V3 gate a11y=pass"
+    },
+    {
+      "at": "2026-08-22T04:56:55.210Z",
+      "event": "V3 gate performance=pass"
+    },
+    {
+      "at": "2026-08-22T04:56:55.242Z",
+      "event": "V3 gate design=pending-vision-or-human"
+    },
+    {
+      "at": "2026-08-22T04:56:55.270Z",
+      "event": "V3 gate originality=pass-distinct"
+    },
+    {
+      "at": "2026-08-22T04:56:55.306Z",
+      "event": "V3 receipt recorded"
+    },
+    {
+      "at": "2026-08-22T04:56:55.333Z",
+      "event": "V3 -> TECHNICAL_PASS",
       "attempt": 1
     }
   ]

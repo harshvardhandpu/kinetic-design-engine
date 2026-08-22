@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Whispering Statement (V3 original)</title>
+<!--
+  KINETIC GYM / V3 ORIGINAL VARIANT — case-fe653973ef / slot V3
+  Direction: "The Whispering Statement" — a single-viewport, NO-SCROLL typographic room.
+  Distinct from reference (dark vertical ceremonial scroll), V1 (light editorial grid),
+  V2 (horizontal procession). Here: one screen, a scramble-decoded central statement,
+  a slow marquee band of whispered words, and three hover-lift "whisper" cards.
+  Warm paper + deep teal + one coral accent. Content ORIGINAL.
+-->
+<style>
+:root {
+  --paper: #F4EFE6;
+  --ink: #12332E;
+  --coral: #E2603F;
+  --dim: color-mix(in srgb, var(--ink) 60%, transparent);
+  --sans: 'Helvetica Neue', Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { height: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: var(--sans); overflow: hidden; display: flex; flex-direction: column; }
+::selection { background: var(--coral); color: var(--paper); }
+
+.top { display: flex; justify-content: space-between; align-items: center; padding: 1.4rem clamp(1.5rem, 5vw, 4rem); }
+.top .mark { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.3em; }
+.top .tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.2em; color: var(--dim); }
+
+.stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 clamp(1.5rem, 6vw, 5rem); gap: 2.2rem; }
+.stage .kicker { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.4em; color: var(--coral); }
+.statement { font-size: clamp(2.2rem, 6.5vw, 5rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; max-width: 20ch; }
+.stage .sub { max-width: 34rem; color: var(--dim); font-size: 1rem; }
+
+.whispers { display: flex; gap: 1.2rem; flex-wrap: wrap; justify-content: center; }
+.whisper { background: color-mix(in srgb, var(--ink) 4%, transparent); border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: 12px; padding: 1rem 1.4rem; min-width: 150px; cursor: default; }
+.whisper b { display: block; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.whisper span { font-size: 0.78rem; color: var(--dim); }
+
+.band { border-top: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); padding: 0.7rem 0; overflow: hidden; }
+.band .kinetic-marquee-track { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.35em; color: var(--dim); text-transform: uppercase; }
+
+@media (prefers-reduced-motion: reduce) { body { overflow: auto; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="mark">WA · ROOM 03</span>
+  <span class="tag">A SINGLE-SCREEN STATEMENT</span>
+</header>
+
+<main class="stage" id="main">
+  <p class="kicker">LISTEN CLOSELY</p>
+  <h1 class="statement" data-recipe-role="scramble">Stillness speaks first.</h1>
+  <p class="sub">Before the room fills, before the words arrive, there is a pause that already knows what it wants to say. This room holds that pause.</p>
+
+  <div class="whispers" aria-label="Three whispers">
+    <div class="whisper" data-recipe-role="lift"><b>Begin</b><span>the quiet entry</span></div>
+    <div class="whisper" data-recipe-role="lift"><b>Refine</b><span>the careful middle</span></div>
+    <div class="whisper" data-recipe-role="lift"><b>Return</b><span>the long way home</span></div>
+  </div>
+</main>
+
+<div class="band" data-recipe-role="marquee">breathe in · hold · breathe out · remember · begin again · breathe in · hold · breathe out · remember · begin again ·</div>
+
+<script type="module">
+import * as scrambleText from './kinetic/core/primitives/scramble-text.js';
+import * as marquee from './kinetic/core/primitives/marquee.js';
+import * as hoverLift from './kinetic/core/primitives/hover-lift.js';
+const tokens = await fetch('./.kinetic/tokens.json').then(r => r.json()).catch(() => ({}));
+const handles = [];
+const st = document.querySelector('[data-recipe-role=scramble]');
+if (st) handles.push(scrambleText.mount(st, { duration: 1400, tokens }));
+const mq = document.querySelector('[data-recipe-role=marquee]');
+if (mq) handles.push(marquee.mount(mq, { speed: 40, tokens }));
+for (const el of document.querySelectorAll('[data-recipe-role=lift]')) {
+  handles.push(hoverLift.mount(el, { lift: 6, tokens }));
+}
+window.__KINETIC_HANDLES__ = handles;
+</script>
+</body>
+</html>
