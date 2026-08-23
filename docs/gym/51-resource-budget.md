@@ -42,3 +42,14 @@ Generation dominates cost; evaluation is mostly scripted (cheap). Therefore:
 If the review queue exceeds K unreviewed batches, generation throttles to
 ingest+study only (producing review-ready backlog is worthless if review is
 the bottleneck). Metric-driven, logged.
+
+## Phase 2.5 browser boundary
+
+The sole browser dependency is exact `playwright-chromium@1.62.1`; Firefox,
+WebKit, global installs, `--with-deps`, and host package mutation are forbidden.
+Install package metadata with `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` and
+`NPM_CONFIG_CACHE=$PWD/.cache/npm`, then run the free-space preflight before
+`npm run install:chromium`. Chromium uses `.cache/ms-playwright/`; npm uses
+`.cache/npm/`; general browser temp uses `.tmp/playwright/`; run profiles use
+`gym/runs/<case>/.tmp/`. `TMPDIR` is always project-local, cleanup runs in
+`finally`, and package plus actual `browser.version()` values are recorded.

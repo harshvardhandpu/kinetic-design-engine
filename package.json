@@ -1,0 +1,13 @@
+{
+  "name": "kinetic-design-engine",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "preflight:chromium": "node -e \"require('node:fs').statfs('.',(e,s)=>{if(e)throw e;const n=Number(s.bavail)*Number(s.bsize);if(n<1073741824)throw Error('Chromium install requires 1 GiB free; found '+n);console.log('Chromium free-space preflight: '+n+' bytes available')})\"",
+    "install:chromium": "npm run preflight:chromium && mkdir -p .cache/ms-playwright .tmp/playwright && PLAYWRIGHT_BROWSERS_PATH=$PWD/.cache/ms-playwright TMPDIR=$PWD/.tmp/playwright playwright install chromium",
+    "test:s11": "npm run preflight:chromium && mkdir -p .cache/ms-playwright .tmp/playwright && chmod 1777 .tmp/playwright && PLAYWRIGHT_BROWSERS_PATH=$PWD/.cache/ms-playwright TMPDIR=$PWD/.tmp/playwright node engine/tests/test-phase2-5-capture.mjs"
+  },
+  "dependencies": {
+    "playwright-chromium": "1.62.1"
+  }
+}

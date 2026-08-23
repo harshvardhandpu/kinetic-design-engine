@@ -1,5 +1,8 @@
 node_modules/
 dist/
+.cache/
+.tmp/
+gym/runs/*/.tmp/
 gym/artifacts/
 gym/exports/obsidian/
 *.log

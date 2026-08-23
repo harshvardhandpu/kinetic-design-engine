@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>KINETIC capture fixture</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #f4efe6; color: #171512; }
+    main { min-height: 140vh; padding: 48px; }
+    .card { max-width: 640px; padding: 32px; border: 2px solid currentColor; border-radius: 24px; background: #fffaf0; }
+    .mark { width: 96px; height: 96px; transition: transform 300ms ease; }
+    .mark:hover { transform: rotate(12deg) scale(1.05); }
+    #checkpoint { margin-top: 70vh; }
+    @media (prefers-reduced-motion: reduce) { .mark { transition: none; } }
+  </style>
+</head>
+<body>
+  <main data-kinetic-fixture="ready">
+    <section class="card">
+      <svg class="mark" viewBox="0 0 100 100" aria-label="Synthetic KINETIC mark"><circle cx="50" cy="50" r="45" fill="#f26b38"/><path d="M25 55 48 30l27 40" fill="none" stroke="#171512" stroke-width="8"/></svg>
+      <h1>Synthetic capture fixture</h1>
+      <p>Deterministic local content only. No network, product, or Wanaka data.</p>
+    </section>
+    <p id="checkpoint">capture-ready</p>
+  </main>
+</body>
+</html>
