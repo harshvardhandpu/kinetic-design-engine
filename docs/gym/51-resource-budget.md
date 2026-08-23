@@ -23,8 +23,8 @@ repair attempts: ≤ 2 per candidate (44)
 wall clock:      ≤ N hours (config; jobs pause, not fail, on expiry — 50)
 token classes:   per-stage allocation (48); strong-model quota capped
 storage growth:  ≤ X GB/day soft cap → retention sweep (52) before overflow
-browser:         one shared browser profile; per-candidate isolated context;
-                 crash of one context never kills the batch
+browser:         one browser process per capture invocation; one isolated
+                 context per capture spec; no persistent shared profile
 ```
 
 ## Compute order-of-magnitude planning (for future activation)
@@ -50,6 +50,9 @@ WebKit, global installs, `--with-deps`, and host package mutation are forbidden.
 Install package metadata with `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` and
 `NPM_CONFIG_CACHE=$PWD/.cache/npm`, then run the free-space preflight before
 `npm run install:chromium`. Chromium uses `.cache/ms-playwright/`; npm uses
-`.cache/npm/`; general browser temp uses `.tmp/playwright/`; run profiles use
-`gym/runs/<case>/.tmp/`. `TMPDIR` is always project-local, cleanup runs in
-`finally`, and package plus actual `browser.version()` values are recorded.
+`.cache/npm/`; browser profiles and other temporary data use
+`.tmp/playwright/`. `PLAYWRIGHT_BROWSERS_PATH` and `TMPDIR` are explicit and
+project-local, every context/browser is closed in `finally`, and package plus
+actual `browser.version()` values are recorded. Durable WebP files alone live
+under `gym/runs/<case>/captures/artifacts/`; partial browser/temp resources do
+not survive a failed capture.

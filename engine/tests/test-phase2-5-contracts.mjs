@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile, readTelemetry, recordStageTelemetry } from '../runner/store.mjs';
@@ -13,6 +13,7 @@ import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
 import { reviewBrief } from '../planning/prebuild-review.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
+import { compareOriginality } from '../evaluator/originality-compare.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const schemaFiles = [
@@ -544,6 +545,13 @@ deny({ sourceId: 'src-originkit', usageMode: 'RECIPE', operation: 'code_ingest',
 // T6 automation denial is independent from manual abstract use.
 deny({ sourceId: 'src-cuvii-labs-motion', usageMode: 'COMPARISON_REFERENCE', operation: 'automated_fetch' }, 'KINETIC_AUTOMATION_DENIED');
 assert.throws(() => sourceRegistry.assertAutomatedAccess({ sourceId: 'src-cuvii-labs-motion', url: 'https://labs.cuvii.dev/volume/motion', operation: 'capture' }), (error) => error.code === 'KINETIC_AUTOMATION_DENIED');
+const fixtureAccess = sourceRegistry.authorizeCaptureAccess({ url: pathToFileURL(join(root, 'engine', 'tests', 'fixtures', 'capture-fixture.html')).href });
+assert.equal(fixtureAccess.allowed, true);
+assert.equal(fixtureAccess.effective_mode, 'PROJECT_LOCAL_CAPTURE');
+assert.throws(
+  () => sourceRegistry.authorizeCaptureAccess({ url: pathToFileURL(join(root, 'package.json')).href }),
+  (error) => error.code === 'KINETIC_CAPTURE_ACCESS_DENIED',
+);
 
 // T7 build-time dependencies stay candidate-local and entitlement-scoped.
 const buildRequest = { sourceId: 'src-aceternity-components', usageMode: 'BUILD_DEPENDENCY', operation: 'build_dependency', entitlementRefs: ['license:item-verified'] };
@@ -563,5 +571,27 @@ const registryBytesAfter = await readFile(registryPath);
 const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest('hex');
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
+
+// T48: visual fingerprint similarity is independent from structural originality and design quality.
+const fingerprint = {
+  url: 'file:///reference.html',
+  section_order: ['reference'], layout_sig: ['reference'], font_size_histogram: { 16: 1 },
+  font_families: { serif: 1 }, color_roles: { dark: 1 }, headings: ['reference'],
+  kinetic_ids: ['reference'], image_hosts: ['reference.test'],
+  visual_phashes: { 'desktop/initial': '0'.repeat(64) },
+};
+const originality = compareOriginality(fingerprint, {
+  ...fingerprint,
+  url: 'file:///candidate.html',
+  section_order: ['candidate'], layout_sig: ['candidate'], font_size_histogram: { 32: 1 },
+  font_families: { sans: 1 }, color_roles: { light: 1 }, headings: ['candidate'],
+  kinetic_ids: ['candidate'], image_hosts: ['candidate.test'],
+});
+assert.equal(originality.weighted_similarity, 0);
+assert.equal(originality.visual_fingerprint_similarity, 1);
+assert.equal('design_quality' in originality, false);
+const oppositeVisual = compareOriginality(fingerprint, { ...fingerprint, url: 'file:///opposite.html', visual_phashes: { 'desktop/initial': 'f'.repeat(64) } });
+assert.equal(oppositeVisual.visual_fingerprint_similarity, 0);
+assert.equal(oppositeVisual.weighted_similarity, 1);
 
 console.log(`S01-S10 contract foundations: PASS (T1-T13, T31, T39-T41, T46, CV01-CV18, registry ${registryHashAfter})`);

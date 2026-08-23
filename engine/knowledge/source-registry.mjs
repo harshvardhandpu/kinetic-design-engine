@@ -1,5 +1,6 @@
 import { readFile } from 'node:fs/promises';
-import { dirname, join, normalize, relative, resolve, sep } from 'node:path';
+import { realpathSync } from 'node:fs';
+import { dirname, isAbsolute, join, normalize, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateFile } from '../core/schema-validate.mjs';
 
@@ -191,6 +192,38 @@ export function assertAutomatedAccess({ sourceId, url, operation }) {
   if (source.automated_access !== 'ALLOWED' || source.ingestion_modes.includes('NO_AUTOMATED_INGEST')) {
     deny('KINETIC_AUTOMATION_DENIED', source, 'COMPARISON_REFERENCE', operation, 'automated access is not explicitly allowed');
   }
+}
+
+export function authorizeCaptureAccess({ sourceId = null, url }) {
+  let parsed;
+  try { parsed = new URL(url); }
+  catch { throw new RightsError('KINETIC_CAPTURE_ACCESS_DENIED', `invalid capture URL: ${url}`); }
+  if (parsed.protocol === 'file:') {
+    let path;
+    let realPath;
+    try {
+      path = fileURLToPath(parsed);
+      realPath = realpathSync(path);
+    } catch { throw new RightsError('KINETIC_CAPTURE_ACCESS_DENIED', `local capture URL does not resolve: ${url}`); }
+    const gymRoot = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
+    const allowed = [join(root, 'engine', 'tests', 'fixtures'), join(gymRoot, 'runs')].some((parent) => {
+      try {
+        const rel = relative(realpathSync(parent), realPath);
+        return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel));
+      } catch { return false; }
+    });
+    if (!allowed) throw new RightsError('KINETIC_CAPTURE_ACCESS_DENIED', `local capture path is outside approved roots: ${path}`);
+    return deepFreeze({
+      allowed: true,
+      source_id: null,
+      usage_mode: 'COMPARISON_REFERENCE',
+      operation: 'capture',
+      effective_mode: 'PROJECT_LOCAL_CAPTURE',
+      obligations: [], warnings: [], evidence_urls: [],
+      registry_version: registryOrThrow().registry_version,
+    });
+  }
+  throw new RightsError('KINETIC_CAPTURE_ACCESS_DENIED', 'external capture navigation is forbidden');
 }
 
 export function permittedRetrievalView(request) {
