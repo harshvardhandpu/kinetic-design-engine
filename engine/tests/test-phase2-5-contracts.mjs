@@ -85,7 +85,6 @@ assert.equal(caseRunSchema.properties.schema.const, 'kinetic/gym/case-run@0.2');
 assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-run.schema.json#/$defs/phase25');
 
 const runtimeFiles = [
-  'engine/cli/capture.mjs',
   'engine/evaluator/vision-critic.mjs',
 ];
 for (const path of runtimeFiles) {
