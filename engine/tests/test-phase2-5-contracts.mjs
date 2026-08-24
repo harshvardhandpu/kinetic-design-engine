@@ -14,6 +14,7 @@ import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
 import { reviewBrief } from '../planning/prebuild-review.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 import { compareOriginality } from '../evaluator/originality-compare.mjs';
+import { createVisionCritic, createVisionRequest } from '../evaluator/vision-critic.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const schemaFiles = [
@@ -84,13 +85,6 @@ assert.deepEqual(taste.$defs.phase25.properties.outcome.properties.result.enum, 
 const caseRunSchema = parsed.get('schemas/gym/case-run.schema.json');
 assert.equal(caseRunSchema.properties.schema.const, 'kinetic/gym/case-run@0.2');
 assert.equal(caseRunSchema.properties.slots.additionalProperties.$ref, 'variant-run.schema.json#/$defs/phase25');
-
-const runtimeFiles = [
-  'engine/evaluator/vision-critic.mjs',
-];
-for (const path of runtimeFiles) {
-  await assert.rejects(readFile(join(root, path)), { code: 'ENOENT' }, `${path} must remain absent before its slice`);
-}
 
 const valid = (value, schema, schemaPath = join(root, 'schemas', 'gym', 'inline.schema.json')) => {
   const result = validateValue({ value, schema, schemaPath });
@@ -594,4 +588,273 @@ const oppositeVisual = compareOriginality(fingerprint, { ...fingerprint, url: 'f
 assert.equal(oppositeVisual.visual_fingerprint_similarity, 0);
 assert.equal(oppositeVisual.weighted_similarity, 1);
 
-console.log(`S01-S10 contract foundations: PASS (T1-T13, T31, T39-T41, T46, CV01-CV18, registry ${registryHashAfter})`);
+// T21: vision identity is explicit, matched, and advisory; unknown identity falls back without fabrication.
+const visionRequest = createVisionRequest({
+  reference_capture_ids: ['cap-reference'],
+  candidate_capture_ids: ['cap-candidate'],
+  variant_brief_ref: 'planning/V1/variant-brief.json',
+  rubric_version: 'design-rubric@0.1',
+  relevant_provenance_refs: ['retrieval/V1/receipt.json'],
+  optional_fidelity_report_ref: null,
+  capture_hashes: ['a'.repeat(64), 'b'.repeat(64)],
+  prompt_version: 'vision-prompt@0.1',
+});
+assert.deepEqual(Object.keys(visionRequest), [
+  'reference_capture_ids', 'candidate_capture_ids', 'variant_brief_ref', 'rubric_version',
+  'relevant_provenance_refs', 'optional_fidelity_report_ref', 'capture_hashes', 'prompt_version',
+]);
+const humanGate = {
+  status: 'KINETIC_VISION_UNVERIFIED',
+  advisory_recommendation: 'HUMAN_VISUAL_GATE',
+  observations: [],
+  vision_receipt: null,
+};
+const unverifiedVisionCritic = createVisionCritic();
+assert.deepEqual(unverifiedVisionCritic({ request: visionRequest, toolLabel: 'anonymous vision tool' }), humanGate);
+assert.equal('score' in humanGate, false);
+assert.equal('design_qualified' in humanGate, false);
+
+const visionResponseText = JSON.stringify({
+  request_sha256: createHash('sha256').update(JSON.stringify(visionRequest)).digest('hex'),
+  observations: [{
+  dimension: 'composition', observation: 'The candidate preserves a clear focal hierarchy.',
+  kind: 'STRENGTH', severity: 'low', confidence: 0.8, evidence_capture_ids: ['cap-candidate'],
+  }],
+});
+const visionReceipt = {
+  provider: 'provider-fixture', exact_model: 'vision-model-fixture-1', route: 'provider-api',
+  vision_image_capability: true, cost_status: 'UNKNOWN', limits: null,
+  capture_hashes: visionRequest.capture_hashes, prompt_version: visionRequest.prompt_version,
+  rubric_version: visionRequest.rubric_version,
+  response_sha256: createHash('sha256').update(visionResponseText).digest('hex'),
+  called_at: '2026-08-23T00:00:00.000Z',
+};
+const verifiedIdentity = {
+  verified: true, provider: visionReceipt.provider, exact_model: visionReceipt.exact_model,
+  route: visionReceipt.route, vision_image_capability: true, verification_source: 'provider-api-metadata',
+};
+const evaluateVisionCritic = createVisionCritic(verifiedIdentity);
+const acceptedVision = evaluateVisionCritic({
+  request: visionRequest, responseText: visionResponseText, receipt: visionReceipt,
+});
+assert.equal(acceptedVision.status, 'VERIFIED_ADVISORY');
+assert.equal(acceptedVision.advisory_recommendation, 'ADVANCE_TO_HUMAN');
+assert.deepEqual(acceptedVision.observations, JSON.parse(visionResponseText).observations);
+assert.deepEqual(acceptedVision.vision_receipt, visionReceipt);
+for (const unverified of [
+  { receipt: visionReceipt, verifiedIdentity: null },
+  { receipt: { ...visionReceipt, exact_model: 'anonymous' }, verifiedIdentity },
+  {
+    receipt: { ...visionReceipt, provider: 'anonymous', exact_model: 'vision-tool', route: 'unknown' },
+    verifiedIdentity: { verified: true, provider: 'anonymous', exact_model: 'vision-tool', route: 'unknown', vision_image_capability: true, verification_source: 'provider-api-metadata' },
+  },
+  {
+    receipt: { ...visionReceipt, provider: ' anonymous ' },
+    verifiedIdentity: { ...verifiedIdentity, provider: ' anonymous ' },
+  },
+  { receipt: Object.fromEntries(Object.entries(visionReceipt).filter(([key]) => key !== 'provider')), verifiedIdentity },
+  { receipt: { ...visionReceipt, limits: { tokens: Number.NaN } }, verifiedIdentity },
+  { receipt: { ...visionReceipt, called_at: '0' }, verifiedIdentity },
+  { receipt: { ...visionReceipt, response_sha256: 'f'.repeat(64) }, verifiedIdentity },
+  { receipt: { ...visionReceipt, capture_hashes: ['a'.repeat(64)] }, verifiedIdentity },
+  { receipt: visionReceipt, verifiedIdentity: { ...verifiedIdentity, vision_image_capability: false } },
+  { receipt: visionReceipt, verifiedIdentity: { ...verifiedIdentity, verification_source: 'tool-label' } },
+]) {
+  assert.deepEqual(createVisionCritic(unverified.verifiedIdentity)({
+    request: visionRequest, responseText: visionResponseText, receipt: unverified.receipt,
+  }), humanGate);
+}
+assert.throws(
+  () => createVisionRequest({ ...visionRequest, capture_hashes: [] }),
+  (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID',
+);
+const inheritedRequest = Object.assign(Object.create({ prompt_version: visionRequest.prompt_version }), visionRequest, { extra: true });
+delete inheritedRequest.prompt_version;
+assert.throws(
+  () => createVisionRequest(inheritedRequest),
+  (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID',
+);
+for (const provider of [
+  'anonymous vision tool', 'anonymous-tool', 'tool service', 'generic tool',
+  'unidentified', 'N/A', 'none', 'unspecified', 'TBD', 'not known', 'redacted', 'placeholder', 'default',
+]) {
+  assert.deepEqual(createVisionCritic({ ...verifiedIdentity, provider })({
+    request: visionRequest,
+    responseText: visionResponseText,
+    receipt: { ...visionReceipt, provider },
+  }), humanGate);
+}
+for (const identityPatch of [
+  { provider: 'anonymous.provider' }, { exact_model: 'unknown/model' }, { route: 'tool:api' },
+  { provider: 'anonymousProvider' }, { exact_model: 'unknownModel' }, { route: 'toolAPI' },
+  { route: 't.o.o.l/api' },
+]) {
+  assert.deepEqual(createVisionCritic({ ...verifiedIdentity, ...identityPatch })({
+    request: visionRequest,
+    responseText: visionResponseText,
+    receipt: { ...visionReceipt, ...identityPatch },
+  }), humanGate);
+}
+const sparseRequest = structuredClone(visionRequest);
+sparseRequest.reference_capture_ids = new Array(1);
+assert.throws(() => createVisionRequest(sparseRequest), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+for (const key of ['variant_brief_ref', 'rubric_version', 'prompt_version']) {
+  assert.throws(() => createVisionRequest({ ...visionRequest, [key]: '   ' }), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+}
+const symbolRequest = structuredClone(visionRequest);
+symbolRequest[Symbol('extra')] = true;
+assert.throws(() => createVisionRequest(symbolRequest), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+const hiddenRequest = structuredClone(visionRequest);
+Object.defineProperty(hiddenRequest, 'extra', { value: true });
+assert.throws(() => createVisionRequest(hiddenRequest), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest,
+  responseText: visionResponseText,
+  receipt: { ...visionReceipt, called_at: '2026-02-30T00:00:00Z' },
+}), humanGate);
+assert.deepEqual(evaluateVisionCritic({ request: visionRequest, responseText: null, receipt: visionReceipt }), humanGate);
+let requestHashReads = 0;
+const accessorRequest = { ...visionRequest };
+Object.defineProperty(accessorRequest, 'capture_hashes', {
+  enumerable: true,
+  get: () => (requestHashReads++ < 3 ? visionRequest.capture_hashes : ['not-a-hash']),
+});
+assert.throws(() => createVisionRequest(accessorRequest), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+let receiptProviderReads = 0;
+const accessorReceipt = { ...visionReceipt };
+Object.defineProperty(accessorReceipt, 'provider', {
+  enumerable: true,
+  get: () => (receiptProviderReads++ < 2 ? visionReceipt.provider : 'anonymous'),
+});
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest, responseText: visionResponseText, receipt: accessorReceipt,
+}), humanGate);
+assert.deepEqual(unverifiedVisionCritic({
+  request: visionRequest, responseText: visionResponseText, receipt: visionReceipt, verifiedIdentity,
+}), humanGate, 'per-call identity data cannot replace the constructor capability');
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest, responseText: visionResponseText,
+  receipt: { ...visionReceipt, cost_status: 'VERIFIED_FREE', limits: { tokens: 1000 } },
+}), humanGate, 'cost stays unknown until a provider adapter verifies it');
+const replayRequest = createVisionRequest({
+  ...visionRequest,
+  reference_capture_ids: visionRequest.candidate_capture_ids,
+  candidate_capture_ids: visionRequest.reference_capture_ids,
+  variant_brief_ref: 'planning/V2/other-brief.json',
+  relevant_provenance_refs: ['retrieval/V2/other-receipt.json'],
+  optional_fidelity_report_ref: 'reports/other-fidelity.json',
+});
+assert.throws(() => evaluateVisionCritic({
+  request: replayRequest, responseText: visionResponseText, receipt: visionReceipt,
+}), (error) => error.code === 'KINETIC_VISION_RESPONSE_INVALID', 'receipt/response cannot replay across request roles or context');
+let proxyTraps = 0;
+const proxyRequest = new Proxy(visionRequest, {
+  getPrototypeOf: () => { proxyTraps += 1; return Object.prototype; },
+  ownKeys: (target) => { proxyTraps += 1; return Reflect.ownKeys(target); },
+  getOwnPropertyDescriptor: (target, key) => { proxyTraps += 1; return Object.getOwnPropertyDescriptor(target, key); },
+});
+assert.throws(() => createVisionRequest(proxyRequest), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+assert.equal(proxyTraps, 0, 'Proxy traps must not execute at the plain-data boundary');
+let arrayPrototypeTraps = 0;
+const customPrototypeIds = ['cap-reference'];
+Object.setPrototypeOf(customPrototypeIds, new Proxy(Array.prototype, {
+  get: (target, key, receiver) => {
+    arrayPrototypeTraps += 1;
+    return Reflect.get(target, key, receiver);
+  },
+}));
+assert.throws(
+  () => createVisionRequest({ ...visionRequest, reference_capture_ids: customPrototypeIds }),
+  (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID',
+);
+assert.equal(arrayPrototypeTraps, 0, 'custom array prototypes must be rejected without trap execution');
+assert.deepEqual(createVisionRequest(visionRequest), visionRequest, 'normal arrays remain valid');
+let receiptProxyTraps = 0;
+const proxyReceipt = new Proxy(visionReceipt, {
+  getPrototypeOf: () => { receiptProxyTraps += 1; return Object.prototype; },
+  ownKeys: (target) => { receiptProxyTraps += 1; return Reflect.ownKeys(target); },
+});
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest, responseText: visionResponseText, receipt: proxyReceipt,
+}), humanGate);
+assert.equal(receiptProxyTraps, 0);
+let identityProxyTraps = 0;
+const proxyIdentity = new Proxy(verifiedIdentity, {
+  getPrototypeOf: () => { identityProxyTraps += 1; return Object.prototype; },
+  ownKeys: (target) => { identityProxyTraps += 1; return Reflect.ownKeys(target); },
+});
+assert.deepEqual(createVisionCritic(proxyIdentity)({
+  request: visionRequest, responseText: visionResponseText, receipt: visionReceipt,
+}), humanGate);
+assert.equal(identityProxyTraps, 0);
+let limitsProxyTraps = 0;
+const proxyLimits = new Proxy({}, {
+  getPrototypeOf: () => { limitsProxyTraps += 1; throw new Error('LIMITS_TRAP_EXECUTED'); },
+});
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest,
+  responseText: visionResponseText,
+  receipt: { ...visionReceipt, limits: proxyLimits },
+}), humanGate);
+assert.equal(limitsProxyTraps, 0);
+const revokedRequest = Proxy.revocable(visionRequest, {});
+revokedRequest.revoke();
+assert.throws(() => createVisionRequest(revokedRequest.proxy), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+const revokedLimits = Proxy.revocable({}, {});
+revokedLimits.revoke();
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest,
+  responseText: visionResponseText,
+  receipt: { ...visionReceipt, limits: revokedLimits.proxy },
+}), humanGate);
+let envelopeTraps = 0;
+const proxyEnvelope = new Proxy({ request: visionRequest, responseText: visionResponseText, receipt: visionReceipt }, {
+  get: (target, key, receiver) => { envelopeTraps += 1; return Reflect.get(target, key, receiver); },
+  getPrototypeOf: () => { envelopeTraps += 1; return Object.prototype; },
+});
+assert.deepEqual(evaluateVisionCritic(proxyEnvelope), humanGate);
+assert.equal(envelopeTraps, 0);
+let envelopeGetterReads = 0;
+const accessorEnvelope = { responseText: visionResponseText, receipt: visionReceipt };
+Object.defineProperty(accessorEnvelope, 'request', {
+  enumerable: true,
+  get: () => { envelopeGetterReads += 1; return visionRequest; },
+});
+assert.deepEqual(evaluateVisionCritic(accessorEnvelope), humanGate);
+assert.equal(envelopeGetterReads, 0);
+const revokedEnvelope = Proxy.revocable({ request: visionRequest }, {});
+revokedEnvelope.revoke();
+assert.deepEqual(evaluateVisionCritic(revokedEnvelope.proxy), humanGate);
+const accessorValue = (counter) => Object.defineProperty({}, 'unsafe', {
+  enumerable: true,
+  get: () => { counter.reads += 1; return 'unsafe'; },
+});
+const requestScalarCounter = { reads: 0 };
+assert.throws(() => createVisionRequest({
+  ...visionRequest, variant_brief_ref: accessorValue(requestScalarCounter),
+}), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+assert.equal(requestScalarCounter.reads, 0);
+const requestArrayCounter = { reads: 0 };
+assert.throws(() => createVisionRequest({
+  ...visionRequest, relevant_provenance_refs: [accessorValue(requestArrayCounter)],
+}), (error) => error.code === 'KINETIC_VISION_REQUEST_INVALID');
+assert.equal(requestArrayCounter.reads, 0);
+const receiptScalarCounter = { reads: 0 };
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest, responseText: visionResponseText,
+  receipt: { ...visionReceipt, provider: accessorValue(receiptScalarCounter) },
+}), humanGate);
+assert.equal(receiptScalarCounter.reads, 0);
+const receiptArrayCounter = { reads: 0 };
+assert.deepEqual(evaluateVisionCritic({
+  request: visionRequest, responseText: visionResponseText,
+  receipt: { ...visionReceipt, capture_hashes: [accessorValue(receiptArrayCounter), 'b'.repeat(64)] },
+}), humanGate);
+assert.equal(receiptArrayCounter.reads, 0);
+const identityScalarCounter = { reads: 0 };
+assert.deepEqual(createVisionCritic({
+  ...verifiedIdentity, provider: accessorValue(identityScalarCounter),
+})({ request: visionRequest, responseText: visionResponseText, receipt: visionReceipt }), humanGate);
+assert.equal(identityScalarCounter.reads, 0);
+
+console.log(`S01-S14 contract foundations: PASS (T1-T13, T21, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
