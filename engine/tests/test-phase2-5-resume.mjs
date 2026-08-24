@@ -5,8 +5,8 @@ import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { applyTransition, assertTransition, nextState, prepareRetry, TransitionError } from '../runner/state-machine.mjs';
-import { appendArtifactReceipt, findIdempotentReceipt, hashFile, readCase, withCaseLock, writeCaseAtomic } from '../runner/store.mjs';
+import { applyHumanReview, applyTransition, assertTransition, nextState, prepareRetry, TransitionError } from '../runner/state-machine.mjs';
+import { appendArtifactReceipt, findIdempotentReceipt, hashFile, readCase, readTasteDecision, withCaseLock, writeCaseAtomic, writeTasteDecisionExclusive } from '../runner/store.mjs';
 import { validateFile } from '../core/schema-validate.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
@@ -118,6 +118,41 @@ try {
   assert.equal(takeover.pid, 999999);
   assert.ok(!(await readdir(join(tempGym, 'jobs', 'locks'))).some((name) => name.startsWith('case-stale.lock.stale-')));
 
+  // T47: decision files are create-exclusive; corrections supersede without reopening terminal state.
+  const humanDecision = {
+    schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-review1',
+    context: { case_id: 'case-review', batch_id: 'batch-review', surface: 'portfolio', goal: 'quality' },
+    candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'V1', winner: null, candidate_decisions: {
+      V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'below floor' },
+      V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'below floor' },
+    } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: now,
+  };
+  const firstDecisionRef = await writeTasteDecisionExclusive(humanDecision);
+  assert.equal(firstDecisionRef, 'taste/decisions/td-20260822-review1.json');
+  assert.deepEqual(await readTasteDecision(humanDecision.decision_id), humanDecision);
+  await assert.rejects(writeTasteDecisionExclusive(humanDecision), (error) => error.code === 'KINETIC_DECISION_EXISTS');
+  const reviewCase = {
+    schema: 'kinetic/gym/case-run@0.2', case_id: 'case-review',
+    slots: Object.fromEntries(['V1', 'V2'].map((name) => [name, { ...slot('REVIEW_READY', {
+      run_id: `run-case-review-${name.toLowerCase()}`, case_id: 'case-review', slot: name, mode: 'original', deployable: true, original_work: true,
+      technically_qualified: true,
+    }) }])), reports: { fidelity: 'fidelity', source_to_output_loss: 'loss', review_package: 'package' },
+    review_state: 'REVIEW_READY', taste_decision_ref: null, blocked_condition: null, history: [], created_at: now, updated_at: now,
+  };
+  const terminalReview = applyHumanReview({ caseRun: reviewCase, decision: humanDecision, decisionRef: firstDecisionRef, now });
+  assert.equal(terminalReview.slots.V1.state, 'HUMAN_REVIEWED');
+  assert.throws(() => applyHumanReview({ caseRun: terminalReview, decision: { ...humanDecision, decision_id: 'td-20260822-invalid', supersedes: null }, decisionRef: 'taste/decisions/invalid.json', now }), (error) => error.code === 'KINETIC_HUMAN_REVIEW_INVALID');
+  const correction = structuredClone(humanDecision);
+  correction.decision_id = 'td-20260822-review2';
+  correction.supersedes = humanDecision.decision_id;
+  correction.outcome.result = 'PARTIAL_ACCEPTANCE';
+  correction.outcome.candidate_decisions.V1.acceptable_for_further_taste_learning = true;
+  const corrected = applyHumanReview({ caseRun: terminalReview, decision: correction, decisionRef: 'taste/decisions/td-20260822-review2.json', currentDecisionId: humanDecision.decision_id, now });
+  assert.equal(corrected.slots.V1.state, 'HUMAN_REVIEWED');
+  assert.equal(corrected.slots.V1.design_qualified, false);
+  assert.equal(corrected.slots.V1.acceptable_for_further_taste_learning, true);
+  assert.equal(corrected.history.at(-1).event, 'human-review-corrected');
+
   // T32: legacy CLI remains; Phase-2.5 gets an explicit additive path and no arbitrary record state.
   const run = (args) => spawnSync(process.execPath, [join(root, 'engine', 'runner', 'run.mjs'), ...args], { cwd: root, env: { ...process.env, KINETIC_GYM_ROOT: tempGym }, encoding: 'utf8' });
   let cli = run(['init-case', '--case', 'case-legacy-cli', '--slots', 'V0,V1', '--job', 'fixture']);
@@ -140,8 +175,48 @@ try {
   cli = run(['record', '--case', 'case-phase25-cli', '--slot', 'V0', '--state', 'BUILT']);
   assert.notEqual(cli.status, 0);
   assert.match(cli.stderr, /KINETIC_PHASE25_RECORD_FORBIDDEN/);
+
+  const cliReviewCase = structuredClone(reviewCase);
+  cliReviewCase.case_id = 'case-cli-review';
+  for (const [name, value] of Object.entries(cliReviewCase.slots)) {
+    value.case_id = cliReviewCase.case_id;
+    value.run_id = `run-${cliReviewCase.case_id}-${name.toLowerCase()}`;
+  }
+  await writeCaseAtomic(cliReviewCase.case_id, cliReviewCase);
+  const cliDecision = structuredClone(humanDecision);
+  cliDecision.decision_id = 'td-20260822-cli1';
+  cliDecision.context.case_id = cliReviewCase.case_id;
+  const cliDecisionInput = join(tempGym, 'cli-decision.json');
+  await writeFile(cliDecisionInput, JSON.stringify(cliDecision));
+  cli = run(['record-human-review', '--decision', cliDecisionInput]);
+  assert.equal(cli.status, 0, cli.stderr);
+  let cliReviewed = JSON.parse(await readFile(join(tempGym, 'runs', cliReviewCase.case_id, 'case.json')));
+  assert.equal(cliReviewed.review_state, 'HUMAN_REVIEWED');
+  assert.equal(cliReviewed.taste_decision_ref, 'taste/decisions/td-20260822-cli1.json');
+  assert.equal(cliReviewed.slots.V1.design_qualified, false);
+  assert.equal(cliReviewed.slots.V1.acceptable_for_further_taste_learning, false);
+  const firstCliDecisionHash = await hashFile(join(tempGym, cliReviewed.taste_decision_ref));
+  await assert.rejects(readFile(join(tempGym, 'taste', 'profile.json')), (error) => error.code === 'ENOENT');
+  cli = run(['record-human-review', '--decision', cliDecisionInput]);
+  assert.notEqual(cli.status, 0);
+  assert.match(cli.stderr, /KINETIC_DECISION_EXISTS|KINETIC_HUMAN_REVIEW_INVALID/);
+
+  const cliCorrection = structuredClone(cliDecision);
+  cliCorrection.decision_id = 'td-20260822-cli2';
+  cliCorrection.supersedes = cliDecision.decision_id;
+  cliCorrection.outcome.result = 'PARTIAL_ACCEPTANCE';
+  cliCorrection.outcome.candidate_decisions.V2.acceptable_for_further_taste_learning = true;
+  const cliCorrectionInput = join(tempGym, 'cli-correction.json');
+  await writeFile(cliCorrectionInput, JSON.stringify(cliCorrection));
+  cli = run(['record-human-review', '--decision', cliCorrectionInput]);
+  assert.equal(cli.status, 0, cli.stderr);
+  cliReviewed = JSON.parse(await readFile(join(tempGym, 'runs', cliReviewCase.case_id, 'case.json')));
+  assert.equal(cliReviewed.taste_decision_ref, 'taste/decisions/td-20260822-cli2.json');
+  assert.equal(cliReviewed.slots.V2.state, 'HUMAN_REVIEWED');
+  assert.equal(cliReviewed.slots.V2.acceptable_for_further_taste_learning, true);
+  assert.equal(await hashFile(join(tempGym, 'taste', 'decisions', 'td-20260822-cli1.json')), firstCliDecisionHash);
 } finally {
   await rm(tempGym, { recursive: true, force: true });
 }
 
-console.log('S04 lifecycle/store: PASS (T32, T37, T38)');
+console.log('S04/S17 lifecycle/store: PASS (T32, T37, T38, T47)');

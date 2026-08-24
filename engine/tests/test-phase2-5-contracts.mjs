@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile, readTelemetry, recordStageTelemetry } from '../runner/store.mjs';
-import { applyTransition, assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
+import { applyHumanReview, applyTransition, assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
@@ -620,6 +620,52 @@ try {
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
   valid(decision, phase25Taste, join(root, 'schemas', 'gym', 'taste-decision.schema.json'));
   invalid({ ...decision, outcome: { ...decision.outcome, candidate_decisions: {} } }, phase25Taste);
+  invalid({ ...decision, outcome: { ...decision.outcome, candidate_decisions: { ...decision.outcome.candidate_decisions, V1: { ...decision.outcome.candidate_decisions.V1, quality_floor_passed: true } } } }, phase25Taste);
+
+  // T25-T28: human relative preference, absolute floor, and taste-learning acceptance stay independent.
+  const reviewCase = {
+    schema: 'kinetic/gym/case-run@0.2', case_id: 'case-fixture',
+    slots: Object.fromEntries(['V1', 'V2'].map((slot) => [slot, {
+      schema: 'kinetic/gym/variant-run@0.2', run_id: `run-case-fixture-${slot.toLowerCase()}`, case_id: 'case-fixture', slot,
+      mode: 'original', state: 'REVIEW_READY', attempt: 1, deployable: true, original_work: true,
+      technically_qualified: true, design_qualified: null, acceptable_for_further_taste_learning: null,
+      refs: { variant_brief: 'brief', retrieval_receipt: 'retrieval', prebuild_review: 'prebuild', build_receipt: 'build', technical_evaluation: 'technical', capture_manifest: 'capture', design_evaluation: 'design', fidelity_report: 'fidelity' },
+      attempts: [], blocked_condition: null, timestamps: { REVIEW_READY: '2026-08-22T00:00:00Z' },
+    }])),
+    reports: { fidelity: 'fidelity', source_to_output_loss: 'loss', review_package: 'package' },
+    review_state: 'REVIEW_READY', taste_decision_ref: null, blocked_condition: null, history: [],
+    created_at: '2026-08-22T00:00:00Z', updated_at: '2026-08-22T00:00:00Z',
+  };
+  const reviewed = applyHumanReview({ caseRun: reviewCase, decision, decisionRef: 'taste/decisions/td-20260822-fixture.json', now: '2026-08-22T01:00:00Z' });
+  assert.equal(reviewed.review_state, 'HUMAN_REVIEWED');
+  assert.equal(reviewed.slots.V1.state, 'HUMAN_REVIEWED');
+  assert.equal(reviewed.slots.V1.design_qualified, false);
+  assert.equal(reviewed.slots.V1.acceptable_for_further_taste_learning, false);
+  const winner = structuredClone(decision);
+  winner.decision_id = 'td-20260822-winner';
+  winner.outcome = { result: 'WINNER_SELECTED', relative_preference: 'V1', winner: 'V1', candidate_decisions: {
+    V1: { quality_floor_passed: true, acceptable_for_further_taste_learning: false, reason: 'human floor pass only' },
+    V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: true, reason: 'learning signal only' },
+  } };
+  const independentlyStored = applyHumanReview({ caseRun: reviewCase, decision: winner, decisionRef: 'taste/decisions/td-20260822-winner.json', now: '2026-08-22T01:00:00Z' });
+  assert.equal(independentlyStored.slots.V1.design_qualified, true);
+  assert.equal(independentlyStored.slots.V1.acceptable_for_further_taste_learning, false);
+  assert.equal(independentlyStored.slots.V2.design_qualified, false);
+  assert.equal(independentlyStored.slots.V2.acceptable_for_further_taste_learning, true);
+  for (const bad of [
+    { ...winner, outcome: { ...winner.outcome, relative_preference: 'V2' } },
+    { ...winner, outcome: { ...winner.outcome, candidate_decisions: { ...winner.outcome.candidate_decisions, V1: { ...winner.outcome.candidate_decisions.V1, quality_floor_passed: false } } } },
+    { ...decision, outcome: { ...decision.outcome, candidate_decisions: { ...decision.outcome.candidate_decisions, V2: { ...decision.outcome.candidate_decisions.V2, acceptable_for_further_taste_learning: true } } } },
+    { ...decision, outcome: { ...decision.outcome, result: 'PARTIAL_ACCEPTANCE' } },
+    { ...decision, candidates: ['V0', 'V1'] },
+  ]) assert.throws(() => applyHumanReview({ caseRun: reviewCase, decision: bad, decisionRef: 'taste/decisions/bad.json' }), (error) => error.code === 'KINETIC_HUMAN_REVIEW_INVALID');
+  const confusedCases = [structuredClone(reviewCase), structuredClone(reviewCase), structuredClone(reviewCase)];
+  [confusedCases[0].slots.V1, confusedCases[0].slots.V2] = [confusedCases[0].slots.V2, confusedCases[0].slots.V1];
+  confusedCases[1].slots.V2.slot = 'V1';
+  confusedCases[2].slots.V1.case_id = 'case-foreign';
+  for (const confused of confusedCases) {
+    assert.throws(() => applyHumanReview({ caseRun: confused, decision, decisionRef: 'taste/decisions/confused.json' }), (error) => error.code === 'KINETIC_HUMAN_REVIEW_INVALID');
+  }
 
   const registry = JSON.parse(await readFile(join(root, 'gym', 'knowledge', 'sources', 'registry.json'), 'utf8'));
   valid(registry.sources[0].audit, JSON.parse(await readFile(join(root, 'schemas', 'gym', 'source-audit-record.schema.json'), 'utf8')), join(root, 'schemas', 'gym', 'source-audit-record.schema.json'));
@@ -1340,4 +1386,4 @@ assert.throws(() => assertTransition({
   artifactRefs: { ...designArtifactRefs, design_qualified: true },
 }), (error) => error.code === 'KINETIC_QUALIFICATION_EXPLICIT_REQUIRED');
 
-console.log(`S01-S16 contract foundations: PASS (T1-T16, T21-T24, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S17 contract foundations: PASS (T1-T16, T21-T28, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);

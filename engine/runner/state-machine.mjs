@@ -174,6 +174,58 @@ export function applyTransition({ caseRun, slot, toState, artifactRefs = {}, now
   return next;
 }
 
+export function applyHumanReview({ caseRun, decision, decisionRef, currentDecisionId = null, now = new Date().toISOString() }) {
+  const fail = (message) => { throw new TransitionError('KINETIC_HUMAN_REVIEW_INVALID', message); };
+  if (caseRun?.schema !== 'kinetic/gym/case-run@0.2' || decision?.schema !== 'kinetic/gym/taste-decision@0.2'
+    || decision.context?.case_id !== caseRun.case_id || typeof decisionRef !== 'string' || decisionRef.length === 0
+    || !Array.isArray(decision.candidates) || decision.candidates.length !== 2
+    || new Set(decision.candidates).size !== 2 || !decision.candidates.every((slot) => ['V1', 'V2'].includes(slot))) {
+    fail('human decision must match the Phase-2.5 case and exactly V1/V2');
+  }
+  const expectedSlots = ['V1', 'V2'];
+  const originals = expectedSlots.map((slot) => caseRun.slots?.[slot]);
+  const correction = caseRun.review_state === 'HUMAN_REVIEWED';
+  if (originals.some((record, index) => !record || record.slot !== expectedSlots[index] || record.case_id !== caseRun.case_id
+    || record.mode !== 'original' || record.deployable !== true || record.original_work !== true
+    || record.state !== (correction ? 'HUMAN_REVIEWED' : 'REVIEW_READY'))
+    || (!correction && (caseRun.review_state !== 'REVIEW_READY' || caseRun.taste_decision_ref !== null || decision.supersedes !== null))
+    || (correction && (typeof currentDecisionId !== 'string' || decision.supersedes !== currentDecisionId))) {
+    fail('review requires a ready original batch; corrections must supersede the current decision');
+  }
+  const outcome = decision.outcome;
+  const rows = outcome?.candidate_decisions;
+  if (!outcome || !rows || !['V1', 'V2'].every((slot) => typeof rows[slot]?.quality_floor_passed === 'boolean'
+    && typeof rows[slot]?.acceptable_for_further_taste_learning === 'boolean')) fail('every original requires explicit floor and learning booleans');
+  const anyAccepted = ['V1', 'V2'].some((slot) => rows[slot].quality_floor_passed || rows[slot].acceptable_for_further_taste_learning);
+  if (outcome.result === 'WINNER_SELECTED') {
+    if (!['V1', 'V2'].includes(outcome.relative_preference) || outcome.winner !== outcome.relative_preference
+      || rows[outcome.winner].quality_floor_passed !== true) fail('winner requires matching unique preference and explicit floor pass');
+  } else if (outcome.result === 'PARTIAL_ACCEPTANCE') {
+    if (outcome.winner !== null || !anyAccepted) fail('partial acceptance requires an explicit useful signal and no forced winner');
+  } else if (outcome.result === 'REJECT_ALL') {
+    if (outcome.winner !== null || anyAccepted) fail('reject-all requires every floor and learning value false');
+  } else fail('unsupported human outcome');
+
+  const next = clone(caseRun);
+  for (const slot of expectedSlots) {
+    const record = next.slots[slot];
+    record.design_qualified = rows[slot].quality_floor_passed;
+    record.acceptable_for_further_taste_learning = rows[slot].acceptable_for_further_taste_learning;
+    if (!correction) {
+      record.state = 'HUMAN_REVIEWED';
+      record.timestamps.HUMAN_REVIEWED = now;
+    }
+  }
+  next.review_state = 'HUMAN_REVIEWED';
+  next.taste_decision_ref = decisionRef;
+  next.updated_at = now;
+  next.history.push({
+    event_id: `human-review-${decision.decision_id}`, event: correction ? 'human-review-corrected' : 'human-review-recorded',
+    slot: null, artifact_ref: decisionRef, timestamp: now,
+  });
+  return next;
+}
+
 export function prepareRetry({ caseRun, slot, fromState, diagnosisRef, now = new Date().toISOString() }) {
   const record = getSlot(caseRun, slot);
   if (record.state !== fromState || !['BUILDING', 'TECHNICAL_EVALUATED', 'DESIGN_EVALUATED'].includes(fromState)) {

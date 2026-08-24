@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateValue } from '../core/schema-validate.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const j = async (p) => JSON.parse(await readFile(join(root, p), 'utf8'));
@@ -11,6 +12,7 @@ const schema = await j('schemas/gym/taste-decision.schema.json');
 assert.deepEqual(schema.properties.outcome.properties.result.enum, ['WINNER_SELECTED', 'REJECT_ALL']);
 
 const d = await j('gym/taste/decisions/td-20260822-izanami1.json');
+assert.equal(validateValue({ value: d, schema, schemaPath: join(root, 'schemas/gym/taste-decision.schema.json') }).valid, true, 'legacy @0.1 decision remains valid');
 assert.equal(d.outcome.result, 'REJECT_ALL');
 assert.equal(d.outcome.winner, null);
 assert.equal(d.outcome.runner_up, null);
@@ -54,4 +56,4 @@ assert.equal(nk.technical_gates_failed, false);
 assert.equal(nk.quality_floor_failure, true);
 assert.equal(nk.design_qualified, false);
 
-console.log('TasteDecision REJECT_ALL semantics: PASS');
+console.log('TasteDecision @0.1 REJECT_ALL semantics remain unchanged: PASS');

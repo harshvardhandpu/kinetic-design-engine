@@ -19,8 +19,8 @@ import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
-import { addOriginalSlot, applyTransition, assertFidelityPolicy, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
-import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic } from './store.mjs';
+import { addOriginalSlot, applyHumanReview, applyTransition, assertFidelityPolicy, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
+import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic, writeTasteDecisionExclusive } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
@@ -391,6 +391,44 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
     console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
     process.exitCode = 1;
   }
+} else if (cmd === 'record-human-review') {
+  try {
+    if (typeof A.decision !== 'string') throw Object.assign(new Error('record-human-review requires --decision'), { code: 'KINETIC_DECISION_INVALID' });
+    const decision = await j(A.decision);
+    const schemaPath = join(root, 'schemas', 'gym', 'taste-decision.schema.json');
+    const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+    const validation = validateValue({ value: decision, schema: { $defs: schema.$defs, $ref: '#/$defs/phase25' }, schemaPath });
+    if (!validation.valid) throw Object.assign(new Error(JSON.stringify(validation.errors)), { code: 'KINETIC_SCHEMA_INVALID' });
+    const caseId = decision.context.case_id;
+    await withCaseLock(caseId, `record-human-review-${decision.decision_id}`, async () => {
+      const loaded = await readStoredCase(caseId);
+      if (loaded.legacy) throw Object.assign(new Error('human review import is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
+      const currentDecision = loaded.record.taste_decision_ref
+        ? await j(resolveGymRef(loaded.record.taste_decision_ref, 'KINETIC_DECISION_NOT_FOUND'))
+        : null;
+      if (currentDecision) {
+        const currentValidation = validateValue({ value: currentDecision, schema: { $defs: schema.$defs, $ref: '#/$defs/phase25' }, schemaPath });
+        if (!currentValidation.valid || currentDecision.context.case_id !== caseId
+          || loaded.record.taste_decision_ref !== `taste/decisions/${currentDecision.decision_id}.json`) {
+          throw Object.assign(new Error('current human decision reference is invalid'), { code: 'KINETIC_DECISION_INVALID' });
+        }
+      }
+      const decisionRef = `taste/decisions/${decision.decision_id}.json`;
+      const timestamp = now();
+      const updated = applyHumanReview({
+        caseRun: loaded.record, decision, decisionRef, currentDecisionId: currentDecision?.decision_id ?? null, now: timestamp,
+      });
+      await writeTasteDecisionExclusive(decision);
+      await writeCaseAtomic(caseId, updated);
+      if (loaded.record.review_state !== 'HUMAN_REVIEWED') {
+        await recordTransitionTelemetry(caseId, loaded.record.slots.V1, updated.slots.V1, 'HUMAN_REVIEWED', timestamp);
+      }
+    });
+    console.log(`${decision.context.case_id}: human review ${decision.decision_id} recorded`);
+  } catch (error) {
+    console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
+    process.exitCode = 1;
+  }
 } else if (cmd === 'init-job') {
   const job = {
     schema: 'kinetic/gym/curriculum-job@0.1',
@@ -514,6 +552,6 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
     }
   }
 } else {
-  console.error('commands: init-job | init-case [--run-version phase2.5] | retrieve | advance | next | record | gate | receipt | status');
+  console.error('commands: init-job | init-case [--run-version phase2.5] | retrieve | advance | record-human-review | next | record | gate | receipt | status');
   process.exit(2);
 }

@@ -163,6 +163,37 @@ export async function hashFile(path) {
   return createHash('sha256').update(await readFile(path)).digest('hex');
 }
 
+function tasteDecisionPath(decisionId) {
+  if (typeof decisionId !== 'string' || !/^td-[0-9]{8}-[0-9a-z]+$/.test(decisionId)) {
+    throw new StoreError('KINETIC_DECISION_INVALID', `invalid decision id: ${decisionId}`);
+  }
+  return join(gymRoot(), 'taste', 'decisions', `${decisionId}.json`);
+}
+
+export async function readTasteDecision(decisionId) {
+  return readJson(tasteDecisionPath(decisionId), 'KINETIC_DECISION_NOT_FOUND');
+}
+
+export async function writeTasteDecisionExclusive(decision) {
+  const path = tasteDecisionPath(decision?.decision_id);
+  await mkdir(dirname(path), { recursive: true });
+  let handle;
+  try {
+    handle = await open(path, 'wx', 0o600);
+    await handle.writeFile(`${JSON.stringify(decision, null, 2)}\n`, 'utf8');
+    await handle.sync();
+    await handle.close();
+    handle = null;
+    await fsyncDirectory(dirname(path));
+  } catch (error) {
+    await handle?.close().catch(() => {});
+    if (error.code === 'EEXIST') throw new StoreError('KINETIC_DECISION_EXISTS', `${decision.decision_id} already exists`);
+    await rm(path, { force: true });
+    throw error;
+  }
+  return `taste/decisions/${decision.decision_id}.json`;
+}
+
 function receiptPath(caseId) {
   assertId(caseId);
   return join(gymRoot(), 'runs', caseId, 'receipts', 'artifacts.json');

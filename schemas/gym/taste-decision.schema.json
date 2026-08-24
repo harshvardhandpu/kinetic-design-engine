@@ -133,7 +133,35 @@
         "reviewer": { "type": "string", "minLength": 1 },
         "supersedes": { "type": ["string", "null"] },
         "timestamp": { "type": "string", "format": "date-time" }
-      }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "outcome": { "properties": { "result": { "const": "WINNER_SELECTED" } } } } },
+          "then": { "properties": { "outcome": { "properties": { "winner": { "type": "string" } } } } }
+        },
+        {
+          "if": { "properties": { "outcome": { "properties": { "result": { "const": "PARTIAL_ACCEPTANCE" } } } } },
+          "then": { "properties": { "outcome": { "properties": { "winner": { "const": null } } } } }
+        },
+        {
+          "if": { "properties": { "outcome": { "properties": { "result": { "const": "REJECT_ALL" } } } } },
+          "then": {
+            "properties": {
+              "outcome": {
+                "properties": {
+                  "winner": { "const": null },
+                  "candidate_decisions": {
+                    "properties": {
+                      "V1": { "properties": { "quality_floor_passed": { "const": false }, "acceptable_for_further_taste_learning": { "const": false } } },
+                      "V2": { "properties": { "quality_floor_passed": { "const": false }, "acceptable_for_further_taste_learning": { "const": false } } }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
     },
     "phase25CandidateDecision": {
       "type": "object",

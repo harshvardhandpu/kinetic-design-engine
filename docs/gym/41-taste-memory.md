@@ -49,3 +49,23 @@ timestamp:
 
 Every `rejected` entry with reasons becomes a negative-knowledge record
 (`docs/gym/43`): the Gym learns from losers as much as winners.
+
+## Phase 2.5 human review import (`@0.2`)
+
+The static workbench exports a complete decision; it never writes repository state. Import it with:
+
+```bash
+node engine/runner/run.mjs record-human-review --decision /path/to/taste-decision.json
+```
+
+The guarded command validates the `phase25` schema and case identity, then under the case lock:
+
+1. accepts exactly the original candidates `V1` and `V2`, both already `REVIEW_READY`;
+2. checks outcome consistency without deriving any unanswered field;
+3. creates `gym/taste/decisions/<decision_id>.json` with create-exclusive semantics;
+4. stores each candidate's human `quality_floor_passed` as `design_qualified` and its separate human learning value as `acceptable_for_further_taste_learning`;
+5. advances only V1/V2 and the case review state to `HUMAN_REVIEWED`.
+
+`WINNER_SELECTED` requires a matching V1/V2 relative preference and an explicit floor pass for that winner. `PARTIAL_ACCEPTANCE` requires at least one explicit floor or learning acceptance but forces no winner. `REJECT_ALL` requires all four candidate booleans to be false while preserving weak relative evidence.
+
+A correction is a new immutable decision whose `supersedes` equals the case's current decision ID. It may replace the explicit human booleans while the original decision file and terminal `HUMAN_REVIEWED` history remain unchanged. The importer never writes `gym/taste/profile.json`; Phase 2.5 consolidation remains separately human-approved.
