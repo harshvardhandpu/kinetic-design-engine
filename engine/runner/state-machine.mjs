@@ -137,6 +137,15 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   if (toState === 'BUILDING' && artifactRefs.prebuild_hash_unchanged !== true) {
     throw new TransitionError('KINETIC_PREBUILD_REVIEW_CHANGED', 'BUILDING requires the approved prebuild review hash to remain unchanged');
   }
+  if (toState === 'DESIGN_EVALUATED' && record.technically_qualified !== true) {
+    throw new TransitionError('KINETIC_TECHNICAL_QUALIFICATION_REQUIRED', 'design evaluation requires explicit technical qualification');
+  }
+  if (toState === 'DESIGN_EVALUATED' && (record.design_qualified !== null || record.acceptable_for_further_taste_learning !== null)) {
+    throw new TransitionError('KINETIC_DESIGN_QUALIFICATION_FORBIDDEN', 'design evaluation cannot pre-set design or taste qualification');
+  }
+  if (toState === 'DESIGN_EVALUATED' && (artifactRefs.design_evaluation_validated !== true || typeof artifactRefs.design_evaluation !== 'string')) {
+    throw new TransitionError('KINETIC_DESIGN_EVALUATION_REQUIRED', 'DESIGN_EVALUATED requires a persisted validated rubric evaluation');
+  }
   if (toState === 'DESIGN_EVALUATED' && record.slot === 'V0' && (artifactRefs.fidelity_validated !== true || typeof artifactRefs.fidelity_report !== 'string')) {
     throw new TransitionError('KINETIC_FIDELITY_REQUIRED', 'V0 DESIGN_EVALUATED requires a complete FidelityReport');
   }

@@ -23,6 +23,7 @@ import { addOriginalSlot, applyTransition, assertFidelityPolicy, assertVariantBr
 import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
+import { validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
@@ -158,7 +159,7 @@ async function assertPersistedPlanningUnchanged(caseId, slot, refs) {
 }
 
 async function persistValidatedFidelity(caseId, slot, artifactPath) {
-  if (slot !== 'V0' || typeof artifactPath !== 'string') throw Object.assign(new Error('V0 FidelityReport requires --artifact'), { code: 'KINETIC_FIDELITY_REQUIRED' });
+  if (slot !== 'V0' || typeof artifactPath !== 'string') throw Object.assign(new Error('V0 FidelityReport requires --fidelity'), { code: 'KINETIC_FIDELITY_REQUIRED' });
   const report = await j(artifactPath);
   const schemaPath = join(root, 'schemas', 'gym', 'fidelity-report.schema.json');
   const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
@@ -168,6 +169,39 @@ async function persistValidatedFidelity(caseId, slot, artifactPath) {
   const outputPath = join(gym, 'runs', caseId, 'reports', 'fidelity-v0.json');
   await w(outputPath, report);
   return { fidelity_report: relative(gym, outputPath).split('\\').join('/'), fidelity_validated: true };
+}
+
+async function persistValidatedDesignEvaluation(caseId, slot, artifactPath, refs) {
+  if (typeof artifactPath !== 'string') {
+    throw Object.assign(new Error('DESIGN_EVALUATED requires --artifact'), { code: 'KINETIC_DESIGN_EVALUATION_REQUIRED' });
+  }
+  const evaluation = await j(artifactPath);
+  const evaluationSchemaPath = join(root, 'schemas', 'gym', 'design-quality-evaluation.schema.json');
+  const evaluationSchema = JSON.parse(await readFile(evaluationSchemaPath, 'utf8'));
+  const evaluationValidation = validateValue({ value: evaluation, schema: evaluationSchema, schemaPath: evaluationSchemaPath });
+  if (!evaluationValidation.valid) {
+    throw Object.assign(new Error(JSON.stringify(evaluationValidation.errors)), { code: 'KINETIC_DESIGN_EVALUATION_REQUIRED' });
+  }
+
+  const capturePath = resolveGymRef(refs?.capture_manifest, 'KINETIC_CAPTURE_MANIFEST_REQUIRED');
+  const briefPath = resolveGymRef(refs?.variant_brief, 'KINETIC_DESIGN_EVALUATION_REQUIRED');
+  const retrievalPath = resolveGymRef(refs?.retrieval_receipt, 'KINETIC_DESIGN_EVALUATION_REQUIRED');
+  const captureManifest = await j(capturePath);
+  const captureSchemaPath = join(root, 'schemas', 'gym', 'capture-manifest.schema.json');
+  const captureSchema = JSON.parse(await readFile(captureSchemaPath, 'utf8'));
+  const captureValidation = validateValue({ value: captureManifest, schema: captureSchema, schemaPath: captureSchemaPath });
+  if (!captureValidation.valid) {
+    throw Object.assign(new Error(JSON.stringify(captureValidation.errors)), { code: 'KINETIC_CAPTURE_MANIFEST_REQUIRED' });
+  }
+  await Promise.all([readFile(briefPath), readFile(retrievalPath)]).catch((error) => {
+    throw Object.assign(new Error(`persisted design input missing: ${error.message}`), { code: 'KINETIC_DESIGN_EVALUATION_REQUIRED' });
+  });
+  const accepted = validateDesignQualityEvaluation({
+    evaluation, captureManifest, caseId, variantId: slot, expectedRefs: refs, criticResult: null,
+  });
+  const outputPath = join(gym, 'runs', caseId, 'reports', `design-evaluation-${slot.toLowerCase()}.json`);
+  await w(outputPath, accepted);
+  return { design_evaluation: relative(gym, outputPath).split('\\').join('/'), design_evaluation_validated: true };
 }
 
 async function recordTransitionTelemetry(caseId, before, after, toState, timestamp) {
@@ -289,7 +323,8 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       if (A.to === 'RETRIEVAL_PROVEN') artifactRefs = { ...artifactRefs, ...await persistValidatedRetrieval(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
       if (A.to === 'PREBUILD_APPROVED') artifactRefs = { ...artifactRefs, ...await persistValidatedPrebuild(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
       if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedPlanningUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs) };
-      if (A.to === 'DESIGN_EVALUATED' && A.slot === 'V0') artifactRefs = { ...artifactRefs, ...await persistValidatedFidelity(A.case, A.slot, A.artifact) };
+      if (A.to === 'DESIGN_EVALUATED' && A.slot === 'V0') artifactRefs = { ...artifactRefs, ...await persistValidatedFidelity(A.case, A.slot, A.fidelity) };
+      if (A.to === 'DESIGN_EVALUATED') artifactRefs = { ...artifactRefs, ...await persistValidatedDesignEvaluation(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       if (artifactRefs.fidelity_report) updated.reports.fidelity = artifactRefs.fidelity_report;
       await writeCaseAtomic(A.case, updated);

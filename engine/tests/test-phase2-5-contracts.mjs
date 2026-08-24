@@ -7,14 +7,14 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile, readTelemetry, recordStageTelemetry } from '../runner/store.mjs';
-import { assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
+import { applyTransition, assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
 import { reviewBrief } from '../planning/prebuild-review.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 import { compareOriginality } from '../evaluator/originality-compare.mjs';
-import { createVisionCritic, createVisionRequest } from '../evaluator/vision-critic.mjs';
+import { createVisionCritic, createVisionRequest, validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const schemaFiles = [
@@ -96,6 +96,62 @@ const invalid = (value, schema, code = 'KINETIC_SCHEMA_INVALID', schemaPath = jo
   assert.equal(result.valid, false, 'expected validation failure');
   assert.ok(result.errors.some((error) => error.code === code), JSON.stringify(result.errors));
   return result;
+};
+
+const RUBRIC_DIMENSIONS = [
+  'composition', 'typography', 'art_direction', 'depth', 'motion', 'interaction',
+  'scroll_story', 'originality', 'cohesion', 'surface_fit',
+];
+const viewportFixture = { name: 'desktop', width: 1440, height: 900, device_scale: 1, is_mobile: false, has_touch: false };
+const captureSpecFixture = (captureId, subjectId, url) => ({
+  capture_id: captureId, subject_id: subjectId, attempt: 1, viewport: viewportFixture,
+  capture_mode: 'STATIC_CAPTURE_STABLE', state: 'initial', url, trigger_action: 'goto',
+  target_selector: null, checkpoint_ms: null, checkpoint_progress: null,
+  reduced_motion: 'no-preference', build_sha256: 'f'.repeat(64),
+});
+const captureEntryFixture = (spec, sha256) => {
+  const { build_sha256: _specOnlyBuildHash, ...entry } = spec;
+  return {
+    ...entry, timestamp: '2026-08-22T00:00:00Z', playwright_version: '1.55.0', browser_version: 'fixture-chromium',
+    artifact_path: `captures/artifacts/${sha256}.webp`, sha256, visual_phash: 'c'.repeat(64),
+    readiness: 'READY', notes: [],
+  };
+};
+const captureManifestFixture = (caseId = 'case-fixture', variantId = 'V1') => {
+  const specs = [
+    captureSpecFixture('cap-reference', 'reference', 'file:///reference.html'),
+    captureSpecFixture('cap-candidate', variantId, 'file:///candidate.html'),
+  ];
+  return {
+    schema: 'kinetic/gym/capture-manifest@0.1', manifest_id: `cm-${caseId.slice(5)}`,
+    case_id: caseId, playwright_version: '1.55.0', browser_version: 'fixture-chromium', specs,
+    entries: [captureEntryFixture(specs[0], 'a'.repeat(64)), captureEntryFixture(specs[1], 'b'.repeat(64))],
+    failures: [], created_at: '2026-08-22T00:00:00Z', updated_at: '2026-08-22T00:00:00Z',
+  };
+};
+const rubricDimensionFixture = (producer = 'ai-critic', evaluated = true) => ({
+  status: evaluated ? 'ACCEPTABLE' : 'NOT_EVALUATED',
+  observations: evaluated ? ['Evidence supports the dimension assessment.'] : [],
+  strengths: [], failures: [], severity: 'none', confidence: evaluated ? 0.8 : null,
+  evidence_capture_ids: evaluated ? ['cap-candidate'] : [], producer,
+});
+const designEvaluationFixture = ({
+  caseId = 'case-fixture', variantId = 'V1', producer = 'ai-critic', visionReceipt = null,
+  captureManifestRef = `runs/${caseId}/captures/manifest.json`,
+  briefRef = `runs/${caseId}/planning/${variantId.toLowerCase()}/variant-brief.json`,
+  provenanceRefs = [`runs/${caseId}/planning/${variantId.toLowerCase()}/retrieval-receipt.json`],
+} = {}) => {
+  const humanGate = producer === 'human';
+  return {
+    schema: 'kinetic/gym/design-quality-evaluation@0.1', evaluation_id: `dqe-${caseId.slice(5)}-${variantId.toLowerCase()}`,
+    case_id: caseId, variant_id: variantId, rubric_version: 'design-rubric@0.1', producer,
+    capture_manifest_ref: captureManifestRef, brief_ref: briefRef, provenance_refs: provenanceRefs,
+    vision_receipt: visionReceipt,
+    dimensions: Object.fromEntries(RUBRIC_DIMENSIONS.map((dimension) => [dimension, rubricDimensionFixture(producer, !humanGate)])),
+    limitations: humanGate ? ['Awaiting explicit human visual evaluation.'] : [],
+    advisory_recommendation: humanGate ? 'HUMAN_VISUAL_GATE' : 'ADVANCE_TO_HUMAN',
+    created_at: '2026-08-22T00:00:00Z',
+  };
 };
 
 // CV01 annotations and identity.
@@ -446,11 +502,36 @@ try {
   fidelityCase.reports.fidelity = null;
   fidelityCase.slots.V0.technically_qualified = true;
   fidelityCase.slots.V0.timestamps.VISUAL_CAPTURED = '2026-08-22T00:00:00Z';
+  const fidelityCaptureRef = 'runs/case-fidelity-fixture/captures/manifest.json';
+  const fidelityBriefRef = 'runs/case-fidelity-fixture/planning/v0/variant-brief.json';
+  const fidelityRetrievalRef = 'runs/case-fidelity-fixture/planning/v0/retrieval-receipt.json';
+  fidelityCase.slots.V0.refs.capture_manifest = fidelityCaptureRef;
+  fidelityCase.slots.V0.refs.variant_brief = fidelityBriefRef;
+  fidelityCase.slots.V0.refs.retrieval_receipt = fidelityRetrievalRef;
+  await mkdir(join(tempDir, 'runs', 'case-fidelity-fixture', 'captures'), { recursive: true });
+  await mkdir(join(tempDir, 'runs', 'case-fidelity-fixture', 'planning', 'v0'), { recursive: true });
+  await writeFile(join(tempDir, fidelityCaptureRef), JSON.stringify(captureManifestFixture('case-fidelity-fixture', 'V0'), null, 2));
+  await writeFile(join(tempDir, fidelityBriefRef), '{}');
+  await writeFile(join(tempDir, fidelityRetrievalRef), '{}');
   await writeFile(fidelityCasePath, JSON.stringify(fidelityCase, null, 2));
   const fidelityInput = join(tempDir, 'fidelity-report.json');
   await writeFile(fidelityInput, JSON.stringify(goodFidelity, null, 2));
-  cli = run(['advance', '--case', 'case-fidelity-fixture', '--slot', 'V0', '--to', 'DESIGN_EVALUATED', '--artifact', fidelityInput]);
+  const designInput = join(tempDir, 'design-evaluation.json');
+  const humanDesignEvaluation = designEvaluationFixture({
+    caseId: 'case-fidelity-fixture', variantId: 'V0', producer: 'human',
+    captureManifestRef: fidelityCaptureRef, briefRef: fidelityBriefRef, provenanceRefs: [fidelityRetrievalRef],
+  });
+  await writeFile(designInput, JSON.stringify({ ...humanDesignEvaluation, aggregate_score: 1 }, null, 2));
+  cli = run(['advance', '--case', 'case-fidelity-fixture', '--slot', 'V0', '--to', 'DESIGN_EVALUATED', '--artifact', designInput, '--fidelity', fidelityInput]);
+  assert.notEqual(cli.status, 0);
+  assert.equal(JSON.parse(await readFile(fidelityCasePath)).slots.V0.state, 'VISUAL_CAPTURED');
+  await writeFile(designInput, JSON.stringify(humanDesignEvaluation, null, 2));
+  cli = run(['advance', '--case', 'case-fidelity-fixture', '--slot', 'V0', '--to', 'DESIGN_EVALUATED', '--artifact', designInput, '--fidelity', fidelityInput]);
   assert.equal(cli.status, 0, cli.stderr);
+  fidelityCase = JSON.parse(await readFile(fidelityCasePath, 'utf8'));
+  assert.equal(fidelityCase.slots.V0.refs.design_evaluation, 'runs/case-fidelity-fixture/reports/design-evaluation-v0.json');
+  assert.equal(fidelityCase.slots.V0.design_qualified, null);
+  assert.equal(fidelityCase.slots.V0.acceptable_for_further_taste_learning, null);
   cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V1']);
   assert.equal(cli.status, 0, cli.stderr);
   cli = run(['add-slot', '--case', 'case-fidelity-fixture', '--slot', 'V2']);
@@ -633,7 +714,7 @@ const verifiedIdentity = {
   verified: true, provider: visionReceipt.provider, exact_model: visionReceipt.exact_model,
   route: visionReceipt.route, vision_image_capability: true, verification_source: 'provider-api-metadata',
 };
-const evaluateVisionCritic = createVisionCritic(verifiedIdentity);
+const evaluateVisionCritic = createVisionCritic(verifiedIdentity, { case_id: 'case-fixture', variant_id: 'V1' });
 const acceptedVision = evaluateVisionCritic({
   request: visionRequest, responseText: visionResponseText, receipt: visionReceipt,
 });
@@ -857,4 +938,126 @@ assert.deepEqual(createVisionCritic({
 })({ request: visionRequest, responseText: visionResponseText, receipt: visionReceipt }), humanGate);
 assert.equal(identityScalarCounter.reads, 0);
 
-console.log(`S01-S14 contract foundations: PASS (T1-T13, T21, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
+// T22: every rubric dimension is present and every visual claim cites ready capture evidence.
+const designQualitySchema = parsed.get('schemas/gym/design-quality-evaluation.schema.json');
+const designManifest = captureManifestFixture();
+const designRefs = {
+  capture_manifest: 'runs/case-fixture/captures/manifest.json',
+  variant_brief: visionRequest.variant_brief_ref,
+  retrieval_receipt: visionRequest.relevant_provenance_refs[0],
+};
+const aiDesignEvaluation = designEvaluationFixture({
+  visionReceipt, briefRef: designRefs.variant_brief, provenanceRefs: [designRefs.retrieval_receipt],
+});
+aiDesignEvaluation.dimensions = Object.fromEntries(RUBRIC_DIMENSIONS.map((dimension) => [dimension, rubricDimensionFixture('ai-critic', false)]));
+const compositionObservation = acceptedVision.observations[0];
+aiDesignEvaluation.dimensions.composition = {
+  status: 'STRENGTH', observations: [compositionObservation.observation], strengths: [compositionObservation.observation],
+  failures: [], severity: compositionObservation.severity, confidence: compositionObservation.confidence,
+  evidence_capture_ids: compositionObservation.evidence_capture_ids, producer: 'ai-critic',
+};
+const validateFixtureDesign = (evaluation, criticResult = acceptedVision) => validateDesignQualityEvaluation({
+  evaluation, captureManifest: designManifest, caseId: 'case-fixture', variantId: 'V1', expectedRefs: designRefs, criticResult,
+});
+valid(aiDesignEvaluation, designQualitySchema, join(root, 'schemas', 'gym', 'design-quality-evaluation.schema.json'));
+assert.deepEqual(validateFixtureDesign(aiDesignEvaluation), aiDesignEvaluation);
+const unknownCaptureEvaluation = structuredClone(aiDesignEvaluation);
+unknownCaptureEvaluation.dimensions.composition.evidence_capture_ids = ['cap-missing'];
+assert.throws(() => validateFixtureDesign(unknownCaptureEvaluation), (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID');
+const unsupportedClaimEvaluation = structuredClone(aiDesignEvaluation);
+unsupportedClaimEvaluation.dimensions.motion = rubricDimensionFixture('ai-critic', false);
+unsupportedClaimEvaluation.dimensions.motion.observations = ['Unsupported motion claim.'];
+assert.throws(() => validateFixtureDesign(unsupportedClaimEvaluation), (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID');
+assert.throws(() => validateFixtureDesign(aiDesignEvaluation, structuredClone(acceptedVision)),
+  (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID', 'serialized critic output cannot recreate trusted identity');
+assert.throws(() => validateFixtureDesign(aiDesignEvaluation, null),
+  (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID', 'receipt strings alone cannot claim verified AI evidence');
+const contextlessVision = createVisionCritic(verifiedIdentity)({
+  request: visionRequest, responseText: visionResponseText, receipt: visionReceipt,
+});
+assert.equal(contextlessVision.status, 'VERIFIED_ADVISORY');
+assert.throws(() => validateFixtureDesign(aiDesignEvaluation, contextlessVision),
+  (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID', 'S15 requires trusted case and variant context');
+const caseReplayEvaluation = structuredClone(aiDesignEvaluation);
+caseReplayEvaluation.evaluation_id = 'dqe-other-fixture-v1';
+caseReplayEvaluation.case_id = 'case-other-fixture';
+assert.throws(() => validateDesignQualityEvaluation({
+  evaluation: caseReplayEvaluation, captureManifest: captureManifestFixture('case-other-fixture'),
+  caseId: 'case-other-fixture', variantId: 'V1', criticResult: acceptedVision, expectedRefs: designRefs,
+}), (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID', 'critic capability cannot replay when only case identity changes');
+const variantReplayEvaluation = structuredClone(aiDesignEvaluation);
+variantReplayEvaluation.evaluation_id = 'dqe-fixture-v2';
+variantReplayEvaluation.variant_id = 'V2';
+assert.throws(() => validateDesignQualityEvaluation({
+  evaluation: variantReplayEvaluation, captureManifest: captureManifestFixture('case-fixture', 'V2'),
+  caseId: 'case-fixture', variantId: 'V2', criticResult: acceptedVision, expectedRefs: designRefs,
+}), (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID', 'critic capability cannot replay when only variant identity changes');
+let designProxyTraps = 0;
+const proxiedDimensions = new Proxy(aiDesignEvaluation.dimensions, {
+  ownKeys() { designProxyTraps += 1; return Reflect.ownKeys(aiDesignEvaluation.dimensions); },
+});
+assert.throws(() => validateFixtureDesign({ ...aiDesignEvaluation, dimensions: proxiedDimensions }),
+  (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID');
+assert.equal(designProxyTraps, 0, 'S15 rejects nested proxies before reflection');
+let designGetterReads = 0;
+const getterDimension = { ...aiDesignEvaluation.dimensions.composition };
+Object.defineProperty(getterDimension, 'status', {
+  enumerable: true,
+  get() { designGetterReads += 1; return 'ACCEPTABLE'; },
+});
+assert.throws(() => validateFixtureDesign({
+  ...aiDesignEvaluation, dimensions: { ...aiDesignEvaluation.dimensions, composition: getterDimension },
+}), (error) => error.code === 'KINETIC_DESIGN_EVALUATION_INVALID');
+assert.equal(designGetterReads, 0, 'S15 rejects getters without executing them');
+const humanDesignGate = designEvaluationFixture({
+  producer: 'human', briefRef: designRefs.variant_brief, provenanceRefs: [designRefs.retrieval_receipt],
+});
+valid(humanDesignGate, designQualitySchema, join(root, 'schemas', 'gym', 'design-quality-evaluation.schema.json'));
+assert.deepEqual(validateDesignQualityEvaluation({
+  evaluation: humanDesignGate, captureManifest: designManifest,
+  caseId: 'case-fixture', variantId: 'V1', expectedRefs: designRefs, criticResult: null,
+}), humanDesignGate);
+
+// T23: score-only and qualification-shaped outputs are outside the rubric contract.
+invalid({ schema: 'kinetic/gym/design-quality-evaluation@0.1', aggregate_score: 0.9 }, designQualitySchema);
+invalid({ ...aiDesignEvaluation, score: 0.9 }, designQualitySchema);
+invalid({ ...aiDesignEvaluation, design_qualified: true }, designQualitySchema);
+invalid({ ...aiDesignEvaluation, acceptable_for_further_taste_learning: true }, designQualitySchema);
+invalid({ ...humanDesignGate, vision_receipt: visionReceipt }, designQualitySchema);
+invalid({ ...aiDesignEvaluation, vision_receipt: null }, designQualitySchema);
+invalid({ ...aiDesignEvaluation, vision_receipt: { ...visionReceipt, cost_status: 'VERIFIED_FREE' } }, designQualitySchema);
+
+// T24: DESIGN_EVALUATED means durable rubric evidence exists, never design/taste qualification.
+const visualRecord = {
+  schema: 'kinetic/gym/variant-run@0.2', run_id: 'run-fixture-v1', case_id: 'case-fixture', slot: 'V1', mode: 'original',
+  state: 'VISUAL_CAPTURED', attempt: 1, deployable: true, original_work: true,
+  technically_qualified: true, design_qualified: null, acceptable_for_further_taste_learning: null,
+  refs: { variant_brief: designRefs.variant_brief, retrieval_receipt: designRefs.retrieval_receipt, prebuild_review: null, build_receipt: null, technical_evaluation: null, capture_manifest: designRefs.capture_manifest, design_evaluation: null, fidelity_report: null },
+  attempts: [], blocked_condition: null, timestamps: { VISUAL_CAPTURED: '2026-08-22T00:00:00Z' },
+};
+const visualCase = {
+  schema: 'kinetic/gym/case-run@0.2', case_id: 'case-fixture', slots: { V1: visualRecord },
+  reports: { fidelity: null, source_to_output_loss: null, review_package: null }, review_state: 'NOT_READY',
+  taste_decision_ref: null, blocked_condition: null, history: [],
+  created_at: '2026-08-22T00:00:00Z', updated_at: '2026-08-22T00:00:00Z',
+};
+const designArtifactRefs = { design_evaluation: 'runs/case-fixture/reports/design-evaluation-v1.json', design_evaluation_validated: true };
+const designTransition = applyTransition({ caseRun: visualCase, slot: 'V1', toState: 'DESIGN_EVALUATED', artifactRefs: designArtifactRefs, now: '2026-08-22T00:00:01Z' });
+assert.equal(designTransition.slots.V1.state, 'DESIGN_EVALUATED');
+assert.equal(designTransition.slots.V1.technically_qualified, true);
+assert.equal(designTransition.slots.V1.design_qualified, null);
+assert.equal(designTransition.slots.V1.acceptable_for_further_taste_learning, null);
+assert.equal(designTransition.slots.V1.refs.design_evaluation, designArtifactRefs.design_evaluation);
+assert.throws(() => assertTransition({
+  caseRun: visualCase, slot: 'V1', toState: 'DESIGN_EVALUATED', artifactRefs: {},
+}), (error) => error.code === 'KINETIC_DESIGN_EVALUATION_REQUIRED');
+assert.throws(() => assertTransition({
+  caseRun: { ...visualCase, slots: { V1: { ...visualRecord, design_qualified: true } } },
+  slot: 'V1', toState: 'DESIGN_EVALUATED', artifactRefs: designArtifactRefs,
+}), (error) => error.code === 'KINETIC_DESIGN_QUALIFICATION_FORBIDDEN');
+assert.throws(() => assertTransition({
+  caseRun: visualCase, slot: 'V1', toState: 'DESIGN_EVALUATED',
+  artifactRefs: { ...designArtifactRefs, design_qualified: true },
+}), (error) => error.code === 'KINETIC_QUALIFICATION_EXPLICIT_REQUIRED');
+
+console.log(`S01-S15 contract foundations: PASS (T1-T13, T21-T24, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
