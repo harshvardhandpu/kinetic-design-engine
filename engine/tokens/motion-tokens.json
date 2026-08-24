@@ -1,0 +1,49 @@
+{
+  "schema": "kinetic/motion-tokens@0.1",
+  "version": "0.1.0",
+  "evidence_tags": {
+    "EI": "Engine inference from established interaction norms.",
+    "SD-S4": "Direct Phase-1 S4 card-deck transition evidence.",
+    "SD-S5": "Direct Phase-1 S5 hero reveal evidence.",
+    "SD-S9": "Direct Phase-1 S9 first-render control evidence.",
+    "PRIMITIVE": "Existing primitive default retained for compatibility."
+  },
+  "tokens": {
+    "duration-fast": { "category": "duration", "value": 150, "unit": "ms", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "duration-med": { "category": "duration", "value": 300, "unit": "ms", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "duration-slow": { "category": "duration", "value": 450, "unit": "ms", "evidence_tag": "SD-S4", "reduced_motion_value": 0 },
+    "duration-page": { "category": "duration", "value": 1200, "unit": "ms", "evidence_tag": "SD-S5", "reduced_motion_value": 0 },
+    "delay-none": { "category": "delay", "value": 0, "unit": "ms", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "delay-short": { "category": "delay", "value": 100, "unit": "ms", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "stagger-tight": { "category": "stagger", "value": 30, "unit": "ms", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "stagger-base": { "category": "stagger", "value": 60, "unit": "ms", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "stagger-wide": { "category": "stagger", "value": 120, "unit": "ms", "evidence_tag": "SD-S5", "reduced_motion_value": 0 },
+    "easing-out-expo": { "category": "easing", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "unit": "css-easing", "evidence_tag": "SD-S5", "reduced_motion_value": null },
+    "easing-out-quint": { "category": "easing", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "unit": "css-easing", "evidence_tag": "EI", "reduced_motion_value": null },
+    "easing-snap": { "category": "easing", "value": "cubic-bezier(0.2, 0, 0, 1)", "unit": "css-easing", "evidence_tag": "SD-S9", "reduced_motion_value": null },
+    "easing-standard": { "category": "easing", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "unit": "css-easing", "evidence_tag": "EI", "reduced_motion_value": null },
+    "distance-reveal-y": { "category": "distance", "value": 24, "unit": "px", "evidence_tag": "EI", "reduced_motion_value": 0 },
+    "opacity-hidden": { "category": "opacity", "value": 0, "unit": "unitless", "evidence_tag": "EI", "reduced_motion_value": 1 },
+    "opacity-visible": { "category": "opacity", "value": 1, "unit": "unitless", "evidence_tag": "EI", "reduced_motion_value": 1 },
+    "scale-identity": { "category": "scale", "value": 1, "unit": "unitless", "evidence_tag": "EI", "reduced_motion_value": 1 },
+    "scale-soft": { "category": "scale", "value": 0.96, "unit": "unitless", "evidence_tag": "EI", "reduced_motion_value": 1 },
+    "spring-tactile": { "category": "spring", "value": "mass:1;stiffness:300;damping:24", "unit": "spring", "evidence_tag": "EI", "reduced_motion_value": null },
+    "marquee-speed": { "category": "speed", "value": 40, "unit": "px", "evidence_tag": "PRIMITIVE", "reduced_motion_value": 0 },
+    "parallax-depth": { "category": "depth", "value": 0.2, "unit": "ratio", "evidence_tag": "PRIMITIVE", "reduced_motion_value": 0 }
+  },
+  "aliases": {
+    "duration.fast": "duration-fast",
+    "duration.normal": "duration-med",
+    "duration.slow": "duration-slow",
+    "duration.cinematic": "duration-page",
+    "stagger.tight": "stagger-tight",
+    "stagger.normal": "stagger-base",
+    "stagger.wide": "stagger-wide",
+    "easing.out-expo": "easing-out-expo",
+    "easing.out-quint": "easing-out-quint",
+    "easing.snap": "easing-snap",
+    "easing.standard": "easing-standard",
+    "distance.reveal-y": "distance-reveal-y",
+    "spring.tactile": "spring-tactile"
+  }
+}

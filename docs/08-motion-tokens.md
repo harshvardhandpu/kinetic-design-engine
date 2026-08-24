@@ -42,6 +42,10 @@ kinetic.depth.*        z / parallax factors
 (with evidence tag) before use. The evaluator flags raw numeric
 durations/easings in experience-layer code (`13` check `token-discipline`).
 
+The executable catalog is `engine/tokens/motion-tokens.json`, validated by
+`schemas/motion-tokens.schema.json`. It preserves the primitive-consumed
+hyphenated names; documented dotted names are aliases, not a second scale.
+
 ## Semantic presets
 
 Combinations, not new values:
@@ -70,3 +74,36 @@ Combinations, not new values:
 - Recipes may override tokens only within their declared K-level envelope (`09`).
 - Reduced-motion overrides are token-level too: `kinetic.rm.*` collapse
   durations to 0/1ms and disable stagger, preserving end-states (`16`).
+
+## Phase-2.5 enforcement
+
+`engine/evaluator/motion-token-validate.mjs` is the deterministic Node-side
+boundary. Browser gates keep their existing DOM checks and only report that
+source validation is required; they never scan the filesystem.
+
+The validator scans candidate-authored `.html`, `.css`, `.js`, and `.mjs` and
+excludes `node_modules/`, vendored sources, installed `kinetic/core/`,
+`.kinetic/`, generated/minified files, symlinks, and assets. It reports narrow
+raw duration, delay, stagger, easing, animated distance/rotation/scale/opacity,
+and spring findings as `file`, `line`, `property`, and `value`. Intrinsic
+opacity `0/1`, scale `1`, and static transforms are not violations.
+
+Motion requires an explicit `prefers-reduced-motion: reduce` stylesheet or JS
+branch. Primitive presence alone is not evidence, and reduced-motion absence
+cannot be excepted.
+
+`motion_plan.token_exceptions[]` must match one finding exactly:
+
+```text
+file
+line_or_symbol
+property
+raw_value
+reason
+evidence_ref
+scope
+```
+
+Wildcard paths/locations, vague reasons, malformed rows, and stale unmatched
+exceptions fail. Accepted rows are preserved as `approved_exceptions` in
+`runs/<case>/reports/motion-token-<slot>.json`.

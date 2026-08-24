@@ -24,6 +24,7 @@ import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLoc
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
+import { validateMotionTokens } from '../evaluator/motion-token-validate.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
@@ -204,6 +205,54 @@ async function persistValidatedDesignEvaluation(caseId, slot, artifactPath, refs
   return { design_evaluation: relative(gym, outputPath).split('\\').join('/'), design_evaluation_validated: true };
 }
 
+async function persistTechnicalEvaluation(caseId, slot, artifactPath, variantDir, refs, timestamp) {
+  if (typeof artifactPath !== 'string' || typeof variantDir !== 'string') {
+    throw Object.assign(new Error('TECHNICAL_EVALUATED requires --artifact browser report and --target variant directory'), { code: 'KINETIC_TECHNICAL_EVALUATION_REQUIRED' });
+  }
+  const browserEvaluation = await j(artifactPath);
+  const gateNames = ['technical', 'responsive', 'a11y', 'performance'];
+  if (browserEvaluation?.schema !== 'kinetic/evaluation@0.1' || browserEvaluation.gates === null || typeof browserEvaluation.gates !== 'object'
+    || gateNames.some((name) => !['pass', 'warn', 'fail'].includes(browserEvaluation.gates?.[name]?.result))
+    || browserEvaluation.gates?.design?.result !== 'pending-vision-or-human') {
+    throw Object.assign(new Error('browser technical evaluation is missing required gate results'), { code: 'KINETIC_TECHNICAL_EVALUATION_REQUIRED' });
+  }
+  const briefPath = resolveGymRef(refs?.variant_brief, 'KINETIC_BRIEF_REQUIRED');
+  const brief = await j(briefPath);
+  const briefSchemaPath = join(root, 'schemas', 'gym', 'variant-brief.schema.json');
+  const briefSchema = JSON.parse(await readFile(briefSchemaPath, 'utf8'));
+  const briefValidation = validateValue({ value: brief, schema: briefSchema, schemaPath: briefSchemaPath });
+  if (!briefValidation.valid || brief.case_id !== caseId || brief.variant_id !== slot) {
+    throw Object.assign(new Error('persisted VariantBrief is invalid for technical evaluation'), { code: 'KINETIC_BRIEF_INVALID' });
+  }
+  const catalogPath = join(root, 'engine', 'tokens', 'motion-tokens.json');
+  const catalogSchemaPath = join(root, 'schemas', 'motion-tokens.schema.json');
+  const catalog = JSON.parse(await readFile(catalogPath, 'utf8'));
+  const catalogSchema = JSON.parse(await readFile(catalogSchemaPath, 'utf8'));
+  const catalogValidation = validateValue({ value: catalog, schema: catalogSchema, schemaPath: catalogSchemaPath });
+  if (!catalogValidation.valid) throw Object.assign(new Error('motion token catalog is invalid'), { code: 'KINETIC_MOTION_CATALOG_INVALID' });
+  const motionReport = await validateMotionTokens({ variantDir, brief, tokenCatalog: catalog });
+  const reportsDir = join(gym, 'runs', caseId, 'reports');
+  const motionPath = join(reportsDir, `motion-token-${slot.toLowerCase()}.json`);
+  await w(motionPath, motionReport);
+  const blockingGates = gateNames.filter((name) => browserEvaluation.gates[name].result === 'fail');
+  const qualified = motionReport.result === 'pass'
+    && browserEvaluation.gates.technical.result === 'pass'
+    && browserEvaluation.gates.responsive.result === 'pass'
+    && blockingGates.length === 0;
+  const technicalReport = {
+    schema: 'kinetic/technical-evaluation@0.1', case_id: caseId, variant_id: slot,
+    result: qualified ? 'pass' : 'fail', browser_evaluation: browserEvaluation,
+    motion_token_report: relative(gym, motionPath).split('\\').join('/'), blocking_gates: blockingGates,
+    created_at: timestamp,
+  };
+  const technicalPath = join(reportsDir, `technical-evaluation-${slot.toLowerCase()}.json`);
+  await w(technicalPath, technicalReport);
+  return {
+    refs: { technical_evaluation: relative(gym, technicalPath).split('\\').join('/'), technical_evaluation_validated: true },
+    qualified,
+  };
+}
+
 async function recordTransitionTelemetry(caseId, before, after, toState, timestamp) {
   const mapping = {
     BRIEF_VALIDATED: ['planning', 'PLANNED', 'COMPLETED'],
@@ -319,13 +368,20 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       if (loaded.legacy) throw Object.assign(new Error('advance is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
       const timestamp = now();
       let artifactRefs = A.refs && A.refs !== true ? JSON.parse(A.refs) : {};
+      let technicalQualification = null;
       if (A.to === 'BRIEF_VALIDATED') artifactRefs = { ...artifactRefs, ...await persistValidatedBrief(A.case, A.slot, A.artifact, timestamp) };
       if (A.to === 'RETRIEVAL_PROVEN') artifactRefs = { ...artifactRefs, ...await persistValidatedRetrieval(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs?.variant_brief) };
       if (A.to === 'PREBUILD_APPROVED') artifactRefs = { ...artifactRefs, ...await persistValidatedPrebuild(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
       if (A.to === 'BUILDING') artifactRefs = { ...artifactRefs, ...await assertPersistedPlanningUnchanged(A.case, A.slot, loaded.record.slots?.[A.slot]?.refs) };
+      if (A.to === 'TECHNICAL_EVALUATED') {
+        const technical = await persistTechnicalEvaluation(A.case, A.slot, A.artifact, A.target, loaded.record.slots?.[A.slot]?.refs, timestamp);
+        artifactRefs = { ...artifactRefs, ...technical.refs };
+        technicalQualification = technical.qualified;
+      }
       if (A.to === 'DESIGN_EVALUATED' && A.slot === 'V0') artifactRefs = { ...artifactRefs, ...await persistValidatedFidelity(A.case, A.slot, A.fidelity) };
       if (A.to === 'DESIGN_EVALUATED') artifactRefs = { ...artifactRefs, ...await persistValidatedDesignEvaluation(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
+      if (technicalQualification !== null) updated.slots[A.slot].technically_qualified = technicalQualification;
       if (artifactRefs.fidelity_report) updated.reports.fidelity = artifactRefs.fidelity_report;
       await writeCaseAtomic(A.case, updated);
       await recordTransitionTelemetry(A.case, loaded.record.slots[A.slot], updated.slots[A.slot], A.to, timestamp);

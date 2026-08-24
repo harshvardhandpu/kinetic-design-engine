@@ -16,6 +16,7 @@
     id: e.getAttribute('data-kinetic'), version: e.getAttribute('data-kinetic-version'), tag: e.tagName.toLowerCase(),
   }));
   tech.checks.kinetic_count = tech.checks.kinetic_elements.length;
+  tech.checks.motion_token_source_validation = 'node-side-required';
   tech.checks.title_present = !!document.title.trim();
   tech.checks.h1_count = document.querySelectorAll('h1').length;
   tech.checks.images_broken = [...document.images].filter((i) => !i.complete || i.naturalWidth === 0).length;
@@ -93,8 +94,8 @@
   const body = document.body;
   const cs = getComputedStyle(body);
   a11y.checks.body_font_size = parseFloat(cs.fontSize);
-  // reduced-motion readiness: does the page include kinetic primitives (which degrade) — check meta presence
-  a11y.checks.kinetic_reduced_motion_capable = tech.checks.kinetic_count > 0; // primitives carry the contract
+  // Filesystem-backed token/reduced-motion validation is composed by the Node runner.
+  a11y.checks.motion_token_source_validation = 'node-side-required';
   a11y.checks.focus_visible_styles = (() => {
     // heuristic: any :focus-visible rule in stylesheets
     try {

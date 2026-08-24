@@ -15,6 +15,7 @@ import { reviewBrief } from '../planning/prebuild-review.mjs';
 import * as sourceRegistry from '../knowledge/source-registry.mjs';
 import { compareOriginality } from '../evaluator/originality-compare.mjs';
 import { createVisionCritic, createVisionRequest, validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
+import { validateMotionTokens } from '../evaluator/motion-token-validate.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const schemaFiles = [
@@ -453,6 +454,58 @@ try {
   assert.equal(cli.status, 0, cli.stderr);
   assert.equal(JSON.parse(await readFile(phaseCasePath)).slots.V0.state, 'BUILDING');
 
+  // T14-T16 runner seam: consume existing browser gates, run Node motion validation once, and persist explicit technical qualification.
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'BUILT', '--refs', JSON.stringify({ build_receipt: 'runs/case-brief-fixture/build/v0/receipt.json' })]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const browserEvaluation = {
+    schema: 'kinetic/evaluation@0.1',
+    gates: {
+      technical: { producer: 'objective', result: 'pass', checks: {} },
+      responsive: { producer: 'objective', result: 'pass', checks: {} },
+      a11y: { producer: 'heuristic', result: 'pass', checks: {} },
+      performance: { producer: 'heuristic', result: 'pass', checks: {} },
+      design: { producer: 'not-evaluated', result: 'pending-vision-or-human' },
+    },
+  };
+  const browserEvaluationPath = join(tempDir, 'browser-evaluation.json');
+  await writeFile(browserEvaluationPath, JSON.stringify(browserEvaluation, null, 2));
+  const compliantTarget = join(tempDir, 'candidate-compliant');
+  await mkdir(compliantTarget, { recursive: true });
+  await writeFile(join(compliantTarget, 'index.css'), `.card { transition: transform var(--kinetic-duration-fast); }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }`);
+  cli = run(['advance', '--case', 'case-brief-fixture', '--slot', 'V0', '--to', 'TECHNICAL_EVALUATED', '--artifact', browserEvaluationPath, '--target', compliantTarget]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const technicallyPassed = JSON.parse(await readFile(phaseCasePath, 'utf8')).slots.V0;
+  assert.equal(technicallyPassed.state, 'TECHNICAL_EVALUATED');
+  assert.equal(technicallyPassed.technically_qualified, true);
+  assert.equal(technicallyPassed.design_qualified, null);
+  assert.equal(technicallyPassed.acceptable_for_further_taste_learning, null);
+  const persistedTechnical = JSON.parse(await readFile(join(tempDir, technicallyPassed.refs.technical_evaluation), 'utf8'));
+  assert.equal(persistedTechnical.result, 'pass');
+  assert.equal(persistedTechnical.browser_evaluation.gates.technical.result, 'pass');
+  const persistedMotion = JSON.parse(await readFile(join(tempDir, persistedTechnical.motion_token_report), 'utf8'));
+  assert.equal(persistedMotion.result, 'pass');
+
+  const failingCaseId = 'case-motion-fail';
+  const failingBriefRef = `runs/${failingCaseId}/planning/v0/variant-brief.json`;
+  const failingCase = structuredClone(caseRun);
+  failingCase.case_id = failingCaseId;
+  failingCase.slots.V0 = { ...structuredClone(phase25Run), run_id: `run-${failingCaseId}-v0`, case_id: failingCaseId, state: 'BUILT', refs: { ...phase25Run.refs, variant_brief: failingBriefRef, build_receipt: `runs/${failingCaseId}/build/v0/receipt.json` }, timestamps: { BUILT: '2026-08-22T00:00:00Z' } };
+  await mkdir(join(tempDir, 'runs', failingCaseId, 'planning', 'v0'), { recursive: true });
+  await writeFile(join(tempDir, 'runs', failingCaseId, 'case.json'), JSON.stringify(failingCase, null, 2));
+  await writeFile(join(tempDir, failingBriefRef), JSON.stringify({ ...v0Brief, case_id: failingCaseId }, null, 2));
+  const failingTarget = join(tempDir, 'candidate-failing');
+  await mkdir(failingTarget, { recursive: true });
+  await writeFile(join(failingTarget, 'index.css'), `.card { transition-duration: 275ms; }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }`);
+  cli = run(['advance', '--case', failingCaseId, '--slot', 'V0', '--to', 'TECHNICAL_EVALUATED', '--artifact', browserEvaluationPath, '--target', failingTarget]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const technicallyFailed = JSON.parse(await readFile(join(tempDir, 'runs', failingCaseId, 'case.json'), 'utf8')).slots.V0;
+  assert.equal(technicallyFailed.state, 'TECHNICAL_EVALUATED');
+  assert.equal(technicallyFailed.technically_qualified, false);
+  assert.equal(technicallyFailed.design_qualified, null);
+  assert.equal(technicallyFailed.acceptable_for_further_taste_learning, null);
+
   // T11/T46: Phase-2.5 is V0-only until complete human-approved fixture fidelity evidence exists.
   cli = run(['init-case', '--case', 'case-fidelity-fixture', '--run-version', 'phase2.5']);
   assert.equal(cli.status, 0, cli.stderr);
@@ -646,6 +699,233 @@ const registryBytesAfter = await readFile(registryPath);
 const registryHashAfter = createHash('sha256').update(registryBytesAfter).digest('hex');
 assert.equal(registryHashAfter, registryHashBefore, 'runtime rights operations must not mutate the registry');
 assert.deepEqual(sourceRegistry.normalizedPolicySnapshot(JSON.parse(registryBytesAfter)), policyBefore, 'accepted rights values must remain unchanged');
+
+// T14: token-compliant candidate sources and an explicit reduced-motion branch pass.
+const motionCatalogPath = join(root, 'engine', 'tokens', 'motion-tokens.json');
+const motionCatalog = JSON.parse(await readFile(motionCatalogPath, 'utf8'));
+valid(motionCatalog, parsed.get('schemas/motion-tokens.schema.json'), join(root, 'schemas', 'motion-tokens.schema.json'));
+for (const token of ['duration-fast', 'duration-med', 'duration-slow', 'duration-page', 'stagger-base', 'marquee-speed', 'parallax-depth']) {
+  assert.ok(motionCatalog.tokens[token], `catalog preserves primitive token ${token}`);
+}
+const browserGateSource = await readFile(join(root, 'engine', 'evaluator', 'gates.browser.js'), 'utf8');
+assert.match(browserGateSource, /motion_token_source_validation\s*=\s*'node-side-required'/);
+assert.doesNotMatch(browserGateSource, /node:fs|\breaddir\b|\breadFile\b/, 'browser gates must not scan candidate files');
+assert.doesNotMatch(browserGateSource, /kinetic_reduced_motion_capable\s*=\s*tech\.checks\.kinetic_count/, 'primitive presence cannot prove reduced-motion behavior');
+const compliantMotionDir = await mkdtemp(join('/tmp', 'kinetic-motion-compliant-'));
+await writeFile(join(compliantMotionDir, 'styles.css'), `
+.card { transition: transform var(--kinetic-duration-fast) var(--kinetic-easing-out-expo); transform: translateY(var(--kinetic-distance-reveal-y)); }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; transform: none; } }
+`);
+await writeFile(join(compliantMotionDir, 'motion.js'), `
+const opts = { duration: tokens['duration-med'], easing: tokens['easing-out-expo'], scale: tokens['scale-soft'] };
+`);
+const compliantMotion = await validateMotionTokens({
+  variantDir: compliantMotionDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(compliantMotion.result, 'pass', JSON.stringify(compliantMotion));
+assert.deepEqual(compliantMotion.findings, []);
+assert.equal(compliantMotion.reduced_motion.required, true);
+assert.equal(compliantMotion.reduced_motion.found, true);
+assert.deepEqual(compliantMotion.files_scanned, ['motion.js', 'styles.css']);
+await rm(compliantMotionDir, { recursive: true, force: true });
+
+const adjustedTokenDir = await mkdtemp(join('/tmp', 'kinetic-motion-adjusted-token-'));
+await writeFile(join(adjustedTokenDir, 'motion.js'), `const opts = { duration: tokens['duration-med'] + 100 };`);
+await writeFile(join(adjustedTokenDir, 'reduced.css'), `.motion { transition-duration: calc(var(--kinetic-duration-med) * 2); }
+@media (prefers-reduced-motion: reduce) { .motion { transition: none; } }`);
+const adjustedToken = await validateMotionTokens({
+  variantDir: adjustedTokenDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(adjustedToken.result, 'fail');
+assert.ok(adjustedToken.findings.some(({ property, value }) => property === 'duration' && value === "tokens['duration-med'] + 100"));
+assert.ok(adjustedToken.findings.some(({ file, property, value }) => file === 'reduced.css' && property === 'duration' && value === 'calc(var(--kinetic-duration-med) * 2)'));
+await rm(adjustedTokenDir, { recursive: true, force: true });
+
+// T15: unapproved raw motion values fail with exact source evidence; intrinsic endpoints and excluded sources do not.
+const rawMotionDir = await mkdtemp(join('/tmp', 'kinetic-motion-raw-'));
+await writeFile(join(rawMotionDir, 'styles.css'), `.bad {
+  transition-duration: 275ms;
+  transition-delay: 75ms;
+  transition-timing-function: cubic-bezier(0.1, 0.2, 0.3, 1);
+  transform: translateY(17px) scale(0.93);
+  opacity: 0.5;
+}
+@media (prefers-reduced-motion: reduce) { .bad { transition: none; transform: none; } }
+`);
+await writeFile(join(rawMotionDir, 'motion.js'), `const opts = {
+  duration: 725,
+  delay: 45,
+  stagger: 37,
+  easing: 'power2.out',
+  distance: 19,
+  opacity: 0.4,
+  scale: 0.92,
+  spring: {
+    mass: 1,
+    stiffness: 240,
+    damping: 18
+  }
+};
+`);
+await writeFile(join(rawMotionDir, 'mixed.js'), `const mixed = { duration: tokens['duration-med'], delay: 91 };`);
+const rawMotion = await validateMotionTokens({
+  variantDir: rawMotionDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(rawMotion.result, 'fail');
+for (const property of ['duration', 'delay', 'stagger', 'easing', 'distance', 'scale', 'opacity', 'spring.mass', 'spring.stiffness', 'spring.damping']) {
+  assert.ok(rawMotion.findings.some((finding) => finding.property === property), `raw ${property} is reported`);
+}
+assert.ok(rawMotion.findings.some(({ file, property, value }) => file === 'mixed.js' && property === 'delay' && value === '91'), 'a valid token reference cannot hide a raw sibling value');
+assert.ok(rawMotion.findings.every(({ file, line, property, value }) => typeof file === 'string' && Number.isInteger(line) && line > 0 && typeof property === 'string' && value !== undefined));
+await rm(rawMotionDir, { recursive: true, force: true });
+
+const shorthandMotionDir = await mkdtemp(join('/tmp', 'kinetic-motion-shorthand-'));
+await writeFile(join(shorthandMotionDir, 'styles.css'), `.card { transition: opacity 100ms ease-in 50ms, transform 200ms cubic-bezier(0.1, 0.2, 0.3, 1) 75ms, color 300ms ease-out 25ms; }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }`);
+const shorthandMotion = await validateMotionTokens({
+  variantDir: shorthandMotionDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+const shorthandRows = shorthandMotion.findings.map(({ property, value }) => `${property}:${value}`);
+for (const row of ['duration:100ms', 'delay:50ms', 'easing:ease-in', 'duration:200ms', 'delay:75ms', 'easing:cubic-bezier(0.1, 0.2, 0.3, 1)', 'duration:300ms', 'delay:25ms', 'easing:ease-out']) {
+  assert.ok(shorthandRows.includes(row), `transition shorthand reports ${row}`);
+}
+await rm(shorthandMotionDir, { recursive: true, force: true });
+
+const excludedMotionDir = await mkdtemp(join('/tmp', 'kinetic-motion-excluded-'));
+await mkdir(join(excludedMotionDir, 'node_modules', 'pkg'), { recursive: true });
+await mkdir(join(excludedMotionDir, 'vendor'), { recursive: true });
+await mkdir(join(excludedMotionDir, '.kinetic'), { recursive: true });
+await mkdir(join(excludedMotionDir, 'kinetic', 'core'), { recursive: true });
+for (const file of ['node_modules/pkg/raw.js', 'vendor/raw.css', '.kinetic/tokens.js', 'kinetic/core/raw.js', 'bundle.min.js']) {
+  await writeFile(join(excludedMotionDir, file), `const x = { duration: 999, scale: 0.2 };`);
+}
+await writeFile(join(excludedMotionDir, 'endpoints.css'), `.layout { transform: translateY(17px); }
+.state { animation: state var(--kinetic-duration-fast); opacity: 0; transform: scale(1); }
+@media (prefers-reduced-motion: reduce) { .state { animation: none; opacity: 1; transform: scale(1); } }
+`);
+const excludedMotion = await validateMotionTokens({
+  variantDir: excludedMotionDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(excludedMotion.result, 'pass', JSON.stringify(excludedMotion));
+assert.deepEqual(excludedMotion.files_scanned, ['endpoints.css']);
+await rm(excludedMotionDir, { recursive: true, force: true });
+
+const selectorScopedDir = await mkdtemp(join('/tmp', 'kinetic-motion-selector-scope-'));
+await writeFile(join(selectorScopedDir, 'styles.css'), `@media (min-width: 600px) {
+  .animated { transition: opacity var(--kinetic-duration-fast); }
+  .layout { transform: translateY(17px); }
+}
+@media (prefers-reduced-motion: reduce) { .animated { transition: none; } }`);
+const selectorScoped = await validateMotionTokens({
+  variantDir: selectorScopedDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(selectorScoped.result, 'pass', JSON.stringify(selectorScoped));
+assert.ok(!selectorScoped.findings.some(({ property }) => property === 'distance'));
+await rm(selectorScopedDir, { recursive: true, force: true });
+
+const unknownTokenDir = await mkdtemp(join('/tmp', 'kinetic-motion-unknown-token-'));
+await writeFile(join(unknownTokenDir, 'styles.css'), `.card { transition: transform var(--kinetic-duration-invented); }
+@media (prefers-reduced-motion: reduce) { .card { transition: none; } }`);
+const unknownToken = await validateMotionTokens({
+  variantDir: unknownTokenDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(unknownToken.result, 'fail');
+assert.ok(unknownToken.findings.some(({ property, value }) => property === 'token-reference' && value === 'duration-invented'));
+const exceptedUnknownToken = await validateMotionTokens({
+  variantDir: unknownTokenDir,
+  brief: { motion_plan: { token_exceptions: [{ file: 'styles.css', line_or_symbol: '1', property: 'token-reference', raw_value: 'duration-invented', reason: 'Measured synchronization with cited evidence', evidence_ref: 'capture:cap-token', scope: 'card transition only' }] } },
+  tokenCatalog: motionCatalog,
+});
+assert.equal(exceptedUnknownToken.result, 'fail');
+assert.deepEqual(exceptedUnknownToken.approved_exceptions, []);
+await rm(unknownTokenDir, { recursive: true, force: true });
+
+const missingReducedDir = await mkdtemp(join('/tmp', 'kinetic-motion-no-rm-'));
+await writeFile(join(missingReducedDir, 'styles.css'), `.card { transition: transform var(--kinetic-duration-fast); }`);
+const missingReduced = await validateMotionTokens({
+  variantDir: missingReducedDir,
+  brief: { motion_plan: { token_exceptions: [{ file: 'styles.css', line_or_symbol: '1', property: 'reduced-motion', raw_value: 'missing', reason: 'No animation is intended in reduced mode', evidence_ref: 'brief#motion', scope: 'styles.css reduced motion' }] } },
+  tokenCatalog: motionCatalog,
+});
+assert.equal(missingReduced.result, 'fail');
+assert.ok(missingReduced.findings.some(({ kind }) => kind === 'missing_reduced_motion'));
+assert.deepEqual(missingReduced.approved_exceptions, []);
+await rm(missingReducedDir, { recursive: true, force: true });
+
+const ineffectiveReducedDir = await mkdtemp(join('/tmp', 'kinetic-motion-ineffective-rm-'));
+await writeFile(join(ineffectiveReducedDir, 'empty.css'), `.card { transition: transform var(--kinetic-duration-fast); }
+@media (prefers-reduced-motion: reduce) {}`);
+await writeFile(join(ineffectiveReducedDir, 'commented.html'), `<!-- @media (prefers-reduced-motion: reduce) { .card { transition: none; } } -->`);
+await writeFile(join(ineffectiveReducedDir, 'unrelated.js'), `const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+if (other.matches) { return; }`);
+const ineffectiveReduced = await validateMotionTokens({
+  variantDir: ineffectiveReducedDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(ineffectiveReduced.result, 'fail');
+assert.equal(ineffectiveReduced.reduced_motion.found, false);
+assert.ok(ineffectiveReduced.findings.some(({ kind }) => kind === 'missing_reduced_motion'));
+await rm(ineffectiveReducedDir, { recursive: true, force: true });
+
+const jsReducedDir = await mkdtemp(join('/tmp', 'kinetic-motion-js-rm-'));
+await writeFile(join(jsReducedDir, 'motion.js'), `const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+if (reduce.matches) { return; }
+const opts = { duration: tokens['duration-med'] };`);
+const jsReduced = await validateMotionTokens({
+  variantDir: jsReducedDir, brief: { motion_plan: { token_exceptions: [] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(jsReduced.result, 'pass', JSON.stringify(jsReduced));
+assert.equal(jsReduced.reduced_motion.found, true);
+await rm(jsReducedDir, { recursive: true, force: true });
+
+// T16: only exact, evidenced exceptions waive one matching finding.
+const exceptionMotionDir = await mkdtemp(join('/tmp', 'kinetic-motion-exception-'));
+await writeFile(join(exceptionMotionDir, 'styles.css'), `.special {
+  transition-duration: 275ms;
+}
+@media (prefers-reduced-motion: reduce) { .special { transition: none; } }
+`);
+const exactException = { file: 'styles.css', line_or_symbol: '2', property: 'duration', raw_value: '275ms', reason: 'Cited source clip requires measured timing synchronization', evidence_ref: 'capture:cap-motion-sync', scope: 'special transition only' };
+const exceptedMotion = await validateMotionTokens({
+  variantDir: exceptionMotionDir, brief: { motion_plan: { token_exceptions: [exactException] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(exceptedMotion.result, 'pass', JSON.stringify(exceptedMotion));
+assert.deepEqual(exceptedMotion.findings, []);
+assert.equal(exceptedMotion.approved_exceptions.length, 1);
+assert.deepEqual(
+  Object.fromEntries(Object.entries(exceptedMotion.approved_exceptions[0]).filter(([key]) => ['file', 'line', 'property', 'value'].includes(key))),
+  { file: 'styles.css', line: 2, property: 'duration', value: '275ms' },
+);
+const symbolScopeDir = await mkdtemp(join('/tmp', 'kinetic-motion-symbol-scope-'));
+await writeFile(join(symbolScopeDir, 'motion.js'), `const f = () => {};
+const opts = { duration: 275 };`);
+await writeFile(join(symbolScopeDir, 'reduced.css'), `@media (prefers-reduced-motion: reduce) { .motion { transition: none; } }`);
+const leakedSymbolException = { file: 'motion.js', line_or_symbol: 'f', property: 'duration', raw_value: '275', reason: 'Source capture requires measured timing synchronization', evidence_ref: 'capture:cap-symbol', scope: 'function f only' };
+const symbolScoped = await validateMotionTokens({
+  variantDir: symbolScopeDir, brief: { motion_plan: { token_exceptions: [leakedSymbolException] } }, tokenCatalog: motionCatalog,
+});
+assert.equal(symbolScoped.result, 'fail');
+assert.deepEqual(symbolScoped.approved_exceptions, []);
+assert.ok(symbolScoped.findings.some(({ file, line, property }) => file === 'motion.js' && line === 2 && property === 'duration'));
+await rm(symbolScopeDir, { recursive: true, force: true });
+for (const invalidException of [
+  { ...exactException, file: '*.css' },
+  { ...exactException, reason: 'because design' },
+  { ...exactException, reason: 'because design choice looks better' },
+  { ...exactException, reason: 'measured measurement because design' },
+  { ...exactException, reason: 'Timing constraint preserves a more beautiful aesthetic.' },
+  { ...exactException, reason: 'Measured timing benchmark constraint evidence synchronization.' },
+  { ...exactException, reason: 'Timing capture evidence constraint for design vibes.' },
+  { ...exactException, reason: 'Source capture requires measured timing synchronization for premium design vibes and product desirability.' },
+  { ...exactException, reason: 'Cited source clip requires measured timing synchronization for bananas and latency.' },
+  { ...exactException, property: 'delay' },
+]) {
+  const rejectedException = await validateMotionTokens({
+    variantDir: exceptionMotionDir, brief: { motion_plan: { token_exceptions: [invalidException] } }, tokenCatalog: motionCatalog,
+  });
+  assert.equal(rejectedException.result, 'fail');
+  assert.deepEqual(rejectedException.approved_exceptions, []);
+}
+await rm(exceptionMotionDir, { recursive: true, force: true });
 
 // T48: visual fingerprint similarity is independent from structural originality and design quality.
 const fingerprint = {
@@ -1060,4 +1340,4 @@ assert.throws(() => assertTransition({
   artifactRefs: { ...designArtifactRefs, design_qualified: true },
 }), (error) => error.code === 'KINETIC_QUALIFICATION_EXPLICIT_REQUIRED');
 
-console.log(`S01-S15 contract foundations: PASS (T1-T13, T21-T24, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S16 contract foundations: PASS (T1-T16, T21-T24, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
