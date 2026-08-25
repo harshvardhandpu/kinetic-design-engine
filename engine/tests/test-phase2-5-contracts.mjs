@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile, readTelemetry, recordStageTelemetry } from '../runner/store.mjs';
-import { applyHumanReview, applyTransition, assertFidelityPolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
+import { applyBatchReviewReady, applyHumanReview, applyTransition, assertFidelityPolicy, assertReviewPackagePolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
@@ -761,8 +761,17 @@ try {
   foreignLossCase.slots.V2.case_id = 'case-foreign';
   rejectedLoss(lossReport, evidenceIndex, foreignLossCase);
   rejectedLoss(lossReport, null);
-  const lossArtifactRefs = { source_to_output_loss: `runs/${lossCaseId}/reports/source-to-output-loss.json`, source_to_output_loss_validated: true };
+  const lossArtifactRefs = {
+    source_to_output_loss: `runs/${lossCaseId}/reports/source-to-output-loss.json`,
+    source_to_output_loss_validated: true,
+    review_package: `runs/${lossCaseId}/review-package.html`,
+    review_package_validated: true,
+  };
   assert.throws(() => assertTransition({ caseRun: lossCase, slot: 'V1', toState: 'REVIEW_READY', artifactRefs: {} }), (error) => error.code === 'KINETIC_LOSS_REPORT_REQUIRED');
+  assert.throws(() => assertTransition({
+    caseRun: lossCase, slot: 'V1', toState: 'REVIEW_READY',
+    artifactRefs: { source_to_output_loss: lossArtifactRefs.source_to_output_loss, source_to_output_loss_validated: true },
+  }), (error) => error.code === 'KINETIC_REVIEW_PACKAGE_REQUIRED');
   assert.doesNotThrow(() => assertTransition({ caseRun: lossCase, slot: 'V1', toState: 'REVIEW_READY', artifactRefs: lossArtifactRefs }));
   const prequalifiedLossCase = structuredClone(lossCase);
   prequalifiedLossCase.slots.V1.design_qualified = true;
@@ -775,6 +784,11 @@ try {
   const persistedLossPath = join(tempDir, lossArtifactRefs.source_to_output_loss);
   const assertLossAbsent = () => assert.rejects(readFile(persistedLossPath), (error) => error.code === 'ENOENT');
   await mkdir(dirname(lossCasePath), { recursive: true });
+  // Stage minimal variant pages so workbench links resolve under the temp gym.
+  for (const slot of ['v0', 'v1', 'v2']) {
+    await mkdir(join(tempDir, 'runs', lossCaseId, 'variants', slot), { recursive: true });
+    await writeFile(join(tempDir, 'runs', lossCaseId, 'variants', slot, 'index.html'), `<html><body>${slot}</body></html>`);
+  }
   const wrongStateCase = structuredClone(lossCase);
   wrongStateCase.slots.V1.state = 'PLANNED';
   await writeFile(lossCasePath, JSON.stringify(wrongStateCase, null, 2));
@@ -814,16 +828,23 @@ try {
   let lossReady = JSON.parse(await readFile(lossCasePath, 'utf8'));
   assert.equal(lossReady.slots.V1.state, 'REVIEW_READY');
   assert.equal(lossReady.reports.source_to_output_loss, lossArtifactRefs.source_to_output_loss);
+  assert.equal(lossReady.reports.review_package, lossArtifactRefs.review_package);
   assert.equal(lossReady.slots.V1.design_qualified, null);
   assert.equal(lossReady.slots.V1.acceptable_for_further_taste_learning, null);
   const persistedLossBytes = await readFile(persistedLossPath);
   assert.deepEqual(JSON.parse(persistedLossBytes), lossReport);
+  const packageHtml = await readFile(join(tempDir, lossArtifactRefs.review_package), 'utf8');
+  assert.doesNotThrow(() => assertReviewPackagePolicy({ caseRun: lossReady, html: packageHtml, packageRef: lossArtifactRefs.review_package }));
+  assert.match(packageHtml, /IZANAMI/);
+  assert.doesNotMatch(packageHtml, /\schecked(\s|>|=)/i);
   cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
   assert.equal(cli.status, 0, cli.stderr);
   assert.deepEqual(await readFile(persistedLossPath), persistedLossBytes, 'successful repeat must not rewrite report bytes');
   cli = run(['advance', '--case', lossCaseId, '--slot', 'V2', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
   assert.equal(cli.status, 0, cli.stderr);
   assert.deepEqual(await readFile(persistedLossPath), persistedLossBytes, 'peer transition must reuse the report without overwrite');
+  lossReady = JSON.parse(await readFile(lossCasePath, 'utf8'));
+  assert.equal(lossReady.review_state, 'REVIEW_READY');
   const changedLossReport = structuredClone(lossReport);
   changedLossReport.stage_findings.source_inspection[0].observation = 'Changed repeated report.';
   await writeFile(lossInputPath, JSON.stringify(changedLossReport, null, 2));
@@ -833,6 +854,98 @@ try {
   lossReady = JSON.parse(await readFile(lossCasePath, 'utf8'));
   assert.equal(lossReady.slots.V1.state, 'REVIEW_READY');
   assert.equal(lossReady.slots.V2.state, 'REVIEW_READY');
+
+  // T29/T44 batch path: atomic REVIEW_READY after package + loss checks, no qualification writes.
+  const batchCaseId = 'case-s19-batch';
+  const batchCase = structuredClone(lossCase);
+  batchCase.case_id = batchCaseId;
+  batchCase.slots = Object.fromEntries(['V0', 'V1', 'V2'].map((slot) => [slot, {
+    ...structuredClone(lossCase.slots[slot]),
+    run_id: `run-${batchCaseId}-${slot.toLowerCase()}`,
+    case_id: batchCaseId,
+    refs: Object.fromEntries(Object.entries(lossCase.slots[slot].refs).map(([key, value]) => [
+      key,
+      typeof value === 'string' ? value.replaceAll(lossCaseId, batchCaseId) : value,
+    ])),
+  }]));
+  batchCase.reports.fidelity = `runs/${batchCaseId}/reports/fidelity-v0.json`;
+  await mkdir(join(tempDir, 'runs', batchCaseId, 'reports'), { recursive: true });
+  for (const slot of ['V0', 'V1', 'V2']) {
+    const srcBrief = join(tempDir, lossCase.slots[slot].refs.variant_brief);
+    const srcRetrieval = join(tempDir, lossCase.slots[slot].refs.retrieval_receipt);
+    const srcEval = join(tempDir, lossCase.slots[slot].refs.design_evaluation);
+    for (const [src, destRel] of [
+      [srcBrief, batchCase.slots[slot].refs.variant_brief],
+      [srcRetrieval, batchCase.slots[slot].refs.retrieval_receipt],
+      [srcEval, batchCase.slots[slot].refs.design_evaluation],
+    ]) {
+      await mkdir(dirname(join(tempDir, destRel)), { recursive: true });
+      const text = await readFile(src, 'utf8');
+      await writeFile(join(tempDir, destRel), text.replaceAll(lossCaseId, batchCaseId));
+    }
+    const bytes = Buffer.from(`authentic-${batchCaseId}-${slot}`);
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const manifest = capturePlan({
+      caseId: batchCaseId, subjectId: slot, url: `file:///${slot.toLowerCase()}.html`,
+      specs: [captureSpecFixture('unused', slot, `file:///${slot.toLowerCase()}.html`)],
+      playwrightVersion: '1.55.0', browserVersion: 'fixture-chromium', now: '2026-08-22T00:00:00Z',
+    });
+    const { build_sha256: ignoredBuildHash, ...entry } = manifest.specs[0];
+    manifest.entries.push({
+      ...entry, timestamp: '2026-08-22T00:00:00Z', playwright_version: manifest.playwright_version,
+      browser_version: manifest.browser_version, artifact_path: `artifacts/${sha256}.webp`, sha256,
+      visual_phash: 'c'.repeat(64), readiness: 'READY', notes: [],
+    });
+    const capturePath = join(tempDir, batchCase.slots[slot].refs.capture_manifest);
+    await mkdir(join(dirname(capturePath), 'artifacts'), { recursive: true });
+    await writeFile(join(dirname(capturePath), manifest.entries[0].artifact_path), bytes);
+    await writeFile(capturePath, JSON.stringify(manifest, null, 2));
+    // Keep loss-report capture refs authentic for this batch case by rewriting the batch loss later from these ids when needed.
+    batchCase.slots[slot]._capture_id = entry.capture_id;
+    await mkdir(join(tempDir, 'runs', batchCaseId, 'variants', slot.toLowerCase()), { recursive: true });
+    await writeFile(join(tempDir, 'runs', batchCaseId, 'variants', slot.toLowerCase(), 'index.html'), `<html><body>${slot}</body></html>`);
+  }
+  await writeFile(join(tempDir, batchCase.reports.fidelity), (await readFile(join(tempDir, fidelityRef), 'utf8')).replaceAll(lossCaseId, batchCaseId));
+  const batchLoss = structuredClone(lossReport);
+  batchLoss.case_id = batchCaseId;
+  batchLoss.report_id = 'sol-batch';
+  batchLoss.stage_findings.composition[0].report_refs = [batchCase.slots.V1.refs.design_evaluation];
+  batchLoss.stage_findings.composition[0].capture_refs = [batchCase.slots.V0._capture_id, batchCase.slots.V1._capture_id];
+  batchLoss.stage_findings.motion[0].capture_refs = [batchCase.slots.V0._capture_id, batchCase.slots.V2._capture_id];
+  for (const slot of ['V0', 'V1', 'V2']) delete batchCase.slots[slot]._capture_id;
+  const batchLossPath = join(tempDir, 'batch-loss.json');
+  await writeFile(batchLossPath, JSON.stringify(batchLoss, null, 2));
+  await writeFile(join(tempDir, 'runs', batchCaseId, 'case.json'), JSON.stringify(batchCase, null, 2));
+  cli = run(['batch-review-ready', '--case', batchCaseId, '--loss', batchLossPath]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const batchReady = JSON.parse(await readFile(join(tempDir, 'runs', batchCaseId, 'case.json'), 'utf8'));
+  assert.equal(batchReady.review_state, 'REVIEW_READY');
+  assert.equal(batchReady.slots.V1.state, 'REVIEW_READY');
+  assert.equal(batchReady.slots.V2.state, 'REVIEW_READY');
+  assert.equal(batchReady.slots.V1.design_qualified, null);
+  assert.equal(batchReady.slots.V2.acceptable_for_further_taste_learning, null);
+  assert.equal(batchReady.reports.review_package, `runs/${batchCaseId}/review-package.html`);
+  const batchHtml = await readFile(join(tempDir, batchReady.reports.review_package), 'utf8');
+  assert.doesNotThrow(() => assertReviewPackagePolicy({ caseRun: batchReady, html: batchHtml, packageRef: batchReady.reports.review_package }));
+  assert.doesNotThrow(() => applyBatchReviewReady({
+    caseRun: batchReady,
+    artifactRefs: {
+      source_to_output_loss: batchReady.reports.source_to_output_loss,
+      source_to_output_loss_validated: true,
+      review_package: batchReady.reports.review_package,
+      review_package_validated: true,
+    },
+  }));
+  assert.throws(() => assertReviewPackagePolicy({
+    caseRun: batchReady,
+    html: batchHtml.replace('id="export-decision" disabled', 'id="export-decision"'),
+    packageRef: batchReady.reports.review_package,
+  }), (error) => error.code === 'KINETIC_REVIEW_PACKAGE_INVALID');
+  assert.throws(() => assertReviewPackagePolicy({
+    caseRun: batchReady,
+    html: batchHtml.replaceAll('name="winner" value="V1"', 'name="winner" value="V0"').replaceAll('name="winner" value="V2"', 'name="winner" value="V0"'),
+    packageRef: batchReady.reports.review_package,
+  }), (error) => error.code === 'KINETIC_REVIEW_PACKAGE_INVALID');
 
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
@@ -1604,4 +1717,4 @@ assert.throws(() => assertTransition({
   artifactRefs: { ...designArtifactRefs, design_qualified: true },
 }), (error) => error.code === 'KINETIC_QUALIFICATION_EXPLICIT_REQUIRED');
 
-console.log(`S01-S18 contract foundations: PASS (T1-T16, T21-T28, T30-T31, T39-T43, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S19 contract foundations: PASS (T1-T16, T21-T31, T39-T44, T46, T48, CV01-CV18, registry ${registryHashAfter})`);

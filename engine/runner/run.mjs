@@ -20,13 +20,14 @@ import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
-import { addOriginalSlot, applyHumanReview, applyTransition, assertFidelityPolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
+import { addOriginalSlot, applyBatchReviewReady, applyHumanReview, applyTransition, assertFidelityPolicy, assertReviewPackagePolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
 import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic, writeTasteDecisionExclusive } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
 import { validateMotionTokens } from '../evaluator/motion-token-validate.mjs';
 import { validateCaptureManifest } from '../cli/capture.mjs';
+import { generateReviewPackage } from '../cli/gen-review-package.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
@@ -325,6 +326,44 @@ async function persistLossReportExclusive({ report, outputPath }, mustExist = fa
   }
 }
 
+async function resolveLocalPackageHrefs(caseDir, html) {
+  const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map((match) => match[1])
+    .filter((href) => !href.startsWith('http') && !href.startsWith('#') && !href.startsWith('data:'));
+  for (const href of hrefs) {
+    const target = resolve(caseDir, href);
+    const caseRoot = await realpath(caseDir).catch(() => caseDir);
+    let absolute;
+    try { absolute = await realpath(target); }
+    catch {
+      throw Object.assign(new Error(`review package href does not resolve: ${href}`), { code: 'KINETIC_REVIEW_PACKAGE_INVALID' });
+    }
+    const local = relative(caseRoot, absolute);
+    // Allow baseline links that resolve outside the case but still under the active gym root.
+    const gymRoot = await realpath(gym).catch(() => gym);
+    const underGym = relative(gymRoot, absolute);
+    if ((local === '..' || local.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(local))
+      && (underGym === '..' || underGym.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(underGym))) {
+      throw Object.assign(new Error(`review package href escapes gym root: ${href}`), { code: 'KINETIC_REVIEW_PACKAGE_INVALID' });
+    }
+    const st = await readFile(absolute).catch(() => null);
+    if (st == null) throw Object.assign(new Error(`review package href missing file: ${href}`), { code: 'KINETIC_REVIEW_PACKAGE_INVALID' });
+  }
+  return hrefs.length;
+}
+
+async function prepareValidatedReviewPackage(caseRun) {
+  const generated = await generateReviewPackage({ caseId: caseRun.case_id, gymRoot: gym, repoGym: join(root, 'gym') });
+  assertReviewPackagePolicy({ caseRun, html: generated.html, packageRef: generated.ref });
+  const caseDir = join(gym, 'runs', caseRun.case_id);
+  await resolveLocalPackageHrefs(caseDir, generated.html);
+  return {
+    review_package: generated.ref,
+    review_package_validated: true,
+    html: generated.html,
+    outputPath: generated.outputPath,
+  };
+}
+
 async function persistTechnicalEvaluation(caseId, slot, artifactPath, variantDir, refs, timestamp) {
   if (typeof artifactPath !== 'string' || typeof variantDir !== 'string') {
     throw Object.assign(new Error('TECHNICAL_EVALUATED requires --artifact browser report and --target variant directory'), { code: 'KINETIC_TECHNICAL_EVALUATION_REQUIRED' });
@@ -502,24 +541,69 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       if (A.to === 'DESIGN_EVALUATED') artifactRefs = { ...artifactRefs, ...await persistValidatedDesignEvaluation(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
       if (A.to === 'REVIEW_READY') {
         const lossRef = `runs/${A.case}/reports/source-to-output-loss.json`;
+        const packageRef = `runs/${A.case}/review-package.html`;
         const repeated = loaded.record.slots?.[A.slot]?.state === 'REVIEW_READY';
         if (loaded.record.reports?.source_to_output_loss !== null && loaded.record.reports?.source_to_output_loss !== lossRef) {
           throw Object.assign(new Error('case points to a different loss report; overwrite is forbidden'), { code: 'KINETIC_LOSS_REPORT_CONFLICT' });
         }
-        artifactRefs = { ...artifactRefs, source_to_output_loss: lossRef, source_to_output_loss_validated: true };
+        if (loaded.record.reports?.review_package !== null && loaded.record.reports?.review_package !== packageRef) {
+          throw Object.assign(new Error('case points to a different review package; overwrite is forbidden'), { code: 'KINETIC_REVIEW_PACKAGE_INVALID' });
+        }
+        artifactRefs = {
+          ...artifactRefs,
+          source_to_output_loss: lossRef,
+          source_to_output_loss_validated: true,
+          review_package: packageRef,
+          review_package_validated: true,
+        };
         if (!repeated) assertTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs });
         const prepared = await prepareValidatedLossReport(loaded.record, A.loss);
         await persistLossReportExclusive(prepared, repeated);
+        await prepareValidatedReviewPackage(loaded.record);
         if (repeated) return;
       }
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       if (technicalQualification !== null) updated.slots[A.slot].technically_qualified = technicalQualification;
       if (artifactRefs.fidelity_report) updated.reports.fidelity = artifactRefs.fidelity_report;
       if (artifactRefs.source_to_output_loss) updated.reports.source_to_output_loss = artifactRefs.source_to_output_loss;
+      if (artifactRefs.review_package) {
+        updated.reports.review_package = artifactRefs.review_package;
+        if (['V1', 'V2'].every((slot) => updated.slots?.[slot]?.state === 'REVIEW_READY')) updated.review_state = 'REVIEW_READY';
+      }
       await writeCaseAtomic(A.case, updated);
       await recordTransitionTelemetry(A.case, loaded.record.slots[A.slot], updated.slots[A.slot], A.to, timestamp);
     });
     console.log(`${A.case}/${A.slot} -> ${A.to}`);
+  } catch (error) {
+    console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
+    process.exitCode = 1;
+  }
+} else if (cmd === 'batch-review-ready') {
+  try {
+    await withCaseLock(A.case, `batch-review-ready`, async () => {
+      const loaded = await readStoredCase(A.case);
+      if (loaded.legacy) throw Object.assign(new Error('batch-review-ready is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
+      const timestamp = now();
+      const lossRef = `runs/${A.case}/reports/source-to-output-loss.json`;
+      const packageRef = `runs/${A.case}/review-package.html`;
+      const artifactRefs = {
+        source_to_output_loss: lossRef,
+        source_to_output_loss_validated: true,
+        review_package: packageRef,
+        review_package_validated: true,
+      };
+      const preparedLoss = await prepareValidatedLossReport(loaded.record, A.loss);
+      await prepareValidatedReviewPackage(loaded.record);
+      const updated = applyBatchReviewReady({ caseRun: loaded.record, artifactRefs, now: timestamp });
+      await persistLossReportExclusive(preparedLoss, loaded.record.reports?.source_to_output_loss === lossRef);
+      await writeCaseAtomic(A.case, updated);
+      for (const slot of ['V1', 'V2']) {
+        if (loaded.record.slots?.[slot]?.state !== 'REVIEW_READY') {
+          await recordTransitionTelemetry(A.case, loaded.record.slots[slot], updated.slots[slot], 'REVIEW_READY', timestamp);
+        }
+      }
+    });
+    console.log(`${A.case}: batch REVIEW_READY`);
   } catch (error) {
     console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
     process.exitCode = 1;

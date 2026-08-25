@@ -163,6 +163,75 @@ export function assertSourceToOutputLossReport({ caseRun, report, evidenceIndex 
   return true;
 }
 
+export function assertReviewPackagePolicy({ caseRun, html, packageRef }) {
+  const fail = (message) => { throw new TransitionError('KINETIC_REVIEW_PACKAGE_INVALID', message); };
+  if (caseRun?.schema !== 'kinetic/gym/case-run@0.2' || typeof html !== 'string' || typeof packageRef !== 'string'
+    || packageRef !== `runs/${caseRun.case_id}/review-package.html`) {
+    fail('review package must bind the Phase-2.5 case path');
+  }
+  if (!/data-kinetic-workbench=["']phase2\.5["']/.test(html) || !html.includes(`data-case-id="${caseRun.case_id}"`)) {
+    fail('review package must declare the phase2.5 workbench identity');
+  }
+  if (!/data-role=["']rejected-baseline["']/.test(html) || !/IZANAMI/.test(html)) fail('immutable IZANAMI rejected baseline is required');
+  if (/\schecked(\s|>|=)/i.test(html) || /\sselected(\s|>|=)/i.test(html)) fail('review controls must not be preselected');
+  if (/design_qualified\s*[:=]\s*true/.test(html) || /acceptable_for_further_taste_learning\s*[:=]\s*true/.test(html)) {
+    fail('review package must not set qualification');
+  }
+  const winnerValues = [...html.matchAll(/name=["']winner["'][^>]*value=["']([^"']+)["']/g)].map((match) => match[1]);
+  if (!winnerValues.length || winnerValues.some((value) => !['V1', 'V2'].includes(value))) fail('only V1/V2 may appear in winner controls');
+  const preferenceValues = [...html.matchAll(/name=["']relative_preference["'][^>]*value=["']([^"']+)["']/g)].map((match) => match[1]);
+  if (!preferenceValues.length || preferenceValues.some((value) => !['V1', 'V2', 'tie', 'neither'].includes(value))) {
+    fail('relative preference controls are invalid');
+  }
+  if (/name=["'](?:winner|relative_preference)["'][^>]*value=["']V0["']/.test(html)) fail('V0/reference cannot be selectable');
+  if (!/data-role=["']context["']/.test(html) || !/not selectable/.test(html)) fail('reference and V0 must remain context-only');
+  if (!/id=["']export-decision["'][^>]*\bdisabled\b/.test(html) && !/<button[^>]*\bdisabled\b[^>]*id=["']export-decision["']/.test(html)) {
+    fail('export must start disabled until every independent field is answered');
+  }
+  for (const slot of ['V1', 'V2']) {
+    const record = caseRun.slots?.[slot];
+    if (!record || record.slot !== slot || record.case_id !== caseRun.case_id || record.mode !== 'original'
+      || record.deployable !== true || record.original_work !== true
+      || !['DESIGN_EVALUATED', 'REVIEW_READY'].includes(record.state)
+      || record.design_qualified !== null || record.acceptable_for_further_taste_learning !== null) {
+      fail('workbench requires identity-bound original V1/V2 awaiting human review');
+    }
+  }
+  return true;
+}
+
+export function applyBatchReviewReady({ caseRun, artifactRefs = {}, now = new Date().toISOString() }) {
+  if (caseRun?.schema !== 'kinetic/gym/case-run@0.2') {
+    throw new TransitionError('KINETIC_PHASE25_REQUIRED', 'batch review readiness is Phase-2.5 only');
+  }
+  if (artifactRefs.source_to_output_loss_validated !== true || typeof artifactRefs.source_to_output_loss !== 'string') {
+    throw new TransitionError('KINETIC_LOSS_REPORT_REQUIRED', 'batch review readiness requires a validated loss report');
+  }
+  if (artifactRefs.review_package_validated !== true || typeof artifactRefs.review_package !== 'string') {
+    throw new TransitionError('KINETIC_REVIEW_PACKAGE_REQUIRED', 'batch review readiness requires a validated workbench');
+  }
+  let next = clone(caseRun);
+  for (const slot of ['V1', 'V2']) {
+    if (next.slots?.[slot]?.state === 'REVIEW_READY') continue;
+    next = applyTransition({ caseRun: next, slot, toState: 'REVIEW_READY', artifactRefs, now });
+  }
+  if (!['V1', 'V2'].every((slot) => next.slots?.[slot]?.state === 'REVIEW_READY')) {
+    throw new TransitionError('KINETIC_REVIEW_BATCH_INCOMPLETE', 'batch review readiness requires both originals in REVIEW_READY');
+  }
+  next.review_state = 'REVIEW_READY';
+  next.reports.source_to_output_loss = artifactRefs.source_to_output_loss;
+  next.reports.review_package = artifactRefs.review_package;
+  next.updated_at = now;
+  next.history.push({
+    event_id: `batch-review-ready-${caseRun.case_id}`,
+    event: 'batch-review-ready',
+    slot: null,
+    artifact_ref: artifactRefs.review_package,
+    timestamp: now,
+  });
+  return next;
+}
+
 export function addOriginalSlot({ caseRun, slot, fidelityValidated = false, fidelityRef, now = new Date().toISOString() }) {
   if (!['V1', 'V2'].includes(slot) || caseRun.slots?.[slot] || Object.keys(caseRun.slots ?? {}).filter((key) => ['V1', 'V2'].includes(key)).length >= 2) {
     throw new TransitionError('KINETIC_ORIGINAL_SLOT_LIMIT', 'Phase-2.5 allows exactly V1 and V2 originals');
@@ -228,6 +297,9 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   }
   if (toState === 'REVIEW_READY' && (artifactRefs.source_to_output_loss_validated !== true || typeof artifactRefs.source_to_output_loss !== 'string')) {
     throw new TransitionError('KINETIC_LOSS_REPORT_REQUIRED', 'REVIEW_READY requires a persisted evidence-bound loss report');
+  }
+  if (toState === 'REVIEW_READY' && (artifactRefs.review_package_validated !== true || typeof artifactRefs.review_package !== 'string')) {
+    throw new TransitionError('KINETIC_REVIEW_PACKAGE_REQUIRED', 'REVIEW_READY requires a validated neutral review workbench');
   }
   if (toState === 'REVIEW_READY' && (record.design_qualified !== null || record.acceptable_for_further_taste_learning !== null)) {
     throw new TransitionError('KINETIC_DESIGN_QUALIFICATION_FORBIDDEN', 'review readiness cannot pre-set design or taste qualification');
