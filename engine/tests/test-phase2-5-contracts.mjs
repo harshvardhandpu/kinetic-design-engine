@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { validateFile, validateValue } from '../core/schema-validate.mjs';
 import { hashFile, readTelemetry, recordStageTelemetry } from '../runner/store.mjs';
-import { applyHumanReview, applyTransition, assertFidelityPolicy, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
+import { applyHumanReview, applyTransition, assertFidelityPolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, TransitionError } from '../runner/state-machine.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { searchVault } from '../knowledge/obsidian-adapter.mjs';
 import { generateMirror } from '../cli/gen-obsidian-mirror.mjs';
@@ -16,6 +16,7 @@ import * as sourceRegistry from '../knowledge/source-registry.mjs';
 import { compareOriginality } from '../evaluator/originality-compare.mjs';
 import { createVisionCritic, createVisionRequest, validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
 import { validateMotionTokens } from '../evaluator/motion-token-validate.mjs';
+import { capturePlan } from '../cli/capture.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const schemaFiles = [
@@ -615,6 +616,223 @@ try {
   assert.equal((await validateFile({ artifactPath: telemetryPath, schemaPath: join(root, 'schemas', 'gym', 'execution-telemetry.schema.json') })).valid, true);
   await assert.rejects(recordStageTelemetry('case-fidelity-fixture', { ...telemetryUpdate, stage: 'build', metrics: { monetary_cost: 0, monetary_cost_status: 'UNKNOWN' } }), (error) => error.code === 'KINETIC_TELEMETRY_INVALID');
   assert.deepEqual(JSON.parse(await readFile(fidelityCasePath, 'utf8')).slots.V1, qualificationBeforeTelemetry);
+
+  // T30/T43: case-level loss diagnosis authenticates every identity and evidence kind before publication.
+  const lossCaseId = 'case-loss-fixture';
+  const referenceIdentity = 'design-case:case-fe653973ef';
+  const lossStages = ['source_inspection', 'retrieval', 'analysis', 'planning', 'typography', 'assets', 'composition', 'depth', 'motion', 'interaction', 'implementation', 'evaluation'];
+  const lossFinding = (overrides = {}) => ({
+    finding_id: 'loss-source-v0', stage: 'source_inspection', subject_from: referenceIdentity, subject_to: 'V0',
+    label: 'SOURCE-DERIVED', observation: 'Reference hierarchy was inspected.', quality_loss: 'The hierarchy signal weakened.',
+    why: 'The source inspection omitted a structural relationship.', avoidable: true, responsible_subsystem: 'source-inspection',
+    source_refs: [referenceIdentity], capture_refs: [], report_refs: [], human_feedback_refs: [],
+    possible_remediation: 'Retain the structural relationship in the fidelity analysis.', remediation_label: 'ENGINE-RECOMMENDATION', confidence: 0.9,
+    ...overrides,
+  });
+  const fidelityRef = `runs/${lossCaseId}/reports/fidelity-v0.json`;
+  const slotRefs = Object.fromEntries(['V0', 'V1', 'V2'].map((slot) => [slot, {
+    variant_brief: `runs/${lossCaseId}/planning/${slot.toLowerCase()}/variant-brief.json`,
+    retrieval_receipt: `runs/${lossCaseId}/planning/${slot.toLowerCase()}/retrieval-receipt.json`,
+    capture_manifest: `runs/${lossCaseId}/captures/${slot.toLowerCase()}/manifest.json`,
+    design_evaluation: `runs/${lossCaseId}/reports/design-evaluation-${slot.toLowerCase()}.json`,
+    fidelity_report: fidelityRef,
+  }]));
+  const captureIds = {};
+  for (const slot of ['V0', 'V1', 'V2']) {
+    const manifestPath = join(tempDir, slotRefs[slot].capture_manifest);
+    const captureRoot = dirname(manifestPath);
+    const bytes = Buffer.from(`authentic-${lossCaseId}-${slot}`);
+    const sha256 = createHash('sha256').update(bytes).digest('hex');
+    const manifest = capturePlan({
+      caseId: lossCaseId, subjectId: slot, url: `file:///${slot.toLowerCase()}.html`,
+      specs: [captureSpecFixture('unused', slot, `file:///${slot.toLowerCase()}.html`)],
+      playwrightVersion: '1.55.0', browserVersion: 'fixture-chromium', now: '2026-08-22T00:00:00Z',
+    });
+    const { build_sha256: ignoredBuildHash, ...entry } = manifest.specs[0];
+    manifest.entries.push({
+      ...entry, timestamp: '2026-08-22T00:00:00Z', playwright_version: manifest.playwright_version,
+      browser_version: manifest.browser_version, artifact_path: `artifacts/${sha256}.webp`, sha256,
+      visual_phash: 'c'.repeat(64), readiness: 'READY', notes: [],
+    });
+    captureIds[slot] = entry.capture_id;
+    await mkdir(join(captureRoot, 'artifacts'), { recursive: true });
+    await writeFile(join(captureRoot, manifest.entries[0].artifact_path), bytes);
+    await writeFile(manifestPath, JSON.stringify(manifest, null, 2));
+    const slotBrief = structuredClone(slot === 'V0' ? v0Brief : strongBrief);
+    slotBrief.case_id = lossCaseId;
+    slotBrief.variant_id = slot;
+    await mkdir(dirname(join(tempDir, slotRefs[slot].variant_brief)), { recursive: true });
+    await writeFile(join(tempDir, slotRefs[slot].variant_brief), JSON.stringify(slotBrief, null, 2));
+    const slotRetrieval = { ...structuredClone(receiptA), receipt_id: `rr-loss-${slot.toLowerCase()}`, case_id: lossCaseId, variant_id: slot };
+    await writeFile(join(tempDir, slotRefs[slot].retrieval_receipt), JSON.stringify(slotRetrieval, null, 2));
+    const evaluation = designEvaluationFixture({
+      caseId: lossCaseId, variantId: slot, producer: 'human', captureManifestRef: slotRefs[slot].capture_manifest,
+      briefRef: slotRefs[slot].variant_brief, provenanceRefs: [slotRefs[slot].retrieval_receipt],
+    });
+    await mkdir(dirname(join(tempDir, slotRefs[slot].design_evaluation)), { recursive: true });
+    await writeFile(join(tempDir, slotRefs[slot].design_evaluation), JSON.stringify(evaluation, null, 2));
+  }
+  const lossFidelity = { ...structuredClone(goodFidelity), case_id: lossCaseId };
+  await mkdir(dirname(join(tempDir, fidelityRef)), { recursive: true });
+  await writeFile(join(tempDir, fidelityRef), JSON.stringify(lossFidelity, null, 2));
+  const lossCase = {
+    schema: 'kinetic/gym/case-run@0.2', case_id: lossCaseId,
+    slots: Object.fromEntries(['V0', 'V1', 'V2'].map((slot) => [slot, {
+      ...structuredClone(phase25Run), run_id: `run-${lossCaseId}-${slot.toLowerCase()}`, case_id: lossCaseId, slot,
+      mode: slot === 'V0' ? 'fidelity-study' : 'original', state: 'DESIGN_EVALUATED', deployable: slot !== 'V0', original_work: slot !== 'V0',
+      technically_qualified: true, refs: { ...phase25Run.refs, ...slotRefs[slot] }, timestamps: { DESIGN_EVALUATED: '2026-08-22T00:00:00Z' },
+    }])),
+    reports: { fidelity: fidelityRef, source_to_output_loss: null, review_package: null },
+    review_state: 'NOT_READY', taste_decision_ref: null, blocked_condition: null, history: [],
+    created_at: '2026-08-22T00:00:00Z', updated_at: '2026-08-22T00:00:00Z',
+  };
+  const evidenceIndex = {
+    reference_identities: [referenceIdentity],
+    source_refs: [referenceIdentity, 'source:src-seesaw'],
+    capture_refs: Object.values(captureIds),
+    report_refs: [fidelityRef, ...Object.values(slotRefs).flatMap(({ retrieval_receipt, design_evaluation }) => [retrieval_receipt, design_evaluation])],
+    human_feedback_refs: [],
+  };
+  const lossReport = {
+    schema: 'kinetic/gym/source-to-output-loss@0.1', report_id: 'sol-fixture', case_id: lossCaseId,
+    comparison_chain: [referenceIdentity, 'V0', 'V1', 'V2'],
+    stage_findings: Object.fromEntries(lossStages.map((stage) => [stage, []])),
+    created_at: '2026-08-22T00:00:00Z', producer: 'fixture-human',
+  };
+  lossReport.stage_findings.source_inspection.push(lossFinding());
+  lossReport.stage_findings.composition.push(lossFinding({
+    finding_id: 'loss-v0-v1-composition', stage: 'composition', subject_from: 'V0', subject_to: 'V1', label: 'ENGINE-INFERENCE',
+    observation: 'The candidate flattened the layered composition.', quality_loss: 'Depth cues were lost.', why: 'The build collapsed three planes into one.',
+    responsible_subsystem: 'composition', source_refs: [], capture_refs: [captureIds.V0, captureIds.V1], report_refs: [slotRefs.V1.design_evaluation],
+  }));
+  lossReport.stage_findings.motion.push(lossFinding({
+    finding_id: 'loss-v0-v2-motion', stage: 'motion', subject_from: 'V0', subject_to: 'V2', label: 'ENGINE-INFERENCE',
+    observation: 'The motion no longer supports the narrative.', quality_loss: 'Narrative continuity was lost.', why: 'The transition timing separated related content.',
+    responsible_subsystem: 'motion', source_refs: [], capture_refs: [captureIds.V0, captureIds.V2], human_feedback_refs: [],
+  }));
+  const lossSchema = parsed.get('schemas/gym/source-to-output-loss-report.schema.json');
+  valid(lossReport, lossSchema, join(root, 'schemas', 'gym', 'source-to-output-loss-report.schema.json'));
+  assert.doesNotThrow(() => assertSourceToOutputLossReport({ caseRun: lossCase, report: lossReport, evidenceIndex }));
+  const rejectedLoss = (bad, index = evidenceIndex, caseValue = lossCase) => assert.throws(
+    () => assertSourceToOutputLossReport({ caseRun: caseValue, report: bad, evidenceIndex: index }),
+    (error) => error.code === 'KINETIC_LOSS_REPORT_INVALID',
+  );
+  const fakeSource = structuredClone(lossReport);
+  fakeSource.stage_findings.source_inspection[0].source_refs = ['design-case:case-fake'];
+  rejectedLoss(fakeSource);
+  const fakeCapture = structuredClone(lossReport);
+  fakeCapture.stage_findings.composition[0].capture_refs = ['cap-fake'];
+  rejectedLoss(fakeCapture);
+  const foreignReference = structuredClone(lossReport);
+  foreignReference.comparison_chain[0] = 'design-case:case-foreign';
+  foreignReference.stage_findings.source_inspection[0].subject_from = foreignReference.comparison_chain[0];
+  rejectedLoss(foreignReference);
+  const reportOnlyCandidate = structuredClone(lossReport);
+  reportOnlyCandidate.stage_findings.planning.push(lossFinding({
+    finding_id: 'loss-report-only-planning', stage: 'planning', subject_from: 'V0', subject_to: 'V1', label: 'ENGINE-INFERENCE',
+    source_refs: [], capture_refs: [], report_refs: [slotRefs.V1.design_evaluation],
+  }));
+  rejectedLoss(reportOnlyCandidate);
+  const plannedPeer = structuredClone(lossCase);
+  plannedPeer.slots.V2.state = 'PLANNED';
+  rejectedLoss(lossReport, evidenceIndex, plannedPeer);
+  const traversalEvidence = structuredClone(lossReport);
+  traversalEvidence.stage_findings.source_inspection[0].source_refs = ['../foreign/source.json'];
+  rejectedLoss(traversalEvidence, { ...evidenceIndex, source_refs: [...evidenceIndex.source_refs, '../foreign/source.json'] });
+  const wrongKind = structuredClone(lossReport);
+  wrongKind.stage_findings.composition[0].capture_refs = [slotRefs.V1.design_evaluation];
+  rejectedLoss(wrongKind);
+  const missingSourceEvidence = structuredClone(lossReport);
+  missingSourceEvidence.stage_findings.source_inspection[0].source_refs = [];
+  rejectedLoss(missingSourceEvidence);
+  const stageMismatch = structuredClone(lossReport);
+  stageMismatch.stage_findings.motion[0].stage = 'composition';
+  rejectedLoss(stageMismatch);
+  const invalidEdge = structuredClone(lossReport);
+  invalidEdge.stage_findings.analysis.push(lossFinding({ finding_id: 'loss-invalid-edge', stage: 'analysis', subject_from: 'V1', subject_to: 'V2', label: 'ENGINE-INFERENCE', source_refs: [], capture_refs: [captureIds.V1], report_refs: [] }));
+  rejectedLoss(invalidEdge);
+  const duplicateFinding = structuredClone(lossReport);
+  duplicateFinding.stage_findings.composition.push(structuredClone(duplicateFinding.stage_findings.composition[0]));
+  rejectedLoss(duplicateFinding);
+  const emptyLossReport = structuredClone(lossReport);
+  emptyLossReport.stage_findings = Object.fromEntries(lossStages.map((stage) => [stage, []]));
+  rejectedLoss(emptyLossReport);
+  const foreignLossCase = structuredClone(lossCase);
+  foreignLossCase.slots.V2.case_id = 'case-foreign';
+  rejectedLoss(lossReport, evidenceIndex, foreignLossCase);
+  rejectedLoss(lossReport, null);
+  const lossArtifactRefs = { source_to_output_loss: `runs/${lossCaseId}/reports/source-to-output-loss.json`, source_to_output_loss_validated: true };
+  assert.throws(() => assertTransition({ caseRun: lossCase, slot: 'V1', toState: 'REVIEW_READY', artifactRefs: {} }), (error) => error.code === 'KINETIC_LOSS_REPORT_REQUIRED');
+  assert.doesNotThrow(() => assertTransition({ caseRun: lossCase, slot: 'V1', toState: 'REVIEW_READY', artifactRefs: lossArtifactRefs }));
+  const prequalifiedLossCase = structuredClone(lossCase);
+  prequalifiedLossCase.slots.V1.design_qualified = true;
+  assert.throws(() => assertTransition({ caseRun: prequalifiedLossCase, slot: 'V1', toState: 'REVIEW_READY', artifactRefs: lossArtifactRefs }), (error) => error.code === 'KINETIC_DESIGN_QUALIFICATION_FORBIDDEN');
+  invalid({ ...lossReport, design_qualified: true }, lossSchema);
+  invalid({ ...lossReport, comparison_chain: [referenceIdentity, 'V0', 'V1'] }, lossSchema);
+
+  const lossCasePath = join(tempDir, 'runs', lossCaseId, 'case.json');
+  const lossInputPath = join(tempDir, 'loss-report.json');
+  const persistedLossPath = join(tempDir, lossArtifactRefs.source_to_output_loss);
+  const assertLossAbsent = () => assert.rejects(readFile(persistedLossPath), (error) => error.code === 'ENOENT');
+  await mkdir(dirname(lossCasePath), { recursive: true });
+  const wrongStateCase = structuredClone(lossCase);
+  wrongStateCase.slots.V1.state = 'PLANNED';
+  await writeFile(lossCasePath, JSON.stringify(wrongStateCase, null, 2));
+  await writeFile(lossInputPath, JSON.stringify(lossReport, null, 2));
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.notEqual(cli.status, 0);
+  await assertLossAbsent();
+
+  for (const badRef of [`runs/${lossCaseId}/../case-foreign/reports/design-evaluation-v1.json`, 'runs/case-foreign/reports/design-evaluation-v1.json']) {
+    const badPathCase = structuredClone(lossCase);
+    badPathCase.slots.V1.refs.design_evaluation = badRef;
+    await writeFile(lossCasePath, JSON.stringify(badPathCase, null, 2));
+    cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+    assert.notEqual(cli.status, 0);
+    await assertLossAbsent();
+  }
+  const v2EvaluationPath = join(tempDir, slotRefs.V2.design_evaluation);
+  const v2EvaluationBytes = await readFile(v2EvaluationPath);
+  await rm(v2EvaluationPath);
+  await writeFile(lossCasePath, JSON.stringify(lossCase, null, 2));
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.notEqual(cli.status, 0);
+  await assertLossAbsent();
+  await writeFile(v2EvaluationPath, '{');
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.notEqual(cli.status, 0);
+  await assertLossAbsent();
+  await writeFile(v2EvaluationPath, v2EvaluationBytes);
+  await writeFile(lossInputPath, JSON.stringify(fakeCapture, null, 2));
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.notEqual(cli.status, 0);
+  await assertLossAbsent();
+
+  await writeFile(lossInputPath, JSON.stringify(lossReport, null, 2));
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.equal(cli.status, 0, cli.stderr);
+  let lossReady = JSON.parse(await readFile(lossCasePath, 'utf8'));
+  assert.equal(lossReady.slots.V1.state, 'REVIEW_READY');
+  assert.equal(lossReady.reports.source_to_output_loss, lossArtifactRefs.source_to_output_loss);
+  assert.equal(lossReady.slots.V1.design_qualified, null);
+  assert.equal(lossReady.slots.V1.acceptable_for_further_taste_learning, null);
+  const persistedLossBytes = await readFile(persistedLossPath);
+  assert.deepEqual(JSON.parse(persistedLossBytes), lossReport);
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.deepEqual(await readFile(persistedLossPath), persistedLossBytes, 'successful repeat must not rewrite report bytes');
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V2', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.deepEqual(await readFile(persistedLossPath), persistedLossBytes, 'peer transition must reuse the report without overwrite');
+  const changedLossReport = structuredClone(lossReport);
+  changedLossReport.stage_findings.source_inspection[0].observation = 'Changed repeated report.';
+  await writeFile(lossInputPath, JSON.stringify(changedLossReport, null, 2));
+  cli = run(['advance', '--case', lossCaseId, '--slot', 'V1', '--to', 'REVIEW_READY', '--loss', lossInputPath]);
+  assert.notEqual(cli.status, 0);
+  assert.deepEqual(await readFile(persistedLossPath), persistedLossBytes, 'changed repeat must not overwrite report bytes');
+  lossReady = JSON.parse(await readFile(lossCasePath, 'utf8'));
+  assert.equal(lossReady.slots.V1.state, 'REVIEW_READY');
+  assert.equal(lossReady.slots.V2.state, 'REVIEW_READY');
 
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
@@ -1386,4 +1604,4 @@ assert.throws(() => assertTransition({
   artifactRefs: { ...designArtifactRefs, design_qualified: true },
 }), (error) => error.code === 'KINETIC_QUALIFICATION_EXPLICIT_REQUIRED');
 
-console.log(`S01-S17 contract foundations: PASS (T1-T16, T21-T28, T31, T39-T41, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
+console.log(`S01-S18 contract foundations: PASS (T1-T16, T21-T28, T30-T31, T39-T43, T46, T48, CV01-CV18, registry ${registryHashAfter})`);

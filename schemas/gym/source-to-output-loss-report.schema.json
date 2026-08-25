@@ -10,7 +10,7 @@
     "schema": { "const": "kinetic/gym/source-to-output-loss@0.1" },
     "report_id": { "type": "string", "pattern": "^sol-[0-9a-z-]+$" },
     "case_id": { "type": "string", "pattern": "^case-[0-9a-z-]+$" },
-    "comparison_chain": { "type": "array", "minItems": 3, "maxItems": 4, "items": { "type": "string", "minLength": 1 } },
+    "comparison_chain": { "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
     "stage_findings": {
       "type": "object", "additionalProperties": false,
       "required": ["source_inspection", "retrieval", "analysis", "planning", "typography", "assets", "composition", "depth", "motion", "interaction", "implementation", "evaluation"],
@@ -33,7 +33,7 @@
     "producer": { "type": "string", "minLength": 1 }
   },
   "$defs": {
-    "strings": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "strings": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
     "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
     "finding": {
       "type": "object", "additionalProperties": false,

@@ -15,16 +15,18 @@
  * Idempotency: (case, slot, state) transitions are append-only; re-recording a
  * terminal state is a no-op. Locks: gym/jobs/locks/<case>.lock with pid+heartbeat.
  */
-import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir, realpath } from 'node:fs/promises';
 import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
-import { addOriginalSlot, applyHumanReview, applyTransition, assertFidelityPolicy, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
+import { isDeepStrictEqual } from 'node:util';
+import { addOriginalSlot, applyHumanReview, applyTransition, assertFidelityPolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
 import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic, writeTasteDecisionExclusive } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
 import { validateDesignQualityEvaluation } from '../evaluator/vision-critic.mjs';
 import { validateMotionTokens } from '../evaluator/motion-token-validate.mjs';
+import { validateCaptureManifest } from '../cli/capture.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const gym = process.env.KINETIC_GYM_ROOT || join(root, 'gym');
@@ -205,6 +207,124 @@ async function persistValidatedDesignEvaluation(caseId, slot, artifactPath, refs
   return { design_evaluation: relative(gym, outputPath).split('\\').join('/'), design_evaluation_validated: true };
 }
 
+function resolveCaseRef(caseId, ref) {
+  const code = 'KINETIC_LOSS_EVIDENCE_INVALID';
+  if (typeof ref !== 'string' || !ref.startsWith(`runs/${caseId}/`) || ref.includes('\\')) {
+    throw Object.assign(new Error('loss evidence reference is not bound to the case'), { code });
+  }
+  const path = resolveGymRef(ref, code);
+  if (relative(gym, path).split('\\').join('/') !== ref) {
+    throw Object.assign(new Error('loss evidence reference is non-canonical or traverses outside the case'), { code });
+  }
+  return path;
+}
+
+async function readLossArtifact(caseId, ref, schemaName, expected = {}) {
+  const code = 'KINETIC_LOSS_EVIDENCE_INVALID';
+  const path = resolveCaseRef(caseId, ref);
+  let containedPath;
+  try {
+    const [caseRoot, artifactPath] = await Promise.all([realpath(join(gym, 'runs', caseId)), realpath(path)]);
+    const local = relative(caseRoot, artifactPath);
+    if (local === '..' || local.startsWith(`..${process.platform === 'win32' ? '\\' : '/'}`) || isAbsolute(local)) throw new Error('artifact resolves outside the case');
+    containedPath = artifactPath;
+  } catch (error) {
+    throw Object.assign(new Error(`loss evidence is missing or outside the case: ${ref}: ${error.message}`), { code });
+  }
+  let value;
+  try { value = JSON.parse(await readFile(containedPath, 'utf8')); }
+  catch (error) { throw Object.assign(new Error(`loss evidence is missing or invalid JSON: ${ref}: ${error.message}`), { code }); }
+  const schemaPath = join(root, 'schemas', 'gym', schemaName);
+  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const validation = validateValue({ value, schema, schemaPath });
+  if (!validation.valid || Object.entries(expected).some(([key, expectedValue]) => value?.[key] !== expectedValue)) {
+    throw Object.assign(new Error(`loss evidence is invalid or identity-mismatched: ${ref}`), { code });
+  }
+  return { path: containedPath, value };
+}
+
+async function buildLossEvidenceIndex(caseRun) {
+  const caseId = caseRun.case_id;
+  const index = {
+    reference_identities: new Set(), source_refs: new Set(), capture_refs: new Set(),
+    report_refs: new Set(), human_feedback_refs: new Set(),
+  };
+  const fidelityRef = caseRun.reports?.fidelity;
+  const { value: fidelity } = await readLossArtifact(caseId, fidelityRef, 'fidelity-report.schema.json', { case_id: caseId, variant_id: 'V0' });
+  assertFidelityPolicy(fidelity, { caseId, requireApproval: true });
+  const referenceIdentity = `design-case:${fidelity.reference_design_case_id}`;
+  index.reference_identities.add(referenceIdentity);
+  index.source_refs.add(referenceIdentity);
+  index.report_refs.add(fidelityRef);
+
+  for (const slot of ['V0', 'V1', 'V2']) {
+    const record = caseRun.slots?.[slot];
+    const refs = record?.refs ?? {};
+    const brief = await readLossArtifact(caseId, refs.variant_brief, 'variant-brief.schema.json', { case_id: caseId, variant_id: slot });
+    const retrieval = await readLossArtifact(caseId, refs.retrieval_receipt, 'retrieval-receipt.schema.json', { case_id: caseId, variant_id: slot });
+    const capture = await readLossArtifact(caseId, refs.capture_manifest, 'capture-manifest.schema.json', { case_id: caseId });
+    await validateCaptureManifest({ manifest: capture.value, caseRoot: dirname(capture.path) });
+    const evaluation = await readLossArtifact(caseId, refs.design_evaluation, 'design-quality-evaluation.schema.json', { case_id: caseId, variant_id: slot });
+    validateDesignQualityEvaluation({
+      evaluation: evaluation.value, captureManifest: capture.value, caseId, variantId: slot, expectedRefs: refs, criticResult: null,
+    });
+    for (const ref of [refs.retrieval_receipt, refs.design_evaluation]) index.report_refs.add(ref);
+    for (const row of retrieval.value.design_cases_retrieved) index.source_refs.add(`design-case:${row.case_id}`);
+    for (const row of retrieval.value.sources_retrieved) index.source_refs.add(`source:${row.source_id}`);
+    for (const entry of capture.value.entries) {
+      if (entry.subject_id === slot || entry.subject_id === 'reference') index.capture_refs.add(entry.capture_id);
+    }
+    assertVariantBriefPolicy({ brief: brief.value, caseId, slot });
+    if (slot === 'V0' && (!brief.value.design_case_ids_used.includes(fidelity.reference_design_case_id)
+      || !retrieval.value.design_cases_retrieved.some(({ case_id: designCaseId }) => designCaseId === fidelity.reference_design_case_id))) {
+      throw Object.assign(new Error('FidelityReport reference is not bound to V0 planning and retrieval evidence'), { code: 'KINETIC_LOSS_EVIDENCE_INVALID' });
+    }
+  }
+  return Object.fromEntries(Object.entries(index).map(([key, refs]) => [key, [...refs].sort()]));
+}
+
+async function prepareValidatedLossReport(caseRun, artifactPath) {
+  if (typeof artifactPath !== 'string') {
+    throw Object.assign(new Error('REVIEW_READY requires --loss'), { code: 'KINETIC_LOSS_REPORT_REQUIRED' });
+  }
+  let report;
+  try { report = JSON.parse(await readFile(artifactPath, 'utf8')); }
+  catch (error) { throw Object.assign(new Error(`loss report is missing or invalid JSON: ${error.message}`), { code: 'KINETIC_LOSS_REPORT_INVALID' }); }
+  const schemaPath = join(root, 'schemas', 'gym', 'source-to-output-loss-report.schema.json');
+  const schema = JSON.parse(await readFile(schemaPath, 'utf8'));
+  const validation = validateValue({ value: report, schema, schemaPath });
+  if (!validation.valid) throw Object.assign(new Error(JSON.stringify(validation.errors)), { code: 'KINETIC_LOSS_REPORT_INVALID' });
+  const evidenceIndex = await buildLossEvidenceIndex(caseRun);
+  assertSourceToOutputLossReport({ caseRun, report, evidenceIndex });
+  const outputPath = join(gym, 'runs', caseRun.case_id, 'reports', 'source-to-output-loss.json');
+  return {
+    report, outputPath, ref: relative(gym, outputPath).split('\\').join('/'),
+  };
+}
+
+async function persistLossReportExclusive({ report, outputPath }, mustExist = false) {
+  if (mustExist) {
+    let existing;
+    try { existing = JSON.parse(await readFile(outputPath, 'utf8')); }
+    catch (error) { throw Object.assign(new Error(`persisted loss report is missing or unreadable: ${error.message}`), { code: 'KINETIC_LOSS_REPORT_CONFLICT' }); }
+    if (!isDeepStrictEqual(existing, report)) {
+      throw Object.assign(new Error('persisted loss report differs; overwrite is forbidden'), { code: 'KINETIC_LOSS_REPORT_CONFLICT' });
+    }
+    return;
+  }
+  await mkdir(dirname(outputPath), { recursive: true });
+  try { await writeFile(outputPath, JSON.stringify(report, null, 2), { flag: 'wx' }); }
+  catch (error) {
+    if (error.code !== 'EEXIST') throw error;
+    let existing;
+    try { existing = JSON.parse(await readFile(outputPath, 'utf8')); }
+    catch (readError) { throw Object.assign(new Error(`persisted loss report is unreadable: ${readError.message}`), { code: 'KINETIC_LOSS_REPORT_CONFLICT' }); }
+    if (!isDeepStrictEqual(existing, report)) {
+      throw Object.assign(new Error('persisted loss report differs; overwrite is forbidden'), { code: 'KINETIC_LOSS_REPORT_CONFLICT' });
+    }
+  }
+}
+
 async function persistTechnicalEvaluation(caseId, slot, artifactPath, variantDir, refs, timestamp) {
   if (typeof artifactPath !== 'string' || typeof variantDir !== 'string') {
     throw Object.assign(new Error('TECHNICAL_EVALUATED requires --artifact browser report and --target variant directory'), { code: 'KINETIC_TECHNICAL_EVALUATION_REQUIRED' });
@@ -380,9 +500,22 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       }
       if (A.to === 'DESIGN_EVALUATED' && A.slot === 'V0') artifactRefs = { ...artifactRefs, ...await persistValidatedFidelity(A.case, A.slot, A.fidelity) };
       if (A.to === 'DESIGN_EVALUATED') artifactRefs = { ...artifactRefs, ...await persistValidatedDesignEvaluation(A.case, A.slot, A.artifact, loaded.record.slots?.[A.slot]?.refs) };
+      if (A.to === 'REVIEW_READY') {
+        const lossRef = `runs/${A.case}/reports/source-to-output-loss.json`;
+        const repeated = loaded.record.slots?.[A.slot]?.state === 'REVIEW_READY';
+        if (loaded.record.reports?.source_to_output_loss !== null && loaded.record.reports?.source_to_output_loss !== lossRef) {
+          throw Object.assign(new Error('case points to a different loss report; overwrite is forbidden'), { code: 'KINETIC_LOSS_REPORT_CONFLICT' });
+        }
+        artifactRefs = { ...artifactRefs, source_to_output_loss: lossRef, source_to_output_loss_validated: true };
+        if (!repeated) assertTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs });
+        const prepared = await prepareValidatedLossReport(loaded.record, A.loss);
+        await persistLossReportExclusive(prepared, repeated);
+        if (repeated) return;
+      }
       const updated = applyTransition({ caseRun: loaded.record, slot: A.slot, toState: A.to, artifactRefs, now: timestamp });
       if (technicalQualification !== null) updated.slots[A.slot].technically_qualified = technicalQualification;
       if (artifactRefs.fidelity_report) updated.reports.fidelity = artifactRefs.fidelity_report;
+      if (artifactRefs.source_to_output_loss) updated.reports.source_to_output_loss = artifactRefs.source_to_output_loss;
       await writeCaseAtomic(A.case, updated);
       await recordTransitionTelemetry(A.case, loaded.record.slots[A.slot], updated.slots[A.slot], A.to, timestamp);
     });

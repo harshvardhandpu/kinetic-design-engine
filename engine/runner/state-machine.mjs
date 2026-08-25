@@ -5,6 +5,13 @@ const FORWARD_STATES = [
 ];
 const TERMINAL_STATES = new Set(['HUMAN_REVIEWED', 'REJECTED_FINAL', 'CANCELLED']);
 const QUALIFICATION_KEYS = new Set(['technically_qualified', 'design_qualified', 'acceptable_for_further_taste_learning']);
+const LOSS_STAGES = [
+  'source_inspection', 'retrieval', 'analysis', 'planning', 'typography', 'assets',
+  'composition', 'depth', 'motion', 'interaction', 'implementation', 'evaluation',
+];
+const VISUAL_LOSS_STAGES = new Set(['typography', 'assets', 'composition', 'depth', 'motion', 'interaction', 'evaluation']);
+const DIAGNOSABLE_STATES = new Set(['DESIGN_EVALUATED', 'REVIEW_READY', 'HUMAN_REVIEWED']);
+const MAX_LOSS_EVIDENCE_REFS = 4096;
 
 export class TransitionError extends Error {
   constructor(code, message) {
@@ -86,6 +93,76 @@ export function assertFidelityPolicy(report, { caseId, requireApproval = false }
   return true;
 }
 
+function safeLossEvidenceRef(ref) {
+  return typeof ref === 'string' && ref.length > 0 && ref.length <= 1024 && ref.trim() === ref
+    && !ref.includes('\\') && !ref.startsWith('/') && !/^[A-Za-z]:/.test(ref)
+    && ref.split('/').every((part) => part !== '.' && part !== '..' && part.length > 0);
+}
+
+export function assertSourceToOutputLossReport({ caseRun, report, evidenceIndex }) {
+  const fail = (message) => { throw new TransitionError('KINETIC_LOSS_REPORT_INVALID', message); };
+  if (caseRun?.schema !== 'kinetic/gym/case-run@0.2' || report?.schema !== 'kinetic/gym/source-to-output-loss@0.1'
+    || report.case_id !== caseRun.case_id || !Array.isArray(report.comparison_chain)
+    || report.comparison_chain.length !== 4 || new Set(report.comparison_chain).size !== 4
+    || report.comparison_chain[1] !== 'V0' || report.comparison_chain[2] !== 'V1' || report.comparison_chain[3] !== 'V2') {
+    fail('loss report must bind the case and reference -> V0 -> V1/V2 comparison chain');
+  }
+  const evidence = {};
+  for (const key of ['reference_identities', 'source_refs', 'capture_refs', 'report_refs', 'human_feedback_refs']) {
+    const refs = evidenceIndex?.[key];
+    if (!Array.isArray(refs) || refs.length > MAX_LOSS_EVIDENCE_REFS || new Set(refs).size !== refs.length || refs.some((ref) => !safeLossEvidenceRef(ref))) {
+      fail(`loss evidence index requires bounded safe unique ${key}`);
+    }
+    evidence[key] = new Set(refs);
+  }
+  if (!evidence.reference_identities.has(report.comparison_chain[0])) fail('comparison reference is not authenticated for this case');
+  const casePrefix = `runs/${caseRun.case_id}/`;
+  for (const slot of ['V0', 'V1', 'V2']) {
+    const record = caseRun.slots?.[slot];
+    const evaluationRef = record?.refs?.design_evaluation;
+    if (!record || record.slot !== slot || record.case_id !== caseRun.case_id || !DIAGNOSABLE_STATES.has(record.state)
+      || !safeLossEvidenceRef(evaluationRef) || !evaluationRef.startsWith(casePrefix) || !evidence.report_refs.has(evaluationRef)) {
+      fail('loss report requires authenticated identity-bound V0/V1/V2 records at DESIGN_EVALUATED or later');
+    }
+  }
+  const fidelityRef = caseRun.reports?.fidelity;
+  if (!safeLossEvidenceRef(fidelityRef) || !fidelityRef.startsWith(casePrefix) || caseRun.slots.V0.refs?.fidelity_report !== fidelityRef
+    || !evidence.report_refs.has(fidelityRef)) fail('comparison reference requires the authenticated case FidelityReport');
+  const allowedEdges = new Set([`${report.comparison_chain[0]}\0V0`, 'V0\0V1', 'V0\0V2']);
+  const ids = new Set();
+  let findingCount = 0;
+  for (const stage of LOSS_STAGES) {
+    const findings = report.stage_findings?.[stage];
+    if (!Array.isArray(findings)) fail(`loss report requires stage ${stage}`);
+    for (const finding of findings) {
+      findingCount += 1;
+      if (!finding || finding.stage !== stage || typeof finding.finding_id !== 'string' || ids.has(finding.finding_id)) {
+        fail('finding IDs must be unique and each finding must match its stage bucket');
+      }
+      ids.add(finding.finding_id);
+      if (!allowedEdges.has(`${finding.subject_from}\0${finding.subject_to}`)) fail('finding subjects must follow a reference -> V0 -> V1/V2 edge');
+      const sourceRefs = finding.source_refs;
+      const captureRefs = finding.capture_refs;
+      const reportRefs = finding.report_refs;
+      const humanRefs = finding.human_feedback_refs;
+      if (![sourceRefs, captureRefs, reportRefs, humanRefs].every(Array.isArray)) fail('finding evidence references must be arrays');
+      if (sourceRefs.length + captureRefs.length + reportRefs.length + humanRefs.length === 0) fail('every finding requires durable evidence');
+      for (const [kind, refs] of [['source_refs', sourceRefs], ['capture_refs', captureRefs], ['report_refs', reportRefs], ['human_feedback_refs', humanRefs]]) {
+        if (refs.some((ref) => !safeLossEvidenceRef(ref) || !evidence[kind].has(ref))) fail(`finding has unauthenticated or wrong-kind ${kind}`);
+      }
+      if (finding.label === 'SOURCE-DERIVED' && sourceRefs.length === 0) fail('SOURCE-DERIVED findings require source evidence');
+      if (finding.label === 'HUMAN-FEEDBACK' && humanRefs.length === 0) fail('HUMAN-FEEDBACK findings require human evidence');
+      if (!['SOURCE-DERIVED', 'ENGINE-INFERENCE', 'HUMAN-FEEDBACK'].includes(finding.label)) fail('unsupported finding label');
+      if ((finding.subject_from === 'V0' || VISUAL_LOSS_STAGES.has(stage)) && captureRefs.length + humanRefs.length === 0) {
+        fail('candidate and visual findings require authenticated capture or human evidence');
+      }
+      if (finding.remediation_label !== 'ENGINE-RECOMMENDATION') fail('remediation must remain an engine recommendation');
+    }
+  }
+  if (findingCount === 0) fail('loss report requires at least one evidence-bound finding');
+  return true;
+}
+
 export function addOriginalSlot({ caseRun, slot, fidelityValidated = false, fidelityRef, now = new Date().toISOString() }) {
   if (!['V1', 'V2'].includes(slot) || caseRun.slots?.[slot] || Object.keys(caseRun.slots ?? {}).filter((key) => ['V1', 'V2'].includes(key)).length >= 2) {
     throw new TransitionError('KINETIC_ORIGINAL_SLOT_LIMIT', 'Phase-2.5 allows exactly V1 and V2 originals');
@@ -148,6 +225,12 @@ export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) 
   }
   if (toState === 'DESIGN_EVALUATED' && record.slot === 'V0' && (artifactRefs.fidelity_validated !== true || typeof artifactRefs.fidelity_report !== 'string')) {
     throw new TransitionError('KINETIC_FIDELITY_REQUIRED', 'V0 DESIGN_EVALUATED requires a complete FidelityReport');
+  }
+  if (toState === 'REVIEW_READY' && (artifactRefs.source_to_output_loss_validated !== true || typeof artifactRefs.source_to_output_loss !== 'string')) {
+    throw new TransitionError('KINETIC_LOSS_REPORT_REQUIRED', 'REVIEW_READY requires a persisted evidence-bound loss report');
+  }
+  if (toState === 'REVIEW_READY' && (record.design_qualified !== null || record.acceptable_for_further_taste_learning !== null)) {
+    throw new TransitionError('KINETIC_DESIGN_QUALIFICATION_FORBIDDEN', 'review readiness cannot pre-set design or taste qualification');
   }
   if (toState === 'VISUAL_CAPTURED' && record.technically_qualified !== true) {
     throw new TransitionError('KINETIC_TECHNICAL_QUALIFICATION_REQUIRED', 'visual capture requires explicit technical qualification');
