@@ -20,7 +20,7 @@ import { join, dirname, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
-import { addOriginalSlot, applyBatchReviewReady, applyHumanReview, applyTransition, assertFidelityPolicy, assertReviewPackagePolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, nextState } from './state-machine.mjs';
+import { addOriginalSlot, applyBatchReviewReady, applyHumanReview, applyTransition, assertFidelityPolicy, assertReviewPackagePolicy, assertSourceToOutputLossReport, assertTransition, assertVariantBriefPolicy, nextState, prepareRetry, resumePlan } from './state-machine.mjs';
 import { hashFile, readCase as readStoredCase, recordStageTelemetry, withCaseLock, writeCaseAtomic, writeTasteDecisionExclusive } from './store.mjs';
 import { validateValue } from '../core/schema-validate.mjs';
 import { retrieveKnowledge } from '../knowledge/retrieval.mjs';
@@ -680,9 +680,14 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
   if (!rec) { console.error('no such case'); process.exit(1); }
   if (rec.schema === 'kinetic/gym/case-run@0.2') {
     for (const [slot, value] of Object.entries(rec.slots)) {
-      const nextStage = nextState(value, rec);
-      if (nextStage) {
-        console.log(JSON.stringify({ case_id: A.case, slot, state: value.state, next_stage: nextStage, attempt: value.attempt, mode: value.mode }, null, 2));
+      const plan = resumePlan(value, rec);
+      if (!plan.wait || plan.action === 'human_review_wait' || plan.action === 'repair_or_reject') {
+        console.log(JSON.stringify({
+          case_id: A.case, slot, state: value.state, next_stage: plan.next_stage, action: plan.action,
+          wait: plan.wait, attempt: value.attempt, mode: value.mode,
+          technically_qualified: value.technically_qualified ?? null,
+          design_qualified: value.design_qualified ?? null,
+        }, null, 2));
         process.exit(0);
       }
     }
@@ -697,6 +702,30 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
       process.exit(0);
     }
     console.log(JSON.stringify({ case_id: A.case, done: true, summary: Object.fromEntries(Object.entries(rec.slots).map(([k, s]) => [k, s.state])) }, null, 2));
+  }
+} else if (cmd === 'retry') {
+  try {
+    await withCaseLock(A.case, `retry-${A.slot}`, async () => {
+      const loaded = await readStoredCase(A.case);
+      if (loaded.legacy) throw Object.assign(new Error('retry is Phase-2.5 only'), { code: 'KINETIC_PHASE25_REQUIRED' });
+      if (typeof A.from !== 'string' || typeof A.diagnosis !== 'string') {
+        throw Object.assign(new Error('retry requires --slot --from --diagnosis'), { code: 'KINETIC_RETRY_DIAGNOSIS_REQUIRED' });
+      }
+      const timestamp = now();
+      const updated = prepareRetry({
+        caseRun: loaded.record, slot: A.slot, fromState: A.from, diagnosisRef: A.diagnosis, now: timestamp,
+      });
+      await writeCaseAtomic(A.case, updated);
+      await recordStageTelemetry(A.case, {
+        stage: 'repair', startedAt: timestamp, endedAt: timestamp, status: 'COMPLETED',
+        attempt: updated.slots[A.slot].attempt, receiptRefs: [A.diagnosis],
+        metrics: { repair_attempts: Math.max(0, updated.slots[A.slot].attempt - 1) },
+      });
+    });
+    console.log(`${A.case}/${A.slot}: retry from ${A.from}`);
+  } catch (error) {
+    console.error(`${error.code || 'KINETIC_ERROR'}: ${error.message}`);
+    process.exitCode = 1;
   }
 } else if (cmd === 'record') {
   const before = await j(casePath(A.case));

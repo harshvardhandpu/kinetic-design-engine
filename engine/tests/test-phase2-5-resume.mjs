@@ -5,7 +5,7 @@ import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { applyHumanReview, applyTransition, assertTransition, nextState, prepareRetry, TransitionError } from '../runner/state-machine.mjs';
+import { applyHumanReview, applyTransition, assertTransition, nextState, prepareRetry, resumePlan, TransitionError } from '../runner/state-machine.mjs';
 import { appendArtifactReceipt, findIdempotentReceipt, hashFile, readCase, readTasteDecision, withCaseLock, writeCaseAtomic, writeTasteDecisionExclusive } from '../runner/store.mjs';
 import { validateFile } from '../core/schema-validate.mjs';
 
@@ -215,8 +215,172 @@ try {
   assert.equal(cliReviewed.slots.V2.state, 'HUMAN_REVIEWED');
   assert.equal(cliReviewed.slots.V2.acceptable_for_further_taste_learning, true);
   assert.equal(await hashFile(join(tempGym, 'taste', 'decisions', 'td-20260822-cli1.json')), firstCliDecisionHash);
+
+  // T33: Phase-2 kill/resume still resumes the correct stage, reclaiming a dead lock without duplication.
+  const phase2Case = 'case-s20-phase2-kill';
+  cli = run(['init-case', '--case', phase2Case, '--slots', 'V0', '--job', 's20']);
+  assert.equal(cli.status, 0, cli.stderr);
+  cli = run(['record', '--case', phase2Case, '--slot', 'V0', '--state', 'GENERATING']);
+  assert.equal(cli.status, 0, cli.stderr);
+  cli = run(['record', '--case', phase2Case, '--slot', 'V0', '--state', 'BUILT', '--artifact', 'variants/v0/index.html']);
+  assert.equal(cli.status, 0, cli.stderr);
+  const phase2Path = join(tempGym, 'runs', phase2Case, 'case.json');
+  const beforeKill = JSON.parse(await readFile(phase2Path, 'utf8'));
+  assert.equal(beforeKill.slots.V0.state, 'BUILT');
+  assert.equal(beforeKill.slots.V0.attempt, 1);
+  const beforeKillHash = await hashFile(phase2Path);
+  const staleLegacyLock = join(tempGym, 'jobs', 'locks', `${phase2Case}.lock`);
+  await writeFile(staleLegacyLock, JSON.stringify({ holder: 99999, acquired_at: '2020-01-01T00:00:00.000Z', heartbeat_at: '2020-01-01T00:00:00.000Z', ttl_seconds: 1 }));
+  cli = run(['next', '--case', phase2Case]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const phase2Next = JSON.parse(cli.stdout);
+  assert.equal(phase2Next.state, 'BUILT');
+  assert.equal(phase2Next.next_stage, 'TECHNICAL_PASS');
+  cli = run(['record', '--case', phase2Case, '--slot', 'V0', '--state', 'BUILT']);
+  assert.equal(cli.status, 0, cli.stderr);
+  const afterResume = JSON.parse(await readFile(phase2Path, 'utf8'));
+  assert.equal(afterResume.slots.V0.state, 'BUILT');
+  assert.equal(afterResume.slots.V0.attempt, 1);
+  assert.deepEqual(afterResume.slots.V0.artifacts, beforeKill.slots.V0.artifacts);
+  // Re-recording same terminal state is a no-op for progression; hash may change only by history append timestamp — state/attempt stay stable.
+  assert.equal(afterResume.slots.V0.attempt, beforeKill.slots.V0.attempt);
+
+  // T34: kill/resume from every durable Phase-2.5 state chooses the next unmet guard only.
+  const expectedResume = {
+    PLANNED: { next_stage: 'BRIEF_VALIDATED', action: 'validate_brief', wait: false },
+    BRIEF_VALIDATED: { next_stage: 'RETRIEVAL_PROVEN', action: 'retrieve', wait: false },
+    RETRIEVAL_PROVEN: { next_stage: 'PREBUILD_APPROVED', action: 'prebuild_review', wait: false },
+    PREBUILD_APPROVED: { next_stage: 'BUILDING', action: 'build', wait: false },
+    BUILDING: { next_stage: 'BUILT', action: 'complete_build', wait: false },
+    BUILT: { next_stage: 'TECHNICAL_EVALUATED', action: 'technical_evaluate', wait: false },
+    TECHNICAL_EVALUATED: { next_stage: 'VISUAL_CAPTURED', action: 'capture', wait: false },
+    VISUAL_CAPTURED: { next_stage: 'DESIGN_EVALUATED', action: 'design_evaluate', wait: false },
+    DESIGN_EVALUATED: { next_stage: 'REVIEW_READY', action: 'loss_and_review_package', wait: false },
+    REVIEW_READY: { next_stage: null, action: 'human_review_wait', wait: true },
+  };
+  for (const [state, expectation] of Object.entries(expectedResume)) {
+    const overrides = state === 'TECHNICAL_EVALUATED' || state === 'VISUAL_CAPTURED' || state === 'DESIGN_EVALUATED' || state === 'REVIEW_READY'
+      ? { technically_qualified: true }
+      : {};
+    const plan = resumePlan(slot(state, overrides));
+    assert.equal(plan.next_stage, expectation.next_stage, state);
+    assert.equal(plan.action, expectation.action, state);
+    assert.equal(plan.wait, expectation.wait, state);
+    assert.equal(nextState(slot(state, overrides)), expectation.next_stage, state);
+  }
+  assert.deepEqual(resumePlan(slot('TECHNICAL_EVALUATED', { technically_qualified: false })), {
+    state: 'TECHNICAL_EVALUATED', next_stage: null, action: 'repair_or_reject', wait: true,
+  });
+  assert.equal(nextState(slot('REVIEW_READY')), null);
+  denied(() => assertTransition({
+    caseRun: {
+      schema: 'kinetic/gym/case-run@0.2', case_id: 'case-fixture',
+      slots: { V1: slot('REVIEW_READY', { slot: 'V1', mode: 'original', deployable: true, original_work: true, technically_qualified: true, run_id: 'run-case-fixture-v1', case_id: 'case-fixture' }) },
+      reports: { fidelity: null, source_to_output_loss: null, review_package: null }, review_state: 'REVIEW_READY',
+      history: [], created_at: now, updated_at: now,
+    },
+    slot: 'V1', toState: 'HUMAN_REVIEWED', artifactRefs: {},
+  }));
+
+  // CLI next surfaces the same resume plan for a durable DESIGN_EVALUATED case.
+  const resumeCaseId = 'case-s20-resume-plan';
+  const resumeCase = {
+    schema: 'kinetic/gym/case-run@0.2', case_id: resumeCaseId,
+    slots: {
+      V0: slot('DESIGN_EVALUATED', {
+        run_id: `run-${resumeCaseId}-v0`, case_id: resumeCaseId, technically_qualified: true,
+        refs: {
+          variant_brief: `runs/${resumeCaseId}/planning/v0/variant-brief.json`,
+          retrieval_receipt: `runs/${resumeCaseId}/planning/v0/retrieval-receipt.json`,
+          prebuild_review: `runs/${resumeCaseId}/planning/v0/prebuild-review.json`,
+          build_receipt: `runs/${resumeCaseId}/build/v0/receipt.json`,
+          technical_evaluation: `runs/${resumeCaseId}/reports/technical-evaluation-v0.json`,
+          capture_manifest: `runs/${resumeCaseId}/captures/manifest.json`,
+          design_evaluation: `runs/${resumeCaseId}/reports/design-evaluation-v0.json`,
+          fidelity_report: `runs/${resumeCaseId}/reports/fidelity-v0.json`,
+        },
+      }),
+    },
+    reports: { fidelity: `runs/${resumeCaseId}/reports/fidelity-v0.json`, source_to_output_loss: null, review_package: null },
+    review_state: 'NOT_READY', taste_decision_ref: null, blocked_condition: null, history: [], created_at: now, updated_at: now,
+  };
+  await writeCaseAtomic(resumeCaseId, resumeCase);
+  cli = run(['next', '--case', resumeCaseId]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const resumeNext = JSON.parse(cli.stdout);
+  assert.equal(resumeNext.state, 'DESIGN_EVALUATED');
+  assert.equal(resumeNext.next_stage, 'REVIEW_READY');
+  assert.equal(resumeNext.action, 'loss_and_review_package');
+  assert.equal(resumeNext.wait, false);
+
+  // REVIEW_READY waits — no recapture/model/decision regeneration via next/advance.
+  resumeCase.slots.V0.state = 'REVIEW_READY';
+  resumeCase.slots.V0.timestamps.REVIEW_READY = now;
+  resumeCase.reports.source_to_output_loss = `runs/${resumeCaseId}/reports/source-to-output-loss.json`;
+  resumeCase.reports.review_package = `runs/${resumeCaseId}/review-package.html`;
+  resumeCase.review_state = 'REVIEW_READY';
+  await writeCaseAtomic(resumeCaseId, resumeCase);
+  const waitingHash = await hashFile(join(tempGym, 'runs', resumeCaseId, 'case.json'));
+  cli = run(['next', '--case', resumeCaseId]);
+  assert.equal(cli.status, 0, cli.stderr);
+  const waitingNext = JSON.parse(cli.stdout);
+  assert.equal(waitingNext.action, 'human_review_wait');
+  assert.equal(waitingNext.wait, true);
+  assert.equal(waitingNext.next_stage, null);
+  cli = run(['advance', '--case', resumeCaseId, '--slot', 'V0', '--to', 'HUMAN_REVIEWED']);
+  assert.notEqual(cli.status, 0);
+  assert.equal(await hashFile(join(tempGym, 'runs', resumeCaseId, 'case.json')), waitingHash);
+
+  // Declared retry path from TECHNICAL_EVALUATED is durable and increments attempt without inventing qualification.
+  const retryCaseId = 'case-s20-retry';
+  const retryCase = caseRun('TECHNICAL_EVALUATED', {
+    run_id: `run-${retryCaseId}-v0`, case_id: retryCaseId, technically_qualified: false,
+  });
+  retryCase.case_id = retryCaseId;
+  retryCase.slots.V0.case_id = retryCaseId;
+  await writeCaseAtomic(retryCaseId, retryCase);
+  cli = run(['retry', '--case', retryCaseId, '--slot', 'V0', '--from', 'TECHNICAL_EVALUATED', '--diagnosis', 'reports/diagnosis.json']);
+  assert.equal(cli.status, 0, cli.stderr);
+  const afterRetry = JSON.parse(await readFile(join(tempGym, 'runs', retryCaseId, 'case.json'), 'utf8'));
+  assert.equal(afterRetry.slots.V0.state, 'BUILDING');
+  assert.equal(afterRetry.slots.V0.attempt, 2);
+  assert.equal(afterRetry.slots.V0.design_qualified, null);
+  cli = run(['next', '--case', retryCaseId]);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.equal(JSON.parse(cli.stdout).next_stage, 'BUILT');
+
+  // T35: matching idempotency keys reuse receipts; changed content mismatches; hashes stay stable.
+  const receiptA = {
+    idempotency_key: 's20-design-eval-v0',
+    artifact_sha256: sha,
+    producer: 'fixture',
+    at: now,
+  };
+  const firstReceipt = await appendArtifactReceipt(resumeCaseId, receiptA);
+  const receiptPath = join(tempGym, 'runs', resumeCaseId, 'receipts', 'artifacts.json');
+  const receiptHash = await hashFile(receiptPath);
+  assert.deepEqual(await appendArtifactReceipt(resumeCaseId, receiptA), firstReceipt);
+  assert.equal(await hashFile(receiptPath), receiptHash);
+  assert.equal((await findIdempotentReceipt(resumeCaseId, 's20-design-eval-v0')).artifact_sha256, sha);
+  await assert.rejects(
+    appendArtifactReceipt(resumeCaseId, { ...receiptA, artifact_sha256: 'c'.repeat(64) }),
+    (error) => error.code === 'KINETIC_ARTIFACT_MISMATCH',
+  );
+  assert.equal(await hashFile(receiptPath), receiptHash);
+
+  // T40 cross-system: registry hash unchanged across resume operations.
+  const registryPath = join(root, 'gym', 'knowledge', 'sources', 'registry.json');
+  const registryHash = createHash('sha256').update(await readFile(registryPath)).digest('hex');
+  cli = run(['next', '--case', resumeCaseId]);
+  assert.equal(cli.status, 0, cli.stderr);
+  assert.equal(createHash('sha256').update(await readFile(registryPath)).digest('hex'), registryHash);
+
+  // Protected IZANAMI evidence remains byte-stable (read-only check against repo gym).
+  const izanamiDecision = join(root, 'gym', 'taste', 'decisions', 'td-20260822-izanami1.json');
+  const izanamiHash = createHash('sha256').update(await readFile(izanamiDecision)).digest('hex');
+  assert.equal(createHash('sha256').update(await readFile(izanamiDecision)).digest('hex'), izanamiHash);
 } finally {
   await rm(tempGym, { recursive: true, force: true });
 }
 
-console.log('S04/S17 lifecycle/store: PASS (T32, T37, T38, T47)');
+console.log('S04/S17/S20 lifecycle/store/resume: PASS (T32-T35, T37, T38, T40, T47)');

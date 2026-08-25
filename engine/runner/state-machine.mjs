@@ -253,16 +253,54 @@ export function addOriginalSlot({ caseRun, slot, fidelityValidated = false, fide
   return next;
 }
 
-export function nextState(slot) {
+export function nextState(slot, _caseRun = null) {
   if (!slot || TERMINAL_STATES.has(slot.state)) return null;
+  // Human import is not an advance() target — REVIEW_READY waits.
+  if (slot.state === 'REVIEW_READY') return null;
   const index = FORWARD_STATES.indexOf(slot.state);
-  return index >= 0 && index < FORWARD_STATES.length - 1 ? FORWARD_STATES[index + 1] : null;
+  if (index < 0 || index >= FORWARD_STATES.length - 1) return null;
+  const candidate = FORWARD_STATES[index + 1];
+  return candidate === 'HUMAN_REVIEWED' ? null : candidate;
+}
+
+export function resumePlan(slot, _caseRun = null) {
+  if (!slot) return { state: null, next_stage: null, action: 'unknown', wait: true };
+  if (TERMINAL_STATES.has(slot.state)) {
+    return { state: slot.state, next_stage: null, action: 'terminal', wait: true };
+  }
+  if (slot.state === 'REVIEW_READY') {
+    return { state: slot.state, next_stage: null, action: 'human_review_wait', wait: true };
+  }
+  if (slot.state === 'TECHNICAL_EVALUATED' && slot.technically_qualified !== true) {
+    return { state: slot.state, next_stage: null, action: 'repair_or_reject', wait: true };
+  }
+  const next_stage = nextState(slot, _caseRun);
+  const actions = {
+    PLANNED: 'validate_brief',
+    BRIEF_VALIDATED: 'retrieve',
+    RETRIEVAL_PROVEN: 'prebuild_review',
+    PREBUILD_APPROVED: 'build',
+    BUILDING: 'complete_build',
+    BUILT: 'technical_evaluate',
+    TECHNICAL_EVALUATED: 'capture',
+    VISUAL_CAPTURED: 'design_evaluate',
+    DESIGN_EVALUATED: 'loss_and_review_package',
+  };
+  return {
+    state: slot.state,
+    next_stage,
+    action: next_stage ? (actions[slot.state] ?? 'advance') : 'wait',
+    wait: next_stage == null,
+  };
 }
 
 export function assertTransition({ caseRun, slot, toState, artifactRefs = {} }) {
   const record = getSlot(caseRun, slot);
   assertV0Invariant(record, artifactRefs);
   if (TERMINAL_STATES.has(record.state)) throw new TransitionError('KINETIC_TRANSITION_DENIED', `terminal state ${record.state} cannot advance`);
+  if (toState === 'HUMAN_REVIEWED') {
+    throw new TransitionError('KINETIC_TRANSITION_DENIED', 'HUMAN_REVIEWED requires record-human-review, not advance');
+  }
   const expected = nextState(record, caseRun);
   if (toState !== expected) throw new TransitionError('KINETIC_TRANSITION_DENIED', `expected adjacent state ${expected ?? 'none'}, got ${toState}`);
   if (toState === 'BRIEF_VALIDATED' && (artifactRefs.brief_validated !== true || typeof artifactRefs.variant_brief !== 'string')) {

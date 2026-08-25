@@ -31,6 +31,7 @@ provider_notes: []            # failover events, model swaps (48)
 3. **Idempotency keys:** ingest keyed by canonical URL hash; generation by
    (case_id, slot, attempt); evaluation by (run_id, gate, rules_version).
    Re-running a completed key is a no-op returning the stored receipt.
+   Changed content under the same key yields `KINETIC_ARTIFACT_MISMATCH`.
 4. **Locks:** file locks per job type + per case (`gym/jobs/locks/`), TTL +
    heartbeat; stale locks (dead holder) are reclaimable with a logged takeover.
    Two sessions never write one case simultaneously.
@@ -43,6 +44,29 @@ provider_notes: []            # failover events, model swaps (48)
 6. **Artifact receipts:** every produced file lands content-addressed with a
    receipt (sha256, producer, job_id) — resume verifies receipts instead of
    trusting directory listings.
+
+## Phase-2.5 resume map (`run.mjs next` / `resumePlan`)
+
+| Durable state | Next unmet guard | Notes |
+|---|---|---|
+| `PLANNED` | `BRIEF_VALIDATED` / validate brief | |
+| `BRIEF_VALIDATED` | `RETRIEVAL_PROVEN` / retrieve | reuse brief hash |
+| `RETRIEVAL_PROVEN` | `PREBUILD_APPROVED` / prebuild | no repeated source fetch |
+| `PREBUILD_APPROVED` | `BUILDING` / build | upstream fixed by hash |
+| `BUILDING` | `BUILT` / complete build | never claim BUILT from files alone |
+| `BUILT` | `TECHNICAL_EVALUATED` / technical eval | |
+| `TECHNICAL_EVALUATED` (qualified) | `VISUAL_CAPTURED` / capture missing specs | |
+| `TECHNICAL_EVALUATED` (failed) | wait / repair_or_reject | `retry --from TECHNICAL_EVALUATED` |
+| `VISUAL_CAPTURED` | `DESIGN_EVALUATED` / design eval | reuse capture hashes; no vision re-call if receipt valid |
+| `DESIGN_EVALUATED` | `REVIEW_READY` / loss + package | |
+| `REVIEW_READY` | **wait** / `human_review_wait` | never recapture, never model, never decision regen |
+| `HUMAN_REVIEWED` | terminal | import only via `record-human-review` |
+
+`advance` never transitions to `HUMAN_REVIEWED`. Human outcomes stay create-exclusive
+(`writeTasteDecisionExclusive`); corrections require `supersedes`.
+
+Capture resume (S13/T20): only missing specs run; matching spec+hash reuses the entry.
+Registry and protected IZANAMI evidence hashes must remain unchanged across resume.
 
 ## Schedule (SPECIFIED, NOT ACTIVATED)
 
