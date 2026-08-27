@@ -1,0 +1,54 @@
+{
+  "schema": "kinetic/gym/case-run@0.2",
+  "case_id": "case-ee9eaf0dc9",
+  "slots": {
+    "V0": {
+      "schema": "kinetic/gym/variant-run@0.2",
+      "run_id": "run-case-ee9eaf0dc9-v0",
+      "case_id": "case-ee9eaf0dc9",
+      "slot": "V0",
+      "mode": "fidelity-study",
+      "state": "PLANNED",
+      "attempt": 1,
+      "deployable": false,
+      "original_work": false,
+      "technically_qualified": false,
+      "design_qualified": null,
+      "acceptable_for_further_taste_learning": null,
+      "refs": {
+        "variant_brief": null,
+        "retrieval_receipt": null,
+        "prebuild_review": null,
+        "build_receipt": null,
+        "technical_evaluation": null,
+        "capture_manifest": null,
+        "design_evaluation": null,
+        "fidelity_report": null
+      },
+      "attempts": [],
+      "blocked_condition": null,
+      "timestamps": {
+        "PLANNED": "2026-08-27T11:56:10.881Z"
+      }
+    }
+  },
+  "reports": {
+    "fidelity": null,
+    "source_to_output_loss": null,
+    "review_package": null
+  },
+  "review_state": "NOT_READY",
+  "taste_decision_ref": null,
+  "blocked_condition": null,
+  "history": [
+    {
+      "event_id": "init-case-ee9eaf0dc9",
+      "event": "phase2.5-init-v0",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-27T11:56:10.881Z"
+    }
+  ],
+  "created_at": "2026-08-27T11:56:10.881Z",
+  "updated_at": "2026-08-27T11:56:10.881Z"
+}

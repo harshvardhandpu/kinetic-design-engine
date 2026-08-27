@@ -7,7 +7,7 @@
 - Gate 4 — Slice Plan: APPROVED 2026-08-27
 - Gate 4 — ENGINE IMPLEMENTATION READY: HUMAN APPROVED 2026-08-27
 - Engine implementation: COMPLETE (S01–S21)
-- Real calibration: NOT STARTED
+- Real calibration: IN PROGRESS — `case-ee9eaf0dc9` / V0 only
 - Human V0 fidelity gate: PENDING
 - Final human design/taste review: PENDING
 

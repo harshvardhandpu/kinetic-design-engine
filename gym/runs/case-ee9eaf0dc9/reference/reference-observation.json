@@ -1,0 +1,240 @@
+{
+  "schema": "kinetic/gym/reference-observation@0.1",
+  "case_id": "case-ee9eaf0dc9",
+  "title": "Wanaka Studio",
+  "canonical_url": "https://www.wanaka.studio/",
+  "access_policy": "reference-site-observe-only",
+  "rights": {
+    "storage": "metadata, KINETIC-authored analysis, internal screenshots only",
+    "prohibited": [
+      "source assets",
+      "source copy",
+      "source code",
+      "logos",
+      "fonts",
+      "exact section geometry"
+    ],
+    "robots_url": "https://www.wanaka.studio/robots.txt",
+    "legal_url": "https://www.wanaka.studio/mentions-legales"
+  },
+  "browser": {
+    "playwright": "1.62.1",
+    "chromium": "151.0.7922.34"
+  },
+  "inspected_at": "2026-08-27T11:47:31.203Z",
+  "observations": {
+    "desktop": {
+      "title": "Wanaka - Le studio de cr\u00e9ation pointu & ultra flex",
+      "lang": "fr-FR",
+      "url": "https://www.wanaka.studio/",
+      "scroll_height": 7714,
+      "viewport_height": 900,
+      "visible_elements": 401,
+      "headings": [
+        "Le                             studio de cr\u00e9ation pointu et ultra flex",
+        "Un studio bas\u00e9 \u00e0 annecy",
+        "Identit\u00e9 de marque",
+        "Sites web",
+        "Design print",
+        "Applications mobiles",
+        "Motion design",
+        "Typographie",
+        "Quai des arts",
+        "Salle de spectacles & m\u00e9diath\u00e8que",
+        "Outdoor Sports Valley",
+        "Acc\u00e9l\u00e9rateur de la fili\u00e8re Outdoor",
+        "La presqu\u2019\u00eele de l\u2019imagi\u00adnaire",
+        "Festival au ch\u00e2teau de Duingt",
+        "Bee-In MyTrip",
+        "Application de voyage",
+        "Quoi de neuf\u202f?",
+        "AJS",
+        "Architectes",
+        "Le Summum",
+        "Salle de spectacles \u00e0 Grenoble",
+        "Grand Bureau",
+        "R\u00e9seau des musiques actuelles en Auvergne-Rh\u00f4ne-Alpes",
+        "AER",
+        "Architectes",
+        "Sport & Wellness Les Belleville",
+        "Move & Relax",
+        "Nous \u00e9crire",
+        "Discuter",
+        "Recevoir notre newsletter"
+      ],
+      "links": 40,
+      "buttons": 2,
+      "images": 26,
+      "canvases": 1,
+      "videos": 0,
+      "fixed_or_sticky": 7,
+      "transformed": 70,
+      "animated": 81,
+      "font_families": [
+        "Santoku, sans-serif",
+        "Sujiki, serif"
+      ],
+      "colors": [
+        "rgb(19, 19, 19)",
+        "rgb(255, 255, 255)",
+        "rgb(0, 0, 0)"
+      ],
+      "scripts": [
+        "plausible.wanaka.studio",
+        "www.wanaka.studio",
+        "js-de.sentry-cdn.com"
+      ],
+      "capture_ready": "complete",
+      "http_status": 200
+    },
+    "mobile": {
+      "title": "Wanaka - Le studio de cr\u00e9ation pointu & ultra flex",
+      "lang": "fr-FR",
+      "url": "https://www.wanaka.studio/",
+      "scroll_height": 8380,
+      "viewport_height": 844,
+      "visible_elements": 369,
+      "headings": [
+        "Le                             studio de cr\u00e9ation pointu et ultra flex",
+        "Un studio bas\u00e9 \u00e0 annecy",
+        "Identit\u00e9 de marque",
+        "Sites web",
+        "Design print",
+        "Applications mobiles",
+        "Motion design",
+        "Typographie",
+        "Quai des arts",
+        "Salle de spectacles & m\u00e9diath\u00e8que",
+        "Outdoor Sports Valley",
+        "Acc\u00e9l\u00e9rateur de la fili\u00e8re Outdoor",
+        "La presqu\u2019\u00eele de l\u2019imagi\u00adnaire",
+        "Festival au ch\u00e2teau de Duingt",
+        "Bee-In MyTrip",
+        "Application de voyage",
+        "Quoi de neuf\u202f?",
+        "AJS",
+        "Architectes",
+        "Le Summum",
+        "Salle de spectacles \u00e0 Grenoble",
+        "Grand Bureau",
+        "R\u00e9seau des musiques actuelles en Auvergne-Rh\u00f4ne-Alpes",
+        "AER",
+        "Architectes",
+        "Sport & Wellness Les Belleville",
+        "Move & Relax",
+        "Nous \u00e9crire",
+        "Discuter",
+        "Recevoir notre newsletter"
+      ],
+      "links": 40,
+      "buttons": 2,
+      "images": 26,
+      "canvases": 1,
+      "videos": 0,
+      "fixed_or_sticky": 6,
+      "transformed": 67,
+      "animated": 93,
+      "font_families": [
+        "Santoku, sans-serif",
+        "Sujiki, serif"
+      ],
+      "colors": [
+        "rgb(19, 19, 19)",
+        "rgb(255, 255, 255)",
+        "rgb(0, 0, 0)"
+      ],
+      "scripts": [
+        "plausible.wanaka.studio",
+        "www.wanaka.studio",
+        "js-de.sentry-cdn.com"
+      ],
+      "capture_ready": "complete",
+      "http_status": 200
+    }
+  },
+  "captures": [
+    {
+      "capture_id": "wanaka-reference-desktop-initial",
+      "viewport": "desktop",
+      "state": "initial",
+      "url": "https://www.wanaka.studio/",
+      "scroll_y": 0,
+      "sha256": "9228172552eb1af72f8a9c651878d271f3c6ca9830f4a1ad00e4855515054514",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-08-27T11:47:31.203Z",
+      "artifact_path": "reference/captures/desktop-initial-9228172552eb.webp"
+    },
+    {
+      "capture_id": "wanaka-reference-desktop-mid-scroll",
+      "viewport": "desktop",
+      "state": "mid-scroll",
+      "url": "https://www.wanaka.studio/",
+      "scroll_y": 3240,
+      "sha256": "f73214a1107a72b0e97d58305657cfecbe889f31cee124683a5971eeae54f8b4",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-08-27T11:47:31.203Z",
+      "artifact_path": "reference/captures/desktop-mid-scroll-f73214a1107a.webp"
+    },
+    {
+      "capture_id": "wanaka-reference-desktop-project-hover",
+      "viewport": "desktop",
+      "state": "project-hover",
+      "url": "https://www.wanaka.studio/",
+      "scroll_y": 3423,
+      "sha256": "929fe188a6b3dcd52eccfc62631b5963899a44025063159a2522cb0b7a3d64c8",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-08-27T11:47:31.203Z",
+      "artifact_path": "reference/captures/desktop-project-hover-929fe188a6b3.webp"
+    },
+    {
+      "capture_id": "wanaka-reference-desktop-final",
+      "viewport": "desktop",
+      "state": "final",
+      "url": "https://www.wanaka.studio/",
+      "scroll_y": 6814,
+      "sha256": "ddf04b326ac2269eae6934e46a458403a81f22e26bfbfa0245c16e2730e0e5b9",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-08-27T11:47:31.203Z",
+      "artifact_path": "reference/captures/desktop-final-ddf04b326ac2.webp"
+    },
+    {
+      "capture_id": "wanaka-reference-mobile-initial",
+      "viewport": "mobile",
+      "state": "initial",
+      "url": "https://www.wanaka.studio/",
+      "scroll_y": 0,
+      "sha256": "3747e071d7b6e676a11c27727ef2b8af3994999e83756b31d4b70ce443aaeb81",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-08-27T11:47:31.203Z",
+      "artifact_path": "reference/captures/mobile-initial-3747e071d7b6.webp"
+    },
+    {
+      "capture_id": "wanaka-reference-mobile-mid-scroll",
+      "viewport": "mobile",
+      "state": "mid-scroll",
+      "url": "https://www.wanaka.studio/",
+      "scroll_y": 3520,
+      "sha256": "e4b973ec4b960c90e33481558642f769008c3858fdef633e2ea590f1b775cd36",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-08-27T11:47:31.203Z",
+      "artifact_path": "reference/captures/mobile-mid-scroll-e4b973ec4b96.webp"
+    }
+  ],
+  "limitations": [
+    "One-off runtime observation, not deterministic candidate capture.",
+    "Screenshots are internal comparison evidence and are not reusable assets."
+  ],
+  "visual_analysis": {
+    "desktop_initial": "Mixed grotesk/serif hero dominates a wide paper-like field; restrained monochrome shell, sculptural pale media and sparse violet accent create depth without a busy palette.",
+    "desktop_mid_scroll": "Large editorial statement and offset portfolio media establish alternating narrative rhythm, generous negative space and non-uniform geometry.",
+    "desktop_project_hover": "The project media exposes a large circular arrow affordance on hover; the still proves the state change but not its timing or easing.",
+    "mobile_initial": "Navigation collapses to a compact menu while mixed-type hierarchy and layered hero composition are deliberately reflowed rather than merely scaled.",
+    "evidence_limit": "Ordered stills and DOM state counts do not prove animation continuity, easing quality or hidden implementation."
+  },
+  "source_refs": [
+    "https://www.wanaka.studio/",
+    "https://www.wanaka.studio/robots.txt",
+    "https://www.wanaka.studio/mentions-legales",
+    "https://www.awwwards.com/sites/wanaka-studio"
+  ]
+}

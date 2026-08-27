@@ -1,0 +1,207 @@
+{
+  "schema": "kinetic/gym/design-case@0.1",
+  "case_id": "case-ee9eaf0dc9",
+  "canonical_url": "https://www.wanaka.studio/",
+  "title": "Wanaka Studio",
+  "studio": "Wanaka",
+  "status": "STUDIED",
+  "provenance": {
+    "discovered_via": "awwwards",
+    "source_url": "https://www.awwwards.com/sites/wanaka-studio",
+    "award": [
+      {
+        "body": "Awwwards",
+        "type": "Honorable Mention",
+        "level": "HM",
+        "year": 2025,
+        "category": null,
+        "jury_scores": null
+      }
+    ],
+    "fetched": "2026-08-27T11:47:31.203Z",
+    "access_policy": "reference-site-observe-only",
+    "site_robots_checked": true,
+    "availability": "live",
+    "archive_url": null
+  },
+  "surface": {
+    "surface_types": ["creative-studio", "brand-services", "portfolio", "storytelling"],
+    "k_level_estimate": "K4",
+    "evidence": {
+      "tag": "DIRECTLY-INSPECTED",
+      "confidence": 0.95,
+      "method": "one-off live Playwright desktop/mobile observation with SHA-addressed internal screenshots"
+    }
+  },
+  "analysis": {
+    "layout": {
+      "notes": {
+        "structure": "Long single-page studio narrative: oversized mixed-type hero, capability overview, editorial portfolio sequence, recent-work grid, and contact/footer close.",
+        "desktop": "Wide editorial grid with large left-aligned statements, offset media blocks, deliberate whitespace, and persistent horizontal navigation.",
+        "mobile": "Single-column reflow preserves the mixed-type headline and layered hero while collapsing navigation to a compact menu control.",
+        "runtime_observation": "Desktop measured 7714px across a 900px viewport; mobile measured 8380px across an 844px viewport."
+      },
+      "artifact_refs": [
+        "runs/case-ee9eaf0dc9/reference/reference-observation.json",
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-initial-9228172552eb.webp",
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-mid-scroll-f73214a1107a.webp",
+        "runs/case-ee9eaf0dc9/reference/captures/mobile-initial-3747e071d7b6.webp"
+      ],
+      "evidence": {
+        "tag": "VISUALLY-INSPECTED",
+        "confidence": 0.95,
+        "method": "desktop/mobile screenshots plus DOM geometry"
+      }
+    },
+    "typography": {
+      "notes": {
+        "roles": "Bold grotesk establishes navigation, labels and emphatic headline fragments; a high-contrast serif supplies editorial counter-rhythm and long-form statements.",
+        "composition": "Type behaves as image and structure: mixed faces share lines, scale shifts define pacing, and circular annotation marks add a hand-directed layer.",
+        "observed_families": ["Santoku, sans-serif", "Sujiki, serif"],
+        "copying_boundary": "V0 may reproduce role contrast and rhythm only; Wanaka font files and exact copy are prohibited."
+      },
+      "artifact_refs": [
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-initial-9228172552eb.webp",
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-mid-scroll-f73214a1107a.webp"
+      ],
+      "evidence": {
+        "tag": "DIRECTLY-INSPECTED",
+        "confidence": 0.95,
+        "method": "computed font families plus visual inspection"
+      }
+    },
+    "color": {
+      "notes": {
+        "palette": ["white paper ground", "near-black ink", "sparse electric-violet accent", "project-specific image color"],
+        "logic": "A near-monochrome editorial shell lets work imagery and one saturated hero accent carry emphasis."
+      },
+      "artifact_refs": [
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-initial-9228172552eb.webp",
+        "runs/case-ee9eaf0dc9/reference/captures/mobile-initial-3747e071d7b6.webp"
+      ],
+      "evidence": {
+        "tag": "DIRECTLY-INSPECTED",
+        "confidence": 0.95,
+        "method": "computed color sample and visual inspection"
+      }
+    },
+    "motion": {
+      "notes": {
+        "observed_affordances": "The runtime exposed 70 transformed and 81 animated/transitioned visible elements on desktop, with one canvas and fixed/sticky navigation elements.",
+        "interaction_evidence": "A project hover reveals a large circular cursor/arrow overlay on the media card; still captures prove states, not animation timing or easing.",
+        "choreography": "Large whitespace and alternating statement/media positions create scroll-paced reveals; important motion quality remains a visual-sequence question."
+      },
+      "artifact_refs": [
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-mid-scroll-f73214a1107a.webp",
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-project-hover-929fe188a6b3.webp",
+        "runs/case-ee9eaf0dc9/reference/captures/desktop-final-ddf04b326ac2.webp"
+      ],
+      "evidence": {
+        "tag": "DIRECTLY-INSPECTED",
+        "confidence": 0.85,
+        "method": "runtime computed-state counts plus ordered still-state comparison"
+      }
+    },
+    "technology": {
+      "observed": [
+        "WordPress public asset routes",
+        "one canvas element",
+        "Plausible analytics host",
+        "Sentry browser host"
+      ],
+      "inferred": [
+        {
+          "claim": "The canvas likely contributes to decorative or interactive hero behavior.",
+          "confidence": 0.45,
+          "basis": "One canvas is present, but no hidden source inspection or decompilation was performed."
+        }
+      ]
+    },
+    "performance": {
+      "notes": {
+        "live_status": 200,
+        "desktop_visible_elements": 401,
+        "mobile_visible_elements": 369,
+        "images": 26,
+        "limitation": "No performance score is inferred from one observation."
+      },
+      "artifact_refs": ["runs/case-ee9eaf0dc9/reference/reference-observation.json"],
+      "evidence": {
+        "tag": "DIRECTLY-INSPECTED",
+        "confidence": 0.8,
+        "method": "one-off runtime DOM inventory"
+      }
+    },
+    "accessibility": {
+      "notes": {
+        "positive": "Semantic headings and links are present; mobile exposes a text menu control.",
+        "unverified": "Keyboard order, focus states, accessible canvas alternatives, contrast and screen-reader output require separate checks."
+      },
+      "artifact_refs": ["runs/case-ee9eaf0dc9/reference/reference-observation.json"],
+      "evidence": {
+        "tag": "DIRECTLY-INSPECTED",
+        "confidence": 0.65,
+        "method": "DOM inventory and static visual inspection"
+      }
+    },
+    "principles": [
+      {
+        "rule": "Treat typography as the primary composition system by pairing emphatic grotesk fragments with editorial serif counter-rhythm.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "analysis.typography.notes.roles"
+      },
+      {
+        "rule": "Use generous paper-like whitespace and offset media to pace a long portfolio narrative instead of filling a uniform card grid.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "analysis.layout.notes.desktop"
+      },
+      {
+        "rule": "Preserve the visual concept on mobile through deliberate re-composition rather than simple proportional shrinking.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "analysis.layout.notes.mobile"
+      },
+      {
+        "rule": "Make interactive affordance visible at the media surface; the project-hover cursor links action and content.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "analysis.motion.notes.interaction_evidence"
+      },
+      {
+        "rule": "Keep the shell restrained so project imagery and one saturated accent can provide local emphasis.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "analysis.color.notes.logic"
+      }
+    ],
+    "inferences": [
+      "The award-quality effect depends on coordinated typography, spacing, media cropping and interaction states rather than any one component.",
+      "V0 must test responsive re-composition and scroll pacing, not merely reproduce the desktop hero.",
+      "Static screenshots cannot establish animation timing, easing or transition continuity; those remain explicit limitations."
+    ],
+    "anti_patterns": [
+      {
+        "issue": "Copying Wanaka branding, artwork, text, fonts, source code or exact section geometry would violate the observe-only boundary.",
+        "evidence_tag": "DIRECTLY-INSPECTED"
+      },
+      {
+        "issue": "Treating transformed-element counts or still frames as proof of motion quality would overstate the evidence.",
+        "evidence_tag": "INFERRED"
+      }
+    ]
+  },
+  "figma": {
+    "authorization": "none",
+    "file_ref": null,
+    "captured": null
+  },
+  "scores": {
+    "external": {
+      "awwwards": "Honorable Mention",
+      "date": "2025-09-17",
+      "note": "weak prior only"
+    },
+    "automated": {}
+  },
+  "variant_run_ids": ["run-case-ee9eaf0dc9-v0"],
+  "taste_decision_ids": [],
+  "promotion_history": [],
+  "re_studies": []
+}
