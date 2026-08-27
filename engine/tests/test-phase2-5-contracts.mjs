@@ -953,7 +953,7 @@ try {
   invalid({ ...decision, outcome: { ...decision.outcome, candidate_decisions: {} } }, phase25Taste);
   invalid({ ...decision, outcome: { ...decision.outcome, candidate_decisions: { ...decision.outcome.candidate_decisions, V1: { ...decision.outcome.candidate_decisions.V1, quality_floor_passed: true } } } }, phase25Taste);
 
-  // T25-T28: human relative preference, absolute floor, and taste-learning acceptance stay independent.
+  // T25-T28: human relative preference (T25), absolute floor (T26), REJECT_ALL (T27), and taste-learning acceptance (T28) stay independent.
   const reviewCase = {
     schema: 'kinetic/gym/case-run@0.2', case_id: 'case-fixture',
     slots: Object.fromEntries(['V1', 'V2'].map((slot) => [slot, {
@@ -1717,4 +1717,5 @@ assert.throws(() => assertTransition({
   artifactRefs: { ...designArtifactRefs, design_qualified: true },
 }), (error) => error.code === 'KINETIC_QUALIFICATION_EXPLICIT_REQUIRED');
 
-console.log(`S01-S19 contract foundations: PASS (T1-T16, T21-T31, T39-T44, T46, T48, CV01-CV18, registry ${registryHashAfter})`);
+// T36: S21 aggregate coverage requires T1-T48 and CV01-CV18 to be present and executed by package scripts.
+console.log(`S01-S21 contract foundations: PASS (T1-T31, T36, T39-T44, T46, T48, CV01-CV18, registry ${registryHashAfter})`);

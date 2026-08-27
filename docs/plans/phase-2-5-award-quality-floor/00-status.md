@@ -5,7 +5,7 @@
 - Gate 2 — Source-Intelligence / Source-Governance Amendment: APPROVED 2026-08-22
 - Gate 3 — Program Design: APPROVED 2026-08-22
 - Gate 4 — Slice Plan: in progress
-- Gate 4 — ENGINE IMPLEMENTATION READY: pending
+- Gate 4 — ENGINE IMPLEMENTATION READY: READY FOR APPROVAL
 - Implementation: NOT STARTED
 
 ## Slices
