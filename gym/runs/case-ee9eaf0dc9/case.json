@@ -8,22 +8,22 @@
       "case_id": "case-ee9eaf0dc9",
       "slot": "V0",
       "mode": "fidelity-study",
-      "state": "PREBUILD_APPROVED",
+      "state": "DESIGN_EVALUATED",
       "attempt": 1,
       "deployable": false,
       "original_work": false,
-      "technically_qualified": false,
+      "technically_qualified": true,
       "design_qualified": null,
       "acceptable_for_further_taste_learning": null,
       "refs": {
         "variant_brief": "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
         "retrieval_receipt": "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
         "prebuild_review": "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json",
-        "build_receipt": null,
-        "technical_evaluation": null,
-        "capture_manifest": null,
-        "design_evaluation": null,
-        "fidelity_report": null
+        "build_receipt": "runs/case-ee9eaf0dc9/variants/v0",
+        "technical_evaluation": "runs/case-ee9eaf0dc9/reports/technical-evaluation-v0.json",
+        "capture_manifest": "runs/case-ee9eaf0dc9/captures/v0/manifest.json",
+        "design_evaluation": "runs/case-ee9eaf0dc9/reports/design-evaluation-v0.json",
+        "fidelity_report": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       },
       "attempts": [],
       "blocked_condition": null,
@@ -31,12 +31,17 @@
         "PLANNED": "2026-08-27T11:56:10.881Z",
         "BRIEF_VALIDATED": "2026-08-27T12:36:03.062Z",
         "RETRIEVAL_PROVEN": "2026-08-27T12:36:04.986Z",
-        "PREBUILD_APPROVED": "2026-08-27T12:36:06.653Z"
+        "PREBUILD_APPROVED": "2026-08-27T12:36:06.653Z",
+        "BUILDING": "2026-08-30T13:01:33.391Z",
+        "BUILT": "2026-08-30T13:10:29.635Z",
+        "TECHNICAL_EVALUATED": "2026-08-30T14:55:03.389Z",
+        "VISUAL_CAPTURED": "2026-08-30T19:27:40.793Z",
+        "DESIGN_EVALUATED": "2026-08-30T19:44:21.487Z"
       }
     }
   },
   "reports": {
-    "fidelity": null,
+    "fidelity": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json",
     "source_to_output_loss": null,
     "review_package": null
   },
@@ -71,8 +76,43 @@
       "slot": "V0",
       "artifact_ref": null,
       "timestamp": "2026-08-27T12:36:06.653Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-PREBUILD_APPROVED-BUILDING",
+      "event": "PREBUILD_APPROVED->BUILDING",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-30T13:01:33.391Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-BUILDING-BUILT",
+      "event": "BUILDING->BUILT",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-30T13:10:29.635Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-BUILT-TECHNICAL_EVALUATED",
+      "event": "BUILT->TECHNICAL_EVALUATED",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-30T14:55:03.389Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-TECHNICAL_EVALUATED-VISUAL_CAPTURED",
+      "event": "TECHNICAL_EVALUATED->VISUAL_CAPTURED",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-30T19:27:40.793Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-VISUAL_CAPTURED-DESIGN_EVALUATED",
+      "event": "VISUAL_CAPTURED->DESIGN_EVALUATED",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-30T19:44:21.487Z"
     }
   ],
   "created_at": "2026-08-27T11:56:10.881Z",
-  "updated_at": "2026-08-27T12:36:06.653Z"
+  "updated_at": "2026-08-30T19:44:21.487Z"
 }

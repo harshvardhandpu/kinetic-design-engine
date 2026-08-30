@@ -8,7 +8,8 @@
 - Gate 4 — ENGINE IMPLEMENTATION READY: HUMAN APPROVED 2026-08-27
 - Engine implementation: COMPLETE (S01–S21)
 - Real calibration: IN PROGRESS — `case-ee9eaf0dc9` / V0 only
-- Human V0 fidelity gate: PENDING
+- V0 lifecycle: PLANNED → … → DESIGN_EVALUATED (2026-08-30) — evidence complete, human gate reached
+- Human V0 fidelity gate: AWAITING DECISION (V0 at DESIGN_EVALUATED with pending FidelityReport `approval: REVISE`, `approved_at: null`)
 - Final human design/taste review: PENDING
 
 ## Slices

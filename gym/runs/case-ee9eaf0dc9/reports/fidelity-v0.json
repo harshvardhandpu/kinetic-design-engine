@@ -1,0 +1,237 @@
+{
+  "schema": "kinetic/gym/fidelity-report@0.1",
+  "case_id": "case-ee9eaf0dc9",
+  "variant_id": "V0",
+  "classification": "INTERNAL_REFERENCE_STUDY",
+  "deployable": false,
+  "original_work": false,
+  "reference_design_case_id": "case-ee9eaf0dc9",
+  "dimensions": {
+    "layout": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference shows a wide paper-like field with mixed grotesk/serif hero, alternating offset portfolio media and generous negative space; V0 reconstructs the shell grid (12-column, offset media/copy pairing, editorial statement sections) with original placeholder content, but exact column ratios and section counts differ.",
+      "evidence_source": "reference/captures/desktop-initial-9228172552eb.webp paired with deterministic V0 desktop initial capture; reference-observation.json visual_analysis.desktop_initial",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f1259aae2bedd3d7f7128e94594bc4be",
+        "reference/captures/desktop-initial-9228172552eb.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9",
+        "reference/captures/desktop-initial-9228172552eb.webp"
+      ],
+      "engine_inference": "V0 uses a 12-column grid with alternating 7/5 and 5/7 media/copy spans; the reference alternates media left/right with irregular vertical rhythm.",
+      "limitations": [
+        "Ordered stills cannot prove the reference's responsive reflow behavior beyond the two captured viewports."
+      ]
+    },
+    "typography": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference hero mixes grotesk and serif at extreme display scale with tight tracking; V0 reproduces the mixed-family display treatment (sans display plus serif counterpart), tight negative letter-spacing and weight contrast, using open system font stacks instead of the reference's licensed fonts.",
+      "evidence_source": "reference/captures/desktop-initial-9228172552eb.webp and desktop-mid-scroll-f73214a1107a.webp paired with V0 desktop initial and mid-scroll captures",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f1259aae2bedd3d7f7128e94594bc4be",
+        "captures/v0/cap-33916ec7a4af5cd67824bf1e1eefb361",
+        "reference/captures/desktop-initial-9228172552eb.webp",
+        "reference/captures/desktop-mid-scroll-f73214a1107a.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 display sizes clamp between 3.35rem and 8.15rem with -7.5 percent tracking on display sans; serif counterparts at 400 weight. Reference font files are licensed and were not retrieved.",
+      "limitations": [
+        "Reference uses licensed typefaces that cannot be copied; V0 substitutes open system stacks, so glyph geometry differs by design."
+      ]
+    },
+    "color": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference works a restrained monochrome shell (paper/ink) with sparse violet accent and sculptural pale media; V0 reproduces paper/ink monochrome plus violet and acid accents, with the contact section inverted to violet.",
+      "evidence_source": "reference/captures/desktop-initial-9228172552eb.webp and desktop-final-ddf04b326ac2.webp paired with V0 desktop initial and final captures",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f1259aae2bedd3d7f7128e94594bc4be",
+        "captures/v0/cap-22b1101942cf5278e227ee9635781163",
+        "reference/captures/desktop-initial-9228172552eb.webp",
+        "reference/captures/desktop-final-ddf04b326ac2.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 palette is paper neutral, ink near-black, violet accent, acid secondary accent; the reference presents a similar two-neutral plus violet scheme.",
+      "limitations": [
+        "Reference colors were read from stills, not extracted from licensed stylesheets; V0 values are original approximations."
+      ]
+    },
+    "spacing": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference maintains generous macro whitespace with editorial section padding; V0 uses clamp-based section padding between 7rem and 15rem and consistent 1rem grid gutters approximating the reference rhythm.",
+      "evidence_source": "reference/captures/desktop-mid-scroll-f73214a1107a.webp paired with V0 desktop mid-scroll capture",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-33916ec7a4af5cd67824bf1e1eefb361",
+        "reference/captures/desktop-mid-scroll-f73214a1107a.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 macro spacing scales via clamp section padding; rhythm is regularized where the reference is intentionally non-uniform.",
+      "limitations": []
+    },
+    "asset_treatment": {
+      "status": "APPROXIMATED_BEHAVIOR",
+      "observation": "Reference media are sculptural pale photographic objects; V0 reconstructs the treatment as pure-CSS sculptural compositions (soft-shadow letterform object, conic-gradient disc, striped ledger field) with zero external assets.",
+      "evidence_source": "reference/captures/desktop-mid-scroll-f73214a1107a.webp paired with V0 desktop signature-hover capture",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-00c281d06f1faed620cdd242aa11ccfe",
+        "reference/captures/desktop-mid-scroll-f73214a1107a.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "All V0 visuals are CSS-generated (gradients, shadows, clip-path); no proprietary reference asset was downloaded or copied.",
+      "limitations": [
+        "Reference photography treatment is approximated, not reproduced; fidelity of asset treatment is inherently partial."
+      ]
+    },
+    "depth": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference creates depth through layering (hero text over sculptural media, seal overlays, collage planes); V0 reconstructs a z-layered hero (text over object over collage) and inset-shadow sculptural treatments.",
+      "evidence_source": "reference/captures/desktop-initial-9228172552eb.webp paired with V0 desktop initial capture",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f1259aae2bedd3d7f7128e94594bc4be",
+        "reference/captures/desktop-initial-9228172552eb.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 hero uses three stacked planes (headline z2, hero-object z1, collage absolute) plus a rotating seal at z3; the reference uses a similar plane ordering.",
+      "limitations": []
+    },
+    "hierarchy": {
+      "status": "CAPTURED_WELL",
+      "observation": "Reference establishes a clear editorial hierarchy: display hero, quiet nav, section statements at intermediate scale, micro-labels; V0 mirrors the scale steps (display, statement, body, micro-label) with explicit weights and letter-spacing per tier.",
+      "evidence_source": "reference/captures/desktop-initial-9228172552eb.webp and mobile-initial-3747e071d7b6.webp paired with V0 desktop initial and mobile initial captures",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f1259aae2bedd3d7f7128e94594bc4be",
+        "captures/v0/cap-6a4c90fed33a0dd3f3d358fcc18f6a3b",
+        "reference/captures/desktop-initial-9228172552eb.webp",
+        "reference/captures/mobile-initial-3747e071d7b6.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 scale ratio display:statement:body:micro is approximately 8.15rem to 7rem to 1.05rem to 0.66rem, matching the reference's four-tier structure.",
+      "limitations": []
+    },
+    "motion": {
+      "status": "APPROXIMATED_BEHAVIOR",
+      "observation": "Reference stills cannot prove animation timing or easing (stated evidence_limit in reference-observation.json); V0 implements scroll-reveal choreography and hover transitions entirely through kinetic motion tokens (out-expo and out-quint curves, duration tokens, stagger), the KINETIC-sanctioned approximation.",
+      "evidence_source": "reference/captures/desktop-project-hover-929fe188a6b3.webp paired with V0 desktop signature-hover capture and the persisted motion-token report",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-00c281d06f1faed620cdd242aa11ccfe",
+        "reference/captures/desktop-project-hover-929fe188a6b3.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9",
+        "source:src-cuvii-labs-motion"
+      ],
+      "engine_inference": "V0 motion uses out-expo and out-quint easing tokens with duration-slow and duration-page tokens for reveals and hover; the reduced-motion variant is captured as a separate state.",
+      "limitations": [
+        "Still captures cannot verify the reference's actual easing curves; V0 motion is an approximation licensed under the motion token catalog, not a measurement."
+      ]
+    },
+    "scroll_choreography": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference mid-scroll stills show alternating editorial statements and offset media at wide intervals; V0 reconstructs the same narrative ordering (hero, manifesto, capabilities, work, index, contact) with intersection-observer reveals at threshold 0.12.",
+      "evidence_source": "reference/captures/desktop-mid-scroll-f73214a1107a.webp paired with V0 desktop mid-scroll and final captures",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-33916ec7a4af5cd67824bf1e1eefb361",
+        "captures/v0/cap-22b1101942cf5278e227ee9635781163",
+        "reference/captures/desktop-mid-scroll-f73214a1107a.webp",
+        "reference/captures/desktop-final-ddf04b326ac2.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 reveal choreography: each section reveals once when 12 percent visible, no re-trigger; reference scroll behavior is observed only as ordered stills.",
+      "limitations": [
+        "Scroll-linked motion in the reference (if any) is unproven by stills; V0 uses reveal-only choreography as the conservative reconstruction."
+      ]
+    },
+    "interaction": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference exposes a large circular arrow affordance on project hover (state change proven, timing unproven); V0 reconstructs the same affordance pattern (circular action button appearing on media hover) with focus-visible parity and a collapsed mobile menu.",
+      "evidence_source": "reference/captures/desktop-project-hover-929fe188a6b3.webp paired with V0 desktop signature capture and mobile menu-open capture",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-00c281d06f1faed620cdd242aa11ccfe",
+        "captures/v0/cap-df390f7e5253a01196205f23476e3bb6",
+        "reference/captures/desktop-project-hover-929fe188a6b3.webp",
+        "reference/captures/mobile-initial-3747e071d7b6.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 hover states use scale and opacity tokens with a 1250ms stable checkpoint; menu-open is a separate mobile state; focus-visible mirrors hover.",
+      "limitations": [
+        "Reference hover timing and easing are unproven; V0 interaction timing is a token-driven approximation."
+      ]
+    },
+    "transition_behavior": {
+      "status": "APPROXIMATED_BEHAVIOR",
+      "observation": "Reference transition behavior is unmeasured (stills only); V0 transitions are fully token-governed (cubic-bezier tokens, duration tokens, stagger constants) and validated by the motion-token validator with a captured reduced-motion state.",
+      "evidence_source": "V0 desktop reduced-motion capture and signature capture; motion-token report runs/case-ee9eaf0dc9/reports/motion-token-v0.json",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-a8dd4c1836dca7514a4e11bc85cce956",
+        "captures/v0/cap-00c281d06f1faed620cdd242aa11ccfe"
+      ],
+      "source_refs": [
+        "source:src-cuvii-labs-motion",
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "All V0 transitions resolve to kinetic tokens; the reduced-motion capture proves transitions are fully suppressed under prefers-reduced-motion.",
+      "limitations": [
+        "Reference transition curves remain unmeasured; equivalence to reference timing is not claimed."
+      ]
+    },
+    "narrative_pacing": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference paces a long editorial scroll with alternating statement and media blocks at generous intervals; V0 reconstructs the same pacing (six sections, alternating composition, macro padding) but shortens total length relative to the reference.",
+      "evidence_source": "reference/captures/desktop-mid-scroll-f73214a1107a.webp and desktop-final-ddf04b326ac2.webp paired with V0 mid-scroll and final captures",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-33916ec7a4af5cd67824bf1e1eefb361",
+        "captures/v0/cap-22b1101942cf5278e227ee9635781163",
+        "reference/captures/desktop-mid-scroll-f73214a1107a.webp",
+        "reference/captures/desktop-final-ddf04b326ac2.webp"
+      ],
+      "source_refs": [
+        "design-case:case-ee9eaf0dc9"
+      ],
+      "engine_inference": "V0 total scroll depth is approximately half the reference's; section ordering and alternation match.",
+      "limitations": [
+        "Pacing equivalence is not claimed; V0 is a fidelity study of grammar, not a replica."
+      ]
+    }
+  },
+  "understood": "partial",
+  "coverage_summary": "All 12 dimensions carry paired reference and V0 capture evidence. Layout grammar, hierarchy, color shell, spacing rhythm, scroll choreography and interaction affordances are reconstructed from one-off observe-only reference evidence; motion, transitions and asset treatment are KINETIC token-governed approximations because stills cannot measure the reference's timing. Licensed fonts and photographic assets are deliberately approximated, never copied.",
+  "unresolved_dimensions": [
+    "motion",
+    "transition_behavior",
+    "asset_treatment"
+  ],
+  "approval": "REVISE",
+  "approval_producer": "human",
+  "approval_reason": "Pending human V0 fidelity gate: the active runtime is text-only, so visual fidelity judgment is reserved for the human reviewer at the HUMAN V0 FIDELITY GATE. This value records the report as presented-not-approved.",
+  "approved_at": null,
+  "created_at": "2026-08-30T19:39:27Z",
+  "producer": "hermes-lead-architect"
+}
