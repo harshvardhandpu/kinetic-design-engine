@@ -1,0 +1,64 @@
+{
+  "schema": "kinetic/gym/execution-telemetry@0.1",
+  "case_id": "case-ee9eaf0dc9",
+  "stages": {
+    "planning": {
+      "started_at": "2026-08-27T11:56:10.881Z",
+      "ended_at": "2026-08-27T12:36:03.062Z",
+      "duration_ms": 2392181,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json"
+      ]
+    },
+    "retrieval": {
+      "started_at": "2026-08-27T12:36:03.062Z",
+      "ended_at": "2026-08-27T12:36:04.986Z",
+      "duration_ms": 1924,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json"
+      ]
+    },
+    "prebuild_review": {
+      "started_at": "2026-08-27T12:36:04.986Z",
+      "ended_at": "2026-08-27T12:36:06.653Z",
+      "duration_ms": 1667,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json"
+      ]
+    },
+    "build": null,
+    "capture": null,
+    "technical_evaluation": null,
+    "design_evaluation": null,
+    "repair": null,
+    "review_package_generation": null,
+    "human_review_waiting": null
+  },
+  "metrics": {
+    "model": null,
+    "provider": null,
+    "model_calls": null,
+    "tokens_input": null,
+    "tokens_output": null,
+    "tool_calls": null,
+    "vision_calls": null,
+    "repair_attempts": 0,
+    "build_attempts": 0,
+    "asset_preparation_ms": null,
+    "monetary_cost": null,
+    "monetary_cost_status": "UNKNOWN",
+    "availability_notes": [
+      "model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed"
+    ]
+  },
+  "updated_at": "2026-08-27T12:36:06.653Z"
+}

@@ -1,0 +1,181 @@
+{
+  "schema": "kinetic/gym/variant-brief@0.1",
+  "variant_id": "V0",
+  "case_id": "case-ee9eaf0dc9",
+  "design_case_ids_used": [
+    "case-ee9eaf0dc9"
+  ],
+  "surface": "creative-studio portfolio",
+  "goal": "Test whether KINETIC understood Wanaka Studio's layout grammar, typography roles, responsive composition, scroll pacing and interaction model without reusing protected content.",
+  "direction_name": "Editorial Studio Fidelity Study",
+  "core_concept": "An annotated studio folio where mixed typography becomes the spatial system and offset project media interrupts a restrained paper field.",
+  "composition_plan": {
+    "sections": [
+      "mixed-type manifesto hero",
+      "capability overview",
+      "offset project folio",
+      "recent-work index",
+      "conversation close"
+    ],
+    "spatial_system": "A wide editorial grid alternates oversized text fields with offset media blocks; mobile deliberately re-composes those layers into one column.",
+    "visual_hierarchy": "The manifesto leads, serif editorial statements establish chapter rhythm, project imagery carries local emphasis, and compact labels/navigation remain subordinate.",
+    "pacing": "Long paper-like pauses separate dense visual moments so each portfolio chapter arrives as a distinct scroll beat.",
+    "density": "Sparse shell with isolated high-density project moments rather than uniform card packing.",
+    "focal_points": [
+      "mixed sans/serif manifesto",
+      "sculptural substitute hero object",
+      "offset project media",
+      "visible circular project affordance"
+    ]
+  },
+  "typography_plan": {
+    "display_role": "A heavy system grotesk supplies emphatic fragments, labels and navigation without using Wanaka fonts.",
+    "body_role": "A system serif supplies editorial statements and reflective pacing without using Wanaka fonts.",
+    "scale_strategy": "Fluid clamp-based display sizes create deliberate line breaks at desktop and mobile rather than proportionally shrinking one composition.",
+    "contrast_strategy": "Weight, family and scale contrast replace decorative color as the primary hierarchy device.",
+    "rhythm": "Tight grotesk lines alternate with open serif lines and generous section whitespace.",
+    "responsive_behavior": "Mobile stacks and overlaps selected hero layers while preserving the type-role contrast and priority order."
+  },
+  "art_direction": {
+    "imagery_strategy": "Use only KINETIC-authored CSS geometry and abstract generated placeholders that preserve media role, crop and visual weight without depicting Wanaka work.",
+    "asset_strategy": "No external assets, logos, source imagery, copied illustrations, source fonts or source copy; all visual material is CSS/HTML authored inside V0.",
+    "texture": "Mostly clean paper and ink with restrained halftone/noise accents authored in CSS.",
+    "material": "Paper editorial field contrasted with a pale embossed geometric object and flat saturated accent discs.",
+    "depth": "Depth comes from controlled overlap, clipping and shadows on substitute forms rather than WebGL or proprietary media.",
+    "layering": "Text, geometric object, circular affordance and lower hero collage overlap at intentional z-levels; project sections return to a flatter editorial plane.",
+    "color_logic": "Warm white and near-black form the shell; one electric-violet accent marks interactive or spatial emphasis."
+  },
+  "motion_plan": {
+    "signature_move": {
+      "name": "folio orbit affordance",
+      "central_idea": "A circular action marker follows focus within a project media plane and makes the portfolio interaction visibly legible.",
+      "trigger": "pointer hover or keyboard focus on a project link",
+      "visual_transformation": "The action circle expands from the media crop while the image shifts slightly within its frame.",
+      "purpose": "Connect the user's action to the selected work without adding decorative motion elsewhere.",
+      "content_relationship": "The affordance is anchored to the active project media and disappears when no project is active.",
+      "reduced_motion_alternative": "Show a static outlined action circle on focus/hover with no translation or scaling.",
+      "capture_checkpoint": "desktop project-hover after the circular marker is fully visible"
+    },
+    "scroll_storyboard": [
+      "Manifesto hero enters as a composed still with only restrained layer settling.",
+      "Capability copy yields to a large editorial portfolio statement after a long whitespace beat.",
+      "Project media and description alternate across the grid as the document scrolls.",
+      "Recent-work index compresses the rhythm before the final conversation close."
+    ],
+    "transitions": [
+      "opacity and translate transitions use canonical KINETIC motion tokens",
+      "project hover uses canonical fast/standard tokens",
+      "no autonomous carousel, video or looping animation"
+    ],
+    "interaction_states": [
+      "desktop project hover",
+      "keyboard project focus",
+      "mobile menu control",
+      "reduced-motion static affordance"
+    ],
+    "reduced_motion_behavior": "Disable scroll-linked transforms and continuous interpolation; preserve hierarchy, final positions and visible focus/hover affordances.",
+    "token_exceptions": []
+  },
+  "reference_transfer": {
+    "retained_principles": [
+      "mixed typography as primary composition",
+      "generous editorial whitespace",
+      "offset media rhythm rather than a uniform card grid",
+      "responsive re-composition rather than simple shrinking",
+      "visible interaction affordance at the media surface"
+    ],
+    "deliberately_rejected_principles": [
+      "source branding and project identities",
+      "source copy and naming",
+      "source font files",
+      "source imagery and artwork",
+      "exact section geometry and hidden implementation"
+    ],
+    "prohibited_copying": [
+      "source imagery",
+      "source copy",
+      "source logo",
+      "source fonts/assets",
+      "source code",
+      "exact section geometry"
+    ]
+  },
+  "source_provenance": {
+    "design_reference_sources": [
+      {
+        "source_id": "src-seesaw",
+        "retrieval_reason": "Use an audited curated-design source only as abstract comparative context while the Wanaka DesignCase remains the primary reference.",
+        "knowledge_used": [
+          "Curated website references are comparison evidence, not reusable source material."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-seesaw"
+            ]
+          }
+        ]
+      }
+    ],
+    "motion_reference_sources": [
+      {
+        "source_id": "src-cuvii-labs-motion",
+        "retrieval_reason": "Use the audited motion-study category to require ordered observable states without copying implementation or media.",
+        "knowledge_used": [
+          "Motion fidelity should be studied through explicit trigger and checkpoint states."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "ENGINE-INFERENCE",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-cuvii-labs-motion"
+            ]
+          }
+        ]
+      }
+    ],
+    "typography_sources": [
+      {
+        "source_id": "src-inspotype-discovery",
+        "retrieval_reason": "Use the audited typography-discovery category to reason about role pairing while choosing only system substitutes.",
+        "knowledge_used": [
+          "Typeface roles and pairing can be evaluated independently of copying a proprietary font asset."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "ENGINE-INFERENCE",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-inspotype-discovery"
+            ]
+          }
+        ]
+      }
+    ],
+    "implementation_sources": [],
+    "tool_sources": []
+  },
+  "originality_plan": {
+    "composition_differences": [
+      "V0 is a declared internal fidelity study, not an original candidate; exact source geometry is prohibited."
+    ],
+    "typography_differences": [
+      "Use system grotesk and serif substitutes only; no Wanaka font files or exact typesetting."
+    ],
+    "motion_differences": [
+      "Implement only observable state relationships with KINETIC tokens; do not reconstruct hidden source choreography."
+    ],
+    "asset_non_reuse": "All imagery is KINETIC-authored CSS geometry; no Wanaka asset, logo, copy, artwork, font, code or project identity is reused.",
+    "signature_move_hypothesis": "The visible project-affordance relationship can be studied with an independently implemented focus/hover circle."
+  },
+  "quality_hypothesis": "If V0 preserves mixed-type hierarchy, whitespace pacing, offset media rhythm, responsive re-composition and visible project affordance using wholly substitute content, a human can determine whether KINETIC understood the reference grammar without mistaking the study for a clone.",
+  "planning_exception": null,
+  "created_at": "2026-08-27T12:01:54Z",
+  "producer": "hermes-agent:gpt-5.6-sol"
+}

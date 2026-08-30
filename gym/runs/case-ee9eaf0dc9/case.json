@@ -8,7 +8,7 @@
       "case_id": "case-ee9eaf0dc9",
       "slot": "V0",
       "mode": "fidelity-study",
-      "state": "PLANNED",
+      "state": "PREBUILD_APPROVED",
       "attempt": 1,
       "deployable": false,
       "original_work": false,
@@ -16,9 +16,9 @@
       "design_qualified": null,
       "acceptable_for_further_taste_learning": null,
       "refs": {
-        "variant_brief": null,
-        "retrieval_receipt": null,
-        "prebuild_review": null,
+        "variant_brief": "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
+        "retrieval_receipt": "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
+        "prebuild_review": "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json",
         "build_receipt": null,
         "technical_evaluation": null,
         "capture_manifest": null,
@@ -28,7 +28,10 @@
       "attempts": [],
       "blocked_condition": null,
       "timestamps": {
-        "PLANNED": "2026-08-27T11:56:10.881Z"
+        "PLANNED": "2026-08-27T11:56:10.881Z",
+        "BRIEF_VALIDATED": "2026-08-27T12:36:03.062Z",
+        "RETRIEVAL_PROVEN": "2026-08-27T12:36:04.986Z",
+        "PREBUILD_APPROVED": "2026-08-27T12:36:06.653Z"
       }
     }
   },
@@ -47,8 +50,29 @@
       "slot": "V0",
       "artifact_ref": null,
       "timestamp": "2026-08-27T11:56:10.881Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-PLANNED-BRIEF_VALIDATED",
+      "event": "PLANNED->BRIEF_VALIDATED",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-27T12:36:03.062Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-BRIEF_VALIDATED-RETRIEVAL_PROVEN",
+      "event": "BRIEF_VALIDATED->RETRIEVAL_PROVEN",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-27T12:36:04.986Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v0-1-RETRIEVAL_PROVEN-PREBUILD_APPROVED",
+      "event": "RETRIEVAL_PROVEN->PREBUILD_APPROVED",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-08-27T12:36:06.653Z"
     }
   ],
   "created_at": "2026-08-27T11:56:10.881Z",
-  "updated_at": "2026-08-27T11:56:10.881Z"
+  "updated_at": "2026-08-27T12:36:06.653Z"
 }
