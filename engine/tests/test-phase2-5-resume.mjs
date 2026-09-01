@@ -131,6 +131,9 @@ try {
   assert.equal(firstDecisionRef, 'taste/decisions/td-20260822-review1.json');
   assert.deepEqual(await readTasteDecision(humanDecision.decision_id), humanDecision);
   await assert.rejects(writeTasteDecisionExclusive(humanDecision), (error) => error.code === 'KINETIC_DECISION_EXISTS');
+  const hyphenatedDecision = structuredClone(humanDecision);
+  hyphenatedDecision.decision_id = 'td-20260822-review-1';
+  assert.equal(await writeTasteDecisionExclusive(hyphenatedDecision), 'taste/decisions/td-20260822-review-1.json');
   const reviewCase = {
     schema: 'kinetic/gym/case-run@0.2', case_id: 'case-review',
     slots: Object.fromEntries(['V1', 'V2'].map((name) => [name, { ...slot('REVIEW_READY', {

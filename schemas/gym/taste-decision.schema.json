@@ -7,7 +7,7 @@
   "required": ["schema", "decision_id", "context", "candidates", "outcome", "reviewer", "timestamp"],
   "properties": {
     "schema": { "const": "kinetic/gym/taste-decision@0.1" },
-    "decision_id": { "type": "string", "pattern": "^td-[0-9]{8}-[0-9a-z]+$" },
+    "decision_id": { "type": "string", "pattern": "^td-[0-9]{8}-[0-9a-z]+(?:-[0-9a-z]+)*$" },
     "context": {
       "type": "object",
       "required": ["surface"],
@@ -90,7 +90,7 @@
       "required": ["schema", "decision_id", "context", "candidates", "outcome", "reason_tags", "freeform", "reviewer", "supersedes", "timestamp"],
       "properties": {
         "schema": { "const": "kinetic/gym/taste-decision@0.2" },
-        "decision_id": { "type": "string", "pattern": "^td-[0-9]{8}-[0-9a-z]+$" },
+        "decision_id": { "type": "string", "pattern": "^td-[0-9]{8}-[0-9a-z]+(?:-[0-9a-z]+)*$" },
         "context": {
           "type": "object",
           "additionalProperties": false,

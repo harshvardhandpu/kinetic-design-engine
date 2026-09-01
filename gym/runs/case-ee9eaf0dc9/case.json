@@ -45,13 +45,13 @@
       "case_id": "case-ee9eaf0dc9",
       "slot": "V1",
       "mode": "original",
-      "state": "REVIEW_READY",
+      "state": "HUMAN_REVIEWED",
       "attempt": 1,
       "deployable": true,
       "original_work": true,
       "technically_qualified": true,
-      "design_qualified": null,
-      "acceptable_for_further_taste_learning": null,
+      "design_qualified": false,
+      "acceptable_for_further_taste_learning": false,
       "refs": {
         "variant_brief": "runs/case-ee9eaf0dc9/planning/v1/variant-brief.json",
         "retrieval_receipt": "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
@@ -74,7 +74,8 @@
         "TECHNICAL_EVALUATED": "2026-09-01T06:40:06.805Z",
         "VISUAL_CAPTURED": "2026-09-01T06:41:28.398Z",
         "DESIGN_EVALUATED": "2026-09-01T06:42:33.891Z",
-        "REVIEW_READY": "2026-09-01T06:52:04.798Z"
+        "REVIEW_READY": "2026-09-01T06:52:04.798Z",
+        "HUMAN_REVIEWED": "2026-09-01T11:44:38.083Z"
       }
     },
     "V2": {
@@ -83,13 +84,13 @@
       "case_id": "case-ee9eaf0dc9",
       "slot": "V2",
       "mode": "original",
-      "state": "REVIEW_READY",
+      "state": "HUMAN_REVIEWED",
       "attempt": 1,
       "deployable": true,
       "original_work": true,
       "technically_qualified": true,
-      "design_qualified": null,
-      "acceptable_for_further_taste_learning": null,
+      "design_qualified": true,
+      "acceptable_for_further_taste_learning": true,
       "refs": {
         "variant_brief": "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
         "retrieval_receipt": "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
@@ -112,7 +113,8 @@
         "TECHNICAL_EVALUATED": "2026-09-01T06:40:07.299Z",
         "VISUAL_CAPTURED": "2026-09-01T06:41:28.895Z",
         "DESIGN_EVALUATED": "2026-09-01T06:42:34.392Z",
-        "REVIEW_READY": "2026-09-01T06:52:04.798Z"
+        "REVIEW_READY": "2026-09-01T06:52:04.798Z",
+        "HUMAN_REVIEWED": "2026-09-01T11:44:38.083Z"
       }
     }
   },
@@ -121,8 +123,8 @@
     "source_to_output_loss": "runs/case-ee9eaf0dc9/reports/source-to-output-loss.json",
     "review_package": "runs/case-ee9eaf0dc9/review-package.html"
   },
-  "review_state": "REVIEW_READY",
-  "taste_decision_ref": null,
+  "review_state": "HUMAN_REVIEWED",
+  "taste_decision_ref": "taste/decisions/td-20260901-wanaka-v1-v2.json",
   "blocked_condition": null,
   "history": [
     {
@@ -334,8 +336,15 @@
       "slot": null,
       "artifact_ref": "runs/case-ee9eaf0dc9/review-package.html",
       "timestamp": "2026-09-01T06:52:04.798Z"
+    },
+    {
+      "event_id": "human-review-td-20260901-wanaka-v1-v2",
+      "event": "human-review-recorded",
+      "slot": null,
+      "artifact_ref": "taste/decisions/td-20260901-wanaka-v1-v2.json",
+      "timestamp": "2026-09-01T11:44:38.083Z"
     }
   ],
   "created_at": "2026-08-27T11:56:10.881Z",
-  "updated_at": "2026-09-01T06:52:04.798Z"
+  "updated_at": "2026-09-01T11:44:38.083Z"
 }

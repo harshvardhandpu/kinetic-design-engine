@@ -164,7 +164,7 @@ export async function hashFile(path) {
 }
 
 function tasteDecisionPath(decisionId) {
-  if (typeof decisionId !== 'string' || !/^td-[0-9]{8}-[0-9a-z]+$/.test(decisionId)) {
+  if (typeof decisionId !== 'string' || !/^td-[0-9]{8}-[0-9a-z]+(?:-[0-9a-z]+)*$/.test(decisionId)) {
     throw new StoreError('KINETIC_DECISION_INVALID', `invalid decision id: ${decisionId}`);
   }
   return join(gymRoot(), 'taste', 'decisions', `${decisionId}.json`);

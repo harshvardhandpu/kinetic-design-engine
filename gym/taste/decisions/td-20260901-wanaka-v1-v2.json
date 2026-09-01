@@ -1,0 +1,36 @@
+{
+  "schema": "kinetic/gym/taste-decision@0.2",
+  "decision_id": "td-20260901-wanaka-v1-v2",
+  "context": {
+    "case_id": "case-ee9eaf0dc9",
+    "batch_id": "case-ee9eaf0dc9",
+    "surface": "website",
+    "goal": "Select the strongest original design candidate"
+  },
+  "candidates": [
+    "V1",
+    "V2"
+  ],
+  "outcome": {
+    "result": "PARTIAL_ACCEPTANCE",
+    "relative_preference": "V2",
+    "winner": null,
+    "candidate_decisions": {
+      "V1": {
+        "quality_floor_passed": false,
+        "acceptable_for_further_taste_learning": false,
+        "reason": "it was too plain and very less animation"
+      },
+      "V2": {
+        "quality_floor_passed": true,
+        "acceptable_for_further_taste_learning": true,
+        "reason": "good not great good number of animation but the design was not attractive"
+      }
+    }
+  },
+  "reason_tags": [],
+  "freeform": null,
+  "reviewer": "Harshvardhan",
+  "supersedes": null,
+  "timestamp": "2026-09-01T07:29:54.458Z"
+}

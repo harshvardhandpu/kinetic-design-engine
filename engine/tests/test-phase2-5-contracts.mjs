@@ -950,6 +950,7 @@ try {
   const decision = { schema: 'kinetic/gym/taste-decision@0.2', decision_id: 'td-20260822-fixture', context: { case_id: 'case-fixture', batch_id: 'batch-fixture', surface: 'portfolio', goal: 'quality' }, candidates: ['V1', 'V2'], outcome: { result: 'REJECT_ALL', relative_preference: 'neither', winner: null, candidate_decisions: { V1: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' }, V2: { quality_floor_passed: false, acceptable_for_further_taste_learning: false, reason: 'weak' } } }, reason_tags: [], freeform: null, reviewer: 'human-fixture', supersedes: null, timestamp: '2026-08-22T00:00:00Z' };
   const phase25Taste = { $defs: taste.$defs, $ref: '#/$defs/phase25' };
   valid(decision, phase25Taste, join(root, 'schemas', 'gym', 'taste-decision.schema.json'));
+  valid({ ...decision, decision_id: 'td-20260901-wanaka-v1-v2' }, phase25Taste, join(root, 'schemas', 'gym', 'taste-decision.schema.json'));
   invalid({ ...decision, outcome: { ...decision.outcome, candidate_decisions: {} } }, phase25Taste);
   invalid({ ...decision, outcome: { ...decision.outcome, candidate_decisions: { ...decision.outcome.candidate_decisions, V1: { ...decision.outcome.candidate_decisions.V1, quality_floor_passed: true } } } }, phase25Taste);
 
