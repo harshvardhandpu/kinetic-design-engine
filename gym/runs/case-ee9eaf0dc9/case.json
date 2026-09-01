@@ -38,14 +38,90 @@
         "VISUAL_CAPTURED": "2026-08-30T19:27:40.793Z",
         "DESIGN_EVALUATED": "2026-08-30T19:44:21.487Z"
       }
+    },
+    "V1": {
+      "schema": "kinetic/gym/variant-run@0.2",
+      "run_id": "run-case-ee9eaf0dc9-v1",
+      "case_id": "case-ee9eaf0dc9",
+      "slot": "V1",
+      "mode": "original",
+      "state": "REVIEW_READY",
+      "attempt": 1,
+      "deployable": true,
+      "original_work": true,
+      "technically_qualified": true,
+      "design_qualified": null,
+      "acceptable_for_further_taste_learning": null,
+      "refs": {
+        "variant_brief": "runs/case-ee9eaf0dc9/planning/v1/variant-brief.json",
+        "retrieval_receipt": "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+        "prebuild_review": "runs/case-ee9eaf0dc9/planning/v1/prebuild-review.json",
+        "build_receipt": "runs/case-ee9eaf0dc9/variants/v1",
+        "technical_evaluation": "runs/case-ee9eaf0dc9/reports/technical-evaluation-v1.json",
+        "capture_manifest": "runs/case-ee9eaf0dc9/captures/v1/manifest.json",
+        "design_evaluation": "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json",
+        "fidelity_report": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
+      },
+      "attempts": [],
+      "blocked_condition": null,
+      "timestamps": {
+        "PLANNED": "2026-09-01T06:17:14.712Z",
+        "BRIEF_VALIDATED": "2026-09-01T06:25:57.093Z",
+        "RETRIEVAL_PROVEN": "2026-09-01T06:26:44.613Z",
+        "PREBUILD_APPROVED": "2026-09-01T06:28:21.091Z",
+        "BUILDING": "2026-09-01T06:38:22.822Z",
+        "BUILT": "2026-09-01T06:38:23.393Z",
+        "TECHNICAL_EVALUATED": "2026-09-01T06:40:06.805Z",
+        "VISUAL_CAPTURED": "2026-09-01T06:41:28.398Z",
+        "DESIGN_EVALUATED": "2026-09-01T06:42:33.891Z",
+        "REVIEW_READY": "2026-09-01T06:52:04.798Z"
+      }
+    },
+    "V2": {
+      "schema": "kinetic/gym/variant-run@0.2",
+      "run_id": "run-case-ee9eaf0dc9-v2",
+      "case_id": "case-ee9eaf0dc9",
+      "slot": "V2",
+      "mode": "original",
+      "state": "REVIEW_READY",
+      "attempt": 1,
+      "deployable": true,
+      "original_work": true,
+      "technically_qualified": true,
+      "design_qualified": null,
+      "acceptable_for_further_taste_learning": null,
+      "refs": {
+        "variant_brief": "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "retrieval_receipt": "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "prebuild_review": "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "build_receipt": "runs/case-ee9eaf0dc9/variants/v2",
+        "technical_evaluation": "runs/case-ee9eaf0dc9/reports/technical-evaluation-v2.json",
+        "capture_manifest": "runs/case-ee9eaf0dc9/captures/v2/manifest.json",
+        "design_evaluation": "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json",
+        "fidelity_report": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
+      },
+      "attempts": [],
+      "blocked_condition": null,
+      "timestamps": {
+        "PLANNED": "2026-09-01T06:17:15.194Z",
+        "BRIEF_VALIDATED": "2026-09-01T06:25:57.594Z",
+        "RETRIEVAL_PROVEN": "2026-09-01T06:26:45.189Z",
+        "PREBUILD_APPROVED": "2026-09-01T06:28:21.588Z",
+        "BUILDING": "2026-09-01T06:38:23.898Z",
+        "BUILT": "2026-09-01T06:38:24.399Z",
+        "TECHNICAL_EVALUATED": "2026-09-01T06:40:07.299Z",
+        "VISUAL_CAPTURED": "2026-09-01T06:41:28.895Z",
+        "DESIGN_EVALUATED": "2026-09-01T06:42:34.392Z",
+        "REVIEW_READY": "2026-09-01T06:52:04.798Z"
+      }
     }
   },
   "reports": {
     "fidelity": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json",
-    "source_to_output_loss": null,
-    "review_package": null
+    "source_to_output_loss": "runs/case-ee9eaf0dc9/reports/source-to-output-loss.json",
+    "review_package": "runs/case-ee9eaf0dc9/review-package.html"
   },
-  "review_state": "NOT_READY",
+  "review_state": "REVIEW_READY",
   "taste_decision_ref": null,
   "blocked_condition": null,
   "history": [
@@ -111,8 +187,155 @@
       "slot": "V0",
       "artifact_ref": null,
       "timestamp": "2026-08-30T19:44:21.487Z"
+    },
+    {
+      "event_id": "add-case-ee9eaf0dc9-V1",
+      "event": "original-slot-planned",
+      "slot": "V1",
+      "artifact_ref": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json",
+      "timestamp": "2026-09-01T06:17:14.712Z"
+    },
+    {
+      "event_id": "add-case-ee9eaf0dc9-V2",
+      "event": "original-slot-planned",
+      "slot": "V2",
+      "artifact_ref": "runs/case-ee9eaf0dc9/reports/fidelity-v0.json",
+      "timestamp": "2026-09-01T06:17:15.194Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-PLANNED-BRIEF_VALIDATED",
+      "event": "PLANNED->BRIEF_VALIDATED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:25:57.093Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-PLANNED-BRIEF_VALIDATED",
+      "event": "PLANNED->BRIEF_VALIDATED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:25:57.594Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-BRIEF_VALIDATED-RETRIEVAL_PROVEN",
+      "event": "BRIEF_VALIDATED->RETRIEVAL_PROVEN",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:26:44.613Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-BRIEF_VALIDATED-RETRIEVAL_PROVEN",
+      "event": "BRIEF_VALIDATED->RETRIEVAL_PROVEN",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:26:45.189Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-RETRIEVAL_PROVEN-PREBUILD_APPROVED",
+      "event": "RETRIEVAL_PROVEN->PREBUILD_APPROVED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:28:21.091Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-RETRIEVAL_PROVEN-PREBUILD_APPROVED",
+      "event": "RETRIEVAL_PROVEN->PREBUILD_APPROVED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:28:21.588Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-PREBUILD_APPROVED-BUILDING",
+      "event": "PREBUILD_APPROVED->BUILDING",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:38:22.822Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-BUILDING-BUILT",
+      "event": "BUILDING->BUILT",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:38:23.393Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-PREBUILD_APPROVED-BUILDING",
+      "event": "PREBUILD_APPROVED->BUILDING",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:38:23.898Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-BUILDING-BUILT",
+      "event": "BUILDING->BUILT",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:38:24.399Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-BUILT-TECHNICAL_EVALUATED",
+      "event": "BUILT->TECHNICAL_EVALUATED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:40:06.805Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-BUILT-TECHNICAL_EVALUATED",
+      "event": "BUILT->TECHNICAL_EVALUATED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:40:07.299Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-TECHNICAL_EVALUATED-VISUAL_CAPTURED",
+      "event": "TECHNICAL_EVALUATED->VISUAL_CAPTURED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:41:28.398Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-TECHNICAL_EVALUATED-VISUAL_CAPTURED",
+      "event": "TECHNICAL_EVALUATED->VISUAL_CAPTURED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:41:28.895Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-VISUAL_CAPTURED-DESIGN_EVALUATED",
+      "event": "VISUAL_CAPTURED->DESIGN_EVALUATED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:42:33.891Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-VISUAL_CAPTURED-DESIGN_EVALUATED",
+      "event": "VISUAL_CAPTURED->DESIGN_EVALUATED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:42:34.392Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v1-1-DESIGN_EVALUATED-REVIEW_READY",
+      "event": "DESIGN_EVALUATED->REVIEW_READY",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:52:04.798Z"
+    },
+    {
+      "event_id": "transition-run-case-ee9eaf0dc9-v2-1-DESIGN_EVALUATED-REVIEW_READY",
+      "event": "DESIGN_EVALUATED->REVIEW_READY",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-01T06:52:04.798Z"
+    },
+    {
+      "event_id": "batch-review-ready-case-ee9eaf0dc9",
+      "event": "batch-review-ready",
+      "slot": null,
+      "artifact_ref": "runs/case-ee9eaf0dc9/review-package.html",
+      "timestamp": "2026-09-01T06:52:04.798Z"
     }
   ],
   "created_at": "2026-08-27T11:56:10.881Z",
-  "updated_at": "2026-08-30T19:44:21.487Z"
+  "updated_at": "2026-09-01T06:52:04.798Z"
 }

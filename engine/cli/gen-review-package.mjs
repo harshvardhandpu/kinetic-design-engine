@@ -52,6 +52,24 @@ async function collectCaptureLinks(caseDir, slot, captureRef, gymRoot) {
   return links;
 }
 
+async function collectReferenceCaptureLinks(caseDir) {
+  const observationPath = join(caseDir, 'reference', 'reference-observation.json');
+  if (!await exists(observationPath)) return [];
+  const observation = await readJson(observationPath);
+  const links = [];
+  for (const capture of observation.captures ?? []) {
+    if (!capture?.artifact_path || !capture?.capture_id) continue;
+    const absolute = resolve(caseDir, capture.artifact_path);
+    if (!absolute.startsWith(`${caseDir}/`) || !await exists(absolute)) continue;
+    links.push({
+      label: `reference:${capture.capture_id}`,
+      href: rel(caseDir, absolute),
+      capture_id: capture.capture_id,
+    });
+  }
+  return links;
+}
+
 async function collectReportLink(caseDir, ref, gymRoot, label) {
   if (typeof ref !== 'string') return null;
   const absolute = join(gymRoot, ref);
@@ -187,10 +205,7 @@ async function generatePhase25Package(caseId, rec, caseDir, gymRoot, repoGym) {
     const record = subject.slot ? rec.slots?.[subject.slot] : null;
     const links = [];
     if (subject.key === 'reference') {
-      for (const slot of ['V0', 'V1', 'V2']) {
-        const captureRef = rec.slots?.[slot]?.refs?.capture_manifest;
-        for (const link of await collectCaptureLinks(caseDir, 'reference', captureRef, gymRoot)) links.push(link);
-      }
+      links.push(...await collectReferenceCaptureLinks(caseDir));
     } else if (record) {
       links.push(...await collectCaptureLinks(caseDir, subject.slot, record.refs?.capture_manifest, gymRoot));
       const design = await collectReportLink(caseDir, record.refs?.design_evaluation, gymRoot, `${subject.slot}-design-evaluation`);

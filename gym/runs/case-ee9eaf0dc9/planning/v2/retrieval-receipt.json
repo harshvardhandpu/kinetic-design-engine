@@ -1,0 +1,109 @@
+{
+  "schema": "kinetic/gym/retrieval-receipt@0.1",
+  "receipt_id": "rr-4e06c56bdba82d4c445d",
+  "case_id": "case-ee9eaf0dc9",
+  "variant_id": "V2",
+  "query": "creative studio editorial portfolio transmission log motion typography",
+  "normalized_tokens": [
+    "creative",
+    "editorial",
+    "log",
+    "motion",
+    "portfolio",
+    "studio",
+    "transmission",
+    "typography"
+  ],
+  "filters": {},
+  "registry_version": "0.1.2",
+  "registry_sha256": "2e05e111be67230c1f26524368ad7bcb298a4bd483f39f4d6dbf8c56d443072c",
+  "index_hashes": [
+    "0847cf16f97eb8b862328dbe19f22d7718a6795a92ababf2b2737b480da8f751",
+    "0a98b093dd6408ed915276521ca1956731e4a21782341342c2947bac8d302963",
+    "0c263826911e7b399949cd695a2c1c17fb2177f68fa85aee776dc6059f968f3c",
+    "2e05e111be67230c1f26524368ad7bcb298a4bd483f39f4d6dbf8c56d443072c",
+    "3ada0067a20cf11b71bc17a93fb5233e63d9b84f0fcc7c0089b2c97e9331ff9a",
+    "cea3c536a818181f29d7dd4ca6bddc973c9f1a984607c6f0bc8de27917775ff1"
+  ],
+  "design_cases_retrieved": [
+    {
+      "case_id": "case-ee9eaf0dc9",
+      "score": 7,
+      "retrieval_reason": "selected by validated VariantBrief DesignCase provenance",
+      "knowledge_used": [
+        "Treat typography as the primary composition system by pairing emphatic grotesk fragments with editorial serif counter-rhythm.",
+        "Use generous paper-like whitespace and offset media to pace a long portfolio narrative instead of filling a uniform card grid.",
+        "Preserve the visual concept on mobile through deliberate re-composition rather than simple proportional shrinking.",
+        "Make interactive affordance visible at the media surface; the project-hover cursor links action and content.",
+        "Keep the shell restrained so project imagery and one saturated accent can provide local emphasis.",
+        "avoid: Copying Wanaka branding, artwork, text, fonts, source code or exact section geometry would violate the observe-only boundary.",
+        "avoid: Treating transformed-element counts or still frames as proof of motion quality would overstate the evidence."
+      ]
+    }
+  ],
+  "sources_retrieved": [
+    {
+      "source_id": "src-cuvii-labs-motion",
+      "score": 2,
+      "retrieval_reason": "Use the audited motion-study category to require observable transmission trigger and checkpoint states without copying implementation or media.",
+      "knowledge_used": [
+        "Motion fidelity should be studied through explicit trigger and checkpoint states."
+      ],
+      "usage_mode": "PRINCIPLE",
+      "rights_allowed": true,
+      "rights_evidence_urls": [
+        "https://labs.cuvii.dev/volume/motion",
+        "https://labs.cuvii.dev/robots.txt"
+      ]
+    },
+    {
+      "source_id": "src-inspotype-discovery",
+      "score": 1,
+      "retrieval_reason": "Use the audited typography-discovery category to reason about role pairing while selecting only system substitutes.",
+      "knowledge_used": [
+        "Typeface roles and pairing can be evaluated independently of copying a proprietary font asset."
+      ],
+      "usage_mode": "PRINCIPLE",
+      "rights_allowed": true,
+      "rights_evidence_urls": [
+        "https://inspotype.com/discovery"
+      ]
+    },
+    {
+      "source_id": "src-seesaw",
+      "score": 1,
+      "retrieval_reason": "Use audited curated-design context for editorial composition comparison while the Wanaka DesignCase remains the primary reference.",
+      "knowledge_used": [
+        "Curated website references are comparison evidence, not reusable source material."
+      ],
+      "usage_mode": "PRINCIPLE",
+      "rights_allowed": true,
+      "rights_evidence_urls": [
+        "https://www.seesaw.website/"
+      ]
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "candidate_id": "case-6f67d60006",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-77a4f7b7b5",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-98d4bd4196",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-fe653973ef",
+      "reason": "not selected by validated VariantBrief provenance"
+    }
+  ],
+  "recipes_selected": [],
+  "primitives_selected": [],
+  "tools_selected": [],
+  "obsidian_notes_used": [],
+  "created_at": "2026-09-01T06:26:27.592Z"
+}

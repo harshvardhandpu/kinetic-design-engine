@@ -1,0 +1,7 @@
+{
+  "schema": "kinetic/gym/prebuild-review-receipt@0.1",
+  "case_id": "case-ee9eaf0dc9",
+  "slot": "V1",
+  "review_ref": "runs/case-ee9eaf0dc9/planning/v1/prebuild-review.json",
+  "review_sha256": "57dc0f3f39602d6703aef4ad116d9ee4b1a2d1a3bf5ce94b827da58a3ac56ac9"
+}

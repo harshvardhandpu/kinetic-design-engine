@@ -1,0 +1,88 @@
+{
+  "schema": "kinetic/technical-evaluation@0.1",
+  "case_id": "case-ee9eaf0dc9",
+  "variant_id": "V1",
+  "result": "pass",
+  "browser_evaluation": {
+    "schema": "kinetic/evaluation@0.1",
+    "url": "http://127.0.0.1:45617/",
+    "viewport": "desktop",
+    "at": "2026-09-01T06:39:24.229Z",
+    "gates": {
+      "technical": {
+        "producer": "objective",
+        "checks": {
+          "kinetic_elements": [],
+          "kinetic_count": 0,
+          "motion_token_source_validation": "node-side-required",
+          "title_present": true,
+          "h1_count": 1,
+          "images_broken": 0,
+          "links_empty_href": 0
+        },
+        "result": "pass"
+      },
+      "responsive": {
+        "producer": "objective",
+        "checks": {
+          "horizontal_overflow": false,
+          "scroll_width": 1440,
+          "client_width": 1440,
+          "escaping_elements": [],
+          "escaping_count": 0,
+          "possibly_clipped_text": 0,
+          "interaction_blockers": [],
+          "interaction_blocker_count": 0
+        },
+        "result": "pass",
+        "mobile": {
+          "producer": "objective",
+          "checks": {
+            "horizontal_overflow": false,
+            "scroll_width": 390,
+            "client_width": 390,
+            "escaping_elements": [],
+            "escaping_count": 0,
+            "possibly_clipped_text": 0,
+            "interaction_blockers": [],
+            "interaction_blocker_count": 0
+          },
+          "result": "pass"
+        }
+      },
+      "a11y": {
+        "producer": "heuristic",
+        "checks": {
+          "html_lang": true,
+          "interactive_count": 13,
+          "interactive_without_label": 0,
+          "tabindex_positive": 0,
+          "body_font_size": 16,
+          "motion_token_source_validation": "node-side-required",
+          "focus_visible_styles": true
+        },
+        "result": "pass"
+      },
+      "performance": {
+        "producer": "heuristic",
+        "checks": {
+          "dom_nodes": 126,
+          "will_change_count": 0,
+          "animations_running": 0,
+          "iframes": 0,
+          "large_images": 0,
+          "continuous_raf_hint": false
+        },
+        "result": "pass"
+      },
+      "design": {
+        "producer": "not-evaluated",
+        "result": "pending-vision-or-human",
+        "note": "aesthetic validation requires vision-capable review or human review; DOM/style probes alone cannot qualify design (Amendment G)."
+      }
+    }
+  },
+  "motion_token_report": "runs/case-ee9eaf0dc9/reports/motion-token-v1.json",
+  "blocking_gates": [],
+  "created_at": "2026-09-01T06:40:06.805Z"
+}

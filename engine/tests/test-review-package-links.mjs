@@ -70,6 +70,13 @@ try {
   await mkdir(join(caseDir, 'variants', 'v1'), { recursive: true });
   await mkdir(join(caseDir, 'variants', 'v2'), { recursive: true });
   await mkdir(join(caseDir, 'variants', 'v0'), { recursive: true });
+  await mkdir(join(caseDir, 'reference', 'captures'), { recursive: true });
+  await writeFile(join(caseDir, 'reference', 'captures', 'reference-fixture.webp'), Buffer.from('s19-reference'));
+  await writeFile(join(caseDir, 'reference', 'reference-observation.json'), JSON.stringify({
+    schema: 'kinetic/gym/reference-observation@0.1',
+    case_id: caseId,
+    captures: [{ capture_id: 'reference-fixture', artifact_path: 'reference/captures/reference-fixture.webp' }],
+  }, null, 2));
   await writeFile(join(caseDir, 'variants', 'v0', 'index.html'), '<html><body>v0</body></html>');
   await writeFile(join(caseDir, 'variants', 'v1', 'index.html'), '<html><body>v1</body></html>');
   await writeFile(join(caseDir, 'variants', 'v2', 'index.html'), '<html><body>v2</body></html>');
@@ -180,6 +187,7 @@ try {
   // T44: no defaults / baseline present
   assert.match(generated.html, /IZANAMI/);
   assert.match(generated.html, /data-role="rejected-baseline"/);
+  assert.match(generated.html, /reference:reference-fixture/);
   assert.doesNotMatch(generated.html, /\schecked(\s|>|=)/i);
   assert.doesNotMatch(generated.html, /\sselected(\s|>|=)/i);
   assert.match(generated.html, /id="export-decision"[^>]*\bdisabled\b/);

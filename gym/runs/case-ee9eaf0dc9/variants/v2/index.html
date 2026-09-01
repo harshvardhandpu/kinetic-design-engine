@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <meta name="description" content="Night Signal — a fictional studio receiving ideas, systems and visual transmissions.">
+  <title>Night Signal — Transmission Log</title>
+  <style>
+    :root {
+      --ink: #101522;
+      --ink-soft: #192235;
+      --chalk: #eee9dc;
+      --muted: #8892a4;
+      --blue: #4b76ff;
+      --coral: #ff6a4b;
+      --lime: #c9ee56;
+      --line: rgba(238,233,220,.26);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --kinetic-duration-fast: 150ms;
+      --kinetic-duration-med: 300ms;
+      --kinetic-duration-slow: 450ms;
+      --kinetic-duration-page: 1200ms;
+      --kinetic-easing-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --kinetic-easing-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+      --kinetic-easing-snap: cubic-bezier(0.2, 0, 0, 1);
+      --kinetic-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --kinetic-distance-reveal-y: 24px;
+      --kinetic-scale-soft: .96;
+      --kinetic-scale-identity: 1;
+      --kinetic-opacity-hidden: 0;
+      --kinetic-opacity-visible: 1;
+      --page: min(100% - 5rem, 1320px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ink); color: var(--chalk); font-family: var(--sans); text-rendering: optimizeLegibility; }
+    body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(rgba(75,118,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(75,118,255,.04) 1px, transparent 1px); background-size: 3.5rem 3.5rem; mask-image: linear-gradient(to bottom, black, transparent 75%); }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: .18rem solid var(--lime); outline-offset: .3rem; }
+    .skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 20; padding: .7rem 1rem; background: var(--chalk); color: var(--ink); transform: translateY(calc(-3 * var(--kinetic-distance-reveal-y))); }
+    .skip-link:focus { transform: none; }
+    .shell { width: var(--page); margin-inline: auto; }
+
+    .site-header { position: sticky; top: 0; z-index: 10; border-bottom: .06rem solid var(--line); background: rgba(16,21,34,.94); }
+    .nav { min-height: 5.8rem; display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; }
+    .brand { display: inline-flex; align-items: center; gap: .75rem; width: max-content; color: var(--chalk); font-size: .74rem; font-weight: 850; letter-spacing: .13em; text-decoration: none; text-transform: uppercase; }
+    .brand-mark { width: 1.85rem; aspect-ratio: 1; display: grid; place-items: center; border: .08rem solid var(--coral); color: var(--coral); font: 800 .66rem/1 var(--mono); }
+    .nav-links { display: flex; gap: clamp(1.5rem, 3vw, 3.4rem); align-items: center; }
+    .nav-links a, .status { font-size: .67rem; font-weight: 760; letter-spacing: .11em; text-decoration: none; text-transform: uppercase; }
+    .nav-links a { position: relative; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -.45rem; height: .1rem; background: var(--coral); transition: right var(--kinetic-duration-med) var(--kinetic-easing-snap); }
+    .nav-links a:hover::after, .nav-links a:focus-visible::after { right: 0; }
+    .status { justify-self: end; color: var(--muted); font: 600 .62rem/1.2 var(--mono); letter-spacing: .06em; }
+    .status strong { color: var(--lime); font-weight: 800; }
+    .menu-button { display: none; border: 0; background: none; color: var(--chalk); font: 760 .7rem/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+
+    .hero { min-height: 61rem; position: relative; display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: clamp(2rem, 6vw, 7rem); padding: clamp(5rem, 10vw, 11rem) 0 6rem; overflow: clip; }
+    .time-rail { display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: .7rem 0; border-inline: .06rem solid var(--line); color: var(--muted); font: 600 .6rem/1 var(--mono); letter-spacing: .12em; writing-mode: vertical-rl; text-transform: uppercase; }
+    .time-rail strong { color: var(--coral); font-size: .73rem; }
+    .hero-content { position: relative; align-self: center; z-index: 2; }
+    .eyebrow, .timecode, .signal-label { color: var(--blue); font: 700 .65rem/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .hero h1 { max-width: 72rem; margin: 2.2rem 0 2.3rem; font-size: clamp(4.1rem, 10.5vw, 11.8rem); line-height: .78; letter-spacing: -.1em; font-weight: 900; text-transform: uppercase; }
+    .hero h1 em { color: var(--coral); font-family: var(--serif); font-size: .9em; font-weight: 400; letter-spacing: -.08em; text-transform: none; }
+    .hero-deck { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 48rem; align-items: end; }
+    .hero-deck p { max-width: 20rem; margin: 0; font: 400 clamp(1.25rem, 2vw, 1.8rem)/1.13 var(--serif); }
+    .hero-deck small { max-width: 15rem; color: var(--muted); font: 600 .64rem/1.5 var(--mono); }
+    .hero-marker { position: absolute; right: 7%; top: 14%; width: clamp(11rem, 22vw, 19rem); aspect-ratio: 1; border: .08rem solid rgba(75,118,255,.78); border-radius: 50%; }
+    .hero-marker::before, .hero-marker::after { content: ""; position: absolute; left: 50%; top: -1.8rem; width: .06rem; height: calc(100% + 3.6rem); background: var(--blue); transform: rotate(37deg); }
+    .hero-marker::after { transform: rotate(-37deg); background: var(--coral); }
+    .marker-dot { position: absolute; left: 68%; top: 28%; width: .7rem; aspect-ratio: 1; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 .35rem rgba(201,238,86,.15); }
+    .hero-signal { position: absolute; left: 0; right: 0; bottom: 7rem; height: 6rem; border-block: .08rem solid var(--line); background: repeating-linear-gradient(90deg, transparent 0 9%, rgba(75,118,255,.2) 9% 9.3%); }
+    .hero-signal::before { content: ""; position: absolute; left: 4%; right: 35%; top: 50%; height: .2rem; background: var(--coral); box-shadow: 18rem -1.5rem 0 -.03rem var(--lime), 31rem 1.2rem 0 -.03rem var(--blue); transform: rotate(-2deg); }
+    .hero-signal::after { content: "LISTEN / ALIGN / SEND"; position: absolute; right: 3%; top: 50%; color: var(--muted); font: 700 .58rem/1 var(--mono); letter-spacing: .14em; transform: translateY(-50%); }
+    .hero-cta { display: inline-flex; gap: .7rem; margin-top: 3.5rem; color: var(--chalk); font-size: .68rem; font-weight: 800; letter-spacing: .12em; text-decoration: none; text-transform: uppercase; }
+    .hero-cta span { color: var(--coral); }
+
+    .room { padding: 8rem 0 12rem; border-top: .08rem solid var(--line); }
+    .room-head { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: end; margin-bottom: 5rem; }
+    .room-head h2, .frequency h2 { max-width: 37rem; margin: 0; font: 400 clamp(3.5rem, 6.8vw, 8rem)/.86 var(--serif); letter-spacing: -.075em; }
+    .room-head h2 em { color: var(--lime); }
+    .room-head p { max-width: 22rem; margin: 0; color: var(--muted); font: 600 .72rem/1.55 var(--mono); }
+    .room-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; border: .08rem solid var(--line); background: var(--line); }
+    .room-cell { min-height: 14rem; padding: 1.4rem; background: var(--ink); }
+    .room-cell strong { display: block; margin-bottom: 5rem; color: var(--coral); font: 800 .72rem/1 var(--mono); }
+    .room-cell p { max-width: 13rem; margin: 0; font-size: clamp(1.2rem, 1.8vw, 1.6rem); font-weight: 760; letter-spacing: -.035em; }
+    .room-cell:nth-child(2) strong { color: var(--lime); }
+    .room-cell:nth-child(3) strong { color: var(--blue); }
+
+    .logs { padding-bottom: 12rem; }
+    .logs-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; padding-bottom: 2rem; border-bottom: .16rem solid var(--chalk); }
+    .logs-head h2 { margin: 0; color: var(--chalk); font-size: clamp(3rem, 6vw, 7rem); line-height: .82; letter-spacing: -.08em; text-transform: uppercase; }
+    .logs-head p { max-width: 15rem; margin: 0; color: var(--muted); font: 600 .68rem/1.45 var(--mono); }
+    .transmission { display: grid; grid-template-columns: 5rem minmax(0, 1.2fr) minmax(15rem, .8fr); gap: clamp(1.5rem, 4vw, 5rem); align-items: center; min-height: 32rem; padding: 4rem 0; border-bottom: .08rem solid var(--line); }
+    .transmission:nth-child(even) { grid-template-columns: 5rem minmax(15rem, .8fr) minmax(0, 1.2fr); }
+    .transmission:nth-child(even) .transmission-art { order: 3; }
+    .transmission:nth-child(even) .transmission-copy { order: 2; }
+    .transmission:nth-child(even) .transmission-code { order: 1; }
+    .transmission-code { align-self: stretch; display: flex; align-items: flex-start; justify-content: center; padding-top: .3rem; border-right: .06rem solid var(--line); color: var(--muted); font: 700 .62rem/1 var(--mono); writing-mode: vertical-rl; }
+    .transmission-code strong { color: var(--coral); }
+    .transmission-art { position: relative; min-height: 24rem; overflow: hidden; isolation: isolate; background: var(--ink-soft); }
+    .transmission-art::before { content: ""; position: absolute; inset: 12%; border: .08rem solid var(--blue); background: repeating-linear-gradient(0deg, transparent 0 13%, rgba(75,118,255,.18) 13% 13.6%), repeating-linear-gradient(90deg, transparent 0 11%, rgba(75,118,255,.18) 11% 11.6%); }
+    .transmission-art::after { content: ""; position: absolute; width: 58%; height: 58%; left: 20%; top: 21%; border: 1.3rem solid var(--coral); border-radius: 50%; border-left-color: transparent; transform: rotate(-32deg); }
+    .transmission-two { background: #1c2630; }
+    .transmission-two::before { inset: 0; border: 0; background: linear-gradient(135deg, transparent 0 32%, rgba(201,238,86,.82) 32% 33%, transparent 33% 48%, rgba(75,118,255,.8) 48% 49%, transparent 49%), repeating-linear-gradient(0deg, transparent 0 18%, rgba(238,233,220,.12) 18% 18.6%); }
+    .transmission-two::after { width: 66%; height: 34%; left: 17%; top: 33%; border: .08rem solid var(--chalk); border-radius: 0; background: var(--coral); box-shadow: 1.2rem 1.2rem 0 var(--blue); transform: rotate(6deg); }
+    .transmission-three { background: #161d2b; }
+    .transmission-three::before { inset: 8%; border-color: rgba(238,233,220,.42); background: repeating-linear-gradient(90deg, transparent 0 8%, rgba(238,233,220,.15) 8% 8.6%), repeating-linear-gradient(0deg, transparent 0 12%, rgba(238,233,220,.12) 12% 12.6%); }
+    .transmission-three::after { width: 72%; height: .35rem; left: 14%; top: 48%; border: 0; border-radius: 0; background: var(--lime); box-shadow: 0 1.5rem 0 var(--coral), 0 -1.5rem 0 var(--blue); transform: rotate(-18deg); }
+    .trace-bracket { position: absolute; z-index: 2; left: 10%; right: 100%; top: 12%; height: 76%; border-block: .15rem solid var(--coral); border-right: .15rem solid var(--coral); transition: right var(--kinetic-duration-med) var(--kinetic-easing-snap); }
+    .trace-title {
+      position: absolute;
+      z-index: 3;
+      left: 9%;
+      bottom: 10%;
+      color: var(--chalk);
+      font: 900 clamp(1.7rem, 4vw, 4.5rem)/.8 var(--sans);
+      letter-spacing: -.08em;
+      text-transform: uppercase;
+      opacity: var(--kinetic-opacity-hidden);
+      transform: translateX(calc(-1 * var(--kinetic-distance-reveal-y)));
+      transition: opacity var(--kinetic-duration-fast) var(--kinetic-easing-standard), transform var(--kinetic-duration-med) var(--kinetic-easing-snap);
+    }
+    .transmission-art:hover .trace-bracket, .transmission-art:focus-visible .trace-bracket { right: 8%; }
+    .transmission-art:hover .trace-title, .transmission-art:focus-visible .trace-title {
+      opacity: var(--kinetic-opacity-visible);
+      transform: none;
+    }
+    .transmission-copy .signal-label { display: block; margin-bottom: 1.7rem; color: var(--coral); }
+    .transmission-copy h3 { max-width: 22rem; margin: 0 0 1.2rem; color: var(--chalk); font-size: clamp(2.7rem, 5.2vw, 6rem); line-height: .81; letter-spacing: -.085em; text-transform: uppercase; }
+    .transmission-copy p { max-width: 18rem; margin: 0; color: var(--chalk); font: 400 clamp(1.25rem, 1.8vw, 1.7rem)/1.14 var(--serif); }
+    .transmission-copy small { display: block; max-width: 17rem; margin-top: 2rem; color: var(--muted); font: 600 .64rem/1.45 var(--mono); }
+
+    .frequency { display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; padding: 2rem 0 11rem; border-top: .16rem solid var(--chalk); }
+    .frequency h2 em { color: var(--coral); font-family: var(--sans); font-weight: 900; }
+    .frequency-list { border-top: .08rem solid var(--line); }
+    .frequency-row { display: grid; grid-template-columns: 1.2fr 1.5fr auto; gap: 1rem; align-items: baseline; padding: 1.25rem 0; border-bottom: .08rem solid var(--line); }
+    .frequency-row strong { font-size: clamp(1.15rem, 2vw, 1.5rem); }
+    .frequency-row span { color: var(--muted); font: 600 .65rem/1.3 var(--mono); }
+    .frequency-row b { color: var(--lime); }
+
+    .contact { padding: 7rem 0 3rem; background: var(--coral); color: var(--ink); }
+    .contact h2 { max-width: 62rem; margin: 0; font-size: clamp(4rem, 10vw, 11rem); line-height: .78; letter-spacing: -.1em; text-transform: uppercase; }
+    .contact h2 em { color: var(--chalk); font: 400 .9em/.8 var(--serif); letter-spacing: -.08em; text-transform: none; }
+    .contact-links { display: flex; gap: 2.5rem; flex-wrap: wrap; margin-top: 5rem; }
+    .contact-links a { color: var(--ink); font-size: .72rem; font-weight: 850; letter-spacing: .08em; text-underline-offset: .3em; text-transform: uppercase; }
+    footer { display: flex; justify-content: space-between; gap: 2rem; margin-top: 8rem; color: rgba(16,21,34,.72); font: 600 .61rem/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+
+    .reveal {
+      opacity: var(--kinetic-opacity-hidden);
+      transform: translateY(var(--kinetic-distance-reveal-y));
+      transition: transform var(--kinetic-duration-page) var(--kinetic-easing-out-expo), opacity var(--kinetic-duration-slow) var(--kinetic-easing-out-expo);
+    }
+    .reveal.is-visible {
+      opacity: var(--kinetic-opacity-visible);
+      transform: none;
+    }
+
+    @media (max-width: 760px) {
+      :root { --page: min(100% - 2rem, 44rem); }
+      .nav { min-height: 4.9rem; grid-template-columns: 1fr auto; }
+      .status { display: none; }
+      .menu-button { display: block; }
+      .nav-links { position: absolute; top: 4.9rem; left: 1rem; right: 1rem; display: none; flex-direction: column; align-items: stretch; gap: 1.2rem; padding: 1.2rem; background: var(--chalk); color: var(--ink); }
+      .nav-links[data-open="true"] { display: flex; }
+      .hero { min-height: 59rem; display: block; padding: 4rem 0 2rem; }
+      .time-rail { position: absolute; right: 0; top: 3.5rem; bottom: auto; height: 7rem; border-inline: 0; border-block: .06rem solid var(--line); writing-mode: horizontal-tb; flex-direction: row; width: 100%; justify-content: space-between; padding: .7rem 0; }
+      .hero-content { padding-top: 7rem; }
+      .hero h1 { max-width: 25rem; font-size: clamp(3.8rem, 17vw, 6.5rem); }
+      .hero-deck { grid-template-columns: 1fr; gap: 1.4rem; }
+      .hero-marker { right: -3rem; top: 33%; width: 14rem; }
+      .hero-signal { bottom: 3rem; }
+      .hero-signal::after { right: 1rem; font-size: .52rem; }
+      .room { padding: 6rem 0 8rem; }
+      .room-head, .frequency { grid-template-columns: 1fr; gap: 2.5rem; }
+      .room-head h2, .frequency h2 { font-size: clamp(3.8rem, 17vw, 6.5rem); }
+      .room-grid { grid-template-columns: 1fr; }
+      .room-cell { min-height: 10rem; }
+      .room-cell strong { margin-bottom: 3rem; }
+      .logs { padding-bottom: 8rem; }
+      .logs-head { display: block; }
+      .logs-head p { margin-top: 1.5rem; }
+      .transmission, .transmission:nth-child(even) { display: flex; flex-direction: column; align-items: stretch; gap: 2rem; min-height: auto; padding: 3.5rem 0; }
+      .transmission-code, .transmission:nth-child(even) .transmission-code { order: 1; align-self: auto; justify-content: flex-start; padding: 0 0 .7rem; border-right: 0; border-bottom: .06rem solid var(--line); writing-mode: horizontal-tb; }
+      .transmission-art, .transmission:nth-child(even) .transmission-art { order: 2; min-height: 24rem; }
+      .transmission-copy, .transmission:nth-child(even) .transmission-copy { order: 3; }
+      .transmission-copy h3 { font-size: 3.8rem; }
+      .trace-title {
+        opacity: var(--kinetic-opacity-visible);
+        transform: none;
+      }
+      .trace-bracket { right: 8%; }
+      .frequency { padding-bottom: 8rem; }
+      .frequency-row { grid-template-columns: 1fr auto; gap: .6rem; }
+      .frequency-row span { grid-column: 1 / -1; grid-row: 2; }
+      .contact { padding-top: 6rem; }
+      footer { flex-direction: column; align-items: flex-start; margin-top: 6rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .reveal {
+        opacity: var(--kinetic-opacity-visible);
+        transform: none;
+      }
+      .trace-bracket, .trace-title, .skip-link { transform: none; }
+      .trace-bracket { right: 8%; }
+      .trace-title { opacity: var(--kinetic-opacity-visible); }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to transmissions</a>
+  <header class="site-header">
+    <nav class="nav shell" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="Night Signal home"><span class="brand-mark" aria-hidden="true">NS</span>Night Signal</a>
+      <div class="nav-links" id="site-links" data-open="false"><a href="#room">Signal room</a><a href="#logs">Logs</a><a href="#frequency">Frequency</a><a href="#contact">Contact</a></div>
+      <div class="status"><strong>On air</strong> / 03:17 UTC</div>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-links"><span class="menu-label">Menu</span>&nbsp;<span class="menu-icon" aria-hidden="true">+</span></button>
+    </nav>
+  </header>
+
+  <main id="main" data-kinetic-capture-ready>
+    <section class="hero shell" id="top" aria-labelledby="hero-title">
+      <div class="time-rail reveal"><strong>03:17</strong><span>signal / open</span><span>north desk</span></div>
+      <div class="hero-content reveal">
+        <span class="eyebrow">Independent practice / transmission 01</span>
+        <h1 id="hero-title">Stay close to the <em>signal.</em></h1>
+        <div class="hero-deck"><p>Night Signal builds identities and digital places for ideas arriving after dark.</p><small>Identity systems / editorial interfaces / visual direction</small></div>
+        <a class="hero-cta" href="#room">Tune into the room <span>↘</span></a>
+        <div class="hero-marker" aria-hidden="true"><span class="marker-dot"></span></div>
+      </div>
+      <div class="hero-signal" aria-hidden="true"></div>
+    </section>
+
+    <section class="room shell reveal" id="room" aria-labelledby="room-title">
+      <div class="room-head"><h2 id="room-title">Make the <em>frequency</em> useful.</h2><p>We turn a half-heard idea into a signal people can find, read and carry forward.</p></div>
+      <div class="room-grid">
+        <div class="room-cell"><strong>01 / Receive</strong><p>Find the live wire inside the brief.</p></div>
+        <div class="room-cell"><strong>02 / Shape</strong><p>Give the signal a system with room to move.</p></div>
+        <div class="room-cell"><strong>03 / Send</strong><p>Make the next action unmistakably visible.</p></div>
+      </div>
+    </section>
+
+    <section class="logs shell" id="logs" aria-labelledby="logs-title">
+      <div class="logs-head reveal"><h2 id="logs-title">Transmission logs</h2><p>Three received studies, indexed by the work they set in motion.</p></div>
+
+      <article class="transmission reveal">
+        <div class="transmission-code"><strong>TX—01</strong>&nbsp; / &nbsp;RECEIVED</div>
+        <a class="transmission-art" href="#bright-interval" aria-label="Open Bright Interval transmission"><span class="trace-bracket" aria-hidden="true"></span><span class="trace-title" aria-hidden="true">Bright interval</span></a>
+        <div class="transmission-copy" id="bright-interval"><span class="signal-label">Identity / public room</span><h3>Bright Interval</h3><p>A visual system for a place where research becomes a shared evening.</p><small>Signal family / interface direction / 2026</small></div>
+      </article>
+
+      <article class="transmission reveal">
+        <div class="transmission-code"><strong>TX—02</strong>&nbsp; / &nbsp;HELD</div>
+        <a class="transmission-art transmission-two" href="#low-orbit" aria-label="Open Low Orbit transmission"><span class="trace-bracket" aria-hidden="true"></span><span class="trace-title" aria-hidden="true">Low orbit</span></a>
+        <div class="transmission-copy" id="low-orbit"><span class="signal-label">Archive / editorial</span><h3>Low Orbit</h3><p>An archive that keeps its most useful fragments in view.</p><small>Publication system / digital archive / 2025</small></div>
+      </article>
+
+      <article class="transmission reveal">
+        <div class="transmission-code"><strong>TX—03</strong>&nbsp; / &nbsp;OPEN</div>
+        <a class="transmission-art transmission-three" href="#after-rain" aria-label="Open After Rain transmission"><span class="trace-bracket" aria-hidden="true"></span><span class="trace-title" aria-hidden="true">After rain</span></a>
+        <div class="transmission-copy" id="after-rain"><span class="signal-label">Campaign / moving image</span><h3>After Rain</h3><p>A campaign language for the moment a city begins again.</p><small>Campaign direction / motion language / 2024</small></div>
+      </article>
+    </section>
+
+    <section class="frequency shell reveal" id="frequency" aria-labelledby="frequency-title">
+      <h2 id="frequency-title">On the <em>same</em> line.</h2>
+      <div class="frequency-list">
+        <div class="frequency-row"><strong>Field recordings</strong><span>small notes from the practice</span><b>↗</b></div>
+        <div class="frequency-row"><strong>Open channel</strong><span>projects with a public afterlife</span><b>↗</b></div>
+        <div class="frequency-row"><strong>Signal loss</strong><span>what a system chooses not to say</span><b>↗</b></div>
+        <div class="frequency-row"><strong>Night shift</strong><span>a monthly dispatch from the desk</span><b>↗</b></div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact" aria-labelledby="contact-title">
+      <div class="shell"><h2 id="contact-title">Send the <em>question.</em><br>We’ll tune in.</h2><div class="contact-links"><a href="mailto:hello@example.com">Open a channel</a><a href="#top">Back to the top ↑</a></div><footer><span>Night Signal / fictional practice</span><span>Internal original candidate / 2026</span></footer></div>
+    </section>
+  </main>
+
+  <script>
+    const menuButton = document.querySelector('.menu-button');
+    const menu = document.querySelector('#site-links');
+    const menuLabel = menuButton.querySelector('.menu-label');
+    const menuIcon = menuButton.querySelector('.menu-icon');
+    const setMenu = (open) => {
+      menu.dataset.open = String(open);
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuLabel.textContent = open ? 'Close' : 'Menu';
+      menuIcon.textContent = open ? '×' : '+';
+    };
+    menuButton.addEventListener('click', () => setMenu(menu.dataset.open !== 'true'));
+    menu.addEventListener('click', () => setMenu(false));
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      document.querySelectorAll('.reveal').forEach((node) => node.classList.add('is-visible'));
+    } else {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+        });
+      }, { threshold: .12 });
+      document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
+    }
+  </script>
+</body>
+</html>

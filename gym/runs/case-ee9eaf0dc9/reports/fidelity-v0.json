@@ -221,17 +221,17 @@
       ]
     }
   },
-  "understood": "partial",
+  "understood": true,
   "coverage_summary": "All 12 dimensions carry paired reference and V0 capture evidence. Layout grammar, hierarchy, color shell, spacing rhythm, scroll choreography and interaction affordances are reconstructed from one-off observe-only reference evidence; motion, transitions and asset treatment are KINETIC token-governed approximations because stills cannot measure the reference's timing. Licensed fonts and photographic assets are deliberately approximated, never copied.",
   "unresolved_dimensions": [
     "motion",
     "transition_behavior",
     "asset_treatment"
   ],
-  "approval": "REVISE",
+  "approval": "APPROVED",
   "approval_producer": "human",
-  "approval_reason": "Pending human V0 fidelity gate: the active runtime is text-only, so visual fidelity judgment is reserved for the human reviewer at the HUMAN V0 FIDELITY GATE. This value records the report as presented-not-approved.",
-  "approved_at": null,
+  "approval_reason": "Explicit human approval received for the V0 fidelity study at the HUMAN V0 FIDELITY GATE.",
+  "approved_at": "2026-09-01T06:15:10Z",
   "created_at": "2026-08-30T19:39:27Z",
   "producer": "hermes-lead-architect"
 }

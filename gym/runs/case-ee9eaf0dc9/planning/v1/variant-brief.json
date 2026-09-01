@@ -1,0 +1,185 @@
+{
+  "schema": "kinetic/gym/variant-brief@0.1",
+  "variant_id": "V1",
+  "case_id": "case-ee9eaf0dc9",
+  "design_case_ids_used": [
+    "case-ee9eaf0dc9"
+  ],
+  "surface": "creative-studio portfolio",
+  "goal": "Translate the studied editorial grammar into an original cartographic portfolio where projects read as coordinates rather than cards.",
+  "direction_name": "Open Latitude / Atlas of Making",
+  "core_concept": "A fictional practice mapped as a field notebook: a bright coordinate grid, oversized latitude marks and project notes turn the studio portfolio into an instrument for finding relationships.",
+  "composition_plan": {
+    "sections": [
+      "coordinate-led thesis hero",
+      "practice atlas",
+      "three field-note projects",
+      "dispatch index",
+      "open invitation"
+    ],
+    "spatial_system": "A split desktop canvas uses a persistent coordinate rail and asymmetrical field-note panels; mobile collapses the rail into a compact masthead and stacks notes with their coordinates intact.",
+    "visual_hierarchy": "The latitude thesis leads, coordinate labels provide orientation, project notes carry evidence, and the utility rail remains quiet but always available.",
+    "pacing": "Short map annotations alternate with long blank survey fields so each project feels like a deliberate plotted stop rather than a feed item.",
+    "density": "Moderate, instrument-like density around the rail and project metadata against broad unmarked paper fields.",
+    "focal_points": [
+      "oversized latitude thesis",
+      "coordinate rail and live plot marker",
+      "scan-beam project artwork",
+      "open dispatch panel"
+    ]
+  },
+  "typography_plan": {
+    "display_role": "A wide system sans carries the thesis in compact stacked lines with visible tracking and numeric interruptions; no source font files.",
+    "body_role": "A system serif handles field-note descriptions as measured editorial annotations; no source font files.",
+    "scale_strategy": "Fluid clamp sizes preserve the thesis as a poster at desktop and a narrow stacked instrument label at mobile.",
+    "contrast_strategy": "Width, tracking, numeric labels and a single cobalt/orange signal pair establish hierarchy instead of ornamental gradients.",
+    "rhythm": "Condensed uppercase coordinates alternate with sentence-case notes and a recurring hairline rule.",
+    "responsive_behavior": "The coordinate rail becomes a top strip; project panels keep their plotted label and reorder into a single readable column."
+  },
+  "art_direction": {
+    "imagery_strategy": "Use CSS-authored contour fields, plotted points and flat geometric signals as abstract stand-ins for project media; preserve the role of a visual artifact without source imagery.",
+    "asset_strategy": "No external assets, logos, copied illustrations, source imagery, source fonts, source code or source copy; all material is authored in this variant.",
+    "texture": "Clean survey paper with thin rules, small plotted dots and one coarse grid texture built from CSS gradients.",
+    "material": "Matte paper, cobalt ink, rust-orange signal marks and a pale blue survey plane create the feel of a field instrument.",
+    "depth": "Depth comes from inset map panels, offset registration marks and layered flat planes rather than photographic realism or WebGL.",
+    "layering": "The rail, hero plot and project scan markers form an intentional two-dimensional instrument stack; notes sit on a quieter plane.",
+    "color_logic": "Warm paper and deep ink are the base; cobalt indicates orientation and rust-orange marks the active signal or invitation."
+  },
+  "motion_plan": {
+    "signature_move": {
+      "name": "latitude scan",
+      "central_idea": "A thin survey beam crosses the active project field and resolves its plotted coordinate into a visible annotation.",
+      "trigger": "pointer hover or keyboard focus on a field-note project",
+      "visual_transformation": "The beam extends across the artwork, the plotted marker shifts to the coordinate edge and the annotation becomes fully legible.",
+      "purpose": "Make the relationship between project artifact and its context legible through one purposeful instrument action.",
+      "content_relationship": "The scan is anchored to the active field-note artwork and exposes information belonging only to that project.",
+      "reduced_motion_alternative": "Keep the beam and coordinate annotation statically visible on focus/hover with no translation or expansion.",
+      "capture_checkpoint": "desktop first field-note hover after the scan beam and coordinate annotation are fully visible"
+    },
+    "scroll_storyboard": [
+      "Coordinate thesis arrives as a composed poster with a quiet rail.",
+      "Practice atlas introduces the vocabulary in a short plotted list.",
+      "Field-note projects alternate panel alignment while their coordinate labels remain anchored.",
+      "Dispatch index compresses the map into a final open invitation."
+    ],
+    "transitions": [
+      "opacity and translate transitions use canonical KINETIC motion tokens",
+      "latitude scan uses canonical med/slow duration and out-expo easing tokens",
+      "no autonomous carousel, video or looping animation"
+    ],
+    "interaction_states": [
+      "desktop field-note hover",
+      "keyboard field-note focus",
+      "mobile menu control",
+      "reduced-motion static scan state"
+    ],
+    "reduced_motion_behavior": "Disable scan translation and reveal transforms; preserve all plotted annotations, hierarchy, focus visibility and final positions.",
+    "token_exceptions": []
+  },
+  "reference_transfer": {
+    "retained_principles": [
+      "mixed typography as primary composition",
+      "generous editorial pauses",
+      "asymmetrical media and copy rhythm",
+      "responsive re-composition rather than simple shrinking",
+      "an interaction affordance attached to the visual surface"
+    ],
+    "deliberately_rejected_principles": [
+      "source branding and project identities",
+      "source copy, naming and imagery",
+      "source font files and exact typesetting",
+      "rounded sculptural hero object",
+      "exact section geometry and hidden implementation"
+    ],
+    "prohibited_copying": [
+      "source imagery",
+      "source copy",
+      "source logo",
+      "source fonts/assets",
+      "source code",
+      "exact section geometry"
+    ]
+  },
+  "source_provenance": {
+    "design_reference_sources": [
+      {
+        "source_id": "src-seesaw",
+        "retrieval_reason": "Use audited curated-design context to compare editorial composition principles while the Wanaka DesignCase remains the primary reference.",
+        "knowledge_used": [
+          "Curated website references are comparison evidence, not reusable source material."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-seesaw"
+            ]
+          }
+        ]
+      }
+    ],
+    "motion_reference_sources": [
+      {
+        "source_id": "src-cuvii-labs-motion",
+        "retrieval_reason": "Use the audited motion-study category to require an observable scan trigger and checkpoint without copying implementation or media.",
+        "knowledge_used": [
+          "Motion fidelity should be studied through explicit trigger and checkpoint states."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "ENGINE-INFERENCE",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-cuvii-labs-motion"
+            ]
+          }
+        ]
+      }
+    ],
+    "typography_sources": [
+      {
+        "source_id": "src-inspotype-discovery",
+        "retrieval_reason": "Use the audited typography-discovery category to reason about role pairing while selecting only system substitutes.",
+        "knowledge_used": [
+          "Typeface roles and pairing can be evaluated independently of copying a proprietary font asset."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "ENGINE-INFERENCE",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-inspotype-discovery"
+            ]
+          }
+        ]
+      }
+    ],
+    "implementation_sources": [],
+    "tool_sources": []
+  },
+  "originality_plan": {
+    "composition_differences": [
+      "Persistent coordinate rail and plotted field-note panels replace V0's centered editorial shell.",
+      "A map-like thesis and compact dispatch index replace the V0 manifesto/capability sequence.",
+      "Panels use survey registration marks and a deliberate two-dimensional instrument language rather than sculptural collage."
+    ],
+    "typography_differences": [
+      "Wide system sans and numeric coordinate interruptions replace V0's heavy grotesk/serif hero pairing.",
+      "Field-note serif text is smaller and more annotation-like than V0's large reflective statements."
+    ],
+    "motion_differences": [
+      "The signature interaction is a coordinate scan beam resolving project context, not V0's expanding circular action marker.",
+      "Scroll reveals are staggered by plotted field rows and preserve a persistent orientation rail."
+    ],
+    "asset_non_reuse": "All imagery is newly authored CSS geometry; no Wanaka or V0 asset, logo, copy, artwork, font, code or project identity is reused.",
+    "signature_move_hypothesis": "A project-specific latitude scan can make context and artifact relationship memorable while remaining a substantive interaction rather than a decorative hover lift."
+  },
+  "quality_hypothesis": "If an original coordinate rail and latitude scan can preserve the reference's editorial hierarchy, whitespace and surface-attached interaction without repeating V0's composition, a human can compare two genuinely distinct interpretations of the studied grammar.",
+  "planning_exception": null,
+  "created_at": "2026-09-01T06:21:23Z",
+  "producer": "hermes-agent:gpt-5.6-luna"
+}

@@ -1,0 +1,382 @@
+{
+  "schema": "kinetic/gym/source-to-output-loss@0.1",
+  "report_id": "sol-ee9eaf0dc9-20260901",
+  "case_id": "case-ee9eaf0dc9",
+  "comparison_chain": [
+    "design-case:case-ee9eaf0dc9",
+    "V0",
+    "V1",
+    "V2"
+  ],
+  "stage_findings": {
+    "source_inspection": [
+      {
+        "finding_id": "loss-source-observation-boundary",
+        "stage": "source_inspection",
+        "subject_from": "design-case:case-ee9eaf0dc9",
+        "subject_to": "V0",
+        "label": "SOURCE-DERIVED",
+        "observation": "The reference was reduced to an authenticated DesignCase, observation record and observe-only captures; proprietary source assets and hidden implementation were not transferred into the candidate workspace.",
+        "quality_loss": "Exact source geometry, font metrics and artwork detail are intentionally unavailable to the implementation.",
+        "why": "The study must preserve the reference boundary and test grammar transfer rather than reproduce protected material.",
+        "avoidable": false,
+        "responsible_subsystem": "source-access boundary",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v0.json",
+          "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep future visual comparisons at the principle and evidence level; do not recover or import protected source assets.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.98
+      }
+    ],
+    "retrieval": [
+      {
+        "finding_id": "loss-retrieval-principle-only",
+        "stage": "retrieval",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 and V2 retrieval receipts resolve the same authenticated DesignCase and three rights-authorized principle sources used to frame typography, motion and editorial comparison.",
+        "quality_loss": "No source recipe, implementation dependency or proprietary asset is available to carry hidden behavior into either original.",
+        "why": "The rights registry and each brief's provenance intentionally permit principles, not source reconstruction.",
+        "avoidable": false,
+        "responsible_subsystem": "knowledge retrieval",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9",
+          "source:src-cuvii-labs-motion",
+          "source:src-inspotype-discovery",
+          "source:src-seesaw"
+        ],
+        "capture_refs": [
+          "cap-f1259aae2bedd3d7f7128e94594bc4be",
+          "cap-b0b0cc9a432845784cec75958d1eec30"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "If a later study needs a missing principle, add a separately audited registry source rather than broadening retrieval permissions.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.96
+      }
+    ],
+    "analysis": [
+      {
+        "finding_id": "loss-analysis-hidden-implementation",
+        "stage": "analysis",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "The analysis records observable hierarchy, whitespace, alternating media/copy rhythm and surface-attached interaction, while hidden source choreography remains unobserved.",
+        "quality_loss": "Unobserved implementation nuance cannot be measured as output fidelity and remains an explicit uncertainty.",
+        "why": "DOM and capture evidence cannot establish source behavior that was not observed or legally retrieved.",
+        "avoidable": "unknown",
+        "responsible_subsystem": "reference analysis",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-00c281d06f1faed620cdd242aa11ccfe",
+          "cap-2728e9fc742107682bd693d86e3b3157"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v0.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json",
+          "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Limit later remediation to observable capture checkpoints and human feedback; do not infer hidden choreography from pixels alone.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.93
+      }
+    ],
+    "planning": [
+      {
+        "finding_id": "loss-planning-divergent-candidates",
+        "stage": "planning",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1's approved brief changes the spatial system to a coordinate rail and plotted field-note panels; V2's approved brief changes it to a timecode rail and horizontal transmission bands.",
+        "quality_loss": "The original candidates intentionally lose V0's exact paper-collage geometry in order to test transferable principles rather than produce a derivative.",
+        "why": "Originality plans explicitly require substantive composition differences after human V0 approval.",
+        "avoidable": false,
+        "responsible_subsystem": "variant planning",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-f1259aae2bedd3d7f7128e94594bc4be",
+          "cap-b0b0cc9a432845784cec75958d1eec30"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Use the final human comparison to select which original planning principle is worth carrying forward; do not collapse the candidates back into V0 geometry.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.97
+      }
+    ],
+    "typography": [
+      {
+        "finding_id": "loss-typography-system-substitution",
+        "stage": "typography",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V0, V1 and V2 all use system-only type stacks; V1 changes the role pairing to a wide sans with numeric coordinate interruptions and a smaller annotation serif.",
+        "quality_loss": "Licensed/reference font metrics and exact source typesetting are not retained, so line breaks and density remain approximate.",
+        "why": "Source fonts are prohibited and the brief calls for role-level transfer with original typesetting.",
+        "avoidable": false,
+        "responsible_subsystem": "typography implementation",
+        "source_refs": [
+          "source:src-inspotype-discovery"
+        ],
+        "capture_refs": [
+          "cap-00c281d06f1faed620cdd242aa11ccfe",
+          "cap-2728e9fc742107682bd693d86e3b3157",
+          "cap-2f09a097688523462452a4d1a7832d7d"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Tune system-stack sizes and line lengths only after human visual feedback identifies a readable, original direction.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.92
+      }
+    ],
+    "assets": [
+      {
+        "finding_id": "loss-assets-css-substitution",
+        "stage": "assets",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "The V2 transmission fields use newly authored CSS signal bands, orbital rings and registration ticks in place of source photography or artwork.",
+        "quality_loss": "Material and image-specific nuance is intentionally replaced by abstract geometry; no source asset fidelity is claimed.",
+        "why": "The originality and rights plans prohibit source imagery, logos, illustrations, fonts and project identities.",
+        "avoidable": false,
+        "responsible_subsystem": "asset strategy",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-2f09a097688523462452a4d1a7832d7d",
+          "cap-39071bdafb3e3f7e138ab815e723187d"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "If the human gate identifies an asset-role weakness, adjust authored geometry and contrast, never substitute protected source media.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.96
+      }
+    ],
+    "composition": [
+      {
+        "finding_id": "loss-composition-coordinate-rail",
+        "stage": "composition",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 preserves asymmetrical editorial pacing while replacing V0's centered hero/collage system with a persistent coordinate rail, plotted map and alternating field notes.",
+        "quality_loss": "Exact reference composition is not retained; the candidate's spatial grammar is a deliberate original interpretation.",
+        "why": "The V1 originality plan requires a new spatial system and the capture set records its initial, mid-scroll, signature and final states.",
+        "avoidable": false,
+        "responsible_subsystem": "composition system",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-f1259aae2bedd3d7f7128e94594bc4be",
+          "cap-b0b0cc9a432845784cec75958d1eec30",
+          "cap-6cf2c34e20b43e4e4d0fdbc5d05215e6"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/reports/fidelity-v0.json",
+          "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Let human comparison decide whether the coordinate rail preserves sufficient editorial tension before any further visual tuning.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.94
+      }
+    ],
+    "depth": [
+      {
+        "finding_id": "loss-depth-flat-signal-layers",
+        "stage": "depth",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V2 expresses depth through offset signal layers, clipped bands and inset borders rather than V0's pale sculptural object and paper shadow treatment.",
+        "quality_loss": "Physical material depth is abstracted into flat broadcast-console layers; visual quality is not scored by the text-only runtime.",
+        "why": "V2's art direction deliberately chooses a measured signal-room material language and its design evaluation is deferred to human review.",
+        "avoidable": "unknown",
+        "responsible_subsystem": "depth and layering",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-22b1101942cf5278e227ee9635781163",
+          "cap-e5ee235dc548b856ff7ec6a677b85287",
+          "cap-04b6110758bae146ae7c679f831fe138"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Use human visual feedback to adjust layer contrast or offset only if the signal-room depth reads flat at the final gate.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.88
+      }
+    ],
+    "motion": [
+      {
+        "finding_id": "loss-motion-observable-tokenized",
+        "stage": "motion",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 replaces V0's circular project affordance with a tokenized latitude scan that extends a beam and resolves a project coordinate at the captured signature checkpoint.",
+        "quality_loss": "Source motion timing and choreography are not known; only the candidate's observable token-governed relationship is evidenced.",
+        "why": "The motion plan prohibits reconstructing hidden choreography and the runtime can validate tokens and capture states but not aesthetic feel.",
+        "avoidable": "unknown",
+        "responsible_subsystem": "motion governance",
+        "source_refs": [
+          "source:src-cuvii-labs-motion"
+        ],
+        "capture_refs": [
+          "cap-00c281d06f1faed620cdd242aa11ccfe",
+          "cap-2728e9fc742107682bd693d86e3b3157",
+          "cap-a8dd4c1836dca7514a4e11bc85cce956",
+          "cap-6728e0db5e27454efb77b0a54f5b0d7e"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "If the human gate finds the scan too weak or too strong, refine only the declared token-governed states and preserve reduced-motion behavior.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.94
+      }
+    ],
+    "interaction": [
+      {
+        "finding_id": "loss-interaction-signature-divergence",
+        "stage": "interaction",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V2's transmission interaction uses a coral bracket and identity-bound afterimage title trace, while the capture matrix also records keyboard-focus-compatible controls, menu state and reduced-motion state.",
+        "quality_loss": "The original interaction cannot be compared to hidden source behavior beyond the explicitly captured observable checkpoints.",
+        "why": "The interaction is intentionally original and the current design evaluation has no vision receipt.",
+        "avoidable": "unknown",
+        "responsible_subsystem": "interaction states",
+        "source_refs": [
+          "source:src-cuvii-labs-motion"
+        ],
+        "capture_refs": [
+          "cap-00c281d06f1faed620cdd242aa11ccfe",
+          "cap-2f09a097688523462452a4d1a7832d7d",
+          "cap-2f37eeebc7826066b0c7963684e00a99",
+          "cap-39071bdafb3e3f7e138ab815e723187d"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Use the human gate to judge affordance clarity and tune the bracket/trace only if the evidence shows a concrete comprehension problem.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.91
+      }
+    ],
+    "implementation": [
+      {
+        "finding_id": "loss-implementation-css-only",
+        "stage": "implementation",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 and V2 are self-contained HTML/CSS/JS artifacts with no external images, fonts, iframes or continuous animation; their technical reports and token reports are independently persisted.",
+        "quality_loss": "The implementation intentionally omits source runtime dependencies and photographic richness, trading exact material fidelity for auditable original work.",
+        "why": "The candidate boundary requires non-reuse, deterministic capture and reduced-motion support.",
+        "avoidable": false,
+        "responsible_subsystem": "artifact implementation",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-b0b0cc9a432845784cec75958d1eec30",
+          "cap-e5ee235dc548b856ff7ec6a677b85287"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/planning/v1/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep the implementation self-contained and make only evidence-backed refinements after the human comparison.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.98
+      }
+    ],
+    "evaluation": [
+      {
+        "finding_id": "loss-evaluation-vision-deferred",
+        "stage": "evaluation",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "Objective technical and deterministic capture evidence is complete for V0, V1 and V2, while all design-quality dimensions remain explicitly uninterpreted pending human visual review.",
+        "quality_loss": "Hero tension, whitespace rhythm, material depth, motion feel, originality and mobile visual re-composition are not scored by the current runtime.",
+        "why": "The active model is text-only and the contract forbids substituting DOM/style probes or fabricated vision judgments for human approval.",
+        "avoidable": "unknown",
+        "responsible_subsystem": "design evaluation boundary",
+        "source_refs": [
+          "design-case:case-ee9eaf0dc9"
+        ],
+        "capture_refs": [
+          "cap-f1259aae2bedd3d7f7128e94594bc4be",
+          "cap-b0b0cc9a432845784cec75958d1eec30",
+          "cap-e5ee235dc548b856ff7ec6a677b85287"
+        ],
+        "report_refs": [
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v0.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v1.json",
+          "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json",
+          "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Present the paired reference and V0/V1/V2 captures to a human reviewer and record the explicit taste/floor decision without preselecting a candidate.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 1
+      }
+    ]
+  },
+  "created_at": "2026-09-01T06:43:40Z",
+  "producer": "hermes-agent:gpt-5.6-luna"
+}

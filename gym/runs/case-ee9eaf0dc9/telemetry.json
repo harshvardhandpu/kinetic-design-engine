@@ -3,99 +3,121 @@
   "case_id": "case-ee9eaf0dc9",
   "stages": {
     "planning": {
-      "started_at": "2026-08-27T11:56:10.881Z",
-      "ended_at": "2026-08-27T12:36:03.062Z",
-      "duration_ms": 2392181,
+      "started_at": "2026-09-01T06:17:15.194Z",
+      "ended_at": "2026-09-01T06:25:57.594Z",
+      "duration_ms": 522400,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json"
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "retrieval": {
-      "started_at": "2026-08-27T12:36:03.062Z",
-      "ended_at": "2026-08-27T12:36:04.986Z",
-      "duration_ms": 1924,
+      "started_at": "2026-09-01T06:25:57.594Z",
+      "ended_at": "2026-09-01T06:26:45.189Z",
+      "duration_ms": 47595,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
-        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json"
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "prebuild_review": {
-      "started_at": "2026-08-27T12:36:04.986Z",
-      "ended_at": "2026-08-27T12:36:06.653Z",
-      "duration_ms": 1667,
+      "started_at": "2026-09-01T06:26:45.189Z",
+      "ended_at": "2026-09-01T06:28:21.588Z",
+      "duration_ms": 96399,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
-        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
-        "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json"
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "build": {
-      "started_at": "2026-08-30T13:01:33.391Z",
-      "ended_at": "2026-08-30T13:10:29.635Z",
-      "duration_ms": 536244,
+      "started_at": "2026-09-01T06:38:23.898Z",
+      "ended_at": "2026-09-01T06:38:24.399Z",
+      "duration_ms": 501,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
-        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
-        "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json",
-        "runs/case-ee9eaf0dc9/variants/v0"
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "runs/case-ee9eaf0dc9/variants/v2",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "capture": {
-      "started_at": "2026-08-30T14:55:03.389Z",
-      "ended_at": "2026-08-30T19:27:40.793Z",
-      "duration_ms": 16357404,
+      "started_at": "2026-09-01T06:40:07.299Z",
+      "ended_at": "2026-09-01T06:41:28.895Z",
+      "duration_ms": 81596,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
-        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
-        "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json",
-        "runs/case-ee9eaf0dc9/variants/v0",
-        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v0.json",
-        "runs/case-ee9eaf0dc9/captures/v0/manifest.json"
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "runs/case-ee9eaf0dc9/variants/v2",
+        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v2.json",
+        "runs/case-ee9eaf0dc9/captures/v2/manifest.json",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "technical_evaluation": {
-      "started_at": "2026-08-30T13:10:29.635Z",
-      "ended_at": "2026-08-30T14:55:03.389Z",
-      "duration_ms": 6273754,
+      "started_at": "2026-09-01T06:38:24.399Z",
+      "ended_at": "2026-09-01T06:40:07.299Z",
+      "duration_ms": 102900,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
-        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
-        "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json",
-        "runs/case-ee9eaf0dc9/variants/v0",
-        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v0.json"
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "runs/case-ee9eaf0dc9/variants/v2",
+        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v2.json",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "design_evaluation": {
-      "started_at": "2026-08-30T19:27:40.793Z",
-      "ended_at": "2026-08-30T19:44:21.487Z",
-      "duration_ms": 1000694,
+      "started_at": "2026-09-01T06:41:28.895Z",
+      "ended_at": "2026-09-01T06:42:34.392Z",
+      "duration_ms": 65497,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-ee9eaf0dc9/planning/v0/variant-brief.json",
-        "runs/case-ee9eaf0dc9/planning/v0/retrieval-receipt.json",
-        "runs/case-ee9eaf0dc9/planning/v0/prebuild-review.json",
-        "runs/case-ee9eaf0dc9/variants/v0",
-        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v0.json",
-        "runs/case-ee9eaf0dc9/captures/v0/manifest.json",
-        "runs/case-ee9eaf0dc9/reports/design-evaluation-v0.json",
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "runs/case-ee9eaf0dc9/variants/v2",
+        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v2.json",
+        "runs/case-ee9eaf0dc9/captures/v2/manifest.json",
+        "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json",
         "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
       ]
     },
     "repair": null,
-    "review_package_generation": null,
+    "review_package_generation": {
+      "started_at": "2026-09-01T06:42:34.392Z",
+      "ended_at": "2026-09-01T06:52:04.798Z",
+      "duration_ms": 570406,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-ee9eaf0dc9/planning/v2/variant-brief.json",
+        "runs/case-ee9eaf0dc9/planning/v2/retrieval-receipt.json",
+        "runs/case-ee9eaf0dc9/planning/v2/prebuild-review.json",
+        "runs/case-ee9eaf0dc9/variants/v2",
+        "runs/case-ee9eaf0dc9/reports/technical-evaluation-v2.json",
+        "runs/case-ee9eaf0dc9/captures/v2/manifest.json",
+        "runs/case-ee9eaf0dc9/reports/design-evaluation-v2.json",
+        "runs/case-ee9eaf0dc9/reports/fidelity-v0.json"
+      ]
+    },
     "human_review_waiting": null
   },
   "metrics": {
@@ -115,5 +137,5 @@
       "model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed"
     ]
   },
-  "updated_at": "2026-08-30T19:44:21.487Z"
+  "updated_at": "2026-09-01T06:52:04.798Z"
 }

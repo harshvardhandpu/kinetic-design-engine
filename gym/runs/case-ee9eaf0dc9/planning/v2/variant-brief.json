@@ -1,0 +1,185 @@
+{
+  "schema": "kinetic/gym/variant-brief@0.1",
+  "variant_id": "V2",
+  "case_id": "case-ee9eaf0dc9",
+  "design_case_ids_used": [
+    "case-ee9eaf0dc9"
+  ],
+  "surface": "creative-studio portfolio",
+  "goal": "Turn the studied editorial rhythm into an original nocturnal broadcast log where projects are transmissions and the scroll behaves like a tuning sequence.",
+  "direction_name": "Night Signal / Transmission Log",
+  "core_concept": "A fictional studio presented as a late-night signal room: timecodes, signal bands and a restrained chalk interface give each project the weight of a transmission received and archived.",
+  "composition_plan": {
+    "sections": [
+      "timecode transmission hero",
+      "signal-room principles",
+      "three transmission logs",
+      "frequency index",
+      "night desk contact"
+    ],
+    "spatial_system": "A dark field uses a narrow timecode rail beside broad horizontal transmission bands; mobile turns the rail into a repeated top marker and stacks each band as a contained broadcast panel.",
+    "visual_hierarchy": "The transmission statement and timecode dominate, signal bands frame project artifacts, serif annotations slow the reading, and the utility controls stay small and high-contrast.",
+    "pacing": "Long dark intervals are interrupted by bright signal bands; each project enters as a self-contained transmission before the next quiet frequency.",
+    "density": "Dense only at the metadata rail and signal headers; the project fields remain broad, legible and intentionally underfilled.",
+    "focal_points": [
+      "timecode hero statement",
+      "vertical broadcast rail",
+      "afterimage project signal",
+      "frequency index and contact desk"
+    ]
+  },
+  "typography_plan": {
+    "display_role": "A heavy system sans carries short broadcast phrases and timecode numerals in stacked blocks; it is deliberately clipped by the band edge at desktop.",
+    "body_role": "A system serif carries transmission notes with a slower, reflective voice against the dark field.",
+    "scale_strategy": "Fluid display type preserves a strong horizontal silhouette on desktop and breaks into compact signal phrases on mobile.",
+    "contrast_strategy": "Warm chalk, coral signal and faint blue grid lines create hierarchy through luminance and interruption rather than decorative gradients.",
+    "rhythm": "Monospaced timecodes and uppercase utility labels punctuate wide serif notes and heavy sans transmission phrases.",
+    "responsive_behavior": "The vertical rail becomes a horizontal status strip; clipped desktop bands become contained mobile panels with the same timecode order."
+  },
+  "art_direction": {
+    "imagery_strategy": "Use CSS-authored signal bands, orbital rings, registration ticks and abstract broadcast forms as original stand-ins for studio work.",
+    "asset_strategy": "No external assets, logos, copied illustrations, source imagery, source fonts, source code or source copy; all material is authored in this variant.",
+    "texture": "Deep ink field with fine blue grid lines, scanline bands and sparse registration ticks authored in CSS.",
+    "material": "Night blue-black, warm chalk, coral-orange signal and a cold electric-blue grid suggest a tactile broadcast console without a literal device mockup.",
+    "depth": "Depth comes from offset signal layers, clipped bands and inset borders; no photographic media, WebGL or continuous ambient effect is necessary.",
+    "layering": "Timecode, signal header, artifact plane and afterimage marker occupy explicit z-levels within each transmission band.",
+    "color_logic": "Ink is the uninterrupted field; chalk is the reading layer, coral is the active signal, and electric blue marks measured structure."
+  },
+  "motion_plan": {
+    "signature_move": {
+      "name": "afterimage trace",
+      "central_idea": "The active transmission leaves a short offset trace behind its signal title, showing the project as a received event rather than a static card.",
+      "trigger": "pointer hover or keyboard focus on a transmission log",
+      "visual_transformation": "A coral bracket expands across the band, a translucent title trace settles one grid unit behind it and the timecode brightens.",
+      "purpose": "Make selection feel like tuning into a transmission while keeping motion attached to the project's identity and metadata.",
+      "content_relationship": "The trace repeats only the active transmission's short title and timecode; it does not introduce unrelated decoration.",
+      "reduced_motion_alternative": "Show the bracket, title trace and bright timecode statically on focus/hover with no translation or expansion.",
+      "capture_checkpoint": "desktop first transmission hover after the coral bracket and title trace are fully visible"
+    },
+    "scroll_storyboard": [
+      "Timecode hero holds as a dark broadcast slate with one coral marker.",
+      "Signal-room principles alternate dense metadata with open serif notes.",
+      "Transmission logs enter as wide bands with changing alignment and quiet gaps.",
+      "Frequency index tightens the rhythm before the night desk contact."
+    ],
+    "transitions": [
+      "opacity and translate transitions use canonical KINETIC motion tokens",
+      "afterimage trace uses canonical snap and med duration tokens",
+      "no autonomous carousel, video or looping animation"
+    ],
+    "interaction_states": [
+      "desktop transmission hover",
+      "keyboard transmission focus",
+      "mobile menu control",
+      "reduced-motion static trace state"
+    ],
+    "reduced_motion_behavior": "Disable trace translation and reveal transforms; retain bracket, title trace, timecode emphasis, hierarchy and visible focus states.",
+    "token_exceptions": []
+  },
+  "reference_transfer": {
+    "retained_principles": [
+      "typography carries the composition",
+      "large negative-space pauses",
+      "media and copy alternate as a narrative rhythm",
+      "responsive composition changes structure rather than only scale",
+      "surface-attached interaction feedback"
+    ],
+    "deliberately_rejected_principles": [
+      "source branding and project identities",
+      "source copy, naming and imagery",
+      "source font files and exact typesetting",
+      "warm paper shell and sculptural hero treatment",
+      "exact section geometry and hidden implementation"
+    ],
+    "prohibited_copying": [
+      "source imagery",
+      "source copy",
+      "source logo",
+      "source fonts/assets",
+      "source code",
+      "exact section geometry"
+    ]
+  },
+  "source_provenance": {
+    "design_reference_sources": [
+      {
+        "source_id": "src-seesaw",
+        "retrieval_reason": "Use audited curated-design context for editorial composition comparison while the Wanaka DesignCase remains the primary reference.",
+        "knowledge_used": [
+          "Curated website references are comparison evidence, not reusable source material."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-seesaw"
+            ]
+          }
+        ]
+      }
+    ],
+    "motion_reference_sources": [
+      {
+        "source_id": "src-cuvii-labs-motion",
+        "retrieval_reason": "Use the audited motion-study category to require observable transmission trigger and checkpoint states without copying implementation or media.",
+        "knowledge_used": [
+          "Motion fidelity should be studied through explicit trigger and checkpoint states."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "ENGINE-INFERENCE",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-cuvii-labs-motion"
+            ]
+          }
+        ]
+      }
+    ],
+    "typography_sources": [
+      {
+        "source_id": "src-inspotype-discovery",
+        "retrieval_reason": "Use the audited typography-discovery category to reason about role pairing while selecting only system substitutes.",
+        "knowledge_used": [
+          "Typeface roles and pairing can be evaluated independently of copying a proprietary font asset."
+        ],
+        "usage_mode": "PRINCIPLE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "ENGINE-INFERENCE",
+            "evidence_refs": [
+              "gym/knowledge/sources/registry.json#src-inspotype-discovery"
+            ]
+          }
+        ]
+      }
+    ],
+    "implementation_sources": [],
+    "tool_sources": []
+  },
+  "originality_plan": {
+    "composition_differences": [
+      "A dark horizontal transmission log and persistent timecode rail replace both V0's paper collage and V1's coordinate map.",
+      "Project entries are wide signal bands with a broadcast index, not offset portfolio cards or survey panels.",
+      "The contact close is a compact night desk rather than a full-bleed violet invitation."
+    ],
+    "typography_differences": [
+      "Short clipped broadcast phrases and timecode numerals create the display voice instead of V0's open display manifesto.",
+      "Serif copy is used as a quiet transmission annotation against an ink field rather than as a dominant chapter heading."
+    ],
+    "motion_differences": [
+      "The signature interaction is an offset afterimage trace and coral bracket, not V0's circle or V1's latitude scan.",
+      "Scroll pacing follows broadcast bands and signal gaps with a persistent timecode orientation strip."
+    ],
+    "asset_non_reuse": "All imagery is newly authored CSS geometry; no Wanaka, V0 or V1 asset, logo, copy, artwork, font, code or project identity is reused.",
+    "signature_move_hypothesis": "An identity-bound afterimage trace can make a selected transmission feel received and memorable without reducing the interaction to a decorative lift or generic fade."
+  },
+  "quality_hypothesis": "If an original night-signal composition preserves editorial hierarchy, whitespace, alternating media/copy rhythm and surface-attached response without repeating V0 or V1, the human review can distinguish grammar transfer from stylistic imitation.",
+  "planning_exception": null,
+  "created_at": "2026-09-01T06:21:23Z",
+  "producer": "hermes-agent:gpt-5.6-luna"
+}
