@@ -1,0 +1,183 @@
+{
+  "schema": "kinetic/gym/variant-brief@0.1",
+  "variant_id": "V0",
+  "case_id": "case-5300412a00",
+  "design_case_ids_used": [
+    "case-5300412a00"
+  ],
+  "surface": "component catalogue / motion reference index",
+  "goal": "Test whether KINETIC can transfer a browse-first dark gallery grammar to an original V0 on a new reference, without copying source implementation, branding, copy, fonts, media, or assets.",
+  "direction_name": "Signal Shelf / Motion Atlas",
+  "core_concept": "A compact motion catalogue where each original preview is a signal tile inside a disciplined browse shell; the page teaches the collection through consistent frames, not through source-specific content.",
+  "composition_plan": {
+    "sections": [
+      "utility bar with brand-neutral title, primary links, search affordance, and theme control",
+      "left navigation rail with grouped catalogue filters and a mobile menu entry point",
+      "central browse heading with a short original introduction and result metadata",
+      "filter toolbar with labeled search and category controls",
+      "responsive preview shelf of original CSS-generated signal tiles with compact metadata",
+      "right support rail containing original documentation and contribution panels",
+      "return-to-top control after the catalogue shelf"
+    ],
+    "spatial_system": "Desktop uses a top utility bar over three columns: narrow left rail, flexible central shelf, narrow right rail. The central shelf owns the visual weight; rails are independently legible but subordinate. At smaller widths rails collapse and the shelf reduces to two then one column.",
+    "visual_hierarchy": "The display heading establishes the page thesis, the filter toolbar frames the browse task, preview tiles are the dominant repeated unit, and metadata/support content remains quiet.",
+    "pacing": "Use regular card bands for browse rhythm, with one short intro before the shelf and one quiet end-of-list return action; avoid Wanaka-style long editorial chapter pacing.",
+    "density": "Dense catalogue in the center with stable gutters and generous internal card padding; rails are compact but never overlap the browse surface.",
+    "focal_points": [
+      "display heading with a small gradient signal mark",
+      "first preview tile's focus/hover transformation",
+      "category filter state",
+      "localized right-rail call to action"
+    ]
+  },
+  "typography_plan": {
+    "display_role": "Bold system sans-serif display heading with a restrained italic emphasis on the second word; original copy only.",
+    "body_role": "Readable system sans-serif for navigation, card metadata, helper text, and controls.",
+    "scale_strategy": "Use clamp-based display and body sizes with four explicit roles: display, section, label, metadata; keep card titles short and readable.",
+    "contrast_strategy": "Bright text for task hierarchy, muted gray for metadata, and uppercase tracking only for labels; no source font files or source typography names.",
+    "rhythm": "Tight title-to-metadata pairing inside cards, medium control spacing, and larger section gaps between intro, toolbar, shelf, and support content.",
+    "responsive_behavior": "Display heading and rail labels reduce at narrow widths; card metadata remains readable and never relies on clipped text."
+  },
+  "art_direction": {
+    "imagery_strategy": "No external imagery. Each tile uses an original CSS-generated abstract signal motif that communicates a motion category without depicting source media.",
+    "asset_strategy": "Inline HTML/CSS only; no external URLs, images, videos, icons, fonts, or library code.",
+    "texture": "Subtle grid, grain-like radial gradients, and thin borders are generated with CSS backgrounds; avoid copied preview artwork.",
+    "material": "Charcoal panels with soft inset edges and luminous gradient accents; surfaces are layered but restrained.",
+    "depth": "Depth comes from panel separation, a shallow hover lift, and an inner focus ring rather than persistent 3D or WebGL.",
+    "layering": "Top bar, rails, shelf, preview motif, signal badge, and focus ring occupy explicit z-levels; no full-screen overlay is permitted.",
+    "color_logic": "Near-black and charcoal form the shell, soft white and muted gray carry hierarchy, and violet/magenta/blue gradients are localized to signal previews and primary actions."
+  },
+  "motion_plan": {
+    "signature_move": {
+      "name": "signal constellation",
+      "central_idea": "The active preview tile reveals a short constellation trace that links its abstract signal to the tile's metadata, making browsing feel like selecting a live instrument rather than opening a static card.",
+      "trigger": "pointer hover or keyboard focus on any preview tile",
+      "visual_transformation": "The preview motif shifts upward slightly, its inner signal ring scales to identity, and a small accent trace fades into place while the metadata remains stable.",
+      "purpose": "Connect the user's browse action to the preview's category without adding unrelated ambient animation across the page.",
+      "content_relationship": "The trace is attached to the selected tile's signal motif and category label; it is not a decorative global effect.",
+      "reduced_motion_alternative": "Keep the tile fully opaque and show a static focus ring plus accent trace with no transform or transition.",
+      "capture_checkpoint": "desktop signature hover/focus after a stable 1200ms checkpoint; mobile content state with keyboard-equivalent focus"
+    },
+    "scroll_storyboard": [
+      "initial: utility bar, intro heading, first shelf row, and quiet rails establish the browse task",
+      "mid-scroll: repeated preview bands and right support panels maintain even catalogue pacing",
+      "signature: focused tile exposes the signal constellation while neighboring tiles remain stable",
+      "final: last shelf row and return control resolve the page without a conventional full-width footer"
+    ],
+    "transitions": [
+      "use duration-slow and easing-out-expo for preview reveal and focus transformation",
+      "use duration-med and easing-out-quint for filter/result changes",
+      "use opacity-hidden/opacity-visible and distance-reveal-y for one-time section reveals",
+      "disable all motion and smooth scrolling under prefers-reduced-motion"
+    ],
+    "interaction_states": [
+      "search filters cards by original title/category and updates the result count",
+      "category select filters the shelf without navigation",
+      "theme control toggles an original light token set",
+      "mobile menu exposes the left rail without a blocking overlay",
+      "tile hover and keyboard focus share the signal constellation state",
+      "return control moves focus back to the page heading"
+    ],
+    "reduced_motion_behavior": "The reduced-motion media query removes transitions and transforms, sets reveal content to its resting state, and changes scroll behavior to auto. All controls remain usable.",
+    "token_exceptions": []
+  },
+  "reference_transfer": {
+    "retained_principles": [
+      "separate browse/navigation/support rails so the central catalogue remains dominant",
+      "use a stable repeated preview frame for varied interactive content",
+      "concentrate luminous gradients on previews and primary actions",
+      "make one focused interaction explain the purpose of a preview"
+    ],
+    "deliberately_rejected_principles": [
+      "Wanaka's editorial studio narrative and irregular portfolio pacing",
+      "source-specific labels, component names, branding, or promotional copy",
+      "source implementation details, library code, preview media, or exact geometry",
+      "persistent ambient animation that would increase cost without improving browse comprehension"
+    ],
+    "prohibited_copying": [
+      "React Bits source code or component implementations",
+      "React Bits branding, logos, copy, typography, demo media, or assets",
+      "exact section geometry, card artwork, labels, or source CSS values",
+      "any standalone or bundled redistribution of source components"
+    ]
+  },
+  "source_provenance": {
+    "design_reference_sources": [
+      {
+        "source_id": "src-react-bits",
+        "retrieval_reason": "Use the audited, unused React Bits reference only for abstract browse-shell, catalogue, and motion-preview observations in this controlled generalization.",
+        "knowledge_used": [
+          "dark application shell separates a left navigation rail, central gallery, and right support rail",
+          "repeated rounded preview panels with compact metadata make a large catalogue browseable",
+          "violet, magenta, and electric-blue gradients are concentrated in previews and primary actions",
+          "search, category filtering, theme/preferences, and card focus states are explicit browse affordances",
+          "preview motion is observed as an interaction intent only; exact timing and implementation remain unclaimed"
+        ],
+        "usage_mode": "COMPARISON_REFERENCE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json",
+              "https://reactbits.dev/get-started/index"
+            ]
+          },
+          {
+            "knowledge_index": 1,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 2,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 3,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 4,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json",
+              "https://reactbits.dev/robots.txt"
+            ]
+          }
+        ]
+      }
+    ],
+    "motion_reference_sources": [],
+    "typography_sources": [],
+    "implementation_sources": [],
+    "tool_sources": []
+  },
+  "originality_plan": {
+    "composition_differences": [
+      "Use a fictional signal catalogue and original six-zone page structure rather than a source documentation index.",
+      "Use a compact central shelf with original support content and CSS-only preview motifs; do not reproduce source card geometry or labels.",
+      "Collapse rails with a custom mobile menu and keep the return control inside the original shell."
+    ],
+    "typography_differences": [
+      "Use system font stacks and original title/metadata roles rather than source font identity or copy.",
+      "Use a restrained italic emphasis and custom scale ratios suited to the fictional catalogue."
+    ],
+    "motion_differences": [
+      "Implement one CSS-token-driven signal constellation interaction with a static reduced-motion path.",
+      "Use one-time section reveals and no persistent source-like preview animation loop."
+    ],
+    "asset_non_reuse": "All candidate visuals are authored with CSS gradients and HTML geometry; there are no external asset, font, media, icon, or source-code dependencies.",
+    "signature_move_hypothesis": "A focused tile should communicate category and browseability through one localized constellation trace, preserving the source's interaction intent while remaining compositionally and technically original."
+  },
+  "quality_hypothesis": "A disciplined dark catalogue shell with localized motion, clear controls, and restrained card repetition should test generalization beyond Wanaka while avoiding the prior failure mode of plain, under-animated originals. Human fidelity review must determine whether the transfer is actually understood; no quality or taste qualification is inferred.",
+  "created_at": "2026-09-02T07:01:32Z",
+  "producer": "kinetic-autonomous-generalization"
+}

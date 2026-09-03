@@ -1,0 +1,178 @@
+{
+  "schema": "kinetic/gym/design-case@0.1",
+  "case_id": "case-5300412a00",
+  "canonical_url": "https://reactbits.dev/get-started/index",
+  "title": "React Bits component index",
+  "studio": "David HDev / React Bits",
+  "status": "STUDIED",
+  "provenance": {
+    "discovered_via": "manual-entry",
+    "source_url": "https://reactbits.dev/get-started/index",
+    "fetched": "2026-09-02T07:01:32Z",
+    "access_policy": "reference-site-observe-only",
+    "site_robots_checked": true,
+    "availability": "live",
+    "archive_url": null,
+    "source_registry_id": "src-react-bits",
+    "source_registry_version": "0.1.2",
+    "obsidian_training_record": "Resource for upgrading/Design engine training.md"
+  },
+  "surface": {
+    "surface_types": ["component-library", "motion-reference", "documentation-gallery"],
+    "k_level_estimate": "K3",
+    "evidence": {
+      "tag": "VISUALLY-INSPECTED",
+      "confidence": 0.86,
+      "method": "one-off browser visual inspection plus DOM snapshot; abstract observations only"
+    }
+  },
+  "analysis": {
+    "layout": {
+      "notes": {
+        "structure": "A wide application shell uses a persistent top bar, a grouped left navigation/filter rail, a dominant central gallery, and a narrower right support rail.",
+        "gallery": "The central surface is an evenly spaced multi-column shelf of rounded preview panels with compact metadata strips.",
+        "pacing": "The list is long and regular rather than editorially irregular; repeated card bands create browse-first rhythm.",
+        "responsive": "The wide shell implies rail collapse and grid reduction on small screens; mobile behavior was not directly captured in this desktop-only observation."
+      },
+      "evidence": {
+        "tag": "VISUALLY-INSPECTED",
+        "confidence": 0.88,
+        "method": "browser visual inspection at initial, mid-list, and final scroll states"
+      }
+    },
+    "typography": {
+      "notes": {
+        "roles": "A bold display heading anchors the browse surface; navigation, card titles, category labels, and utility controls step down into compact sans-serif roles.",
+        "contrast": "Primary text is bright on charcoal; metadata and section labels are muted with tighter tracking.",
+        "candidate_transfer": "The V0 uses open system sans-serif stacks and original labels; it does not retrieve or copy source fonts."
+      },
+      "evidence": {
+        "tag": "VISUALLY-INSPECTED",
+        "confidence": 0.83,
+        "method": "browser visual inspection; font identity not inferred"
+      }
+    },
+    "color": {
+      "notes": {
+        "palette": ["near-black", "charcoal", "soft white", "muted gray", "violet", "magenta", "electric blue"],
+        "logic": "Dark tonal surfaces establish the shell; saturated gradients are reserved for previews, badges, and primary actions."
+      },
+      "evidence": {
+        "tag": "VISUALLY-INSPECTED",
+        "confidence": 0.87,
+        "method": "browser visual inspection; no stylesheet extraction"
+      }
+    },
+    "motion": {
+      "notes": {
+        "observed": "Preview panels visibly suggest animated gradients, glow, blur, scanline, and distortion treatments; card browsing and utility controls expose hover-ready affordances.",
+        "timing": "Exact timing, easing, and implementation are not claimed from still observations.",
+        "candidate_transfer": "V0 uses KINETIC motion tokens for reveal, focus, hover, and reduced-motion states rather than source implementation."
+      },
+      "evidence": {
+        "tag": "VISUALLY-INSPECTED",
+        "confidence": 0.72,
+        "method": "visual sequence; timing unmeasured"
+      }
+    },
+    "technology": {
+      "observed": [
+        "desktop DOM snapshot: 205 links",
+        "desktop DOM snapshot: 16 buttons",
+        "desktop DOM snapshot: 6 images",
+        "desktop DOM snapshot: 9 video elements",
+        "desktop DOM snapshot: 0 canvas elements",
+        "desktop DOM snapshot: 9 visible gallery cells in the current viewport"
+      ],
+      "inferred": [
+        {
+          "claim": "The page is a browse-oriented documentation/gallery surface with independently scrollable navigation and repeated preview cards.",
+          "confidence": 0.84,
+          "basis": "accessibility snapshot and visual inspection"
+        },
+        {
+          "claim": "Preview motion is a first-class part of the catalogue presentation, but its implementation should not be cloned.",
+          "confidence": 0.78,
+          "basis": "source registry classifies the source as COMPONENT_LIBRARY and MOTION_REFERENCE; visual preview states"
+        }
+      ]
+    },
+    "performance": {
+      "notes": {
+        "observed": "The page presents many interactive preview surfaces and media elements.",
+        "risk": "A V0 reproduction should keep the DOM small, avoid persistent animation loops, and use CSS-only local effects."
+      },
+      "evidence": {
+        "tag": "METADATA-ONLY",
+        "confidence": 0.65,
+        "method": "DOM counts from one browser snapshot; no profiling claim"
+      }
+    },
+    "accessibility": {
+      "notes": {
+        "observed": "The page exposes grouped navigation, search/filter controls, theme/preferences controls, and card browsing affordances.",
+        "candidate_requirement": "V0 must preserve labeled controls, keyboard focus parity, semantic headings, and a reduced-motion alternative; source accessibility is not certified."
+      },
+      "evidence": {
+        "tag": "METADATA-ONLY",
+        "confidence": 0.7,
+        "method": "accessibility snapshot and candidate policy, not source audit"
+      }
+    },
+    "principles": [
+      {
+        "rule": "Use a browse-first gallery when the content is a catalogue: stable card grammar can carry varied previews without making every item a bespoke section.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "layout.notes.gallery"
+      },
+      {
+        "rule": "Keep navigation, browsing, and support content in distinct rails so the central visual field remains the dominant task surface.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "layout.notes.structure"
+      },
+      {
+        "rule": "Concentrate high-saturation gradients and glow on previews and primary actions instead of flooding the entire shell.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "color.notes.logic"
+      },
+      {
+        "rule": "Treat interaction previews as content: one intentional hover/focus transformation should explain why an item is browseable.",
+        "evidence_tag": "VISUALLY-INSPECTED",
+        "evidence_ref": "motion.notes.observed"
+      },
+      {
+        "rule": "When source timing and implementation are unmeasured, preserve the interaction intent with KINETIC tokens and label the result an approximation.",
+        "evidence_tag": "INFERRED",
+        "evidence_ref": "motion.notes.timing"
+      }
+    ],
+    "inferences": [
+      "A distinct generalization target should test repeated component browsing and dark gradient art direction rather than Wanaka's long-form editorial portfolio rhythm.",
+      "An original V0 can express the same browse grammar with CSS-generated preview motifs and no source assets, branding, copy, or library code.",
+      "The source page's exact responsive and motion behavior remains partially unresolved until human fidelity review."
+    ],
+    "anti_patterns": [
+      {
+        "issue": "Copying source component code, preview media, branding, or exact labels would exceed the abstract-reference policy.",
+        "evidence_tag": "DIRECTLY-INSPECTED"
+      },
+      {
+        "issue": "A persistent ambient animation loop would add cost without proving transfer of the browse grammar.",
+        "evidence_tag": "INFERRED"
+      }
+    ]
+  },
+  "figma": { "authorization": "none", "file_ref": null, "captured": null },
+  "scores": { "external": {}, "automated": {} },
+  "variant_run_ids": [],
+  "taste_decision_ids": [],
+  "promotion_history": [],
+  "re_studies": [],
+  "source_refs": [
+    "https://reactbits.dev/get-started/index",
+    "https://reactbits.dev/robots.txt",
+    "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+    "source:src-react-bits",
+    "obsidian:Resource for upgrading/Design engine training.md"
+  ]
+}

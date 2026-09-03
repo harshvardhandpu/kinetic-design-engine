@@ -1,0 +1,9 @@
+{
+  "schema": "kinetic/gym/variant-brief-receipt@0.1",
+  "case_id": "case-5300412a00",
+  "slot": "V0",
+  "brief_ref": "runs/case-5300412a00/planning/v0/variant-brief.json",
+  "brief_sha256": "bb5cf67bda94a748ffddb4357814eaa87fa451fc88e44b70c7cec2e33394bcef",
+  "brief_schema": "kinetic/gym/variant-brief@0.1",
+  "validated_at": "2026-09-02T07:08:22.430Z"
+}

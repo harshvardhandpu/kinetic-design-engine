@@ -1,0 +1,108 @@
+{
+  "schema": "kinetic/gym/execution-telemetry@0.1",
+  "case_id": "case-5300412a00",
+  "stages": {
+    "planning": {
+      "started_at": "2026-09-02T07:07:15.579Z",
+      "ended_at": "2026-09-02T07:08:22.430Z",
+      "duration_ms": 66851,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v0/variant-brief.json"
+      ]
+    },
+    "retrieval": {
+      "started_at": "2026-09-02T07:08:22.430Z",
+      "ended_at": "2026-09-02T07:10:17.537Z",
+      "duration_ms": 115107,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v0/variant-brief.json",
+        "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+      ]
+    },
+    "prebuild_review": {
+      "started_at": "2026-09-02T07:10:17.537Z",
+      "ended_at": "2026-09-02T07:10:26.051Z",
+      "duration_ms": 8514,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v0/variant-brief.json",
+        "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v0/prebuild-review.json"
+      ]
+    },
+    "build": {
+      "started_at": "2026-09-02T07:27:27.831Z",
+      "ended_at": "2026-09-02T07:27:28.283Z",
+      "duration_ms": 452,
+      "status": "COMPLETED",
+      "attempt": 3,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v0/variant-brief.json",
+        "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v0/prebuild-review.json",
+        "runs/case-5300412a00/variants/v0",
+        "runs/case-5300412a00/reports/technical-evaluation-v0.json"
+      ]
+    },
+    "capture": {
+      "started_at": "2026-09-02T08:22:38.672Z",
+      "ended_at": "2026-09-02T08:22:54.296Z",
+      "duration_ms": 15624,
+      "status": "COMPLETED",
+      "attempt": 0,
+      "receipt_refs": [
+        "gym/runs/case-5300412a00/captures/v0/manifest.json"
+      ]
+    },
+    "technical_evaluation": {
+      "started_at": "2026-09-02T07:27:28.283Z",
+      "ended_at": "2026-09-02T07:27:49.149Z",
+      "duration_ms": 20866,
+      "status": "COMPLETED",
+      "attempt": 3,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v0/variant-brief.json",
+        "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v0/prebuild-review.json",
+        "runs/case-5300412a00/variants/v0",
+        "runs/case-5300412a00/reports/technical-evaluation-v0.json"
+      ]
+    },
+    "design_evaluation": null,
+    "repair": {
+      "started_at": "2026-09-02T07:27:27.831Z",
+      "ended_at": "2026-09-02T07:27:27.831Z",
+      "duration_ms": 0,
+      "status": "COMPLETED",
+      "attempt": 3,
+      "receipt_refs": [
+        "runs/case-5300412a00/reports/repair-diagnosis-v0-attempt-2.json"
+      ]
+    },
+    "review_package_generation": null,
+    "human_review_waiting": null
+  },
+  "metrics": {
+    "model": null,
+    "provider": null,
+    "model_calls": null,
+    "tokens_input": null,
+    "tokens_output": null,
+    "tool_calls": null,
+    "vision_calls": null,
+    "repair_attempts": 2,
+    "build_attempts": 3,
+    "asset_preparation_ms": null,
+    "monetary_cost": null,
+    "monetary_cost_status": "UNKNOWN",
+    "availability_notes": [
+      "model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed"
+    ]
+  },
+  "updated_at": "2026-09-02T08:22:54.296Z"
+}

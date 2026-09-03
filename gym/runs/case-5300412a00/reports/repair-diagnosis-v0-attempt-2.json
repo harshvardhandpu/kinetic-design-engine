@@ -1,0 +1,19 @@
+{
+  "schema": "kinetic/gym/repair-diagnosis@0.1",
+  "case_id": "case-5300412a00",
+  "variant_id": "V0",
+  "from_state": "TECHNICAL_EVALUATED",
+  "attempt": 2,
+  "failure_code": "KINETIC_TECHNICAL_QUALIFICATION_REQUIRED",
+  "root_cause": "The repaired candidate passed browser gates and all token findings were resolved except the conservative scanner treated two tokenized reduced-motion declarations on one line as one raw duration value.",
+  "smallest_fix": "Collapse the reduced-motion timing overrides into a single transition:none declaration; preserve the explicit reduced-motion media query and transform/opacity reset.",
+  "scope": "V0 candidate only; no source registry, Wanaka artifact, human decision, or lifecycle contract changes.",
+  "verification_plan": [
+    "run the motion-token validator through TECHNICAL_EVALUATED on retry attempt 3",
+    "rerun browser technical/responsive/a11y/performance gates",
+    "recapture the local manifest against the final candidate hash",
+    "confirm technical qualification before VISUAL_CAPTURED"
+  ],
+  "created_at": "2026-09-02T07:23:54.862Z",
+  "producer": "kinetic-repair-diagnosis"
+}

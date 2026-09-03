@@ -1,0 +1,118 @@
+{
+  "schema": "kinetic/gym/prebuild-review@0.1",
+  "review_id": "pbr-5300412a00-v0",
+  "case_id": "case-5300412a00",
+  "variant_id": "V0",
+  "brief_sha256": "bb5cf67bda94a748ffddb4357814eaa87fa451fc88e44b70c7cec2e33394bcef",
+  "retrieval_sha256": "51f424e153a537611dd90e2a5a94a7ca76bfc4bb323961bfe91add153e58bf1a",
+  "decision": "APPROVED",
+  "rule_results": [
+    {
+      "rule_id": "PB01_GENERIC_HERO_CARDS",
+      "passed": true,
+      "evidence_path": "$.composition_plan",
+      "reason": "The brief defines an authored browse shell, central signal shelf, side rails, and a return flow rather than a generic hero/cards/footer template."
+    },
+    {
+      "rule_id": "PB02_DEFAULT_TYPOGRAPHY",
+      "passed": true,
+      "evidence_path": "$.typography_plan",
+      "reason": "Display, body, label, metadata, scale, contrast, rhythm, and responsive roles are explicit."
+    },
+    {
+      "rule_id": "PB03_NO_ASSET_STRATEGY",
+      "passed": true,
+      "evidence_path": "$.art_direction.asset_strategy",
+      "reason": "The candidate uses original CSS-generated motifs only and explicitly forbids external assets, fonts, media, icons, and library code."
+    },
+    {
+      "rule_id": "PB04_NO_SIGNATURE_MOVE",
+      "passed": true,
+      "evidence_path": "$.motion_plan.signature_move",
+      "reason": "V0 is a fidelity study and the brief nevertheless names a bounded signal-constellation interaction for inspection."
+    },
+    {
+      "rule_id": "PB05_DECORATIVE_ONLY_MOTION",
+      "passed": true,
+      "evidence_path": "$.motion_plan.signature_move",
+      "reason": "The focused tile transformation is tied to browse category comprehension, not ambient decoration."
+    },
+    {
+      "rule_id": "PB06_NO_TRANSITION_STORYBOARD",
+      "passed": true,
+      "evidence_path": "$.motion_plan.scroll_storyboard",
+      "reason": "Initial, mid-scroll, signature, and final states plus tokenized transitions are specified."
+    },
+    {
+      "rule_id": "PB07_NO_DEPTH_DECISION",
+      "passed": true,
+      "evidence_path": "$.art_direction.depth",
+      "reason": "Panel separation, shallow lift, focus ring, and explicit z-levels define the depth model."
+    },
+    {
+      "rule_id": "PB08_WEAK_NARRATIVE",
+      "passed": true,
+      "evidence_path": "$.core_concept",
+      "reason": "The signal-catalogue concept, browse hierarchy, pacing, and focal points form a testable authored narrative."
+    },
+    {
+      "rule_id": "PB09_INSUFFICIENT_SOURCE_GROUNDING",
+      "passed": true,
+      "evidence_path": "$.source_provenance",
+      "reason": "The single DesignCase and single source influence match the retrieval receipt and carry explicit abstract-use attribution."
+    },
+    {
+      "rule_id": "PB10_DERIVATIVE_COMPOSITION",
+      "passed": true,
+      "evidence_path": "$.originality_plan",
+      "reason": "The V0 plan records deliberate differences and prohibits source-specific geometry, labels, implementation, and assets."
+    },
+    {
+      "rule_id": "PB11_COMPONENT_SOUP",
+      "passed": true,
+      "evidence_path": "$.source_provenance.implementation_sources",
+      "reason": "No implementation source or dependency is selected; the candidate is one original local HTML/CSS/JS surface."
+    },
+    {
+      "rule_id": "PB12_RIGHTS_MISMATCH",
+      "passed": true,
+      "evidence_path": "$.source_provenance",
+      "reason": "The receipt authorizes COMPARISON_REFERENCE only and the brief's prohibited-copying boundary matches the audited source policy."
+    },
+    {
+      "rule_id": "PB13_WEAK_QUALITY_HYPOTHESIS",
+      "passed": true,
+      "evidence_path": "$.quality_hypothesis",
+      "reason": "The hypothesis identifies the transfer target, prior plain-motion failure mode, and the human review dependency."
+    },
+    {
+      "rule_id": "PB14_SOURCE_ORDER_VIOLATION",
+      "passed": true,
+      "evidence_path": "$.source_provenance",
+      "reason": "Concept and abstract retained principles precede the no-op implementation-source list; no source code is introduced."
+    },
+    {
+      "rule_id": "PB15_ORIGINALS_BEFORE_V0",
+      "passed": true,
+      "evidence_path": "$.variant_id",
+      "reason": "Only the required V0 fidelity-study slot is initialized; no original V1/V2 slot or taste decision exists."
+    }
+  ],
+  "advisory_observations": [
+    {
+      "producer": "deterministic",
+      "observation": "Reference mobile behavior and exact source motion timing remain unresolved and must not be inferred as passed.",
+      "severity": "medium",
+      "confidence": 1
+    },
+    {
+      "producer": "deterministic",
+      "observation": "The V0 must stop before a human FidelityReport; no automated aesthetic qualification is permitted.",
+      "severity": "high",
+      "confidence": 1
+    }
+  ],
+  "blocking_reasons": [],
+  "reviewer": "kinetic/prebuild-review@0.1",
+  "created_at": "2026-09-02T07:09:09.999Z"
+}

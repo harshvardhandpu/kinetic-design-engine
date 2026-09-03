@@ -1,0 +1,107 @@
+{
+  "schema": "kinetic/gym/reference-observation@0.1",
+  "case_id": "case-5300412a00",
+  "title": "React Bits component index",
+  "canonical_url": "https://reactbits.dev/get-started/index",
+  "access_policy": "reference-site-observe-only",
+  "source_registry_id": "src-react-bits",
+  "source_registry_version": "0.1.2",
+  "rights": {
+    "storage": "metadata, KINETIC-authored analysis, and internal comparison screenshots only",
+    "effective_mode": "REFERENCE_ABSTRACTION",
+    "obligations": ["ATTRIBUTION_REQUIRED", "LICENSE_RETENTION_REQUIRED"],
+    "prohibited": [
+      "source code",
+      "component code",
+      "source branding",
+      "source copy",
+      "source fonts",
+      "source demo media",
+      "source assets",
+      "vendor or redistributed library output",
+      "automated corpus ingestion"
+    ],
+    "robots_url": "https://reactbits.dev/robots.txt",
+    "license_url": "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+    "terms_status": "UNVERIFIED; public observation remains limited to the audited abstract-reference boundary"
+  },
+  "browser": {
+    "driver": "Hermes browser tools",
+    "chromium": "151.0.7922.34",
+    "viewport": { "width": 1485, "height": 840 },
+    "capture_scale": "resized internal comparison copy at 720px maximum width"
+  },
+  "inspected_at": "2026-09-02T07:01:32Z",
+  "observations": {
+    "desktop_initial": {
+      "scroll_state": "top",
+      "structure": "Dark three-zone application shell: persistent top bar, grouped left navigation/filter rail, dominant central browse surface, and a narrower right support rail.",
+      "visual": "Large browse heading and compact controls lead into a repeated multi-column gallery of rounded preview panels with small metadata strips.",
+      "interaction": "Search, preferences/theme controls, category filtering, active navigation state, and card affordances are visible.",
+      "dom_snapshot": { "links": 205, "buttons": 16, "images": 6, "videos": 9, "canvases": 0, "grid_cells": 9 }
+    },
+    "desktop_mid_scroll": {
+      "scroll_state": "mid-list",
+      "structure": "Left rail remains independently navigational while the center shows successive card bands; the right rail keeps promotional/support blocks vertically separated.",
+      "visual": "Even gutters, rounded dark panels, muted borders, and concentrated violet/magenta/blue gradients keep a dense catalogue legible.",
+      "interaction": "Preview treatments imply glow, blur, distortion, and hover-ready states without a claim about their exact timing or implementation.",
+      "scroll_y_observed": 7207
+    },
+    "desktop_final": {
+      "scroll_state": "end of list",
+      "structure": "The gallery ends with a final card row and breathing room; there is no conventional full-width footer, while support panels remain in the side rail.",
+      "visual": "A small return-to-top affordance closes the browse flow; the shell remains compartmentalized rather than becoming a new editorial section.",
+      "responsive_note": "The wide arrangement implies rail collapse/drawer behavior and fewer card columns on small screens; mobile behavior was not directly captured."
+    }
+  },
+  "captures": [
+    {
+      "capture_id": "reactbits-reference-desktop-initial",
+      "viewport": "desktop",
+      "state": "initial",
+      "url": "https://reactbits.dev/get-started/index",
+      "artifact_path": "reference/captures/desktop-initial-e87ed92fcb8c.webp",
+      "sha256": "e87ed92fcb8cde80a10afbe48b8f792a4d3f1c16a6bf79268b0960206e92b229",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-09-02T07:01:32Z"
+    },
+    {
+      "capture_id": "reactbits-reference-desktop-mid-scroll",
+      "viewport": "desktop",
+      "state": "mid-scroll",
+      "url": "https://reactbits.dev/get-started/index",
+      "artifact_path": "reference/captures/desktop-mid-scroll-04d151ae6295.webp",
+      "sha256": "04d151ae629543ead16f85706ca07478b2d92768d2acef547b3b10f81082fcd8",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-09-02T07:01:32Z"
+    },
+    {
+      "capture_id": "reactbits-reference-desktop-final",
+      "viewport": "desktop",
+      "state": "final",
+      "url": "https://reactbits.dev/get-started/index",
+      "artifact_path": "reference/captures/desktop-final-136b715b6a12.webp",
+      "sha256": "136b715b6a1267e6d98c843456438b5a974a1ba8764df1bf4e51ddf7c2e3ea2c",
+      "acquisition": "ONE_OFF_OBSERVE_ONLY",
+      "inspected_at": "2026-09-02T07:01:32Z"
+    }
+  ],
+  "visual_analysis": {
+    "desktop_initial": "A dark documentation/gallery shell prioritizes browsing: top utility bar, left grouped rail, central multi-column shelf, and right support panels. A bold heading and compact search/filter controls establish hierarchy before the previews.",
+    "desktop_mid_scroll": "Repeated card bands preserve an even browse rhythm. Rounded frames and low-contrast borders contain varied abstract motion treatments; saturated gradients stay localized to previews and calls to action.",
+    "desktop_final": "The catalogue resolves with a final card row and return affordance instead of a conventional footer. Support content stays in the side rail, preserving the center as the primary browse task.",
+    "evidence_limit": "One-off desktop visual observations do not establish source timing, easing, hidden implementation, mobile behavior, or permission for code/assets/training reuse."
+  },
+  "source_refs": [
+    "https://reactbits.dev/get-started/index",
+    "https://reactbits.dev/robots.txt",
+    "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+    "source:src-react-bits",
+    "obsidian:Resource for upgrading/Design engine training.md"
+  ],
+  "limitations": [
+    "Manual one-off observation only; no automated source capture or corpus ingestion.",
+    "Screenshots are internal comparison evidence and are not reusable source assets.",
+    "Only desktop states were captured by the available browser surface; mobile remains unresolved for human fidelity review."
+  ]
+}
