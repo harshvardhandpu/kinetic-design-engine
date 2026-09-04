@@ -3,77 +3,103 @@
   "case_id": "case-5300412a00",
   "stages": {
     "planning": {
-      "started_at": "2026-09-02T07:07:15.579Z",
-      "ended_at": "2026-09-02T07:08:22.430Z",
-      "duration_ms": 66851,
+      "started_at": "2026-09-04T01:28:55.832Z",
+      "ended_at": "2026-09-04T01:34:04.977Z",
+      "duration_ms": 309145,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-5300412a00/planning/v0/variant-brief.json"
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
     "retrieval": {
-      "started_at": "2026-09-02T07:08:22.430Z",
-      "ended_at": "2026-09-02T07:10:17.537Z",
-      "duration_ms": 115107,
+      "started_at": "2026-09-04T01:34:04.977Z",
+      "ended_at": "2026-09-04T01:34:32.262Z",
+      "duration_ms": 27285,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-5300412a00/planning/v0/variant-brief.json",
-        "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
     "prebuild_review": {
-      "started_at": "2026-09-02T07:10:17.537Z",
-      "ended_at": "2026-09-02T07:10:26.051Z",
-      "duration_ms": 8514,
+      "started_at": "2026-09-04T01:34:32.262Z",
+      "ended_at": "2026-09-04T01:34:39.085Z",
+      "duration_ms": 6823,
       "status": "COMPLETED",
       "attempt": 1,
       "receipt_refs": [
-        "runs/case-5300412a00/planning/v0/variant-brief.json",
-        "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
-        "runs/case-5300412a00/planning/v0/prebuild-review.json"
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
     "build": {
-      "started_at": "2026-09-02T07:27:27.831Z",
-      "ended_at": "2026-09-02T07:27:28.283Z",
-      "duration_ms": 452,
+      "started_at": "2026-09-04T01:34:39.376Z",
+      "ended_at": "2026-09-04T01:34:39.676Z",
+      "duration_ms": 300,
       "status": "COMPLETED",
-      "attempt": 3,
+      "attempt": 1,
       "receipt_refs": [
-        "runs/case-5300412a00/planning/v0/variant-brief.json",
-        "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
-        "runs/case-5300412a00/planning/v0/prebuild-review.json",
-        "runs/case-5300412a00/variants/v0",
-        "runs/case-5300412a00/reports/technical-evaluation-v0.json"
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "runs/case-5300412a00/variants/v2",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
     "capture": {
-      "started_at": "2026-09-03T15:25:00.352Z",
-      "ended_at": "2026-09-03T15:25:15.814Z",
-      "duration_ms": 15462,
+      "started_at": "2026-09-04T01:35:52.247Z",
+      "ended_at": "2026-09-04T01:40:41.965Z",
+      "duration_ms": 289718,
       "status": "COMPLETED",
-      "attempt": 0,
+      "attempt": 1,
       "receipt_refs": [
-        "gym/runs/case-5300412a00/captures/v0/manifest.json"
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "runs/case-5300412a00/variants/v2",
+        "runs/case-5300412a00/reports/technical-evaluation-v2.json",
+        "runs/case-5300412a00/captures/v2/manifest.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
     "technical_evaluation": {
-      "started_at": "2026-09-02T07:27:28.283Z",
-      "ended_at": "2026-09-02T07:27:49.149Z",
-      "duration_ms": 20866,
+      "started_at": "2026-09-04T01:34:39.676Z",
+      "ended_at": "2026-09-04T01:35:52.247Z",
+      "duration_ms": 72571,
       "status": "COMPLETED",
-      "attempt": 3,
+      "attempt": 1,
       "receipt_refs": [
-        "runs/case-5300412a00/planning/v0/variant-brief.json",
-        "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
-        "runs/case-5300412a00/planning/v0/prebuild-review.json",
-        "runs/case-5300412a00/variants/v0",
-        "runs/case-5300412a00/reports/technical-evaluation-v0.json"
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "runs/case-5300412a00/variants/v2",
+        "runs/case-5300412a00/reports/technical-evaluation-v2.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
-    "design_evaluation": null,
+    "design_evaluation": {
+      "started_at": "2026-09-04T01:40:41.965Z",
+      "ended_at": "2026-09-04T01:41:18.243Z",
+      "duration_ms": 36278,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "runs/case-5300412a00/variants/v2",
+        "runs/case-5300412a00/reports/technical-evaluation-v2.json",
+        "runs/case-5300412a00/captures/v2/manifest.json",
+        "runs/case-5300412a00/reports/design-evaluation-v2.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
+      ]
+    },
     "repair": {
       "started_at": "2026-09-02T07:27:27.831Z",
       "ended_at": "2026-09-02T07:27:27.831Z",
@@ -84,7 +110,23 @@
         "runs/case-5300412a00/reports/repair-diagnosis-v0-attempt-2.json"
       ]
     },
-    "review_package_generation": null,
+    "review_package_generation": {
+      "started_at": "2026-09-04T01:41:18.243Z",
+      "ended_at": "2026-09-04T01:42:24.013Z",
+      "duration_ms": 65770,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "runs/case-5300412a00/variants/v2",
+        "runs/case-5300412a00/reports/technical-evaluation-v2.json",
+        "runs/case-5300412a00/captures/v2/manifest.json",
+        "runs/case-5300412a00/reports/design-evaluation-v2.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
+      ]
+    },
     "human_review_waiting": null
   },
   "metrics": {
@@ -95,8 +137,8 @@
     "tokens_output": null,
     "tool_calls": null,
     "vision_calls": null,
-    "repair_attempts": 2,
-    "build_attempts": 3,
+    "repair_attempts": 0,
+    "build_attempts": 1,
     "asset_preparation_ms": null,
     "monetary_cost": null,
     "monetary_cost_status": "UNKNOWN",
@@ -104,5 +146,5 @@
       "model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed"
     ]
   },
-  "updated_at": "2026-09-03T15:25:15.814Z"
+  "updated_at": "2026-09-04T01:42:24.013Z"
 }

@@ -8,7 +8,7 @@
       "case_id": "case-5300412a00",
       "slot": "V0",
       "mode": "fidelity-study",
-      "state": "VISUAL_CAPTURED",
+      "state": "DESIGN_EVALUATED",
       "attempt": 3,
       "deployable": false,
       "original_work": false,
@@ -22,8 +22,8 @@
         "build_receipt": "runs/case-5300412a00/variants/v0",
         "technical_evaluation": "runs/case-5300412a00/reports/technical-evaluation-v0.json",
         "capture_manifest": "runs/case-5300412a00/captures/v0/manifest.json",
-        "design_evaluation": null,
-        "fidelity_report": null
+        "design_evaluation": "runs/case-5300412a00/reports/design-evaluation-v0.json",
+        "fidelity_report": "runs/case-5300412a00/reports/fidelity-v0.json"
       },
       "attempts": [
         {
@@ -54,16 +54,93 @@
         "BUILDING": "2026-09-02T07:27:27.831Z",
         "BUILT": "2026-09-02T07:27:28.283Z",
         "TECHNICAL_EVALUATED": "2026-09-02T07:27:49.149Z",
-        "VISUAL_CAPTURED": "2026-09-02T07:28:30.640Z"
+        "VISUAL_CAPTURED": "2026-09-02T07:28:30.640Z",
+        "DESIGN_EVALUATED": "2026-09-04T01:27:06.006Z"
+      }
+    },
+    "V1": {
+      "schema": "kinetic/gym/variant-run@0.2",
+      "run_id": "run-case-5300412a00-v1",
+      "case_id": "case-5300412a00",
+      "slot": "V1",
+      "mode": "original",
+      "state": "REVIEW_READY",
+      "attempt": 1,
+      "deployable": true,
+      "original_work": true,
+      "technically_qualified": true,
+      "design_qualified": null,
+      "acceptable_for_further_taste_learning": null,
+      "refs": {
+        "variant_brief": "runs/case-5300412a00/planning/v1/variant-brief.json",
+        "retrieval_receipt": "runs/case-5300412a00/planning/v1/retrieval-receipt.json",
+        "prebuild_review": "runs/case-5300412a00/planning/v1/prebuild-review.json",
+        "build_receipt": "runs/case-5300412a00/variants/v1",
+        "technical_evaluation": "runs/case-5300412a00/reports/technical-evaluation-v1.json",
+        "capture_manifest": "runs/case-5300412a00/captures/v1/manifest.json",
+        "design_evaluation": "runs/case-5300412a00/reports/design-evaluation-v1.json",
+        "fidelity_report": "runs/case-5300412a00/reports/fidelity-v0.json"
+      },
+      "attempts": [],
+      "blocked_condition": null,
+      "timestamps": {
+        "PLANNED": "2026-09-04T01:28:55.503Z",
+        "BRIEF_VALIDATED": "2026-09-04T01:34:04.667Z",
+        "RETRIEVAL_PROVEN": "2026-09-04T01:34:31.972Z",
+        "PREBUILD_APPROVED": "2026-09-04T01:34:38.134Z",
+        "BUILDING": "2026-09-04T01:34:38.443Z",
+        "BUILT": "2026-09-04T01:34:38.796Z",
+        "TECHNICAL_EVALUATED": "2026-09-04T01:35:51.949Z",
+        "VISUAL_CAPTURED": "2026-09-04T01:40:41.668Z",
+        "DESIGN_EVALUATED": "2026-09-04T01:41:17.892Z",
+        "REVIEW_READY": "2026-09-04T01:42:24.013Z"
+      }
+    },
+    "V2": {
+      "schema": "kinetic/gym/variant-run@0.2",
+      "run_id": "run-case-5300412a00-v2",
+      "case_id": "case-5300412a00",
+      "slot": "V2",
+      "mode": "original",
+      "state": "REVIEW_READY",
+      "attempt": 1,
+      "deployable": true,
+      "original_work": true,
+      "technically_qualified": true,
+      "design_qualified": null,
+      "acceptable_for_further_taste_learning": null,
+      "refs": {
+        "variant_brief": "runs/case-5300412a00/planning/v2/variant-brief.json",
+        "retrieval_receipt": "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
+        "prebuild_review": "runs/case-5300412a00/planning/v2/prebuild-review.json",
+        "build_receipt": "runs/case-5300412a00/variants/v2",
+        "technical_evaluation": "runs/case-5300412a00/reports/technical-evaluation-v2.json",
+        "capture_manifest": "runs/case-5300412a00/captures/v2/manifest.json",
+        "design_evaluation": "runs/case-5300412a00/reports/design-evaluation-v2.json",
+        "fidelity_report": "runs/case-5300412a00/reports/fidelity-v0.json"
+      },
+      "attempts": [],
+      "blocked_condition": null,
+      "timestamps": {
+        "PLANNED": "2026-09-04T01:28:55.832Z",
+        "BRIEF_VALIDATED": "2026-09-04T01:34:04.977Z",
+        "RETRIEVAL_PROVEN": "2026-09-04T01:34:32.262Z",
+        "PREBUILD_APPROVED": "2026-09-04T01:34:39.085Z",
+        "BUILDING": "2026-09-04T01:34:39.376Z",
+        "BUILT": "2026-09-04T01:34:39.676Z",
+        "TECHNICAL_EVALUATED": "2026-09-04T01:35:52.247Z",
+        "VISUAL_CAPTURED": "2026-09-04T01:40:41.965Z",
+        "DESIGN_EVALUATED": "2026-09-04T01:41:18.243Z",
+        "REVIEW_READY": "2026-09-04T01:42:24.013Z"
       }
     }
   },
   "reports": {
-    "fidelity": null,
-    "source_to_output_loss": null,
-    "review_package": null
+    "fidelity": "runs/case-5300412a00/reports/fidelity-v0.json",
+    "source_to_output_loss": "runs/case-5300412a00/reports/source-to-output-loss.json",
+    "review_package": "runs/case-5300412a00/review-package.html"
   },
-  "review_state": "NOT_READY",
+  "review_state": "REVIEW_READY",
   "taste_decision_ref": null,
   "blocked_condition": null,
   "history": [
@@ -164,8 +241,162 @@
       "slot": "V0",
       "artifact_ref": null,
       "timestamp": "2026-09-02T07:28:30.640Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v0-3-VISUAL_CAPTURED-DESIGN_EVALUATED",
+      "event": "VISUAL_CAPTURED->DESIGN_EVALUATED",
+      "slot": "V0",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:27:06.006Z"
+    },
+    {
+      "event_id": "add-case-5300412a00-V1",
+      "event": "original-slot-planned",
+      "slot": "V1",
+      "artifact_ref": "runs/case-5300412a00/reports/fidelity-v0.json",
+      "timestamp": "2026-09-04T01:28:55.503Z"
+    },
+    {
+      "event_id": "add-case-5300412a00-V2",
+      "event": "original-slot-planned",
+      "slot": "V2",
+      "artifact_ref": "runs/case-5300412a00/reports/fidelity-v0.json",
+      "timestamp": "2026-09-04T01:28:55.832Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-PLANNED-BRIEF_VALIDATED",
+      "event": "PLANNED->BRIEF_VALIDATED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:04.667Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-PLANNED-BRIEF_VALIDATED",
+      "event": "PLANNED->BRIEF_VALIDATED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:04.977Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-BRIEF_VALIDATED-RETRIEVAL_PROVEN",
+      "event": "BRIEF_VALIDATED->RETRIEVAL_PROVEN",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:31.972Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-BRIEF_VALIDATED-RETRIEVAL_PROVEN",
+      "event": "BRIEF_VALIDATED->RETRIEVAL_PROVEN",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:32.262Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-RETRIEVAL_PROVEN-PREBUILD_APPROVED",
+      "event": "RETRIEVAL_PROVEN->PREBUILD_APPROVED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:38.134Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-PREBUILD_APPROVED-BUILDING",
+      "event": "PREBUILD_APPROVED->BUILDING",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:38.443Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-BUILDING-BUILT",
+      "event": "BUILDING->BUILT",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:38.796Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-RETRIEVAL_PROVEN-PREBUILD_APPROVED",
+      "event": "RETRIEVAL_PROVEN->PREBUILD_APPROVED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:39.085Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-PREBUILD_APPROVED-BUILDING",
+      "event": "PREBUILD_APPROVED->BUILDING",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:39.376Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-BUILDING-BUILT",
+      "event": "BUILDING->BUILT",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:34:39.676Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-BUILT-TECHNICAL_EVALUATED",
+      "event": "BUILT->TECHNICAL_EVALUATED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:35:51.949Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-BUILT-TECHNICAL_EVALUATED",
+      "event": "BUILT->TECHNICAL_EVALUATED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:35:52.247Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-TECHNICAL_EVALUATED-VISUAL_CAPTURED",
+      "event": "TECHNICAL_EVALUATED->VISUAL_CAPTURED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:40:41.668Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-TECHNICAL_EVALUATED-VISUAL_CAPTURED",
+      "event": "TECHNICAL_EVALUATED->VISUAL_CAPTURED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:40:41.965Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-VISUAL_CAPTURED-DESIGN_EVALUATED",
+      "event": "VISUAL_CAPTURED->DESIGN_EVALUATED",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:41:17.892Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-VISUAL_CAPTURED-DESIGN_EVALUATED",
+      "event": "VISUAL_CAPTURED->DESIGN_EVALUATED",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:41:18.243Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v1-1-DESIGN_EVALUATED-REVIEW_READY",
+      "event": "DESIGN_EVALUATED->REVIEW_READY",
+      "slot": "V1",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:42:24.013Z"
+    },
+    {
+      "event_id": "transition-run-case-5300412a00-v2-1-DESIGN_EVALUATED-REVIEW_READY",
+      "event": "DESIGN_EVALUATED->REVIEW_READY",
+      "slot": "V2",
+      "artifact_ref": null,
+      "timestamp": "2026-09-04T01:42:24.013Z"
+    },
+    {
+      "event_id": "batch-review-ready-case-5300412a00",
+      "event": "batch-review-ready",
+      "slot": null,
+      "artifact_ref": "runs/case-5300412a00/review-package.html",
+      "timestamp": "2026-09-04T01:42:24.013Z"
     }
   ],
   "created_at": "2026-09-02T07:07:15.579Z",
-  "updated_at": "2026-09-02T07:28:30.640Z"
+  "updated_at": "2026-09-04T01:42:24.013Z"
 }

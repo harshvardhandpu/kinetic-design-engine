@@ -1,0 +1,124 @@
+{
+  "schema": "kinetic/gym/design-quality-evaluation@0.1",
+  "evaluation_id": "dqe-5300412a00-v0-human-fallback",
+  "case_id": "case-5300412a00",
+  "variant_id": "V0",
+  "rubric_version": "kinetic/rubric@0.1.2",
+  "producer": "human",
+  "capture_manifest_ref": "runs/case-5300412a00/captures/v0/manifest.json",
+  "brief_ref": "runs/case-5300412a00/planning/v0/variant-brief.json",
+  "provenance_refs": [
+    "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
+    "runs/case-5300412a00/reference/reference-observation.json"
+  ],
+  "vision_receipt": null,
+  "dimensions": {
+    "composition": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "typography": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "art_direction": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "depth": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "motion": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "interaction": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "scroll_story": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "originality": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "cohesion": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    },
+    "surface_fit": {
+      "status": "NOT_EVALUATED",
+      "observations": [],
+      "strengths": [],
+      "failures": [],
+      "severity": "none",
+      "confidence": null,
+      "evidence_capture_ids": [],
+      "producer": "human"
+    }
+  },
+  "limitations": [
+    "Active runtime model is text-only; the S14-verified vision critic path is unavailable for this evaluation.",
+    "Visual quality judgment for V0 is the human FidelityReport, not this rubric.",
+    "This evaluation cannot set design_qualified or acceptable_for_further_taste_learning."
+  ],
+  "advisory_recommendation": "HUMAN_VISUAL_GATE",
+  "created_at": "2026-09-04T01:21:31Z"
+}

@@ -195,10 +195,10 @@ async function generatePhase25Package(caseId, rec, caseDir, gymRoot, repoGym) {
 
   const columns = [];
   const subjects = [
-    { key: 'reference', title: 'WANAKA REFERENCE', role: 'context', slot: null },
-    { key: 'V0', title: 'WANAKA V0 — FIDELITY STUDY', role: 'context', slot: 'V0' },
-    { key: 'V1', title: 'WANAKA V1 — ORIGINAL', role: 'original', slot: 'V1' },
-    { key: 'V2', title: 'WANAKA V2 — ORIGINAL', role: 'original', slot: 'V2' },
+    { key: 'reference', title: 'REFERENCE', role: 'context', slot: null },
+    { key: 'V0', title: 'V0 — FIDELITY STUDY', role: 'context', slot: 'V0' },
+    { key: 'V1', title: 'V1 — ORIGINAL', role: 'original', slot: 'V1' },
+    { key: 'V2', title: 'V2 — ORIGINAL', role: 'original', slot: 'V2' },
   ];
 
   for (const subject of subjects) {
@@ -227,7 +227,8 @@ async function generatePhase25Package(caseId, rec, caseDir, gymRoot, repoGym) {
 </article>`);
   }
 
-  const loss = await collectReportLink(caseDir, rec.reports?.source_to_output_loss, gymRoot, 'source-to-output-loss');
+  const lossRef = rec.reports?.source_to_output_loss ?? `runs/${caseId}/reports/source-to-output-loss.json`;
+  const loss = await collectReportLink(caseDir, lossRef, gymRoot, 'source-to-output-loss');
   const lossBlock = loss ? `<p class="meta">Loss report: <a href="${esc(loss.href)}">${esc(loss.label)}</a></p>` : '<p class="meta">Loss report: pending</p>';
 
   return `<!doctype html>

@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Index Stage — Paper Inspector</title>
+  <meta name="description" content="An original inspector that restages one signal at a time.">
+  <meta data-kinetic-capture-ready="true" content="local-v1-ready">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3ead7;
+      --ink: #241c14;
+      --ink-soft: #6a5c4d;
+      --rule: rgba(36, 28, 20, .16);
+      --rust: #b44a22;
+      --well: #efe4cc;
+      --kinetic-duration-fast: 150ms;
+      --kinetic-duration-med: 300ms;
+      --kinetic-duration-slow: 450ms;
+      --kinetic-easing-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --kinetic-easing-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+      --kinetic-distance-reveal-y: 24px;
+      --kinetic-opacity-hidden: 0;
+      --kinetic-opacity-visible: 1;
+      --kinetic-scale-identity: 1;
+      --kinetic-scale-soft: .96;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.5 ui-sans-serif, system-ui, sans-serif;
+    }
+    h1 { font-family: ui-serif, Georgia, serif; font-weight: 500; }
+    button { font: inherit; color: inherit; }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--rust); outline-offset: 3px; }
+    .masthead, .workspace, .notes, .end {
+      width: min(1120px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 0 18px; border-bottom: 1px solid var(--rule);
+    }
+    .masthead h1 { margin: 0; font-size: clamp(1.6rem, 4vw, 2.6rem); }
+    .status { color: var(--ink-soft); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    #menuToggle { display: none; }
+    .workspace { display: grid; grid-template-columns: minmax(200px, 28%) 1fr; gap: 28px; padding: 28px 0 48px; }
+    .index { list-style: none; margin: 0; padding: 0; }
+    .index-row {
+      display: grid; grid-template-columns: 2.2rem 1fr; gap: 8px; align-items: baseline;
+      width: 100%; text-align: left; background: none; border: 0; border-bottom: 1px solid var(--rule);
+      padding: 12px 0; cursor: pointer;
+    }
+    .index-row small { color: var(--ink-soft); }
+    .index-row:hover, .index-row:focus-visible { color: var(--rust); }
+    .stage {
+      min-height: 420px; background: var(--well); border: 1px solid var(--rule); padding: 28px;
+      position: relative;
+    }
+    .stage h2 { margin: 0 0 12px; font-family: ui-serif, Georgia, serif; font-size: clamp(2rem, 5vw, 3.4rem); }
+    .motif {
+      width: min(280px, 70%); aspect-ratio: 1; margin: 24px auto; border: 1px solid var(--rule);
+      background: radial-gradient(circle at 30% 30%, #fff7e8, #e2d3b3);
+    }
+    .reticle {
+      position: absolute; inset: 18%; border: 1px solid var(--rust);
+      transform: scale(var(--kinetic-scale-soft)); opacity: var(--kinetic-opacity-hidden);
+      transition: transform var(--kinetic-duration-slow) var(--kinetic-easing-out-expo), opacity var(--kinetic-duration-slow) var(--kinetic-easing-out-expo);
+      pointer-events: none;
+    }
+    .workspace:has(#signature-row:hover) .reticle,
+    .workspace:has(#signature-row:focus-visible) .reticle {
+      transform: scale(var(--kinetic-scale-identity)); opacity: var(--kinetic-opacity-visible);
+    }
+    .notes { padding-bottom: 80px; color: var(--ink-soft); min-height: 720px; }
+    .end { padding-bottom: 48px; }
+    .back-top { display: inline-block; padding: 8px 0; }
+    @media (max-width: 800px) {
+      #menuToggle { display: inline-block; background: none; border: 1px solid var(--rule); padding: 8px 12px; }
+      .workspace { grid-template-columns: 1fr; }
+      .index { display: none; }
+      body.menu-open .index { display: block; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .reticle { transform: none; opacity: var(--kinetic-opacity-visible); }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead" data-kinetic="inspector-masthead" data-kinetic-version="0.1">
+    <h1 id="page-title">Index Stage</h1>
+    <p class="status">Inspector live</p>
+    <button id="menuToggle" type="button" aria-label="Open index">Index</button>
+  </header>
+  <main class="workspace">
+    <ol class="index" id="index">
+      <li><button class="index-row" id="signature-row" type="button"><span>01</span><span>Harbor Pulse<small> — tidal meter</small></span></button></li>
+      <li><button class="index-row" type="button"><span>02</span><span>Glass Ledger<small> — debit glaze</small></span></button></li>
+      <li><button class="index-row" type="button"><span>03</span><span>Copper Delay<small> — room tone</small></span></button></li>
+      <li><button class="index-row" type="button"><span>04</span><span>Paper Orbit<small> — folio spin</small></span></button></li>
+      <li><button class="index-row" type="button"><span>05</span><span>Quiet Rail<small> — alignment</small></span></button></li>
+      <li><button class="index-row" type="button"><span>06</span><span>Last Plate<small> — closing field</small></span></button></li>
+    </ol>
+    <section class="stage" id="stage" data-kinetic="stage-field" data-kinetic-version="0.1">
+      <div class="reticle" aria-hidden="true"></div>
+      <h2>Harbor Pulse</h2>
+      <div class="motif" aria-hidden="true"></div>
+      <p>One selected signal occupies the well. Neighboring rows stay in the index.</p>
+    </section>
+  </main>
+  <section class="notes" id="notes" data-kinetic="annotation-strip" data-kinetic-version="0.1">
+    <h2>Field notes</h2>
+    <p>This inspector restages a single original motif. It is not a documentation gallery and does not reuse source previews.</p>
+  </section>
+  <p class="end"><a class="back-top" id="backTop" href="#page-title">Return to masthead</a></p>
+  <script>
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    document.getElementById('menuToggle').addEventListener('click', () => document.body.classList.toggle('menu-open'));
+    document.getElementById('backTop').addEventListener('click', (event) => {
+      event.preventDefault();
+      document.getElementById('page-title').focus();
+      window.scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+{
+  "schema": "kinetic/gym/variant-brief@0.1",
+  "variant_id": "V2",
+  "case_id": "case-5300412a00",
+  "design_case_ids_used": [
+    "case-5300412a00"
+  ],
+  "surface": "industrial mosaic / docked inspector",
+  "goal": "Translate catalogue browsing into an original industrial bento mosaic where one cell docks an inspector, instead of a three-rail gallery or a paper index-stage.",
+  "direction_name": "Dock Mosaic / Yard Plate",
+  "core_concept": "A dark industrial plate of unequal bento cells. Selecting a cell docks a side inspector with the cell's reading; neighboring cells stay put. Browsing is docking, not restaging a single hero or lifting a card.",
+  "composition_plan": {
+    "sections": [
+      "plate header with yard name and live cell count",
+      "unequal bento mosaic of original signal plates",
+      "docked inspector that appears from the selected cell",
+      "yard notes after the mosaic",
+      "return plate"
+    ],
+    "spatial_system": "Desktop is a 12-column mosaic with 8/4 and 4/4/4 spans; the dock is a 4-column inspector that occupies the right of the selected row. No persistent left nav rail. Mobile stacks cells full-width.",
+    "visual_hierarchy": "The mosaic is primary; dock copy is secondary; yard notes are quiet.",
+    "pacing": "Dense mosaic first, then a longer notes band, then a short return.",
+    "density": "High in the mosaic, low in the notes band.",
+    "focal_points": [
+      "first mosaic cell",
+      "docked inspector",
+      "yard notes",
+      "return plate"
+    ]
+  },
+  "typography_plan": {
+    "display_role": "Condensed uppercase system sans with wide tracking for the plate header.",
+    "body_role": "Regular system sans for dock copy and notes.",
+    "scale_strategy": "Oversized header, compact cell labels, readable dock body.",
+    "contrast_strategy": "Acid lime on graphite instead of violet gradients or rust paper.",
+    "rhythm": "Tight cell labels, wide header tracking, generous notes measure.",
+    "responsive_behavior": "Header wraps; mosaic becomes a single column; dock stacks under the selected cell."
+  },
+  "art_direction": {
+    "imagery_strategy": "CSS plates, hatch fills, and lime rules. No source media.",
+    "asset_strategy": "Inline HTML/CSS/JS only; no external assets.",
+    "texture": "Graphite hatch and lime hairlines.",
+    "material": "Industrial plate, lime signal, charcoal wells.",
+    "depth": "Unequal cell spans and a docked inspector plane, not card lift or paper reticle.",
+    "layering": "Header, mosaic, dock, notes.",
+    "color_logic": "Graphite field, lime signal, pale dock text."
+  },
+  "motion_plan": {
+    "signature_move": {
+      "name": "cell dock",
+      "central_idea": "The first mosaic cell opens a docked inspector beside it so the selected plate keeps its place while its reading becomes available.",
+      "trigger": "pointer hover or keyboard focus on the first mosaic cell",
+      "visual_transformation": "The dock panel opacity and translateX move from hidden/reveal-x to visible while the cell outline becomes lime.",
+      "purpose": "Keep the mosaic stable while exposing the selected cell's reading.",
+      "content_relationship": "The dock text belongs only to the first cell.",
+      "reduced_motion_alternative": "Show the dock and lime outline in final position with no translation.",
+      "capture_checkpoint": "desktop hover on the first mosaic cell after a 1250ms stable checkpoint"
+    },
+    "scroll_storyboard": [
+      "initial: header and first mosaic row",
+      "mid-scroll: lower mosaic row and notes",
+      "signature: first cell docks its inspector",
+      "final: return plate"
+    ],
+    "transitions": [
+      "use duration-slow and easing-out-expo for the dock",
+      "use duration-med and easing-snap for cell outline",
+      "disable transitions and transforms under prefers-reduced-motion"
+    ],
+    "interaction_states": [
+      "first cell hover/focus docks inspector",
+      "mobile menu lists cell names",
+      "return control focuses the header"
+    ],
+    "reduced_motion_behavior": "Remove transitions and transforms; keep dock, outline, hierarchy, and focus at rest.",
+    "token_exceptions": []
+  },
+  "reference_transfer": {
+    "retained_principles": [
+      "catalogue browsing remains the task",
+      "one focused interaction explains a preview",
+      "luminous accent is localized to the active object"
+    ],
+    "deliberately_rejected_principles": [
+      "three-rail documentation shell",
+      "paper inspector two-column",
+      "equal card shelf"
+    ],
+    "prohibited_copying": [
+      "React Bits source, branding, copy, fonts, media, or components",
+      "V0 Signal Shelf and V1 Index Stage geometry",
+      "Wanaka studio layout"
+    ]
+  },
+  "source_provenance": {
+    "design_reference_sources": [
+      {
+        "source_id": "src-react-bits",
+        "retrieval_reason": "Use the audited React Bits reference only for abstract catalogue-browse principles while composing an original industrial mosaic that is not a gallery clone.",
+        "knowledge_used": [
+          "dark application shell separates a left navigation rail, central gallery, and right support rail",
+          "repeated rounded preview panels with compact metadata make a large catalogue browseable",
+          "violet, magenta, and electric-blue gradients are concentrated in previews and primary actions",
+          "search, category filtering, theme/preferences, and card focus states are explicit browse affordances",
+          "preview motion is observed as an interaction intent only; exact timing and implementation remain unclaimed"
+        ],
+        "usage_mode": "COMPARISON_REFERENCE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 1,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 2,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 3,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 4,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          }
+        ]
+      }
+    ],
+    "motion_reference_sources": [],
+    "typography_sources": [],
+    "implementation_sources": [],
+    "tool_sources": []
+  },
+  "originality_plan": {
+    "composition_differences": [
+      "Replace rails and inspector with an unequal bento mosaic and a docked reading.",
+      "Use 12-column industrial spans instead of a card shelf or two-column paper stage.",
+      "Put notes after the mosaic rather than in a persistent right rail."
+    ],
+    "typography_differences": [
+      "Use condensed uppercase tracking for the plate header.",
+      "Use lime on graphite instead of paper rust or violet dark UI."
+    ],
+    "motion_differences": [
+      "Signature docks an inspector beside a stable cell rather than lifting a card or drawing a reticle.",
+      "Dock uses opacity and translateX tokens, not scale-on-preview."
+    ],
+    "asset_non_reuse": "All visuals are original CSS plates; no source, V0, or V1 motifs are reused.",
+    "signature_move_hypothesis": "A docked inspector should prove browsing can keep the mosaic in place while exposing one cell's reading."
+  },
+  "quality_hypothesis": "An industrial mosaic with a docked inspector should be a second original direction, distinct from V0 and V1. Human review must decide taste; no winner is inferred.",
+  "created_at": "2026-09-04T01:21:31Z",
+  "producer": "kinetic-autonomous-generalization"
+}

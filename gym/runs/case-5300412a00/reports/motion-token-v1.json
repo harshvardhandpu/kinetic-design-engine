@@ -1,0 +1,13 @@
+{
+  "schema": "kinetic/motion-token-report@0.1",
+  "result": "pass",
+  "files_scanned": [
+    "index.html"
+  ],
+  "findings": [],
+  "approved_exceptions": [],
+  "reduced_motion": {
+    "required": true,
+    "found": true
+  }
+}

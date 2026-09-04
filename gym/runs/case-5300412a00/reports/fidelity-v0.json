@@ -1,0 +1,234 @@
+{
+  "schema": "kinetic/gym/fidelity-report@0.1",
+  "case_id": "case-5300412a00",
+  "variant_id": "V0",
+  "classification": "INTERNAL_REFERENCE_STUDY",
+  "deployable": false,
+  "original_work": false,
+  "reference_design_case_id": "case-5300412a00",
+  "dimensions": {
+    "layout": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference desktop is a dark three-rail browse shell (left nav, central preview catalogue, right support). V0 reconstructs that grammar as an original Signal Shelf with utility bar, rails, and a central card grid. Exact source geometry, labels, and documentation chrome are not copied.",
+      "evidence_source": "reference/captures/desktop-initial-e87ed92fcb8c.webp paired with V0 desktop initial cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00",
+        "source:src-react-bits"
+      ],
+      "engine_inference": "V0 uses a top bar plus three-column desktop and collapsing rails; the reference uses a similar browse-shell partition. Column ratios and source-specific chrome differ by design.",
+      "limitations": [
+        "No observed React Bits mobile reference exists; V0 mobile layout is original responsive interpretation only and is not used as reference-fidelity evidence."
+      ]
+    },
+    "typography": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference uses a dark UI type system with compact labels and a prominent browse heading. V0 uses original system-sans stacks, italic emphasis on the display word, and four roles (display, section, label, metadata). Source font files and names are not used.",
+      "evidence_source": "reference/captures/desktop-initial-e87ed92fcb8c.webp paired with V0 desktop initial",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Glyph geometry differs because licensed/source fonts were not retrieved; hierarchy of display vs metadata is transferred.",
+      "limitations": [
+        "Typeface identity is approximated with system stacks."
+      ]
+    },
+    "color": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference concentrates luminous violet/magenta/blue on previews and actions over a near-black shell. V0 reconstructs a charcoal shell with localized gradient signals on tiles and primary controls.",
+      "evidence_source": "reference/captures/desktop-initial-e87ed92fcb8c.webp and desktop-mid-scroll-04d151ae6295.webp paired with V0 desktop initial and mid-scroll",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+        "captures/v0/cap-8109c11889a872fd95493486ab52addf",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp",
+        "reference/captures/desktop-mid-scroll-04d151ae6295.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Palette transfer is principle-level (dark shell, localized luminous accents), not sampled source CSS values.",
+      "limitations": [
+        "Colors were read from stills, not extracted from source stylesheets."
+      ]
+    },
+    "spacing": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference catalogue uses regular card gutters and compact rail padding. V0 uses clamp-based section gaps and a dense central shelf with stable gutters.",
+      "evidence_source": "reference/captures/desktop-mid-scroll-04d151ae6295.webp paired with V0 desktop mid-scroll",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-8109c11889a872fd95493486ab52addf",
+        "reference/captures/desktop-mid-scroll-04d151ae6295.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "V0 regularizes catalogue rhythm; exact source spacing tokens are not reproduced.",
+      "limitations": []
+    },
+    "asset_treatment": {
+      "status": "APPROXIMATED_BEHAVIOR",
+      "observation": "Reference previews are component demos and media. V0 uses original CSS-generated signal motifs only; no source media, icons, or component previews were copied.",
+      "evidence_source": "reference/captures/desktop-mid-scroll-04d151ae6295.webp paired with V0 desktop signature capture",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-19b24b605bd46ba1cae401c3b79d2da3",
+        "reference/captures/desktop-mid-scroll-04d151ae6295.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00",
+        "source:src-react-bits"
+      ],
+      "engine_inference": "Asset treatment is intentionally non-reproductive because of MIT+Commons Clause and one-off observe-only rights.",
+      "limitations": [
+        "Fidelity of preview artwork is inherently partial; source media was never retrieved."
+      ]
+    },
+    "depth": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference depth comes from layered panels, preview frames, and luminous inner fields. V0 uses panel separation, inset edges, a shallow hover lift, and an inner focus ring.",
+      "evidence_source": "reference/captures/desktop-initial-e87ed92fcb8c.webp paired with V0 desktop initial and signature",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+        "captures/v0/cap-19b24b605bd46ba1cae401c3b79d2da3",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "No persistent WebGL/3D is claimed; depth is CSS layering.",
+      "limitations": []
+    },
+    "hierarchy": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference hierarchy is browse-first: heading, filters, then repeated previews. V0 mirrors display heading, toolbar, tile dominance, and quiet rails/metadata.",
+      "evidence_source": "reference/captures/desktop-initial-e87ed92fcb8c.webp paired with V0 desktop initial",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Four-tier type/weight steps carry the browse hierarchy without source copy.",
+      "limitations": [
+        "Mobile hierarchy is original interpretation only; there is no React Bits mobile reference still."
+      ]
+    },
+    "motion": {
+      "status": "APPROXIMATED_BEHAVIOR",
+      "observation": "Reference stills cannot prove hover timing. V0 implements a token-driven signal-constellation hover/focus (shallow lift and inner ring). The human reviewer noted the hover is subtle and accepted it as non-blocking.",
+      "evidence_source": "V0 desktop signature cap-19b24b605bd46ba1cae401c3b79d2da3 paired with reference desktop initial; no reference hover still exists",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-19b24b605bd46ba1cae401c3b79d2da3",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Motion is a KINETIC token approximation of browse-focus intent, not a measurement of source easing.",
+      "limitations": [
+        "No React Bits hover/motion still was captured; signature subtlety is recorded, not treated as a blocking fidelity failure."
+      ]
+    },
+    "scroll_choreography": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "After REVISE, V0 desktop final uses scroll_to_px 657 (true page bottom). Last card row and back-to-top are in view; hero is gone. That end-of-list state is distinct from initial by sha256 and pHash. Reference desktop-final shows the catalogue bottom analogously.",
+      "evidence_source": "reference/captures/desktop-final-136b715b6a12.webp paired with V0 desktop mid-scroll and corrected final",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-8109c11889a872fd95493486ab52addf",
+        "captures/v0/cap-5a97e7b3f287b5ef859f94346963d1ba",
+        "reference/captures/desktop-mid-scroll-04d151ae6295.webp",
+        "reference/captures/desktop-final-136b715b6a12.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "End-of-list evidence is now a genuine max-scroll state, not the on-screen #notes rail.",
+      "limitations": [
+        "Scroll-linked source motion, if any, remains unproven by stills."
+      ]
+    },
+    "interaction": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference browse affordances include search, category, and preview focus. V0 implements search, category filter, theme toggle, tile hover/focus, mobile menu, and return-to-top. Signature hover remains the inspected interaction and was kept as-is per human REVISE item 3.",
+      "evidence_source": "V0 desktop signature and initial paired with reference desktop initial",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-19b24b605bd46ba1cae401c3b79d2da3",
+        "captures/v0/cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+        "reference/captures/desktop-initial-e87ed92fcb8c.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Interaction grammar is transferred as browse controls plus one localized tile focus; source widgets are not cloned.",
+      "limitations": [
+        "No reference hover capture exists. V0 mobile menu-open is technical evidence only."
+      ]
+    },
+    "transition_behavior": {
+      "status": "APPROXIMATED_BEHAVIOR",
+      "observation": "Source transition curves are unmeasured. V0 transitions are motion-token governed; reduced-motion capture matches the static top-of-page rest state by design.",
+      "evidence_source": "V0 desktop reduced-motion cap-d20bfde6e7acb358fdeaa1862839e7b2 and signature capture; motion-token report",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-d20bfde6e7acb358fdeaa1862839e7b2",
+        "captures/v0/cap-19b24b605bd46ba1cae401c3b79d2da3"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Reduced-motion equals initial static top because transforms and transitions are suppressed.",
+      "limitations": [
+        "Equivalence to source timing is not claimed."
+      ]
+    },
+    "narrative_pacing": {
+      "status": "PARTIALLY_CAPTURED",
+      "observation": "Reference paces a dense catalogue rather than a long editorial chapter. V0 uses short intro, regular card bands, and a quiet end-of-list return. Corrected final still proves the catalogue actually ends.",
+      "evidence_source": "reference desktop mid/final paired with V0 mid-scroll and corrected final",
+      "inspection_quality": "VISUAL_SEQUENCE",
+      "capture_refs": [
+        "captures/v0/cap-8109c11889a872fd95493486ab52addf",
+        "captures/v0/cap-5a97e7b3f287b5ef859f94346963d1ba",
+        "reference/captures/desktop-mid-scroll-04d151ae6295.webp",
+        "reference/captures/desktop-final-136b715b6a12.webp"
+      ],
+      "source_refs": [
+        "design-case:case-5300412a00"
+      ],
+      "engine_inference": "Pacing is browse-catalogue, deliberately unlike Wanaka editorial chapters.",
+      "limitations": [
+        "Length equivalence to the live source page is not claimed."
+      ]
+    }
+  },
+  "understood": true,
+  "coverage_summary": "All 12 dimensions carry paired desktop reference stills and V0 captures. Browse-shell layout, catalogue hierarchy, localized luminous color, and end-of-list scroll are reconstructed from one-off observe-only desktop evidence. Motion, transitions, and preview assets are token-governed approximations. There is no observed React Bits mobile reference; V0 mobile captures remain technical/original interpretation only and are not treated as reference fidelity. Human APPROVE is for V0 fidelity only.",
+  "unresolved_dimensions": [
+    "motion",
+    "transition_behavior",
+    "asset_treatment"
+  ],
+  "approval": "APPROVED",
+  "approval_producer": "human",
+  "approval_reason": "Explicit human APPROVE 2026-09-04: the corrected React Bits V0 fidelity study is acceptable. This approval is for V0 fidelity only. Preserve V0 non-deployable and non-original; mobile remains technical/original interpretation only where no reference evidence exists; no fabricated winner; human-only final V1/V2 taste decision.",
+  "approved_at": "2026-09-04T01:21:31Z",
+  "created_at": "2026-09-04T01:21:31Z",
+  "producer": "kinetic-autonomous-generalization"
+}

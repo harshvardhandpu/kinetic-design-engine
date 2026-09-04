@@ -1,0 +1,172 @@
+{
+  "schema": "kinetic/gym/variant-brief@0.1",
+  "variant_id": "V1",
+  "case_id": "case-5300412a00",
+  "design_case_ids_used": [
+    "case-5300412a00"
+  ],
+  "surface": "instrument inspector / selected-stage catalogue",
+  "goal": "Turn the studied browse grammar into an original light two-column inspector where choosing a row restages one signal, instead of repeating a dark card grid.",
+  "direction_name": "Index Stage / Paper Inspector",
+  "core_concept": "A warm paper instrument: a numbered index of fictional signals occupies a narrow left column; the right stage restages the selected signal as a single large field. Browsing is selection, not a shelf of equal tiles.",
+  "composition_plan": {
+    "sections": [
+      "masthead with original practice name and inspector status",
+      "numbered index column of signal rows",
+      "dominant stage field that restages the selected signal",
+      "annotation strip under the stage",
+      "quiet end note and return control"
+    ],
+    "spatial_system": "Desktop is a two-column inspector: 28% index, 72% stage. No third support rail. Mobile stacks the masthead, a compact index, then the stage.",
+    "visual_hierarchy": "The stage is the primary surface; index numbers and names are secondary; annotations are tertiary.",
+    "pacing": "Short masthead, then a long selected stage, then a compact closing note. Avoid equal card bands.",
+    "density": "Sparse paper around the stage; denser type in the index.",
+    "focal_points": [
+      "selected index row",
+      "stage reticle",
+      "annotation strip",
+      "return control"
+    ]
+  },
+  "typography_plan": {
+    "display_role": "A large system serif for the stage title; no source fonts.",
+    "body_role": "A compact system sans for the index and annotations.",
+    "scale_strategy": "Clamp the stage title large and keep index names small and tabular.",
+    "contrast_strategy": "Ink on warm paper; one rust index marker instead of violet gradients.",
+    "rhythm": "Tabular numbers, hairline rules, and a single wide stage measure.",
+    "responsive_behavior": "Stage title stacks; index becomes a horizontal scroller of names without overlapping the stage."
+  },
+  "art_direction": {
+    "imagery_strategy": "CSS-only paper grain, hairlines, and one geometric stage motif per selected row. No source media.",
+    "asset_strategy": "Inline HTML/CSS/JS only; no external assets, fonts, or libraries.",
+    "texture": "Warm paper with a faint CSS grain and hairline rules.",
+    "material": "Matte paper, rust marker, graphite ink.",
+    "depth": "Depth is a drawn reticle and inset stage well, not hover-lifted cards.",
+    "layering": "Masthead, index, stage, reticle, annotation.",
+    "color_logic": "Warm paper and graphite ink; rust marks the selected index and reticle."
+  },
+  "motion_plan": {
+    "signature_move": {
+      "name": "stage reticle",
+      "central_idea": "Selecting an index row draws a reticle around the stage motif so the chosen signal is the only restaged object.",
+      "trigger": "pointer hover or keyboard focus on the first index row",
+      "visual_transformation": "A hairline reticle scales from the kinetic soft scale to identity around the stage motif while the row marker becomes rust.",
+      "purpose": "Make selection mean restaging, not decorating a card.",
+      "content_relationship": "The reticle belongs to the selected signal's stage motif and name.",
+      "reduced_motion_alternative": "Show the reticle and rust marker in their final positions with no scale or transition.",
+      "capture_checkpoint": "desktop hover on the first index row after a 1250ms stable checkpoint"
+    },
+    "scroll_storyboard": [
+      "initial: masthead, first index rows, and empty-to-selected stage",
+      "mid-scroll: later index rows and annotation strip",
+      "signature: first row restages the motif with a drawn reticle",
+      "final: closing note and return control"
+    ],
+    "transitions": [
+      "use duration-slow and easing-out-expo for the reticle",
+      "use duration-med and easing-out-quint for row marker color",
+      "disable transitions and transforms under prefers-reduced-motion"
+    ],
+    "interaction_states": [
+      "index row hover/focus restages the stage",
+      "mobile menu reveals the index list",
+      "return control moves focus to the masthead"
+    ],
+    "reduced_motion_behavior": "Remove transitions and transforms; keep the reticle, rust marker, hierarchy, and focus styles at rest.",
+    "token_exceptions": []
+  },
+  "reference_transfer": {
+    "retained_principles": [
+      "keep browsing as the primary task",
+      "one focused interaction explains the selected preview",
+      "separate navigation from the visual field"
+    ],
+    "deliberately_rejected_principles": [
+      "three-rail dark gallery",
+      "equal-weight preview tiles",
+      "violet/magenta preview gradients as the identity"
+    ],
+    "prohibited_copying": [
+      "React Bits source, branding, copy, fonts, media, or components",
+      "V0 Signal Shelf geometry, labels, or CSS",
+      "Wanaka editorial layout"
+    ]
+  },
+  "source_provenance": {
+    "design_reference_sources": [
+      {
+        "source_id": "src-react-bits",
+        "retrieval_reason": "Use the audited React Bits reference only for abstract browse-task principles while composing an original inspector that is not a gallery clone.",
+        "knowledge_used": [
+          "dark application shell separates a left navigation rail, central gallery, and right support rail",
+          "repeated rounded preview panels with compact metadata make a large catalogue browseable",
+          "violet, magenta, and electric-blue gradients are concentrated in previews and primary actions",
+          "search, category filtering, theme/preferences, and card focus states are explicit browse affordances",
+          "preview motion is observed as an interaction intent only; exact timing and implementation remain unclaimed"
+        ],
+        "usage_mode": "COMPARISON_REFERENCE",
+        "attribution": [
+          {
+            "knowledge_index": 0,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 1,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 2,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 3,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          },
+          {
+            "knowledge_index": 4,
+            "classification": "SOURCE-DERIVED",
+            "evidence_refs": [
+              "reference/reference-observation.json"
+            ]
+          }
+        ]
+      }
+    ],
+    "motion_reference_sources": [],
+    "typography_sources": [],
+    "implementation_sources": [],
+    "tool_sources": []
+  },
+  "originality_plan": {
+    "composition_differences": [
+      "Replace the three-rail dark shelf with a two-column light inspector and a single stage.",
+      "Use numbered index rows instead of equal preview tiles.",
+      "Drop the right support rail entirely."
+    ],
+    "typography_differences": [
+      "Use serif display on the stage against sans index names.",
+      "Use rust/graphite on paper instead of luminous dark UI type."
+    ],
+    "motion_differences": [
+      "Signature is a stage reticle on selection, not a card constellation lift.",
+      "No tile hover lift; the index marker and reticle carry the state."
+    ],
+    "asset_non_reuse": "All visuals are original CSS geometry; no source or V0 motifs are reused.",
+    "signature_move_hypothesis": "A drawn reticle on the stage should prove that browsing can mean restaging one object rather than lifting a card."
+  },
+  "quality_hypothesis": "A light inspector with one dominant stage should feel like a different major direction from the dark catalogue while remaining an original, technically complete page. Human review must decide taste; no winner is inferred.",
+  "created_at": "2026-09-04T01:21:31Z",
+  "producer": "kinetic-autonomous-generalization"
+}

@@ -593,9 +593,9 @@ if (cmd === 'init-case' && A['run-version'] === 'phase2.5') {
         review_package_validated: true,
       };
       const preparedLoss = await prepareValidatedLossReport(loaded.record, A.loss);
+      await persistLossReportExclusive(preparedLoss, loaded.record.reports?.source_to_output_loss === lossRef);
       await prepareValidatedReviewPackage(loaded.record);
       const updated = applyBatchReviewReady({ caseRun: loaded.record, artifactRefs, now: timestamp });
-      await persistLossReportExclusive(preparedLoss, loaded.record.reports?.source_to_output_loss === lossRef);
       await writeCaseAtomic(A.case, updated);
       for (const slot of ['V1', 'V2']) {
         if (loaded.record.slots?.[slot]?.state !== 'REVIEW_READY') {

@@ -1,0 +1,105 @@
+{
+  "schema": "kinetic/gym/prebuild-review@0.1",
+  "review_id": "pbr-4cb6cea4ffb7acf48218",
+  "case_id": "case-5300412a00",
+  "variant_id": "V1",
+  "brief_sha256": "5f2f20263339af282323228f327edf5d4fa3cd1a09a62a36d451cbbd6d16b173",
+  "retrieval_sha256": "a516dd8e2e0c7426e331bcddb9396cf03b1c3b2d36d582b127073b06164a8f1f",
+  "decision": "APPROVED",
+  "rule_results": [
+    {
+      "rule_id": "PB01_GENERIC_HERO_CARDS",
+      "passed": true,
+      "evidence_path": "$.composition_plan",
+      "reason": "sections require an authored spatial or narrative concept beyond generic hero/cards/footer"
+    },
+    {
+      "rule_id": "PB02_DEFAULT_TYPOGRAPHY",
+      "passed": true,
+      "evidence_path": "$.typography_plan",
+      "reason": "typography roles and strategies must not all be defaults"
+    },
+    {
+      "rule_id": "PB03_NO_ASSET_STRATEGY",
+      "passed": true,
+      "evidence_path": "$.art_direction.asset_strategy",
+      "reason": "imagery and asset strategy must be explicit"
+    },
+    {
+      "rule_id": "PB04_NO_SIGNATURE_MOVE",
+      "passed": true,
+      "evidence_path": "$.motion_plan.signature_move",
+      "reason": "originals require a substantive composition-linked signature move"
+    },
+    {
+      "rule_id": "PB05_DECORATIVE_ONLY_MOTION",
+      "passed": true,
+      "evidence_path": "$.motion_plan.signature_move",
+      "reason": "motion must serve structure rather than decoration alone"
+    },
+    {
+      "rule_id": "PB06_NO_TRANSITION_STORYBOARD",
+      "passed": true,
+      "evidence_path": "$.motion_plan.scroll_storyboard",
+      "reason": "scroll storyboard and transitions must be explicit"
+    },
+    {
+      "rule_id": "PB07_NO_DEPTH_DECISION",
+      "passed": true,
+      "evidence_path": "$.art_direction.depth",
+      "reason": "depth and layering decisions must be explicit"
+    },
+    {
+      "rule_id": "PB08_WEAK_NARRATIVE",
+      "passed": true,
+      "evidence_path": "$.core_concept",
+      "reason": "core concept, hierarchy, and focal points must form an authored narrative"
+    },
+    {
+      "rule_id": "PB09_INSUFFICIENT_SOURCE_GROUNDING",
+      "passed": true,
+      "evidence_path": "$.source_provenance",
+      "reason": "brief DesignCases and influential sources must match retrieval provenance with attribution"
+    },
+    {
+      "rule_id": "PB10_DERIVATIVE_COMPOSITION",
+      "passed": true,
+      "evidence_path": "$.originality_plan",
+      "reason": "originals require explicit composition, typography, motion, and copying differences"
+    },
+    {
+      "rule_id": "PB11_COMPONENT_SOUP",
+      "passed": true,
+      "evidence_path": "$.source_provenance.implementation_sources",
+      "reason": "at most two implementation influences and one catalogue build dependency are allowed"
+    },
+    {
+      "rule_id": "PB12_RIGHTS_MISMATCH",
+      "passed": true,
+      "evidence_path": "$.source_provenance",
+      "reason": "every influential source must be present and rights-authorized in the retrieval receipt"
+    },
+    {
+      "rule_id": "PB13_WEAK_QUALITY_HYPOTHESIS",
+      "passed": true,
+      "evidence_path": "$.quality_hypothesis",
+      "reason": "quality hypothesis must be substantive and testable"
+    },
+    {
+      "rule_id": "PB14_SOURCE_ORDER_VIOLATION",
+      "passed": true,
+      "evidence_path": "$.source_provenance.implementation_sources",
+      "reason": "concept and retained principles must precede implementation influences"
+    },
+    {
+      "rule_id": "PB15_ORIGINALS_BEFORE_V0",
+      "passed": true,
+      "evidence_path": "$.fidelity_report.human_approval",
+      "reason": "V1/V2 require human-approved V0 fidelity evidence"
+    }
+  ],
+  "advisory_observations": [],
+  "blocking_reasons": [],
+  "reviewer": "kinetic/prebuild-review@0.1",
+  "created_at": "2026-09-04T01:21:31Z"
+}

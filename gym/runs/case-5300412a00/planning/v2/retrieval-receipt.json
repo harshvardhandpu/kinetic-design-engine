@@ -1,0 +1,92 @@
+{
+  "schema": "kinetic/gym/retrieval-receipt@0.1",
+  "receipt_id": "rr-613748aa257de8dbaca3",
+  "case_id": "case-5300412a00",
+  "variant_id": "V2",
+  "query": "industrial mosaic dock lime catalogue browse plates",
+  "normalized_tokens": [
+    "browse",
+    "catalogue",
+    "dock",
+    "industrial",
+    "lime",
+    "mosaic",
+    "plates"
+  ],
+  "filters": {},
+  "registry_version": "0.1.2",
+  "registry_sha256": "2e05e111be67230c1f26524368ad7bcb298a4bd483f39f4d6dbf8c56d443072c",
+  "index_hashes": [
+    "0847cf16f97eb8b862328dbe19f22d7718a6795a92ababf2b2737b480da8f751",
+    "0a98b093dd6408ed915276521ca1956731e4a21782341342c2947bac8d302963",
+    "0c263826911e7b399949cd695a2c1c17fb2177f68fa85aee776dc6059f968f3c",
+    "2e05e111be67230c1f26524368ad7bcb298a4bd483f39f4d6dbf8c56d443072c",
+    "3ada0067a20cf11b71bc17a93fb5233e63d9b84f0fcc7c0089b2c97e9331ff9a",
+    "c5bb6e67edb4e76a88a39814f8a66d0b91f750428b3a45fc6de71a7d05ff15f8",
+    "cea3c536a818181f29d7dd4ca6bddc973c9f1a984607c6f0bc8de27917775ff1"
+  ],
+  "design_cases_retrieved": [
+    {
+      "case_id": "case-5300412a00",
+      "score": 3,
+      "retrieval_reason": "selected by validated VariantBrief DesignCase provenance",
+      "knowledge_used": [
+        "Use a browse-first gallery when the content is a catalogue: stable card grammar can carry varied previews without making every item a bespoke section.",
+        "Keep navigation, browsing, and support content in distinct rails so the central visual field remains the dominant task surface.",
+        "Concentrate high-saturation gradients and glow on previews and primary actions instead of flooding the entire shell.",
+        "Treat interaction previews as content: one intentional hover/focus transformation should explain why an item is browseable.",
+        "When source timing and implementation are unmeasured, preserve the interaction intent with KINETIC tokens and label the result an approximation.",
+        "avoid: Copying source component code, preview media, branding, or exact labels would exceed the abstract-reference policy.",
+        "avoid: A persistent ambient animation loop would add cost without proving transfer of the browse grammar."
+      ]
+    }
+  ],
+  "sources_retrieved": [
+    {
+      "source_id": "src-react-bits",
+      "score": 4,
+      "retrieval_reason": "Use the audited React Bits reference only for abstract catalogue-browse principles while composing an original industrial mosaic that is not a gallery clone.",
+      "knowledge_used": [
+        "dark application shell separates a left navigation rail, central gallery, and right support rail",
+        "repeated rounded preview panels with compact metadata make a large catalogue browseable",
+        "violet, magenta, and electric-blue gradients are concentrated in previews and primary actions",
+        "search, category filtering, theme/preferences, and card focus states are explicit browse affordances",
+        "preview motion is observed as an interaction intent only; exact timing and implementation remain unclaimed"
+      ],
+      "usage_mode": "COMPARISON_REFERENCE",
+      "rights_allowed": true,
+      "rights_evidence_urls": [
+        "https://reactbits.dev/get-started/index",
+        "https://raw.githubusercontent.com/DavidHDev/react-bits/main/LICENSE.md",
+        "https://reactbits.dev/robots.txt"
+      ]
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "candidate_id": "case-6f67d60006",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-77a4f7b7b5",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-98d4bd4196",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-ee9eaf0dc9",
+      "reason": "not selected by validated VariantBrief provenance"
+    },
+    {
+      "candidate_id": "case-fe653973ef",
+      "reason": "not selected by validated VariantBrief provenance"
+    }
+  ],
+  "recipes_selected": [],
+  "primitives_selected": [],
+  "tools_selected": [],
+  "obsidian_notes_used": [],
+  "created_at": "2026-09-04T01:34:09.945Z"
+}

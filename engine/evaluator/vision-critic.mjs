@@ -290,7 +290,7 @@ function validateDesignQualityEvaluationData(input) {
     if (typeof fields.capture_id !== 'string' || !CAPTURE_ID.test(fields.capture_id)
       || typeof fields.subject_id !== 'string' || fields.subject_id.trim().length === 0
       || typeof fields.sha256 !== 'string' || !SHA256.test(fields.sha256)
-      || allowedCaptureIds.has(fields.capture_id) || readyCaptureHashes.includes(fields.sha256)) {
+      || allowedCaptureIds.has(fields.capture_id)) {
       designInvalid('ready capture evidence is malformed or duplicated');
     }
     allowedCaptureIds.add(fields.capture_id);

@@ -1,0 +1,373 @@
+{
+  "schema": "kinetic/gym/source-to-output-loss@0.1",
+  "report_id": "sol-5300412a00-20260904",
+  "case_id": "case-5300412a00",
+  "comparison_chain": [
+    "design-case:case-5300412a00",
+    "V0",
+    "V1",
+    "V2"
+  ],
+  "stage_findings": {
+    "source_inspection": [
+      {
+        "finding_id": "loss-source-boundary",
+        "stage": "source_inspection",
+        "subject_from": "design-case:case-5300412a00",
+        "subject_to": "V0",
+        "label": "SOURCE-DERIVED",
+        "observation": "Reference was reduced to one-off desktop observation; source code, branding, fonts and media were not transferred.",
+        "quality_loss": "Exact source geometry and component implementations are unavailable.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "source-access boundary",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "retrieval": [
+      {
+        "finding_id": "loss-retrieval-principle-only",
+        "stage": "retrieval",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 and V2 retrieval resolve the same DesignCase and src-react-bits as COMPARISON_REFERENCE only.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+          "cap-c52c06f932929367c5ebcafd210b5496"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json",
+          "runs/case-5300412a00/planning/v1/retrieval-receipt.json",
+          "runs/case-5300412a00/planning/v2/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "analysis": [
+      {
+        "finding_id": "loss-analysis-hidden",
+        "stage": "analysis",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "Analysis records browse-shell grammar; hidden source choreography remains unobserved.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-f5f8d8d221fe453f6ec3e01e43fd1784"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "planning": [
+      {
+        "finding_id": "loss-planning-original-directions",
+        "stage": "planning",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 plans a light inspector and V2 an industrial mosaic; both prohibit source and V0 cloning.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+          "cap-ee4cafcff24c73a6124ffc3eb71041b4"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/planning/v1/retrieval-receipt.json",
+          "runs/case-5300412a00/planning/v2/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "typography": [
+      {
+        "finding_id": "loss-type-system-stacks",
+        "stage": "typography",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 uses serif stage titles on paper; source and V0 dark UI stacks are not reused.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+          "cap-c52c06f932929367c5ebcafd210b5496"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "assets": [
+      {
+        "finding_id": "loss-assets-css-only",
+        "stage": "assets",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 and V2 use original CSS plates; no source media is present.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-19b24b605bd46ba1cae401c3b79d2da3",
+          "cap-ee4cafcff24c73a6124ffc3eb71041b4"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "composition": [
+      {
+        "finding_id": "loss-composition-major-shift",
+        "stage": "composition",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 replaces the three-rail shelf with a two-column inspector; V2 uses unequal mosaic spans.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+          "cap-c52c06f932929367c5ebcafd210b5496",
+          "cap-ee4cafcff24c73a6124ffc3eb71041b4"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "depth": [
+      {
+        "finding_id": "loss-depth-model-change",
+        "stage": "depth",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V0 card lift, V1 reticle, and V2 docked inspector are distinct depth models.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-19b24b605bd46ba1cae401c3b79d2da3",
+          "cap-033500978f5925ca201028c2144eaa4d",
+          "cap-dfcf7514f7ed2865577ac69f66de35d5"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "motion": [
+      {
+        "finding_id": "loss-motion-token-approx",
+        "stage": "motion",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "Signature moves are token-governed approximations; source timing was never measured.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-19b24b605bd46ba1cae401c3b79d2da3",
+          "cap-033500978f5925ca201028c2144eaa4d"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "interaction": [
+      {
+        "finding_id": "loss-interaction-grammar",
+        "stage": "interaction",
+        "subject_from": "V0",
+        "subject_to": "V2",
+        "label": "ENGINE-INFERENCE",
+        "observation": "V1 restages via index selection; V2 docks a reading; neither copies source widgets.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-033500978f5925ca201028c2144eaa4d",
+          "cap-dfcf7514f7ed2865577ac69f66de35d5"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/fidelity-v0.json",
+          "runs/case-5300412a00/planning/v0/retrieval-receipt.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "implementation": [
+      {
+        "finding_id": "loss-implementation-local-html",
+        "stage": "implementation",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "Candidates are local HTML/CSS/JS with motion tokens; no React Bits packages were installed.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-c52c06f932929367c5ebcafd210b5496"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/design-evaluation-v1.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ],
+    "evaluation": [
+      {
+        "finding_id": "loss-evaluation-human-gate",
+        "stage": "evaluation",
+        "subject_from": "V0",
+        "subject_to": "V1",
+        "label": "ENGINE-INFERENCE",
+        "observation": "Rubric evaluations are human visual fallbacks with NOT_EVALUATED dimensions; taste remains unassigned.",
+        "quality_loss": "Transfer is principle-level, not pixel-identical.",
+        "why": "Rights-bounded observe-only study plus original candidates.",
+        "avoidable": false,
+        "responsible_subsystem": "phase2.5 runner",
+        "source_refs": [
+          "design-case:case-5300412a00",
+          "source:src-react-bits"
+        ],
+        "capture_refs": [
+          "cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+          "cap-c52c06f932929367c5ebcafd210b5496"
+        ],
+        "report_refs": [
+          "runs/case-5300412a00/reports/design-evaluation-v0.json",
+          "runs/case-5300412a00/reports/design-evaluation-v1.json",
+          "runs/case-5300412a00/reports/design-evaluation-v2.json"
+        ],
+        "human_feedback_refs": [],
+        "possible_remediation": "Keep comparisons at principle level; do not import source code.",
+        "remediation_label": "ENGINE-RECOMMENDATION",
+        "confidence": 0.9
+      }
+    ]
+  },
+  "created_at": "2026-09-04T01:21:31Z",
+  "producer": "kinetic-autonomous-generalization"
+}
