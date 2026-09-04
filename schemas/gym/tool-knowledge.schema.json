@@ -54,6 +54,24 @@
     "privacy_class": { "enum": ["local", "public-api", "third-party", "unknown"] },
     "fallback_for": { "type": ["string", "null"], "description": "declared fallback chain for the router (doc 47)" },
     "integration_status": { "enum": ["not-connected", "sandboxed", "approved"] },
-    "sandbox_experiments": { "type": "array", "items": { "type": "string" }, "description": "ExperimentRecord ids" }
+    "sandbox_experiments": { "type": "array", "items": { "type": "string" }, "description": "ExperimentRecord ids" },
+    "provider_id": { "type": "string" },
+    "canonical_url": { "type": ["string", "null"] },
+    "category": { "type": "string" },
+    "frameworks": { "type": "array", "items": { "type": "string" } },
+    "integration_mode": { "type": "string" },
+    "rights_status": { "enum": ["verified_open", "verified_open_with_clause", "mixed_free_and_licensed", "verified_proprietary", "unverified", "unknown"] },
+    "requires_account": { "type": "boolean" },
+    "requires_secret": { "type": "boolean" },
+    "secret_name": { "type": ["string", "null"] },
+    "network_required": { "type": "boolean" },
+    "autonomous_allowed": { "type": "boolean" },
+    "human_required": { "type": "boolean" },
+    "priority": { "type": "integer" },
+    "fallbacks": { "type": "array", "items": { "type": "string" } },
+    "lifecycle_stage": { "type": "string" },
+    "installable_as_component": { "type": "boolean" },
+    "entitlement_id": { "type": ["string", "null"] },
+    "inventory_status": { "enum": ["USED_AS_REFERENCE", "USED_AS_CALIBRATION", "INTEGRATED_AS_TOOL", "AVAILABLE_NOT_INTEGRATED", "PARTIALLY_INTEGRATED", "MANUAL_ONLY", "PAID_REQUIRES_LICENSE", "INACCESSIBLE", "UNKNOWN"] }
   }
 }

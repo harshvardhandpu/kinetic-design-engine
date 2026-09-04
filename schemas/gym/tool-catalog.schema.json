@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/tool-catalog.schema.json",
+  "title": "ToolCatalog",
+  "description": "Index of ToolKnowledge providers. Separate from the protected Source Registry. Doc: docs/gym/46-tool-intelligence.md",
+  "type": "object",
+  "required": ["schema", "catalog_version", "providers"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/tool-catalog@0.1" },
+    "catalog_version": { "type": "string" },
+    "providers": {
+      "type": "array",
+      "items": { "type": "object" }
+    }
+  }
+}

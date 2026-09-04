@@ -56,3 +56,26 @@ component registries (jsrepo-class) · **Siteinspire MCP (validated public,
 3. Secrets/auth stay in the user's env; the Gym never stores them.
 4. Entries are dated; stale entries (>180d unchecked) get `status: stale` and
    drop in router priority (47).
+5. VariantBriefs declare **capability needs** (`motion.hero`, `visual.webgl`,
+   `security.application`, …), never vendor names. `engine/knowledge/tool-resolver.mjs`
+   ranks the catalog at `gym/knowledge/tools/catalog.json`.
+6. Fail closed: unknown/unverified rights, paid tools without entitlement, missing
+   secrets, and framework mismatch never become hard dependencies. An empty plan
+   is valid.
+7. Security providers (`lifecycle_stage: after_build`) never write taste or
+   `design_qualified`. Research-only providers cannot be installed as component code.
+8. Calibration/reference use of a site is not tool integration. React Bits
+   (`case-5300412a00`) is `USED_AS_CALIBRATION`; CLI copy-in remains `not-connected`.
+9. This catalog is **not** the Source Registry. Do not auto-change
+   `gym/knowledge/sources/registry.json` rights from tool intelligence.
+
+```
+USER GOAL
+  → VariantBrief / design requirements
+  → capability needs (not vendor names)
+  → resolveToolPlan()
+  → rights / cost / framework / secret filters
+  → ranked tool plan + installable subset
+  → (future) retrieval / invocation / install receipt
+  → build → technical gates → Strix after_build
+```

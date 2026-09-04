@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kinetic/gym/tool-plan.schema.json",
+  "title": "ToolPlan",
+  "description": "Deterministic tool-selection result. Capability needs resolve to providers; rights/cost/framework/secrets filter before use. Doc: docs/gym/46-tool-intelligence.md",
+  "type": "object",
+  "required": ["schema", "needs", "project", "ranked", "installable", "suggestions", "excluded", "security"],
+  "properties": {
+    "schema": { "const": "kinetic/gym/tool-plan@0.1" },
+    "needs": { "type": "array", "items": { "type": "string" } },
+    "project": {
+      "type": "object",
+      "required": ["frameworks"],
+      "properties": {
+        "frameworks": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "ranked": { "type": "array", "items": { "$ref": "#/$defs/selection" } },
+    "installable": { "type": "array", "items": { "$ref": "#/$defs/selection" } },
+    "suggestions": { "type": "array", "items": { "$ref": "#/$defs/selection" } },
+    "excluded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["provider_id", "code", "reason"],
+        "properties": {
+          "provider_id": { "type": "string" },
+          "code": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "security": {
+      "type": "object",
+      "required": ["influences_taste", "lifecycle_stage", "providers"],
+      "properties": {
+        "influences_taste": { "const": false },
+        "lifecycle_stage": { "const": "after_build" },
+        "providers": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "$defs": {
+    "selection": {
+      "type": "object",
+      "required": ["provider_id", "capabilities_matched", "priority", "integration_mode", "integration_status"],
+      "properties": {
+        "provider_id": { "type": "string" },
+        "capabilities_matched": { "type": "array", "items": { "type": "string" } },
+        "priority": { "type": "integer" },
+        "integration_mode": { "type": "string" },
+        "integration_status": { "enum": ["not-connected", "sandboxed", "approved"] }
+      }
+    }
+  }
+}
