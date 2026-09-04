@@ -64,13 +64,13 @@
       "case_id": "case-5300412a00",
       "slot": "V1",
       "mode": "original",
-      "state": "REVIEW_READY",
+      "state": "HUMAN_REVIEWED",
       "attempt": 1,
       "deployable": true,
       "original_work": true,
       "technically_qualified": true,
-      "design_qualified": null,
-      "acceptable_for_further_taste_learning": null,
+      "design_qualified": false,
+      "acceptable_for_further_taste_learning": false,
       "refs": {
         "variant_brief": "runs/case-5300412a00/planning/v1/variant-brief.json",
         "retrieval_receipt": "runs/case-5300412a00/planning/v1/retrieval-receipt.json",
@@ -93,7 +93,8 @@
         "TECHNICAL_EVALUATED": "2026-09-04T01:35:51.949Z",
         "VISUAL_CAPTURED": "2026-09-04T01:40:41.668Z",
         "DESIGN_EVALUATED": "2026-09-04T01:41:17.892Z",
-        "REVIEW_READY": "2026-09-04T01:42:24.013Z"
+        "REVIEW_READY": "2026-09-04T01:42:24.013Z",
+        "HUMAN_REVIEWED": "2026-09-04T02:03:45.389Z"
       }
     },
     "V2": {
@@ -102,13 +103,13 @@
       "case_id": "case-5300412a00",
       "slot": "V2",
       "mode": "original",
-      "state": "REVIEW_READY",
+      "state": "HUMAN_REVIEWED",
       "attempt": 1,
       "deployable": true,
       "original_work": true,
       "technically_qualified": true,
-      "design_qualified": null,
-      "acceptable_for_further_taste_learning": null,
+      "design_qualified": false,
+      "acceptable_for_further_taste_learning": false,
       "refs": {
         "variant_brief": "runs/case-5300412a00/planning/v2/variant-brief.json",
         "retrieval_receipt": "runs/case-5300412a00/planning/v2/retrieval-receipt.json",
@@ -131,7 +132,8 @@
         "TECHNICAL_EVALUATED": "2026-09-04T01:35:52.247Z",
         "VISUAL_CAPTURED": "2026-09-04T01:40:41.965Z",
         "DESIGN_EVALUATED": "2026-09-04T01:41:18.243Z",
-        "REVIEW_READY": "2026-09-04T01:42:24.013Z"
+        "REVIEW_READY": "2026-09-04T01:42:24.013Z",
+        "HUMAN_REVIEWED": "2026-09-04T02:03:45.389Z"
       }
     }
   },
@@ -140,8 +142,8 @@
     "source_to_output_loss": "runs/case-5300412a00/reports/source-to-output-loss.json",
     "review_package": "runs/case-5300412a00/review-package.html"
   },
-  "review_state": "REVIEW_READY",
-  "taste_decision_ref": null,
+  "review_state": "HUMAN_REVIEWED",
+  "taste_decision_ref": "taste/decisions/td-20260904-reactbits-v1-v2.json",
   "blocked_condition": null,
   "history": [
     {
@@ -395,8 +397,15 @@
       "slot": null,
       "artifact_ref": "runs/case-5300412a00/review-package.html",
       "timestamp": "2026-09-04T01:42:24.013Z"
+    },
+    {
+      "event_id": "human-review-td-20260904-reactbits-v1-v2",
+      "event": "human-review-recorded",
+      "slot": null,
+      "artifact_ref": "taste/decisions/td-20260904-reactbits-v1-v2.json",
+      "timestamp": "2026-09-04T02:03:45.389Z"
     }
   ],
   "created_at": "2026-09-02T07:07:15.579Z",
-  "updated_at": "2026-09-04T01:42:24.013Z"
+  "updated_at": "2026-09-04T02:03:45.389Z"
 }

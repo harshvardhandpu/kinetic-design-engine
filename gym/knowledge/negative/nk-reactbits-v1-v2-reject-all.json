@@ -1,0 +1,43 @@
+{
+  "schema": "kinetic/gym/negative-knowledge@0.1",
+  "record_id": "nk-reactbits-v1-v2-reject-all",
+  "case_id": "case-5300412a00",
+  "taste_decision_id": "td-20260904-reactbits-v1-v2",
+  "failure_class": "human-design-quality-floor",
+  "level": "batch",
+  "technical_gates_failed": false,
+  "quality_floor_failure": true,
+  "design_qualified": false,
+  "human_perceived_quality_gap": "substantial",
+  "human_feedback": "REJECT_ALL. Both candidates failed the quality floor and are NOT acceptable for further taste learning. Visually too plain, insufficient animation/design richness, unattractive relative to expected KINETIC quality. Tool resolver existed but no actual component/motion/3D provider was connected; outputs remained predominantly handcrafted HTML/CSS/JS. Do not manufacture a winner.",
+  "relative_signal": {
+    "positive_candidates": [],
+    "ordered": false,
+    "strength": "weak",
+    "importance": "none-reject-all"
+  },
+  "knowledge": "Technical qualification of original V1/V2 does not imply design qualification. A Tool Intelligence catalog/resolver that never connects a real provider leaves candidates as handcrafted HTML/CSS/JS and fails the human quality floor on plainness and insufficient motion richness. Resolver selection without install, import, and render is not tool utilization.",
+  "candidate_status": {
+    "V0": {
+      "technical_state": "DESIGN_EVALUATED_FIDELITY_STUDY",
+      "design_qualified": null,
+      "human_accepted": null,
+      "note": "V0 fidelity was approved earlier; this REJECT_ALL applies to originals only."
+    },
+    "V1": {
+      "technical_state": "TECHNICAL_PASS",
+      "design_qualified": false,
+      "human_accepted": false,
+      "acceptable_for_further_taste_learning": false
+    },
+    "V2": {
+      "technical_state": "TECHNICAL_PASS",
+      "design_qualified": false,
+      "human_accepted": false,
+      "acceptable_for_further_taste_learning": false
+    }
+  },
+  "avoidance_rule": "Do not start another calibration until at least one real component/motion provider is selected, installed, imported, and rendered in a target app, with an ACTUALLY_USED receipt.",
+  "calibration_target": "Connect Tool Intelligence to real provider adapters before the next original-generation batch.",
+  "created_at": "2026-09-04T02:02:44Z"
+}

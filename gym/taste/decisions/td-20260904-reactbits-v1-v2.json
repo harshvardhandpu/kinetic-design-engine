@@ -1,0 +1,41 @@
+{
+  "schema": "kinetic/gym/taste-decision@0.2",
+  "decision_id": "td-20260904-reactbits-v1-v2",
+  "context": {
+    "case_id": "case-5300412a00",
+    "batch_id": "case-5300412a00",
+    "surface": "website",
+    "goal": "Select the strongest original design candidate"
+  },
+  "candidates": [
+    "V1",
+    "V2"
+  ],
+  "outcome": {
+    "result": "REJECT_ALL",
+    "relative_preference": "neither",
+    "winner": null,
+    "candidate_decisions": {
+      "V1": {
+        "quality_floor_passed": false,
+        "acceptable_for_further_taste_learning": false,
+        "reason": "Failed the quality floor: visually too plain, insufficient animation/design richness, unattractive relative to expected KINETIC quality. Not acceptable for further taste learning."
+      },
+      "V2": {
+        "quality_floor_passed": false,
+        "acceptable_for_further_taste_learning": false,
+        "reason": "Failed the quality floor: visually too plain, insufficient animation/design richness, unattractive relative to expected KINETIC quality. Not acceptable for further taste learning."
+      }
+    }
+  },
+  "reason_tags": [
+    "motion-quality",
+    "originality",
+    "density",
+    "other"
+  ],
+  "freeform": "REJECT_ALL. Both candidates failed the quality floor and are NOT acceptable for further taste learning. Visually too plain, insufficient animation/design richness, unattractive relative to expected KINETIC quality. Tool resolver existed but no actual component/motion/3D provider was connected; outputs remained predominantly handcrafted HTML/CSS/JS. Do not manufacture a winner.",
+  "reviewer": "human-user",
+  "supersedes": null,
+  "timestamp": "2026-09-04T02:02:44Z"
+}

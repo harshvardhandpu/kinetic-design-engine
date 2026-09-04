@@ -127,7 +127,23 @@
         "runs/case-5300412a00/reports/fidelity-v0.json"
       ]
     },
-    "human_review_waiting": null
+    "human_review_waiting": {
+      "started_at": "2026-09-04T01:42:24.013Z",
+      "ended_at": "2026-09-04T02:03:45.389Z",
+      "duration_ms": 1281376,
+      "status": "COMPLETED",
+      "attempt": 1,
+      "receipt_refs": [
+        "runs/case-5300412a00/planning/v1/variant-brief.json",
+        "runs/case-5300412a00/planning/v1/retrieval-receipt.json",
+        "runs/case-5300412a00/planning/v1/prebuild-review.json",
+        "runs/case-5300412a00/variants/v1",
+        "runs/case-5300412a00/reports/technical-evaluation-v1.json",
+        "runs/case-5300412a00/captures/v1/manifest.json",
+        "runs/case-5300412a00/reports/design-evaluation-v1.json",
+        "runs/case-5300412a00/reports/fidelity-v0.json"
+      ]
+    }
   },
   "metrics": {
     "model": null,
@@ -146,5 +162,5 @@
       "model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed"
     ]
   },
-  "updated_at": "2026-09-04T01:42:24.013Z"
+  "updated_at": "2026-09-04T02:03:45.389Z"
 }
