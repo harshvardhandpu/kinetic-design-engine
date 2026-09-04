@@ -50,9 +50,9 @@
       ]
     },
     "capture": {
-      "started_at": "2026-09-02T08:22:38.672Z",
-      "ended_at": "2026-09-02T08:22:54.296Z",
-      "duration_ms": 15624,
+      "started_at": "2026-09-03T15:25:00.352Z",
+      "ended_at": "2026-09-03T15:25:15.814Z",
+      "duration_ms": 15462,
       "status": "COMPLETED",
       "attempt": 0,
       "receipt_refs": [
@@ -104,5 +104,5 @@
       "model, provider, token, tool, vision, asset preparation, and cost metrics were not exposed"
     ]
   },
-  "updated_at": "2026-09-02T08:22:54.296Z"
+  "updated_at": "2026-09-03T15:25:15.814Z"
 }

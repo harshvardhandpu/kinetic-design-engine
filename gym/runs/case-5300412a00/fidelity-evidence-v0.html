@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>case-5300412a00 — V0 Fidelity Review Evidence (rev 2 — NOT a FidelityReport)</title>
+<style>
+  :root { color-scheme: dark; --ink:#f2efff; --soft:#a9a4bb; --faint:#716d83; --line:#2a2735; --panel:#141221; --panel2:#191628; --accent:#b77cff; --accent2:#ff71c5; --accent3:#62a4ff; --warn:#ffb86b; --ok:#9ff0c7; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0d0b14; color:var(--ink); font:15px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1240px; margin: 0 auto; padding: 40px 28px 80px; }
+  h1 { font-size: clamp(28px, 4vw, 42px); letter-spacing: -.03em; margin: 0 0 6px; }
+  h2 { font-size: 20px; letter-spacing: -.01em; margin: 46px 0 4px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  h3 { color: var(--soft); margin: 22px 0 8px; text-transform: uppercase; letter-spacing: .1em; font-size: 12px; }
+  p, li { color: var(--soft); }
+  strong { color: var(--ink); }
+  code, .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12.5px; color: var(--accent3); word-break: break-all; }
+  .banner { border: 1px solid var(--accent2); background: color-mix(in srgb, var(--accent2) 9%, var(--panel)); border-radius: 12px; padding: 14px 18px; margin: 18px 0 26px; }
+  .banner strong { color: var(--accent2); }
+  .banner.ok { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); background: color-mix(in srgb, var(--ok) 6%, var(--panel)); }
+  .banner.ok strong { color: var(--ok); }
+  .meta { color: var(--faint); font-size: 13px; margin: 0 0 14px; }
+  .panel { border: 1px solid var(--line); background: var(--panel); border-radius: 12px; padding: 16px 18px; margin: 14px 0; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+  .cap { border: 1px solid var(--line); background: var(--panel2); border-radius: 12px; overflow: hidden; }
+  .cap .label { display:flex; justify-content:space-between; gap:10px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 12px; color: var(--soft); }
+  .cap .label b { color: var(--ink); font-size: 12.5px; letter-spacing: .02em; }
+  .cap img { display:block; width: 100%; height: auto; background:#000; }
+  .cap .foot { padding: 9px 14px; border-top: 1px solid var(--line); font-size: 11.5px; color: var(--faint); }
+  table { width:100%; border-collapse: collapse; margin: 12px 0; font-size: 13.5px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--faint); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; }
+  td { color: var(--soft); }
+  td.k { color: var(--ink); white-space: nowrap; }
+  .ok { color: var(--ok); font-weight: 700; }
+  .warn { color: var(--warn); font-weight: 700; }
+  .pending { color: var(--accent2); font-weight: 700; }
+  .note { border-left: 3px solid var(--warn); padding: 10px 14px; background: var(--panel); border-radius: 0 10px 10px 0; margin: 12px 0; font-size: 13.5px; }
+  .sep { margin: 54px 0 8px; padding: 18px 20px; border-radius: 14px; border: 1px solid var(--line); }
+  .sep.tech { border-color: color-mix(in srgb, var(--ok) 45%, var(--line)); background: color-mix(in srgb, var(--ok) 6%, var(--panel)); }
+  .sep.human { border-color: color-mix(in srgb, var(--accent2) 55%, var(--line)); background: color-mix(in srgb, var(--accent2) 7%, var(--panel)); }
+  .sep h2 { border: 0; margin: 0 0 6px; padding: 0; }
+  ul { margin: 8px 0; padding-left: 20px; }
+  .decision { border: 1px solid var(--accent); border-radius: 14px; padding: 18px 20px; margin: 30px 0; background: color-mix(in srgb, var(--accent) 8%, var(--panel)); }
+  .decision ol { margin: 10px 0 4px; padding-left: 22px; }
+  .decision li { color: var(--ink); margin: 6px 0; }
+  .kv { display: grid; grid-template-columns: 210px 1fr; gap: 8px 14px; font-size: 13px; }
+  .kv div:nth-child(odd) { color: var(--faint); text-transform: uppercase; font-size: 10.5px; letter-spacing: .1em; font-weight: 800; padding-top: 2px; }
+  .kv div:nth-child(even) { color: var(--soft); }
+  .badge { display:inline-block; padding:2px 8px; border-radius:6px; font-size:11px; font-weight:800; letter-spacing:.06em; }
+  .badge.tech2 { background: color-mix(in srgb, var(--accent3) 15%, var(--panel)); color: var(--accent3); border: 1px solid color-mix(in srgb, var(--accent3) 35%, transparent); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>case-5300412a00 — V0 Fidelity Review Evidence</h1>
+<p class="meta">React Bits generalization calibration · V0 “Signal Shelf — Motion Atlas” · Revision 2 (post-REVISE) · Prepared 2026-09-03</p>
+
+<div class="banner ok">
+<strong>REVISION APPLIED.</strong> Your REVISE decision required: (1) fix the desktop end-of-list evidence, (2) reclassify V0
+mobile as original responsive interpretation / technical evidence only, (3) keep signature-hover as-is. All three are done.
+This page remains evidence only — no FidelityReport exists, V0 remains <code>VISUAL_CAPTURED</code>, <code>design_qualified=null</code>,
+<code>acceptable_for_further_taste_learning=null</code>, no V1/V2.
+</div>
+
+<div class="banner">
+<strong>THIS IS EVIDENCE ONLY — NOT A FIDELITYREPORT.</strong>
+No lifecycle state was changed to produce this page. The <code>kinetic/gym/fidelity-report@0.1</code> approval must be produced
+by the human reviewer; per <code>assertFidelityPolicy</code>, <code>approval_producer</code> must be <code>human</code>.
+Nothing here records, implies, or pre-selects approval. Silence is not approval.
+</div>
+
+<div class="decision">
+<strong>DECISION REQUESTED FROM YOU (explicit; silence is not approval):</strong>
+<ol>
+<li><strong>APPROVE</strong> — accept V0 as an internal reference study; a human FidelityReport with approval <code>APPROVED</code> will be authored from your decision, then the case may advance to <code>DESIGN_EVALUATED</code>.</li>
+<li><strong>REVISE</strong> — specify what must change; the evidence set can be regenerated deterministically again if needed.</li>
+<li><strong>REJECT</strong> — the study ends without taste learning from this reference.</li>
+</ol>
+</div>
+
+<h2>1 · Reference evidence — React Bits component index</h2>
+<div class="kv panel">
+  <div>Canonical URL</div><div>https://reactbits.dev/get-started/index</div>
+  <div>Registry source</div><div><code>src-react-bits</code> · registry <code>0.1.2</code> (sha <code>2e05e111…3072c</code>, unchanged)</div>
+  <div>Effective mode</div><div><code>REFERENCE_ABSTRACTION</code> / <code>COMPARISON_REFERENCE</code> — abstract observation only</div>
+  <div>License checked</div><div>MIT + Commons Clause (attribution + license retention required; selling/bundling/redistribution prohibited)</div>
+  <div>Terms / AI-training permission</div><div><span class="warn">UNVERIFIED</span> — observation restricted to the audited abstract boundary</div>
+  <div>Capture acquisition</div><div><code>ONE_OFF_OBSERVE_ONLY</code> — manual one-off desktop inspection, Chromium 151.0.7922.34 @1485×840, internal comparison copies ≤720px wide</div>
+  <div>Prohibited (and not used)</div><div>source code · component code · branding · copy · fonts · demo media · assets · vendor output · automated corpus ingestion</div>
+</div>
+
+<p>All three approved reference captures:</p>
+<div class="grid2">
+  <div class="cap">
+    <div class="label"><b>REFERENCE · desktop / initial</b><span>scroll: top</span></div>
+    <img src="reference/captures/desktop-initial-e87ed92fcb8c.webp" alt="React Bits reference desktop initial state">
+    <div class="foot">sha256 <code>e87ed92fcb8cde80a10afbe48b8f792a4d3f1c16a6bf79268b0960206e92b229</code></div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>REFERENCE · desktop / mid-scroll</b><span>scroll_y ≈ 7207</span></div>
+    <img src="reference/captures/desktop-mid-scroll-04d151ae6295.webp" alt="React Bits reference desktop mid-scroll state">
+    <div class="foot">sha256 <code>04d151ae629543ead16f85706ca07478b2d92768d2acef547b3b10f81082fcd8</code></div>
+  </div>
+</div>
+<div class="cap" style="max-width: 62%;">
+  <div class="label"><b>REFERENCE · desktop / final (end of list)</b><span>return-to-top affordance</span></div>
+  <img src="reference/captures/desktop-final-136b715b6a12.webp" alt="React Bits reference desktop final state">
+  <div class="foot">sha256 <code>136b715b6a1267e6d98c843456438b5a974a1ba8764df1bf4e51ddf7c2e3ea2c</code></div>
+</div>
+
+<h3>Reference limitations (recorded at observation)</h3>
+<ul>
+<li>Manual one-off desktop observation only — no automated source capture, no corpus ingestion.</li>
+<li>Screenshots are internal comparison evidence, not reusable assets.</li>
+<li><strong>Reference mobile behavior was never captured</strong> — V0 mobile is therefore an original responsive interpretation, not reference-fidelity evidence (see §2/§3).</li>
+<li>Source motion timing/easing/implementation unmeasured — stills show animated gradients, glow, blur, scanline, distortion <em>intents</em> only (evidence confidence 0.72).</li>
+<li>Source DOM scale: 205 links / 16 buttons / 6 images / 9 video elements / 0 canvases / 9 visible gallery cells.</li>
+</ul>
+
+<h2>2 · V0 evidence — deterministic captures (attempt 3, corrected set)</h2>
+<p class="meta">Manifest <code>cm-fb903037d229da2e9e7f5bc199dbc5db</code> · Playwright 1.62.1 · Chromium 151.0.7922.34 · 8 entries · 0 failures · 7 unique image hashes · build sha256 <code>bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d</code></p>
+
+<div class="grid2">
+  <div class="cap">
+    <div class="label"><b>V0 · desktop / initial</b><span>cap-f5f8d8d2</span></div>
+    <img src="captures/v0/artifacts/f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158.webp" alt="V0 desktop initial">
+    <div class="foot">sha256 <code>f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158</code></div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>V0 · desktop / mid-scroll</b><span>cap-8109c118</span></div>
+    <img src="captures/v0/artifacts/31a8f8315c26c7cc6d7a47588cc71f710c11d60dada2a670894949de62c64f8f.webp" alt="V0 desktop mid-scroll">
+    <div class="foot">sha256 <code>31a8f8315c26c7cc6d7a47588cc71f710c11d60dada2a670894949de62c64f8f</code></div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>V0 · desktop / signature (hover first preview)</b><span>cap-19b24b60</span></div>
+    <img src="captures/v0/artifacts/cbfe87765aff4798a97db55df5f495b4325ee6d76b044af9969d955a8db8f8e9.webp" alt="V0 desktop signature hover state">
+    <div class="foot">sha256 <code>cbfe87765aff4798a97db55df5f495b4325ee6d76b044af9969d955a8db8f8e9</code> — spec unchanged per your instruction</div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>V0 · desktop / final (end of list) — CORRECTED</b><span>cap-5a97e7b3</span></div>
+    <img src="captures/v0/artifacts/7cf0d86a6b660bffa8eac8461f0eeaa68e0f1e7207bb57a21affce104042e697.webp" alt="V0 desktop genuine end-of-list state">
+    <div class="foot">sha256 <code>7cf0d86a6b660bffa8eac8461f0eeaa68e0f1e7207bb57a21affce104042e697</code> · genuinely distinct from initial (sha + pHash)</div>
+  </div>
+</div>
+<div class="grid2">
+  <div class="cap">
+    <div class="label"><b>V0 · mobile / initial (390×844)</b><span class="badge tech2">TECHNICAL / ORIGINAL INTERPRETATION</span></div>
+    <img src="captures/v0/artifacts/3329b2f5dfd411f42e33c7f13ee348b38453ef772a32665a6996c0df109d776d.webp" alt="V0 mobile initial">
+    <div class="foot">sha256 <code>3329b2f5dfd411f42e33c7f13ee348b38453ef772a32665a6996c0df109d776d</code></div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>V0 · mobile / content (card 5)</b><span class="badge tech2">TECHNICAL / ORIGINAL INTERPRETATION</span></div>
+    <img src="captures/v0/artifacts/4ddff73c103393f8f7fb4d6e28d80422337428d3390599f288c821f4b2f83e78.webp" alt="V0 mobile content state">
+    <div class="foot">sha256 <code>4ddff73c103393f8f7fb4d6e28d80422337428d3390599f288c821f4b2f83e78</code></div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>V0 · mobile / menu-open (☰ tapped)</b><span class="badge tech2">TECHNICAL / ORIGINAL INTERPRETATION</span></div>
+    <img src="captures/v0/artifacts/da52049b416542d54e010624d6cd4dd8e62aa0c8bf490bbb06937657aa712390.webp" alt="V0 mobile menu-open state">
+    <div class="foot">sha256 <code>da52049b416542d54e010624d6cd4dd8e62aa0c8bf490bbb06937657aa712390</code></div>
+  </div>
+  <div class="cap">
+    <div class="label"><b>V0 · desktop / reduced-motion</b><span>cap-d20bfde6</span></div>
+    <img src="captures/v0/artifacts/f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158.webp" alt="V0 desktop reduced-motion resting state">
+    <div class="foot">sha256 <code>f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158</code> — identical to initial by design: the reduced-motion resting state at scroll-top renders the same pixels as the motion-enabled initial state</div>
+  </div>
+</div>
+
+<div class="note">① <strong>End-of-list correction (your REVISE item 1):</strong> the old “final” spec scrolled to <code>#notes</code> (the right rail), which never leaves the initial viewport — the capture was byte-identical to “initial”. The corrected spec scrolls deterministically to the true page bottom: <code>scroll_to_px: 657</code> (= <code>scrollHeight 1557 − viewport 900</code>, verified live: scrollY 657/657, last card “Woven Mesh” settled and in view, back-top control visible, hero out of view). The corrected capture is distinct from initial by both sha256 and pHash — unique hashes went 6 → 7.</div>
+
+<div class="note">② <strong>Mobile reclassification (your REVISE item 2):</strong> all three V0 mobile captures are explicitly classified <span class="badge tech2">TECHNICAL / ORIGINAL INTERPRETATION</span> — they evidence V0’s own responsive behavior and technical gates only. They are <strong>not</strong> reference-fidelity evidence, because no React Bits mobile state was ever observed. §5’s dimension table makes no mobile fidelity claim.</div>
+
+<div class="note">③ <strong>Signature-hover (your REVISE item 3):</strong> the spec is unchanged (same trigger, same selector, same checkpoint). The re-capture regenerated all artifacts on the current host environment (see note ④), so its artifact hash is new, but the interaction design was not altered.</div>
+
+<div class="note">④ <strong>Full honesty — environment migration disclosure:</strong> the previously committed capture set was produced inside the <code>/workspace</code> container that no longer exists; its manifest embedded that dead path and its artifacts could no longer be re-validated from the host. This revision regenerated the complete deterministic capture set from the byte-identical candidate (build sha256 <code>bcd31a9a…</code> unchanged) on the current host environment (Playwright 1.62.1 / Chromium 151.0.7922.34). All 8 specs, all identities, and all hashes in this dossier are from the regenerated manifest <code>cm-fb903037…</code>, which passes full integrity validation. The capture plan and candidate were NOT modified except the one corrected final-state scroll target.</div>
+
+<h2>3 · Side-by-side comparison — reference vs V0</h2>
+
+<h3>Desktop initial — browse shell</h3>
+<div class="grid2">
+  <div class="cap"><div class="label"><b>REFERENCE</b><span>top state</span></div><img src="reference/captures/desktop-initial-e87ed92fcb8c.webp" alt="Reference initial"><div class="foot">205 links · persistent top bar · left nav rail · central gallery · right support rail</div></div>
+  <div class="cap"><div class="label"><b>V0</b><span>top state</span></div><img src="captures/v0/artifacts/f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158.webp" alt="V0 initial"><div class="foot">top bar · grouped left rail · central 3-column shelf · right notes rail</div></div>
+</div>
+
+<h3>Desktop mid-scroll — catalogue pacing</h3>
+<div class="grid2">
+  <div class="cap"><div class="label"><b>REFERENCE</b><span>mid-list</span></div><img src="reference/captures/desktop-mid-scroll-04d151ae6295.webp" alt="Reference mid-scroll"><div class="foot">repeated card bands · even gutters · muted borders · gradients concentrated in previews</div></div>
+  <div class="cap"><div class="label"><b>V0</b><span>card 5 in view</span></div><img src="captures/v0/artifacts/31a8f8315c26c7cc6d7a47588cc71f710c11d60dada2a670894949de62c64f8f.webp" alt="V0 mid-scroll"><div class="foot">repeated preview bands · original CSS signal motifs · violet/magenta/blue accents</div></div>
+</div>
+
+<h3>Desktop end-of-list — now comparable</h3>
+<div class="grid2">
+  <div class="cap"><div class="label"><b>REFERENCE</b><span>end of list · return affordance</span></div><img src="reference/captures/desktop-final-136b715b6a12.webp" alt="Reference final"><div class="foot">no conventional full-width footer; support stays in rail</div></div>
+  <div class="cap"><div class="label"><b>V0 — CORRECTED</b><span>genuine bottom state</span></div><img src="captures/v0/artifacts/7cf0d86a6b660bffa8eac8461f0eeaa68e0f1e7207bb57a21affce104042e697.webp" alt="V0 end-of-list"><div class="foot">last card row + back-top control in view; no full-width footer; rails remain</div></div>
+</div>
+
+<h3>Mobile — V0 only · technical evidence, NOT reference fidelity</h3>
+<div class="grid2">
+  <div class="cap"><div class="label"><b>V0 · mobile initial</b><span class="badge tech2">ORIGINAL INTERPRETATION</span></div><img src="captures/v0/artifacts/3329b2f5dfd411f42e33c7f13ee348b38453ef772a32665a6996c0df109d776d.webp" alt="V0 mobile initial"><div class="foot">single column · ☰ menu toggle exposes left rail</div></div>
+  <div class="cap"><div class="label"><b>V0 · mobile menu-open</b><span class="badge tech2">ORIGINAL INTERPRETATION</span></div><img src="captures/v0/artifacts/da52049b416542d54e010624d6cd4dd8e62aa0c8bf490bbb06937657aa712390.webp" alt="V0 mobile menu open"><div class="foot">non-blocking drawer · no reference mobile state exists to compare against</div></div>
+</div>
+
+<h2>4 · Technical evidence — all machine-verified</h2>
+<table>
+  <tr><th>Gate</th><th>Producer</th><th>Result</th><th>Key checks</th></tr>
+  <tr><td class="k">technical</td><td>objective</td><td class="ok">PASS</td><td>11 kinetic elements · 1 h1 · 0 broken images · 0 empty hrefs</td></tr>
+  <tr><td class="k">responsive (desktop 1440)</td><td>objective</td><td class="ok">PASS</td><td>no horizontal overflow · 0 escaping elements · 0 clipped text · 0 interaction blockers</td></tr>
+  <tr><td class="k">responsive (mobile 390)</td><td>objective</td><td class="ok">PASS</td><td>no overflow · 0 escaping · 0 clipped · 0 blockers</td></tr>
+  <tr><td class="k">accessibility</td><td>heuristic</td><td class="ok">PASS</td><td>lang present · 29 interactive, 0 unlabeled · 0 positive tabindex · focus-visible styles</td></tr>
+  <tr><td class="k">performance</td><td>heuristic</td><td class="ok">PASS</td><td>217 DOM nodes · 0 will-change · 0 running animations · 0 iframes · 0 large images · no continuous RAF</td></tr>
+  <tr><td class="k">motion-token validation</td><td>objective</td><td class="ok">PASS</td><td>0 findings · 0 exceptions · all durations/easings/distances/opacities token-derived</td></tr>
+  <tr><td class="k">reduced-motion (source)</td><td>objective</td><td class="ok">PASS</td><td>required=true · found=true · animation/transition none · transforms none · scroll-behavior auto</td></tr>
+  <tr><td class="k">reduced-motion (live browser)</td><td>objective</td><td class="ok">PASS</td><td>both <code>scrollIntoView</code> calls → <code>auto</code>; card/preview/arrow/back-top computed transform <code>none</code> under reduce</td></tr>
+  <tr><td class="k">capture manifest integrity</td><td>objective</td><td class="ok">PASS</td><td>8/8 entries READY · 0 failures · attempt 3 bound · build sha bound · <strong>7 unique hashes</strong></td></tr>
+  <tr><td class="k">end-of-list capture check</td><td>objective</td><td class="ok">PASS</td><td>final ≠ initial (sha + pHash distinct) · scrollY 657/657 verified · last card + back-top visible</td></tr>
+  <tr><td class="k">design / aesthetic</td><td>not-evaluated</td><td class="pending">PENDING HUMAN</td><td>“aesthetic validation requires vision-capable review or human review” (Amendment G)</td></tr>
+</table>
+
+<h3>Identity &amp; integrity hashes</h3>
+<table>
+  <tr><th>Artifact</th><th>sha256</th></tr>
+  <tr><td class="k">V0 build (variants/v0/index.html)</td><td><code>bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d</code> — unchanged by the revision</td></tr>
+  <tr><td class="k">Capture manifest (corrected)</td><td><code>cm-fb903037d229da2e9e7f5bc199dbc5db</code> · 2026-09-03 · all specs/entries attempt 3</td></tr>
+  <tr><td class="k">Desktop final capture (corrected)</td><td><code>7cf0d86a6b660bffa8eac8461f0eeaa68e0f1e7207bb57a21affce104042e697</code></td></tr>
+  <tr><td class="k">DesignCase (corpus)</td><td><code>c5bb6e67edb4e76a88a39814f8a66d0b91f750428b3a45fc6de71a7d05ff15f8</code> (bound in retrieval receipt index_hashes)</td></tr>
+  <tr><td class="k">Registry (protected)</td><td><code>2e05e111be67230c1f26524368ad7bcb298a4bd483f39f4d6dbf8c56d443072c</code> — unchanged</td></tr>
+  <tr><td class="k">Wanaka decision (protected)</td><td><code>e33c9a28c3c1786e614b571424f16d2b1d122d4b1a1b6577b01174a564fb5fd2</code> — unchanged</td></tr>
+</table>
+
+<h2>5 · Fidelity observations — engine-recorded facts only</h2>
+<p class="meta">Statuses are NOT assigned. Each dimension lists what the engine can attest, plus what only your eyes can decide.
+These map 1:1 to the 12 dimensions your FidelityReport will require. No mobile fidelity claim is made anywhere.</p>
+<table>
+  <tr><th>Dimension</th><th>Reference (recorded observation)</th><th>V0 (recorded implementation)</th><th>Your judgment</th></tr>
+  <tr><td class="k">layout</td><td>3-zone shell: top bar, left nav rail, central gallery, right support rail; long regular list (205 links)</td><td>same 3-zone grammar at original scale: 224px/1fr/232px grid, 9-card shelf, 3 columns</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">typography</td><td>bold display heading; compact sans steps for nav/titles/labels; muted metadata</td><td>fluid clamp display (48→94px, −0.085em tracking, italic accent), original open system stack, 10px uppercase rail labels</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">color</td><td>near-black/charcoal shell; violet/magenta/electric-blue gradients concentrated in previews &amp; primary actions</td><td>same tonal logic with original values: charcoal panels, gradients localized to signal motifs and accents</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">spacing</td><td>even gutters, rounded panels, browse-first rhythm</td><td>clamp-based main padding, 14px grid gaps, 16px card radii, regularized rhythm</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">asset_treatment</td><td>live component demos: video elements (9), images, animated previews — <em>proprietary, not reproducible</em></td><td>original pure-CSS signal motifs (orbit, grid, bars, wave, noise, rings, duotone, halo, mesh); 0 external assets</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">depth</td><td>layered panels with glow/blur in previews</td><td>panel separation, shallow token-derived hover lift, inset focus ring, z-levels; no WebGL/3D</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">hierarchy</td><td>heading → controls → previews → metadata; central field dominant</td><td>hero (eyebrow/display/copy/meta) → toolbar (search/category/count) → shelf → card metadata</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">motion</td><td>animated gradients, glow, blur, scanline, distortion visible in previews (timing unmeasured)</td><td>one tokenized hover/focus constellation per tile + one-time section reveals; 0 ambient loops (animations_running: 0)</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">scroll_choreography</td><td>initial → mid-list bands → end-of-list + return affordance (all captured)</td><td>initial, mid-scroll, and <strong>genuine end-of-list</strong> all captured (corrected); no conventional footer</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">interaction</td><td>search, category filtering, theme/preferences, card focus states</td><td>search + select + rail filters + result count, theme toggle, menu toggle, back-top with focus return — all 29 controls labeled</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">transition_behavior</td><td>observed as intent only; unclaimed timing</td><td>duration-slow/expo for preview reveal, duration-med/quint for filters, page/1200ms reveals — all token-bound, 0 raw values</td><td class="pending">REQUIRED</td></tr>
+  <tr><td class="k">narrative_pacing</td><td>browse-first documentation/gallery; regular card bands</td><td>same browse-first pacing at 1/20th the catalogue size (9 cards vs ~100+ components)</td><td class="pending">REQUIRED</td></tr>
+</table>
+
+<h3>What V0 reproduces successfully (structural, machine-attestable)</h3>
+<ul>
+<li>Three-zone dark browse shell with central catalogue dominance.</li>
+<li>Stable repeated preview-card grammar carrying varied original content.</li>
+<li>Gradient saturation localized to previews/accents, not the whole shell.</li>
+<li>Explicit browse affordances: search, filtering, active nav state, focus-visible styles.</li>
+<li>No conventional full-width footer; return-to-top control instead — now evidenced at the true bottom state.</li>
+<li>Full reduced-motion alternative (all motion off, scroll auto, content at resting state).</li>
+</ul>
+
+<h3>Intentionally abstracted (rights boundary — by design, not omission)</h3>
+<ul>
+<li>No source component code, demo media, videos, fonts, branding, copy, or exact geometry.</li>
+<li>Live animated component demos replaced by static-then-hover CSS motifs.</li>
+<li>Original palette values and open font stacks instead of source styling.</li>
+<li><strong>V0 mobile design is an original responsive interpretation</strong> (no reference mobile data exists).</li>
+</ul>
+
+<h3>Remaining weaknesses vs the reference (disclosed for your judgment)</h3>
+<ul>
+<li><strong>Catalogue scale:</strong> 9 cards vs a 200+ link index — density and endless-browse feel are reduced.</li>
+<li><strong>Preview life:</strong> source previews animate persistently; V0 previews are static until hover/focus (deliberate cost/performance choice).</li>
+<li><strong>Signature interaction magnitude:</strong> token-bounded ≈4px lift + ≈1.02 scale — legible but modest (interaction design unchanged per your instruction).</li>
+</ul>
+
+<div class="sep tech">
+<h2>TECHNICALLY VERIFIED ✅</h2>
+<p style="margin:4px 0 0">Responsive (desktop+mobile) · accessibility heuristics · performance · motion-token compliance (0 raw values) ·
+reduced-motion behavior (source-scan + live browser) · capture determinism (8/8, 0 failures, attempt/build-bound, 7 unique hashes,
+corrected end-of-list) · provenance &amp; rights (registry-bound receipt, abstract-only usage) · protected history unchanged ·
+original evidence basis committed at <code>a4eda5a</code>.</p>
+</div>
+
+<div class="sep human">
+<h2>HUMAN VISUAL JUDGMENT REQUIRED ⚠</h2>
+<p style="margin:4px 0 0">Everything in §5’s right column: whether the browse grammar, hierarchy, pacing, preview treatments, and
+signature interaction <em>feel</em> transferred from the reference at the now-complete desktop states — and whether the remaining
+disclosed gaps (catalogue scale, preview life, subtle signature state, mobile being interpretation-only) are acceptable for an
+INTERNAL_REFERENCE_STUDY. The engine cannot and did not evaluate aesthetics (Amendment G).</p>
+</div>
+
+<p class="meta" style="margin-top:40px">Evidence page rev 2 — generated for human fidelity inspection only · no lifecycle transition, no FidelityReport, no V1/V2, no taste decision · case state: V0 VISUAL_CAPTURED, attempt 3 · stop.</p>
+
+</main>
+</body>
+</html>

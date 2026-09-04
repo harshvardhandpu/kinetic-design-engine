@@ -1,6 +1,6 @@
 {
   "schema": "kinetic/gym/capture-manifest@0.1",
-  "manifest_id": "cm-58081c0e37bcf6bef10bad49e4261304",
+  "manifest_id": "cm-fb903037d229da2e9e7f5bc199dbc5db",
   "case_id": "case-5300412a00",
   "playwright_version": "1.62.1",
   "browser_version": "151.0.7922.34",
@@ -26,8 +26,8 @@
       "checkpoint_ms": 1250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-18f58b33fd87cec9e3065a6535e7f9d7"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-f5f8d8d221fe453f6ec3e01e43fd1784"
     },
     {
       "attempt": 3,
@@ -50,8 +50,8 @@
       "checkpoint_ms": 1250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-20047b37b5b8186e61c4f69b58597ba5"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-8109c11889a872fd95493486ab52addf"
     },
     {
       "attempt": 3,
@@ -74,8 +74,8 @@
       "checkpoint_ms": 1250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-4f8d47b1c4fc5140b491a4a796dd08dc"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-19b24b605bd46ba1cae401c3b79d2da3"
     },
     {
       "attempt": 3,
@@ -93,13 +93,13 @@
       },
       "capture_mode": "STATIC_CAPTURE_STABLE",
       "state": "final",
-      "trigger_action": "scroll_to_selector",
-      "target_selector": "#notes",
+      "trigger_action": "scroll_to_px",
+      "target_selector": "657",
       "checkpoint_ms": 1250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-9e00d0bc7e92bb2ac6989e14e73e898f"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-5a97e7b3f287b5ef859f94346963d1ba"
     },
     {
       "attempt": 3,
@@ -122,8 +122,8 @@
       "checkpoint_ms": 1250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-1c50b59c01f242ed6f8f330ca8976ad1"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-8781dc99ef0f2ff3f1c71c2b5778ca8d"
     },
     {
       "attempt": 3,
@@ -146,8 +146,8 @@
       "checkpoint_ms": 1250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-6ef0bc670c2416d0ba03a2a9a4830060"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-0090a1582f01f81d3d13fb14cfcdc32c"
     },
     {
       "attempt": 3,
@@ -170,8 +170,8 @@
       "checkpoint_ms": 250,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-05d4bbfd8d24049140bcab4f6edff344"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-fcb3a5e20f92e29d7da77073f12da0b3"
     },
     {
       "attempt": 3,
@@ -194,8 +194,8 @@
       "checkpoint_ms": 0,
       "build_sha256": "bcd31a9a18ab653974570a7f2fca0265dc82fe324aa3fcae563ec2c075564e0d",
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-5cc0ff6d9923845964fd549f4073fcf6"
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-d20bfde6e7acb358fdeaa1862839e7b2"
     }
   ],
   "entries": [
@@ -219,14 +219,14 @@
       "target_selector": null,
       "checkpoint_ms": 1250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-18f58b33fd87cec9e3065a6535e7f9d7",
-      "timestamp": "2026-09-02T08:22:41.031Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-f5f8d8d221fe453f6ec3e01e43fd1784",
+      "timestamp": "2026-09-03T15:25:02.474Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/a5ee539c8a045029bc4bf095764faff854df7ecf6d9a74639aeafc9900aebabf.webp",
-      "sha256": "a5ee539c8a045029bc4bf095764faff854df7ecf6d9a74639aeafc9900aebabf",
-      "visual_phash": "80000000000090000a000e8000031e03000200000000000099d019d011400040",
+      "artifact_path": "artifacts/f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158.webp",
+      "sha256": "f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158",
+      "visual_phash": "80000000000080000f80180000031683000200000000000091d019d011400040",
       "readiness": "READY",
       "notes": [
         "unrelated CSS animation and caret noise stabilized"
@@ -252,14 +252,14 @@
       "target_selector": ".shelf .card:nth-of-type(5)",
       "checkpoint_ms": 1250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-20047b37b5b8186e61c4f69b58597ba5",
-      "timestamp": "2026-09-02T08:22:43.200Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-8109c11889a872fd95493486ab52addf",
+      "timestamp": "2026-09-03T15:25:04.607Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/b137d9cf45e5aec3cd5320b64e0e7ecff7a4f4f70fbd4770106a9a354aa54d1f.webp",
-      "sha256": "b137d9cf45e5aec3cd5320b64e0e7ecff7a4f4f70fbd4770106a9a354aa54d1f",
-      "visual_phash": "800011501150914014480c401d531d42004010c81cf01df09c70004000400000",
+      "artifact_path": "artifacts/31a8f8315c26c7cc6d7a47588cc71f710c11d60dada2a670894949de62c64f8f.webp",
+      "sha256": "31a8f8315c26c7cc6d7a47588cc71f710c11d60dada2a670894949de62c64f8f",
+      "visual_phash": "800011501150914014480c401d521d43004014c81cf01d709c70004000400000",
       "readiness": "READY",
       "notes": [
         "unrelated CSS animation and caret noise stabilized"
@@ -285,14 +285,14 @@
       "target_selector": ".shelf .card:first-of-type .preview",
       "checkpoint_ms": 1250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-4f8d47b1c4fc5140b491a4a796dd08dc",
-      "timestamp": "2026-09-02T08:22:46.237Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-19b24b605bd46ba1cae401c3b79d2da3",
+      "timestamp": "2026-09-03T15:25:07.563Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/e9bf40ada7d5c05c0ecba815f657d7009b98a37c566ea8bd20b1885eba92fd81.webp",
-      "sha256": "e9bf40ada7d5c05c0ecba815f657d7009b98a37c566ea8bd20b1885eba92fd81",
-      "visual_phash": "80000000000090000a000e8000031e03000200000000000099d019d011400040",
+      "artifact_path": "artifacts/cbfe87765aff4798a97db55df5f495b4325ee6d76b044af9969d955a8db8f8e9.webp",
+      "sha256": "cbfe87765aff4798a97db55df5f495b4325ee6d76b044af9969d955a8db8f8e9",
+      "visual_phash": "80000000000080000f80180000031683000200000000000099d019d011400040",
       "readiness": "READY",
       "notes": []
     },
@@ -312,18 +312,18 @@
       },
       "capture_mode": "STATIC_CAPTURE_STABLE",
       "state": "final",
-      "trigger_action": "scroll_to_selector",
-      "target_selector": "#notes",
+      "trigger_action": "scroll_to_px",
+      "target_selector": "657",
       "checkpoint_ms": 1250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-9e00d0bc7e92bb2ac6989e14e73e898f",
-      "timestamp": "2026-09-02T08:22:48.371Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-5a97e7b3f287b5ef859f94346963d1ba",
+      "timestamp": "2026-09-03T15:25:10.089Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/a5ee539c8a045029bc4bf095764faff854df7ecf6d9a74639aeafc9900aebabf.webp",
-      "sha256": "a5ee539c8a045029bc4bf095764faff854df7ecf6d9a74639aeafc9900aebabf",
-      "visual_phash": "80000000000090000a000e8000031e03000200000000000099d019d011400040",
+      "artifact_path": "artifacts/7cf0d86a6b660bffa8eac8461f0eeaa68e0f1e7207bb57a21affce104042e697.webp",
+      "sha256": "7cf0d86a6b660bffa8eac8461f0eeaa68e0f1e7207bb57a21affce104042e697",
+      "visual_phash": "8000117011c0804000000c501c530c43004002001d701df09cf0006000000000",
       "readiness": "READY",
       "notes": [
         "unrelated CSS animation and caret noise stabilized"
@@ -349,14 +349,14 @@
       "target_selector": null,
       "checkpoint_ms": 1250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-1c50b59c01f242ed6f8f330ca8976ad1",
-      "timestamp": "2026-09-02T08:22:50.357Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-8781dc99ef0f2ff3f1c71c2b5778ca8d",
+      "timestamp": "2026-09-03T15:25:12.025Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/0448763cfd7ad3a1e20e3da1fe6838a12f364b1cc0256713b82d3b0f64429f92.webp",
-      "sha256": "0448763cfd7ad3a1e20e3da1fe6838a12f364b1cc0256713b82d3b0f64429f92",
-      "visual_phash": "7b000000000000001f0048002cb8000000000000000000001c00000078005c00",
+      "artifact_path": "artifacts/3329b2f5dfd411f42e33c7f13ee348b38453ef772a32665a6996c0df109d776d.webp",
+      "sha256": "3329b2f5dfd411f42e33c7f13ee348b38453ef772a32665a6996c0df109d776d",
+      "visual_phash": "78000000000037801c2000000000e1c000007ffe00000000000048007c004c00",
       "readiness": "READY",
       "notes": [
         "unrelated CSS animation and caret noise stabilized"
@@ -382,14 +382,14 @@
       "target_selector": ".shelf .card:nth-of-type(5)",
       "checkpoint_ms": 1250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-6ef0bc670c2416d0ba03a2a9a4830060",
-      "timestamp": "2026-09-02T08:22:52.379Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-0090a1582f01f81d3d13fb14cfcdc32c",
+      "timestamp": "2026-09-03T15:25:14.031Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/84f5b4071300928593d583076e7de3919d5ad4260a81705cb2341e07bd418e1d.webp",
-      "sha256": "84f5b4071300928593d583076e7de3919d5ad4260a81705cb2341e07bd418e1d",
-      "visual_phash": "7b003ffc1ffc3000000009c003c00300002a0000000003c007e002c000000000",
+      "artifact_path": "artifacts/4ddff73c103393f8f7fb4d6e28d80422337428d3390599f288c821f4b2f83e78.webp",
+      "sha256": "4ddff73c103393f8f7fb4d6e28d80422337428d3390599f288c821f4b2f83e78",
+      "visual_phash": "78007ffc3ffc000000000bc003c0038000000000000003c007e002c000000000",
       "readiness": "READY",
       "notes": [
         "unrelated CSS animation and caret noise stabilized"
@@ -415,14 +415,14 @@
       "target_selector": "#menuToggle",
       "checkpoint_ms": 250,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-05d4bbfd8d24049140bcab4f6edff344",
-      "timestamp": "2026-09-02T08:22:53.437Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-fcb3a5e20f92e29d7da77073f12da0b3",
+      "timestamp": "2026-09-03T15:25:15.005Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/8e6c65f6eb758e4db601ba8a14b9690c4bd31f48e6ea9a339af7a0ad73cd5819.webp",
-      "sha256": "8e6c65f6eb758e4db601ba8a14b9690c4bd31f48e6ea9a339af7a0ad73cd5819",
-      "visual_phash": "7b00000070000000000000000000000020026800774000006000000000000000",
+      "artifact_path": "artifacts/da52049b416542d54e010624d6cd4dd8e62aa0c8bf490bbb06937657aa712390.webp",
+      "sha256": "da52049b416542d54e010624d6cd4dd8e62aa0c8bf490bbb06937657aa712390",
+      "visual_phash": "78000000700200000000000000000000200270003d0000002400000000002008",
       "readiness": "READY",
       "notes": []
     },
@@ -446,14 +446,14 @@
       "target_selector": null,
       "checkpoint_ms": 0,
       "subject_id": "V0",
-      "url": "file:///workspace/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
-      "capture_id": "cap-5cc0ff6d9923845964fd549f4073fcf6",
-      "timestamp": "2026-09-02T08:22:54.273Z",
+      "url": "file:///home/harshdev/HermesWorkspaces/kinetic-design-engine/gym/runs/case-5300412a00/variants/v0/index.html",
+      "capture_id": "cap-d20bfde6e7acb358fdeaa1862839e7b2",
+      "timestamp": "2026-09-03T15:25:15.793Z",
       "playwright_version": "1.62.1",
       "browser_version": "151.0.7922.34",
-      "artifact_path": "artifacts/a5ee539c8a045029bc4bf095764faff854df7ecf6d9a74639aeafc9900aebabf.webp",
-      "sha256": "a5ee539c8a045029bc4bf095764faff854df7ecf6d9a74639aeafc9900aebabf",
-      "visual_phash": "80000000000090000a000e8000031e03000200000000000099d019d011400040",
+      "artifact_path": "artifacts/f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158.webp",
+      "sha256": "f1f32237e22acd2320d179680d79b470c39fb6dc9b947b0b6afaa9265cc20158",
+      "visual_phash": "80000000000080000f80180000031683000200000000000091d019d011400040",
       "readiness": "READY",
       "notes": [
         "unrelated CSS animation and caret noise stabilized"
@@ -461,6 +461,6 @@
     }
   ],
   "failures": [],
-  "created_at": "2026-09-02T08:22:38.665Z",
-  "updated_at": "2026-09-02T08:22:54.273Z"
+  "created_at": "2026-09-03T15:25:00.344Z",
+  "updated_at": "2026-09-03T15:25:15.793Z"
 }
